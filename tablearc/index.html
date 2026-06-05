@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TableArc — AI Tabletop Engine by GreenKappa Labs</title>
+  <meta name="description" content="TableArc is a local-first AI tabletop RPG engine for structured live play, adventure generation, character state, tactical maps, combat context, rules workflows, and debug transparency." />
+  <meta name="theme-color" content="#07101c" />
+
+  <meta property="og:title" content="TableArc — AI Tabletop Engine" />
+  <meta property="og:description" content="A local-first AI tabletop RPG engine by GreenKappa Labs." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="../assets/tablearc-banner-dark.png" />
+
+  <link rel="icon" href="../assets/tablearc-logo-dark.png" />
+  <link rel="stylesheet" href="../style.css" />
+</head>
+
+<body class="tablearc-page">
+  <header class="site-header dark-header">
+    <a class="brand" href="../" aria-label="GreenKappa Labs home">
+      <span class="brand-mark" aria-hidden="true">
+        <img src="../assets/greenkappa-logo.png" alt="" />
+      </span>
+      <span class="brand-text">
+        <strong>GreenKappa Labs</strong>
+        <small>Applied technology & creative systems</small>
+      </span>
+    </a>
+
+    <nav class="nav" aria-label="Primary navigation">
+      <a href="../">Studio</a>
+      <a href="#overview">Overview</a>
+      <a href="#systems">Systems</a>
+      <a href="#collaboration">Collaboration</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="section tablearc-hero">
+      <div class="tablearc-hero-art">
+        <img src="../assets/tablearc-banner-dark.png" alt="TableArc logo banner" />
+      </div>
+      <div class="tablearc-hero-copy">
+        <p class="eyebrow gold">GreenKappa Labs flagship project</p>
+        <h1>TableArc is a local-first AI tabletop engine.</h1>
+        <p class="lede">
+          It is being built as a structured, state-aware play system for tabletop RPG sessions: live narration at the
+          surface, explicit adventure, character, rules, combat, map, continuity, and debug state underneath.
+        </p>
+        <div class="hero-actions">
+          <a class="button primary gold-button" href="#collaboration">Collaboration direction</a>
+          <a class="button secondary dark-secondary" href="mailto:GreenkappaLabs@gmail.com">Contact</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="overview" class="section split invert-split">
+      <div>
+        <p class="eyebrow gold">What it is</p>
+        <h2>Not just an AI narrator. A runtime for playable scenes.</h2>
+      </div>
+      <div class="content-card dark-card">
+        <p>
+          TableArc explores how an AI-assisted Game Master can remain imaginative while being grounded by structured
+          state: who is present, what the scene contains, what the player knows, what hidden facts remain locked,
+          what rules apply, what changed, and why.
+        </p>
+        <p>
+          The project began as an AI-DM kernel and evolved into a broader engine architecture for solo play, DM support,
+          adventure generation, character repair, rules lookup, recap/state tools, tactical maps, and runtime debugging.
+        </p>
+      </div>
+    </section>
+
+    <section id="systems" class="section">
+      <p class="eyebrow gold">Core systems</p>
+      <h2>Designed around structure, flexibility, and transparency.</h2>
+      <div class="grid three">
+        <article class="content-card dark-card">
+          <h3>Live Play</h3>
+          <p>Natural-language play supported by scene state, player intent, consequences, continuity, and responsive narration.</p>
+        </article>
+        <article class="content-card dark-card">
+          <h3>Adventure Frameworks</h3>
+          <p>Adventure generation aimed at scenes, nodes, clues, clocks, NPC agendas, encounters, and open-ended approaches.</p>
+        </article>
+        <article class="content-card dark-card">
+          <h3>Character Authority</h3>
+          <p>Character import, repair, active-PC state, resources, inventory, party context, and rules-aware action handling.</p>
+        </article>
+        <article class="content-card dark-card">
+          <h3>Maps & Combat</h3>
+          <p>Tactical scene context, movement, targeting, enemy state, HP, action economy, spatial truth, and aftermath tracking.</p>
+        </article>
+        <article class="content-card dark-card">
+          <h3>Rules & Recap</h3>
+          <p>Rules lookup, state recap, scene memory, continuity tools, and debug-friendly explanations of what happened.</p>
+        </article>
+        <article class="content-card dark-card">
+          <h3>Local Model Support</h3>
+          <p>Built toward local-first workflows with provider flexibility, including local language models through Ollama.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section showcase">
+      <div class="showcase-card">
+        <img src="../assets/tablearc-logo-dark.png" alt="TableArc full logo" />
+        <div>
+          <p class="eyebrow gold">Design philosophy</p>
+          <h2>Authored structure. Flexible play. Visible state.</h2>
+          <p>
+            TableArc is strongest where freeform language and structured game logic meet. The long-term design goal is
+            to let players and creators keep the expressive freedom of tabletop play while making the underlying game
+            state coherent, inspectable, and recoverable.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="collaboration" class="section split invert-split">
+      <div>
+        <p class="eyebrow gold">Collaboration direction</p>
+        <h2>Scene packets for authored adventures.</h2>
+        <p class="section-note light-note">
+          One promising direction is using TableArc’s runtime thinking to support existing human-authored adventures,
+          rather than replacing them.
+        </p>
+      </div>
+      <div class="content-card dark-card emphasis-card">
+        <h3>Branch-safe flexible resolution</h3>
+        <p>
+          A publisher-approved adventure section could be converted into a structured scene packet: visible facts,
+          hidden facts, available branches, checks, enemies, items, map anchors, spoiler rules, and flexible resolution
+          options.
+        </p>
+        <p>
+          An assistant could then help players try creative approaches that are not explicitly listed while still
+          preserving the authored module: interpret the action, check rules and context, avoid spoilers, map the result
+          to a valid branch or bounded consequence, and add transition flavor into the next section.
+        </p>
+        <ul class="feature-list compact-list">
+          <li>Spoiler-safe context</li>
+          <li>Branch-compatible play</li>
+          <li>Rules-aware action checks</li>
+          <li>Map and encounter metadata</li>
+          <li>Authored content remains primary</li>
+          <li>AI adds responsiveness, not replacement</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="section proof-strip">
+      <div>
+        <strong>Current status</strong>
+        <span>Active prototype / research-and-development project</span>
+      </div>
+      <div>
+        <strong>Built by</strong>
+        <span>Trevor Leininger · GreenKappa Labs</span>
+      </div>
+      <div>
+        <strong>Project focus</strong>
+        <span>AI TTRPG runtime architecture, structured scenes, and playable state</span>
+      </div>
+    </section>
+
+    <section id="contact" class="section contact tablearc-contact">
+      <div>
+        <p class="eyebrow gold">Contact</p>
+        <h2>Discuss TableArc or adjacent collaboration.</h2>
+        <p>
+          GreenKappa Labs is open to practical conversations around authored adventure tooling, AI-assisted tabletop
+          workflows, runtime state, solo-play interfaces, and DM-assistant systems.
+        </p>
+      </div>
+      <div class="contact-card dark-card contact-buttons">
+        <a class="button primary gold-button" href="mailto:GreenkappaLabs@gmail.com">Email</a>
+        <a class="button secondary dark-secondary" href="https://www.linkedin.com/company/greenkappa-labs" target="_blank" rel="noreferrer">LinkedIn</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer dark-footer">
+    <span>© <span id="year"></span> GreenKappa Labs</span>
+    <span><a href="../">Back to GreenKappa Labs</a></span>
+  </footer>
+
+  <script src="../script.js"></script>
+</body>
+</html>
