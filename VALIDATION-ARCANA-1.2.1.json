@@ -1,0 +1,21 @@
+{
+  "artifact": "Arcana Netlify All-Scopes Hotfix",
+  "version": "1.2.1",
+  "rootCause": "Functions-only environment variable scope is unavailable on Netlify Free.",
+  "checks": {
+    "syntax:chat-core.mjs": true,
+    "syntax:chat.mjs": true,
+    "syntax:validate.mjs": true,
+    "syntax:arcana-widget.js": true,
+    "syntax:tablearc-knowledge.js": true,
+    "backend_tests": true,
+    "backend_scripts_have_no_functions_scope": true,
+    "hotfix_key_has_no_scope": true,
+    "production_env_list_has_no_scope_filter": true,
+    "health_check_before_post": true,
+    "health_requires_configured": true,
+    "copy_preserves_relative_paths": true,
+    "no_api_key_embedded": true
+  },
+  "backendTests": "Validated raw Responses API parsing, visitor knowledge, retrieval, and Netlify health probing."
+}

@@ -1,0 +1,22 @@
+{
+  "artifact": "GreenKappa Labs Ask Arcana Floating Widget",
+  "version": "1.1.0",
+  "checks": {
+    "syntax:script.js": true,
+    "syntax:arcana-widget.js": true,
+    "syntax:arcana-config.js": true,
+    "syntax:assets/arcana/tablearc-knowledge.js": true,
+    "floating_widget_loaded_home": true,
+    "floating_widget_loaded_tablearc": true,
+    "floating_widget_loaded_privacy": true,
+    "large_embedded_chat_removed": true,
+    "hash_anchor_retained": true,
+    "sitewide_config": true,
+    "connector_updates_root_config": true,
+    "enter_to_send": true,
+    "escape_to_close": true,
+    "mobile_fullscreen": true,
+    "offline_fallback": true,
+    "no_embedded_key": true
+  }
+}

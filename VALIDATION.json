@@ -1,0 +1,28 @@
+{
+  "artifact": "GreenKappa Labs Perfected Website",
+  "version": "1.0.0",
+  "checks": {
+    "syntax:script.js": true,
+    "syntax:tablearc/ask-arcana.js": true,
+    "syntax:tablearc/arcana-config.js": true,
+    "syntax:assets/arcana/tablearc-knowledge.js": true,
+    "title:index.html": true,
+    "viewport:index.html": true,
+    "title:tablearc/index.html": true,
+    "viewport:tablearc/index.html": true,
+    "title:privacy.html": true,
+    "viewport:privacy.html": true,
+    "title:404.html": true,
+    "viewport:404.html": true,
+    "home_canonical": true,
+    "tablearc_canonical": true,
+    "ask_arcana_present": true,
+    "real_product_screenshots": true,
+    "mobile_menu": true,
+    "privacy_page": true,
+    "sitemap": true,
+    "robots": true,
+    "no_embedded_openai_key": true
+  },
+  "progressiveEnhancement": "Core content remains visible if JavaScript is unavailable."
+}

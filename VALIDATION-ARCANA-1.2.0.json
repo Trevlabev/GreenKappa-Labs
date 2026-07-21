@@ -1,0 +1,14 @@
+{
+  "artifact": "Ask Arcana Widget",
+  "version": "1.2.0",
+  "checks": {
+    "live_probe": true,
+    "fun_answer": true,
+    "use_case_answer": true,
+    "followup_context": true,
+    "exact_connection_states": true,
+    "knowledge_has_fun": true,
+    "knowledge_has_use_cases": true,
+    "no_key": true
+  }
+}

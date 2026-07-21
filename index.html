@@ -1,159 +1,260 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>GreenKappa Labs — Applied Technology, Interactive Media & Creative Systems</title>
-  <meta name="description" content="GreenKappa Labs is an independent studio for applied technology, interactive media, creative systems, technical design, and experimental storytelling tools." />
-  <meta name="theme-color" content="#10251b" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GreenKappa Labs — Applied AI, Interactive Systems & Creative Technology</title>
+  <meta name="description" content="GreenKappa Labs is Trevor Leininger’s independent studio for applied AI, local-first software, interactive systems, workflow automation, technical design, and creative technology.">
+  <meta name="theme-color" content="#10251b">
+  <link rel="canonical" href="https://greenkappalabs.art/">
 
-  <meta property="og:title" content="GreenKappa Labs" />
-  <meta property="og:description" content="Applied technology. Interactive media. Creative systems." />
-  <meta property="og:type" content="website" />
-  <meta property="og:image" content="assets/greenkappa-logo.png" />
+  <meta property="og:title" content="GreenKappa Labs">
+  <meta property="og:description" content="Applied AI. Interactive systems. Creative technology.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://greenkappalabs.art/">
+  <meta property="og:image" content="https://greenkappalabs.art/assets/tablearc-banner-light.png">
+  <meta name="twitter:card" content="summary_large_image">
 
-  <link rel="icon" href="assets/greenkappa-logo.png" />
-  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="assets/greenkappa-logo.png">
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="stylesheet" href="style.css">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "GreenKappa Labs",
+    "url": "https://greenkappalabs.art/",
+    "logo": "https://greenkappalabs.art/assets/greenkappa-logo.png",
+    "email": "GreenkappaLabs@gmail.com",
+    "founder": {
+      "@type": "Person",
+      "name": "Trevor Leininger"
+    },
+    "sameAs": [
+      "https://www.linkedin.com/company/greenkappa-labs"
+    ]
+  }
+  </script>
 </head>
 
 <body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
   <header class="site-header">
     <a class="brand" href="./" aria-label="GreenKappa Labs home">
-      <span class="brand-mark" aria-hidden="true">
-        <img src="assets/greenkappa-logo.png" alt="" />
-      </span>
+      <span class="brand-mark"><img src="assets/greenkappa-logo.png" alt=""></span>
       <span class="brand-text">
         <strong>GreenKappa Labs</strong>
         <small>Applied technology & creative systems</small>
       </span>
     </a>
 
-    <nav class="nav" aria-label="Primary navigation">
+    <button class="menu-button" type="button" aria-expanded="false" aria-controls="primary-nav">
+      <span></span><span></span><span></span><b>Menu</b>
+    </button>
+
+    <nav id="primary-nav" class="nav" aria-label="Primary navigation">
       <a href="#work">Work</a>
       <a href="tablearc/">TableArc</a>
-      <a href="#studio">Studio</a>
-      <a href="#contact">Contact</a>
+      <a href="#ask-arcana">Ask Arcana</a>
+      <a href="#approach">Approach</a>
+      <a href="#about">About</a>
+      <a class="nav-cta" href="#contact">Contact</a>
     </nav>
   </header>
 
-  <main id="top">
-    <section class="hero section home-hero">
-      <div class="hero-copy">
-        <p class="eyebrow">Independent studio</p>
-        <h1>Applied technology. Interactive media. Creative systems.</h1>
+  <main id="main">
+    <section class="section home-hero">
+      <div class="hero-copy reveal">
+        <p class="eyebrow">Independent applied technology studio</p>
+        <h1>Useful systems.<br>Expressive interfaces.<br><em>Serious craft.</em></h1>
         <p class="lede">
-          GreenKappa Labs develops practical software and expressive digital work at the intersection of
-          artificial intelligence, structured workflows, storytelling, design, automation, and human-centered systems.
+          GreenKappa Labs builds applied AI software, interactive systems, workflow tools,
+          technical documentation, and creative technology that make complex ideas usable.
         </p>
         <div class="hero-actions">
           <a class="button primary" href="tablearc/">Explore TableArc</a>
-          <a class="button secondary" href="#studio">About the studio</a>
+          <a class="button secondary" href="#ask-arcana">Ask Arcana</a>
+        </div>
+        <div class="hero-proof" aria-label="Studio focus">
+          <span>Local-first software</span>
+          <span>Applied AI</span>
+          <span>Interactive systems</span>
+          <span>Workflow design</span>
         </div>
       </div>
 
-      <aside class="hero-card" aria-label="Studio summary">
-        <div class="logo-panel">
-          <img src="assets/greenkappa-logo.png" alt="GreenKappa Labs logo" />
+      <aside class="studio-portrait reveal" aria-label="GreenKappa Labs identity">
+        <div class="portrait-glow"></div>
+        <img src="assets/greenkappa-logo.png" alt="GreenKappa Labs logo">
+        <div class="portrait-copy">
+          <span>GreenKappa Labs</span>
+          <strong>Technology with structure, clarity, and personality.</strong>
         </div>
-        <p>
-          A production umbrella for tools, prototypes, visual systems, technical documentation, and creative
-          experiments that turn complex ideas into useful, legible, and memorable experiences.
-        </p>
       </aside>
     </section>
 
-    <section id="work" class="section split project-feature">
-      <div>
-        <p class="eyebrow">Flagship project</p>
-        <h2>TableArc</h2>
-        <p class="section-note">
-          An active GreenKappa Labs project exploring how AI-assisted tabletop play can become structured,
-          state-aware, local-first, and still creatively alive.
-        </p>
-      </div>
-      <div class="content-card featured project-card">
-        <img class="project-banner" src="assets/tablearc-banner-light.png" alt="TableArc logo banner" />
-        <h3>A local-first AI tabletop RPG engine</h3>
-        <p>
-          TableArc combines natural-language play with structured runtime state, local language-model integration,
-          rules-aware workflows, tactical maps, combat context, continuity tools, and debug transparency.
-        </p>
-        <p>
-          The goal is not merely a chatbot that tells fantasy stories. It is a playable tabletop engine where
-          narration, character authority, scene structure, mechanics, maps, consequences, and system state work together.
-        </p>
-        <div class="card-actions">
-          <a class="button light" href="tablearc/">View the TableArc page</a>
+    <section class="studio-strip" aria-label="Studio capabilities">
+      <span>Product architecture</span>
+      <i></i>
+      <span>AI integration</span>
+      <i></i>
+      <span>Front-end systems</span>
+      <i></i>
+      <span>Automation</span>
+      <i></i>
+      <span>Technical communication</span>
+    </section>
+
+    <section id="work" class="section flagship-section">
+      <div class="section-heading reveal">
+        <div>
+          <p class="eyebrow">Flagship project</p>
+          <h2>TableArc</h2>
         </div>
-      </div>
-    </section>
-
-    <section id="studio" class="section">
-      <p class="eyebrow">Studio identity</p>
-      <h2>Built at the edge of utility and imagination.</h2>
-      <div class="grid two">
-        <article class="content-card">
-          <h3>What GreenKappa Labs makes</h3>
-          <p>
-            Software prototypes, applied AI tools, workflow systems, technical documents, visual identities,
-            interactive media concepts, and experimental interfaces for complex creative or operational problems.
-          </p>
-        </article>
-        <article class="content-card">
-          <h3>How it thinks</h3>
-          <p>
-            Local-first where possible. Structured beneath the surface. Creative without becoming vague. Technical
-            without becoming cold. Designed for people who want systems that feel useful, expressive, and alive.
-          </p>
-        </article>
-      </div>
-    </section>
-
-    <section id="focus" class="section">
-      <p class="eyebrow">Focus areas</p>
-      <h2>Technology, design, narrative, and production craft.</h2>
-      <div class="pill-grid">
-        <span>Applied AI software</span>
-        <span>Interactive media systems</span>
-        <span>Local-first tools</span>
-        <span>Creative technology</span>
-        <span>Front-end application design</span>
-        <span>Workflow automation</span>
-        <span>Narrative systems</span>
-        <span>Technical documentation</span>
-        <span>Visual identity</span>
-        <span>Prototype development</span>
-      </div>
-    </section>
-
-    <section class="section manifesto">
-      <p>
-        GreenKappa Labs is for projects that need both craft and structure: software that can be used, worlds that can
-        be explored, workflows that can be trusted, and interfaces that make complicated systems feel inviting.
-      </p>
-    </section>
-
-    <section id="contact" class="section contact">
-      <div>
-        <p class="eyebrow">Contact</p>
-        <h2>Follow the work.</h2>
         <p>
-          GreenKappa Labs is currently presenting early project work, prototypes, technical development notes,
-          and selected creative systems.
+          A local-first AI tabletop RPG engine built around canonical state, rules-aware procedure,
+          persistent worlds, provider flexibility, and inspectable runtime behavior.
         </p>
       </div>
-      <div class="contact-card">
-        <a class="button primary" href="https://www.linkedin.com/company/greenkappa-labs" target="_blank" rel="noreferrer">LinkedIn</a>
-        <a class="button secondary" href="mailto:GreenkappaLabs@gmail.com">Email</a>
+
+      <article class="flagship-card reveal">
+        <div class="flagship-copy">
+          <img class="flagship-wordmark" src="assets/tablearc-banner-light.png" alt="TableArc">
+          <h3>The AI imagines. The engine remembers, adjudicates, maps, resolves, and proves.</h3>
+          <p>
+            TableArc is not simply a fantasy chatbot. It connects natural-language play to structured
+            adventure state, character authority, maps, combat, rules, continuity, saves, and debugging.
+          </p>
+          <div class="card-actions">
+            <a class="button light" href="tablearc/">View the full case study</a>
+            <a class="button outline-light" href="#ask-arcana">Ask the project guide</a>
+          </div>
+        </div>
+        <figure class="flagship-screen">
+          <img src="assets/screenshots/tablearc-home.webp" alt="TableArc desktop application home screen">
+          <figcaption>TableArc desktop prototype · active development</figcaption>
+        </figure>
+      </article>
+    </section>
+
+    <section id="approach" class="section approach-section">
+      <div class="section-heading reveal">
+        <div>
+          <p class="eyebrow">How the work is approached</p>
+          <h2>Make complexity legible.</h2>
+        </div>
+        <p>
+          The common thread across GreenKappa Labs projects is a preference for systems that are
+          expressive on the surface and explicit underneath.
+        </p>
+      </div>
+
+      <div class="process-grid">
+        <article class="process-card reveal">
+          <span>01</span>
+          <h3>Clarify the real problem</h3>
+          <p>Separate the user’s goal from the accumulated interface, process, or implementation noise.</p>
+        </article>
+        <article class="process-card reveal">
+          <span>02</span>
+          <h3>Give each system an owner</h3>
+          <p>Use clear contracts, structured state, and visible boundaries instead of hidden accidental behavior.</p>
+        </article>
+        <article class="process-card reveal">
+          <span>03</span>
+          <h3>Prove the result</h3>
+          <p>Validate the path that matters through real use, diagnostics, accessibility, and durable outputs.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section capability-section">
+      <div class="capability-intro reveal">
+        <p class="eyebrow">Capabilities</p>
+        <h2>From concept to working system.</h2>
+        <p>
+          GreenKappa Labs combines product thinking, engineering, design, documentation,
+          and operational workflow experience rather than treating them as separate disciplines.
+        </p>
+      </div>
+
+      <div class="capability-grid">
+        <article class="capability-card reveal">
+          <strong>Applied AI software</strong>
+          <p>Provider integrations, grounded generation, local models, structured outputs, and human-readable failure handling.</p>
+        </article>
+        <article class="capability-card reveal">
+          <strong>Interactive applications</strong>
+          <p>Responsive interfaces, desktop packaging, stateful workflows, maps, dashboards, and user-facing diagnostics.</p>
+        </article>
+        <article class="capability-card reveal">
+          <strong>Workflow systems</strong>
+          <p>Power Platform, SharePoint, Power Automate, operational tracking, forms, notifications, and process redesign.</p>
+        </article>
+        <article class="capability-card reveal">
+          <strong>Technical communication</strong>
+          <p>Architecture plans, testing protocols, decision records, sourcebooks, presentations, and accessible reference material.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="about" class="section about-section">
+      <article class="about-card reveal">
+        <div>
+          <p class="eyebrow">About the builder</p>
+          <h2>Trevor Leininger</h2>
+          <p class="about-lede">
+            An independent software developer and applied-AI builder who works across product architecture,
+            front-end systems, automation, technical writing, and creative technology.
+          </p>
+        </div>
+        <div class="about-details">
+          <p>
+            TableArc is the clearest expression of that range: a long-running systems project combining
+            React, Vite, Electron, OpenAI and Ollama providers, canonical state, rules-aware workflows,
+            persistence, debugging, interface design, and public product communication.
+          </p>
+          <div class="about-links">
+            <a href="https://www.linkedin.com/company/greenkappa-labs" target="_blank" rel="noreferrer">GreenKappa Labs on LinkedIn ↗</a>
+            <a href="mailto:GreenkappaLabs@gmail.com">GreenkappaLabs@gmail.com</a>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <section id="contact" class="section contact-section">
+      <div class="contact-copy reveal">
+        <p class="eyebrow">Contact</p>
+        <h2>Interested in the work?</h2>
+        <p>
+          Reach out about TableArc, applied AI, local-first tools, interactive systems,
+          workflow design, or adjacent collaboration.
+        </p>
+      </div>
+      <div class="contact-actions reveal">
+        <a class="button primary" href="mailto:GreenkappaLabs@gmail.com">Email GreenKappa Labs</a>
+        <a class="button secondary" href="#ask-arcana">Ask Arcana first</a>
       </div>
     </section>
   </main>
 
   <footer class="site-footer">
-    <span>© <span id="year"></span> GreenKappa Labs</span>
-    <span>Independent studio for applied technology and creative systems</span>
+    <div>
+      <strong>GreenKappa Labs</strong>
+      <span>Applied technology & creative systems</span>
+    </div>
+    <div>
+      <a href="tablearc/">TableArc</a>
+      <a href="privacy.html">Privacy</a>
+      <span>© <span id="year"></span> Trevor Leininger</span>
+    </div>
   </footer>
 
   <script src="script.js"></script>
+  <script src="/assets/arcana/tablearc-knowledge.js"></script>
+  <script src="/arcana-config.js"></script>
+  <script src="/arcana-widget.js"></script>
 </body>
 </html>
