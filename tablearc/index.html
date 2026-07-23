@@ -18,6 +18,137 @@
   <link rel="icon" href="../assets/tablearc-logo-light.png">
   <link rel="stylesheet" href="../style.css">
 
+  <style>
+    /* Responsive TableArc product-overview video */
+    .video-showcase-section {
+      position: relative;
+      isolation: isolate;
+      overflow: hidden;
+    }
+
+    .video-showcase-section::before {
+      content: "";
+      position: absolute;
+      inset: 8% -12% auto;
+      height: 72%;
+      z-index: -1;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 50% 40%, rgba(188, 145, 64, 0.13), transparent 58%),
+        radial-gradient(circle at 78% 25%, rgba(49, 105, 174, 0.12), transparent 42%);
+      filter: blur(16px);
+    }
+
+    .video-showcase-heading {
+      max-width: 1180px;
+      margin-inline: auto;
+    }
+
+    .video-player-card {
+      width: min(100%, 1180px);
+      margin: clamp(1.5rem, 3vw, 2.75rem) auto 0;
+      padding: clamp(0.35rem, 0.7vw, 0.65rem);
+      overflow: hidden;
+      border: 1px solid rgba(219, 184, 111, 0.34);
+      border-radius: clamp(1rem, 2vw, 1.5rem);
+      background: linear-gradient(145deg, rgba(15, 31, 52, 0.96), rgba(5, 13, 24, 0.98));
+      box-shadow:
+        0 24px 70px rgba(0, 0, 0, 0.34),
+        0 0 0 1px rgba(255, 255, 255, 0.025) inset;
+    }
+
+    .video-player {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      overflow: hidden;
+      border-radius: clamp(0.72rem, 1.5vw, 1.1rem);
+      background: #020712;
+    }
+
+    .video-player iframe,
+    .video-player video {
+      position: absolute;
+      inset: 0;
+      display: block;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      object-fit: contain;
+      background: #020712;
+    }
+
+    .video-player-card figcaption {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem 2rem;
+      padding: clamp(0.85rem, 1.8vw, 1.35rem) clamp(0.65rem, 1.4vw, 1rem) clamp(0.45rem, 1vw, 0.75rem);
+    }
+
+    .video-caption-copy {
+      display: grid;
+      gap: 0.3rem;
+      min-width: 0;
+    }
+
+    .video-caption-copy strong {
+      color: #f4e6c6;
+      font-size: clamp(1rem, 1.6vw, 1.2rem);
+      letter-spacing: 0.01em;
+    }
+
+    .video-caption-copy span {
+      color: rgba(231, 238, 248, 0.76);
+      line-height: 1.55;
+    }
+
+    .video-external-link {
+      flex: 0 0 auto;
+      color: #e5c47c;
+      font-weight: 700;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 0.25em;
+    }
+
+    .video-external-link:hover,
+    .video-external-link:focus-visible {
+      color: #fff2cf;
+    }
+
+    @supports not (aspect-ratio: 16 / 9) {
+      .video-player {
+        height: 0;
+        padding-top: 56.25%;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .video-player-card {
+        border-radius: 1rem;
+        box-shadow: 0 18px 44px rgba(0, 0, 0, 0.3);
+      }
+
+      .video-player-card figcaption {
+        display: grid;
+        justify-items: start;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .video-player-card {
+        width: calc(100% + 0.5rem);
+        margin-left: -0.25rem;
+        margin-right: -0.25rem;
+        padding: 0.25rem;
+      }
+
+      .video-player-card figcaption {
+        padding-inline: 0.7rem;
+      }
+    }
+  </style>
+
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -35,6 +166,19 @@
       "name": "GreenKappa Labs"
     },
     "url": "https://greenkappalabs.art/tablearc/"
+  }
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "VideoObject",
+    "name": "TableArc Product Overview",
+    "description": "A narrated overview of TableArc, a local-first AI tabletop RPG engine combining natural-language play with persistent, rules-aware game state.",
+    "thumbnailUrl": "https://greenkappalabs.art/tablearc/media/tablearc-product-overview-poster.jpg",
+    "embedUrl": "https://greenkappalabs.art/tablearc/#showcase",
+    "contentUrl": "https://greenkappalabs.art/tablearc/media/tablearc-product-overview.mp4",
+    "duration": "PT2M30S"
   }
   </script>
 </head>
@@ -57,6 +201,7 @@
 
     <nav id="primary-nav" class="nav" aria-label="TableArc navigation">
       <a href="#overview">Overview</a>
+      <a href="#showcase">Watch</a>
       <a href="#product">Product</a>
       <a href="#ask-arcana">Ask Arcana</a>
       <a href="#architecture">Architecture</a>
@@ -76,7 +221,7 @@
         </p>
         <div class="hero-actions">
           <a class="button primary gold-button" href="#ask-arcana">Ask Arcana</a>
-          <a class="button secondary dark-secondary" href="#product">See the product</a>
+          <a class="button secondary dark-secondary" href="#showcase">Watch the overview</a>
           <a class="button text-link-button" href="#status">What works today ↓</a>
         </div>
         <div class="tablearc-badges" aria-label="TableArc technology">
@@ -105,6 +250,8 @@
       <div><strong>Built by</strong><span>Trevor Leininger · GreenKappa Labs</span></div>
     </section>
 
+
+
     <section id="overview" class="section overview-grid">
       <div class="overview-copy reveal">
         <p class="eyebrow gold">What it is</p>
@@ -121,6 +268,41 @@
         <p>The AI imagines.</p>
         <p>The engine remembers, adjudicates, maps, resolves, and proves.</p>
       </blockquote>
+    </section>
+
+    <section id="showcase" class="section video-showcase-section" aria-labelledby="showcase-title">
+      <div class="section-heading dark-heading video-showcase-heading reveal">
+        <div>
+          <p class="eyebrow gold">Product overview</p>
+          <h2 id="showcase-title">See how TableArc turns AI narration into a persistent tabletop engine.</h2>
+        </div>
+        <p>
+          This two-and-a-half-minute showcase explains the product vision, core workflows,
+          local and cloud model support, structured state, maps, combat, continuity, and roadmap.
+        </p>
+      </div>
+
+      <figure class="video-player-card reveal" aria-describedby="showcase-caption">
+        <div class="video-player">
+          <video
+            controls
+            playsinline
+            preload="metadata"
+            poster="./media/tablearc-product-overview-poster.jpg"
+            aria-label="TableArc product overview video">
+            <source src="./media/tablearc-product-overview.mp4" type="video/mp4">
+            Your browser cannot play this embedded video.
+            <a href="https://www.youtube.com/watch?v=bqvEgWpAGv0">Watch the TableArc product overview on YouTube.</a>
+          </video>
+        </div>
+        <figcaption id="showcase-caption">
+          <span class="video-caption-copy">
+            <strong>TableArc Product Overview</strong>
+            <span>Self-hosted responsive playback with full-screen support on desktop, tablet, and mobile.</span>
+          </span>
+          <a class="video-external-link" href="https://www.youtube.com/watch?v=bqvEgWpAGv0" target="_blank" rel="noreferrer">Watch on YouTube ↗</a>
+        </figcaption>
+      </figure>
     </section>
 
     <section id="product" class="section product-gallery-section">
