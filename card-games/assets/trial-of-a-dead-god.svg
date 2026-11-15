@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" role="img" aria-labelledby="title desc">
+<title id="title">The Trial of a Dead God — original promotional illustration</title>
+<desc id="desc">A suspended set of celestial scales below a shattered golden halo, in a dark supernatural courtroom.</desc>
+<defs>
+ <linearGradient id="sky" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#100d1c"/><stop offset=".55" stop-color="#32182a"/><stop offset="1" stop-color="#6f2931"/></linearGradient>
+ <radialGradient id="aura"><stop stop-color="#f4d08c" stop-opacity=".55"/><stop offset=".5" stop-color="#b76b59" stop-opacity=".18"/><stop offset="1" stop-color="#351423" stop-opacity="0"/></radialGradient>
+ <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f7e2ab"/><stop offset=".5" stop-color="#c79a54"/><stop offset="1" stop-color="#795337"/></linearGradient>
+ <linearGradient id="bone" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#f9eccd"/><stop offset="1" stop-color="#bda688"/></linearGradient>
+ <filter id="glow"><feGaussianBlur stdDeviation="11"/></filter>
+ <filter id="shadow"><feDropShadow dx="0" dy="12" stdDeviation="18" flood-color="#050309" flood-opacity=".75"/></filter>
+ <pattern id="lines" width="48" height="48" patternUnits="userSpaceOnUse"><path d="M48 0H0V48" fill="none" stroke="#e9ac85" stroke-opacity=".055"/></pattern>
+</defs>
+<rect width="1200" height="900" fill="url(#sky)"/><rect width="1200" height="900" fill="url(#lines)"/>
+<circle cx="600" cy="338" r="450" fill="url(#aura)"/>
+<path d="M0 780L180 680L320 740L510 680L720 725L950 665L1200 785V900H0Z" fill="#120e1a"/>
+<g opacity=".42" fill="#140f1c">
+ <path d="M56 230h130v545H56zM32 210h180v30H32zM38 176h168l-22 33H60zM86 144h69l36 28H51Z"/>
+ <path d="M1010 230h130v545h-130zM990 210h170v30H990zM994 176h164l-22 33h-121zM1040 144h70l36 28h-142z"/>
+ <path d="M245 310h70v450h-70zM231 294h100v20H231zM890 310h70v450h-70zM874 294h101v20H874z"/>
+</g>
+<g stroke="#a87b60" stroke-width="2" opacity=".48" fill="none">
+ <path d="M104 275v470M139 275v470M1045 275v470M1080 275v470"/>
+ <path d="M275 340v390M929 340v390"/>
+</g>
+<g transform="translate(600 348)" fill="none" stroke="url(#gold)" stroke-linecap="round">
+ <circle r="204" stroke-width="22" stroke-dasharray="210 21 160 30 240 16 210 18 320 26" transform="rotate(-20)" filter="url(#shadow)"/>
+ <circle r="183" stroke-width="2" stroke-dasharray="2 15" opacity=".8"/>
+ <circle r="233" stroke-width="1.5" opacity=".34"/>
+ <path d="M-151-142l-36-63m193-144 33-73m180 216 45-29M-13 207l-31 66" stroke-width="13"/>
+</g>
+<g transform="translate(600 386)" filter="url(#shadow)">
+ <path d="M0-192v424" stroke="url(#gold)" stroke-width="14" stroke-linecap="round"/>
+ <path d="M-242-80Q-4-130 240-80" fill="none" stroke="url(#gold)" stroke-width="18" stroke-linecap="round"/>
+ <circle cx="0" cy="-94" r="26" fill="#f3dca2" stroke="#704831" stroke-width="7"/>
+ <path d="M-210-79l-50 208M-171-81l47 210M171-81l-46 210M210-79l50 208" fill="none" stroke="#e7bc76" stroke-width="4"/>
+ <path d="M-290 128Q-187 205-95 128Z" fill="url(#bone)" stroke="#c69259" stroke-width="7"/>
+ <path d="M93 128Q187 205 289 128Z" fill="url(#bone)" stroke="#c69259" stroke-width="7"/>
+ <path d="M-199 38l16 53-17 22 28-10 23 11-12-25 17-42-27 8Z" fill="#8c3945" stroke="#edba7d" stroke-width="4"/>
+ <path d="M170 34l20 27-3 35-20-7-18 16 1-34Z" fill="#d6b570" stroke="#fff0c3" stroke-width="5"/>
+ <path d="M-44 229h88l37 35H-82Z" fill="url(#gold)"/>
+</g>
+<g fill="#f3ca83" opacity=".7">
+ <circle cx="340" cy="105" r="3"/><circle cx="862" cy="150" r="4"/><circle cx="977" cy="445" r="3"/><circle cx="285" cy="455" r="3"/><circle cx="767" cy="99" r="2"/><circle cx="456" cy="215" r="3"/><circle cx="1004" cy="601" r="2"/>
+</g>
+<g transform="translate(180 637) rotate(-15)" filter="url(#shadow)">
+ <rect width="215" height="155" rx="6" fill="#e4cfaa" stroke="#aa8158" stroke-width="6"/><path d="M25 36h145M25 55h167M25 76h120M25 97h143" stroke="#876b61" stroke-width="5" opacity=".56"/><circle cx="169" cy="111" r="25" fill="#8b3748"/><path d="M159 112l8 9 16-23" fill="none" stroke="#f8d2a0" stroke-width="5"/>
+</g>
+<g transform="translate(845 640) rotate(14)" filter="url(#shadow)">
+ <rect width="195" height="147" rx="6" fill="#dbbe92" stroke="#9a7350" stroke-width="6"/><path d="M25 38h146M25 59h102M25 80h130" stroke="#755e58" stroke-width="5" opacity=".5"/><circle cx="140" cy="107" r="23" fill="#ae5a4c"/><path d="M132 99l19 19m0-19-19 19" stroke="#f4c898" stroke-width="5"/>
+</g>
+<path d="M0 851Q600 793 1200 851" fill="none" stroke="#dca65e" stroke-width="2" opacity=".3"/>
+</svg>
