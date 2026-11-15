@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Small Gods, Large Debts promotional illustration" width="1200" height="800" viewBox="0 0 1200 800">
+<defs><filter id="grain"><feTurbulence type="fractalNoise" baseFrequency=".55" numOctaves="3" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter><pattern id="line" width="13" height="13" patternUnits="userSpaceOnUse"><path d="M0 13L13 0" stroke="#30263F" opacity=".07" stroke-width="1"/></pattern></defs>
+<rect width="1200" height="800" fill="#E8DBBF"/><rect width="1200" height="800" fill="url(#line)"/><rect width="1200" height="800" filter="url(#grain)" opacity=".085"/>
+<rect x="25" y="25" width="1150" height="750" fill="none" stroke="#30263F" opacity=".35" stroke-width="1.3"/>
+<path d="M64 111H1138 M64 700H1138" stroke="#30263F" opacity=".58" stroke-width="1.7"/>
+<text x="65" y="87" fill="#30263F" font-family="Arial,Helvetica,sans-serif" letter-spacing="5" font-size="20" font-weight="700">GREENKAPPA LABS</text>
+<text x="1136" y="87" fill="#30263F" text-anchor="end" font-family="Arial,Helvetica,sans-serif" letter-spacing="3" font-size="16">02 / DIVINE ECONOMICS</text>
+
+<circle cx="875" cy="362" r="228" fill="#D8C8AD" stroke="#30263F" stroke-width="2"/><circle cx="875" cy="362" r="195" fill="none" stroke="#9A6930" stroke-width="2"/>
+<path d="M727 243q138-165 283 0" stroke="#30263F" fill="none" stroke-width="8"/><path d="M773 261q101-94 201 0" stroke="#9A6930" fill="none" stroke-width="2"/>
+<path d="M841 168l33-36 34 36M875 132v-31" fill="none" stroke="#9A6930" stroke-width="4"/>
+<path d="M693 459q-7-90 67-97l78 48q15 6 8 22t-23 10l-44-18 58 33q16 10 8 24-8 13-24 6l-69-34 40 36q10 13 0 23-10 10-23 1l-71-54q-31-4-43 27" stroke="#30263F" stroke-width="7" fill="#E8DBBF" stroke-linejoin="round"/>
+<circle cx="925" cy="327" r="76" fill="#A27940" stroke="#30263F" stroke-width="6"/><circle cx="925" cy="327" r="59" fill="none" stroke="#E8DBBF" stroke-width="3"/><path d="M925 280l13 30 31 4-23 20 6 34-27-16-27 16 6-34-23-20 31-4Z" fill="#E8DBBF"/>
+<path d="M767 535L997 489 1053 561 827 606Z" fill="#30263F" stroke="#9A6930" stroke-width="5"/><path d="M767 535l56 27 230-1M823 562l4 44" stroke="#E8DBBF" stroke-width="3" fill="none"/>
+<path d="M854 565l139-29M858 579l92-19" stroke="#E8DBBF" opacity=".6" stroke-width="2"/>
+<g fill="#9A6930"><circle cx="691" cy="218" r="10"/><circle cx="1058" cy="266" r="7"/><circle cx="1102" cy="460" r="11"/></g>
+
+<text x="66" y="607" font-family="Georgia,'Times New Roman',serif" font-size="56" fill="#30263F" letter-spacing="-1.5" font-weight="700">Small Gods, Large Debts</text>
+<text x="70" y="659" font-family="Arial,Helvetica,sans-serif" font-size="18" letter-spacing="2.1" fill="#30263F" opacity=".88">MIRACLES · BARGAINS · UNPAID OBLIGATIONS</text>
+<text x="70" y="744" font-family="Arial,Helvetica,sans-serif" font-size="14" letter-spacing="3" fill="#9A6930">AN ORIGINAL GAME IN DEVELOPMENT</text>
+<circle cx="1134" cy="736" r="15" stroke="#9A6930" stroke-width="2" fill="none"/><path d="M1125 744q10-19 19 0" stroke="#9A6930" fill="none" stroke-width="2"/></svg>
