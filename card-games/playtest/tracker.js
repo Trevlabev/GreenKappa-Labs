@@ -1,0 +1,16 @@
+(function(){
+"use strict";
+const rounds=document.getElementById("rounds"),suspect=document.getElementById("suspect"),notes=document.getElementById("testNotes"),result=document.getElementById("gameResult"),score=document.getElementById("crewScore");
+function makeRows(){rounds.replaceChildren();for(let i=1;i<=3;i++){const box=document.createElement("section");box.className="tracker-round";box.innerHTML='<h3>Commission '+i+'</h3><p class="lab-small">Mark a criterion only when the final scored answer satisfies it.</p>'+[1,2,3].map(k=>'<label><input type="checkbox" data-round="'+i+'" data-criterion="'+k+'"> Criterion '+k+' passed</label>').join('')+'<label><input type="checkbox" data-round="'+i+'" data-forbidden="true"> Forbidden word present</label><label><input type="checkbox" data-round="'+i+'" data-final="true"> Commission scored / final</label><p class="round-outcome" id="roundOutcome'+i+'">Unscored</p>';rounds.appendChild(box);}}
+function calculate(){let wins=0,complete=0,data=[];for(let i=1;i<=3;i++){const group=[...rounds.querySelectorAll('input[data-round="'+i+'"]')];const criteria=group.filter(e=>e.dataset.criterion).filter(e=>e.checked).length;const forbidden=group.find(e=>e.dataset.forbidden).checked,final=group.find(e=>e.dataset.final).checked;const pass=criteria>=2&&!forbidden;if(final){complete++;if(pass)wins++;}document.getElementById("roundOutcome"+i).textContent=final?(pass?"PASS":"FAIL")+" · "+criteria+"/3 criteria"+(forbidden?" · forbidden word":""):"Unscored · "+criteria+"/3 currently checked";data.push({round:i,complete:final,criteria,forbidden,pass:final?pass:null});}
+score.textContent=wins+" of "+complete+" scored commissions passing";
+let verdict="Enter all three commission outcomes.";if(complete===3){if(wins===3)verdict="CREW WINS · Three commissions passed.";else if(wins===2&&suspect.value==="pending")verdict="Two passes. Resolve the final Injector accusation.";else if(wins===2&&suspect.value==="correct")verdict="CREW WINS · Two passes and the Injector identified.";else verdict="INJECTOR WINS · Crew victory conditions were not met.";}
+result.textContent=verdict;return {data,wins,complete,suspect:suspect.value,verdict,notes:notes.value.trim()};}
+rounds.addEventListener("change",calculate);suspect.addEventListener("change",calculate);
+document.getElementById("resetTracker").addEventListener("click",()=>{makeRows();suspect.value="pending";notes.value="";calculate();});
+document.getElementById("downloadResults").addEventListener("click",()=>{
+const r=calculate();const content=["# Who Broke the Prompt? — Alpha Playtest Score","Generated: "+new Date().toISOString(),"Rulebook version: 0.3-alpha","",...r.data.map(x=>"Commission "+x.round+": "+(x.complete?(x.pass?"PASS":"FAIL"):"UNSCORED")+" · "+x.criteria+"/3 criteria · forbidden word "+(x.forbidden?"present":"absent")),"","Final accusation: "+r.suspect,"Result: "+r.verdict,"","Notes:","",r.notes||"(none)",""].join("\n");
+const blob=new Blob([content],{type:"text/markdown;charset=utf-8"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="Who-Broke-the-Prompt-Playtest-Report.md";document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+});
+makeRows();calculate();
+}());
