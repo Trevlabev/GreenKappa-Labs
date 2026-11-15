@@ -136,3 +136,45 @@ body.card-games-page{
 @media(prefers-reduced-motion:reduce){
   .cg-cover,.cg-hero-art:hover .cg-cover-one,.cg-hero-art:hover .cg-cover-two{transition:none}
 }
+
+
+/* Founding Five / minimalist editorial portfolio */
+.cg-hero-five{grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr);gap:clamp(2rem,5vw,5rem)}
+.cg-hero-five h1{font-size:clamp(4rem,7vw,7rem);line-height:.93}
+.cg-gallery{position:relative;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;align-content:center}
+.cg-gallery-card{display:block;overflow:hidden;border:1px solid rgba(250,226,188,.23);border-radius:12px;background:#1b2431;box-shadow:0 14px 38px rgba(0,0,0,.25);transition:transform .2s ease,border-color .2s ease}
+.cg-gallery-card:first-child{grid-column:span 2}
+.cg-gallery-card img{display:block;width:100%;height:100%;aspect-ratio:2.8/1;object-fit:cover}
+.cg-gallery-card:not(:first-child) img{aspect-ratio:1.7/1}
+.cg-gallery-card:hover,.cg-gallery-card:focus-visible{transform:translateY(-3px);border-color:#dab588}
+.cg-gallery-label{position:absolute;right:16px;bottom:-31px;color:#bdc7c4;font:700 .65rem Arial,sans-serif;letter-spacing:.19em}
+.cg-hero-five .cg-hero-lede{max-width:560px}
+.cg-hero-five .cg-hero-note{max-width:560px}
+.cg-game-art{border-radius:12px;padding:7px;background:rgba(238,222,196,.07)}
+.cg-game-art img{aspect-ratio:3/2;border-radius:7px}
+.cg-game-art figcaption{padding:.73rem .4rem .1rem;font-size:.62rem;letter-spacing:.11em}
+.cg-game h3{letter-spacing:-.06em}
+.cg-game-reverse .cg-game-copy{grid-column:1;grid-row:1}
+.cg-game-reverse .cg-game-art{grid-column:2;grid-row:1}
+.cg-game-reverse .cg-game-art{border-color:rgba(238,216,178,.3)}
+.cg-collection .cg-section-top{margin-bottom:2.5rem}
+.cg-collection .cg-game{padding:clamp(2.8rem,5.2vw,5.2rem) 0}
+@media(max-width:1000px){
+  .cg-hero-five{grid-template-columns:1fr}
+  .cg-gallery{width:min(100%,780px);margin:0 auto}
+  .cg-gallery-card:first-child img{aspect-ratio:3/1}
+}
+@media(max-width:760px){
+  .cg-hero-five .cg-gallery{margin-top:1rem;gap:8px}
+  .cg-gallery-card{border-radius:8px}
+  .cg-gallery-card:first-child img{aspect-ratio:2.2/1}
+  .cg-gallery-card:not(:first-child) img{aspect-ratio:1.35/1}
+  .cg-game-reverse .cg-game-art,.cg-game-reverse .cg-game-copy{grid-column:1;grid-row:auto}
+  .cg-game h3{overflow-wrap:normal;font-size:clamp(2.5rem,9vw,4.3rem)}
+}
+@media(max-width:420px){
+  .cg-gallery-label{right:8px;bottom:-25px;font-size:.55rem}
+  .cg-gallery-card:first-child img{aspect-ratio:1.9/1}
+  .cg-gallery-card:not(:first-child) img{aspect-ratio:1.2/1}
+}
+@media(prefers-reduced-motion:reduce){.cg-gallery-card{transition:none}}
