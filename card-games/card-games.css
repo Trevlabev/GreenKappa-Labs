@@ -194,3 +194,44 @@ body.card-games-page{
   .cg-gallery-card:first-child img,
   .cg-gallery-card:not(:first-child) img{aspect-ratio:3/2;object-fit:contain}
 }
+
+/* Card Games / 2026-11-15: separate illustrated promotional sell sheets.
+   Full posters remain uncropped in each featured game; compact gallery
+   crops intentionally prioritize the box art and heading. */
+.cg-game-poster-art{
+  background:linear-gradient(145deg,rgba(255,255,255,.10),rgba(255,255,255,.025));
+  border-color:rgba(255,255,255,.26);
+  box-shadow:0 24px 60px rgba(0,0,0,.24);
+}
+.cg-poster-link{
+  display:block;position:relative;overflow:hidden;
+  border-radius:10px;background:#111a2a;
+  outline-offset:5px;text-decoration:none;
+}
+.cg-game-poster-art .cg-poster-link img{
+  display:block;width:100%;height:auto;
+  max-width:100%;aspect-ratio:1122/1402;
+  object-fit:contain;object-position:center;
+  border-radius:10px;
+  transition:transform .22s ease;
+}
+.cg-poster-link:hover img{transform:scale(1.012)}
+.cg-poster-link:focus-visible{outline:3px solid #f7d487}
+.cg-game-poster-art figcaption{
+  display:flex;justify-content:space-between;gap:.8rem;
+  color:#d7d2cb;font-weight:750;letter-spacing:.04em;
+  text-transform:none;font-size:.73rem;
+}
+.cg-gallery-card img.cg-gallery-poster,
+.cg-gallery-card:not(:first-child) img.cg-gallery-poster{
+  object-fit:cover;object-position:center top;
+  aspect-ratio:3/2;
+}
+#who-broke .cg-game-poster-art{border-color:rgba(83,210,210,.32)}
+#unsupervised .cg-game-poster-art{border-color:rgba(213,123,244,.34)}
+@media(max-width:760px){
+  .cg-game-poster-art{width:min(100%,560px);margin-inline:auto}
+  .cg-game-poster-art .cg-poster-link img{height:auto;aspect-ratio:1122/1402;object-fit:contain}
+  .cg-gallery-card:not(:first-child) img.cg-gallery-poster{object-fit:cover;object-position:center top;aspect-ratio:3/2}
+}
+@media(prefers-reduced-motion:reduce){.cg-poster-link img{transition:none}.cg-poster-link:hover img{transform:none}}
