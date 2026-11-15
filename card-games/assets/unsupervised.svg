@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" role="img" aria-labelledby="title desc">
+<title id="title">Unsupervised — original promotional illustration</title>
+<desc id="desc">An eccentric retro computer gleams among confetti, speech bubbles, chaotic cards, and electric bolts.</desc>
+<defs>
+<linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#11122d"/><stop offset=".55" stop-color="#32265b"/><stop offset="1" stop-color="#125b6b"/></linearGradient>
+<radialGradient id="halo"><stop stop-color="#46f3cf" stop-opacity=".48"/><stop offset=".5" stop-color="#b28afa" stop-opacity=".17"/><stop offset="1" stop-color="#34205a" stop-opacity="0"/></radialGradient>
+<linearGradient id="frame" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#f9f0cf"/><stop offset="1" stop-color="#c3c4cc"/></linearGradient>
+<linearGradient id="screen" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#17133b"/><stop offset=".55" stop-color="#133f57"/><stop offset="1" stop-color="#0d213e"/></linearGradient>
+<linearGradient id="card" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffbf9d"/><stop offset="1" stop-color="#ee68a5"/></linearGradient>
+<filter id="ds"><feDropShadow dx="0" dy="22" stdDeviation="21" flood-color="#080a20" flood-opacity=".65"/></filter>
+<pattern id="dots" width="32" height="32" patternUnits="userSpaceOnUse"><circle cx="4" cy="4" r="2" fill="#cfccff" opacity=".12"/></pattern>
+</defs>
+<rect width="1200" height="900" fill="url(#bg)"/><rect width="1200" height="900" fill="url(#dots)"/><circle cx="570" cy="380" r="490" fill="url(#halo)"/>
+<g opacity=".7" stroke-width="7" stroke-linejoin="round" fill="none">
+<path d="M199 143l40 19-28 34 41 23" stroke="#b7ffce"/><path d="M958 137l-25 44 38 24-42 29" stroke="#ffbf79"/><path d="M1107 480l-52 14 26 30-46 29" stroke="#94fff0"/><path d="M118 449l56 14-19 37 52 16" stroke="#ee94f1"/>
+</g>
+<g filter="url(#ds)">
+ <g transform="translate(160 218) rotate(-18)">
+   <rect width="238" height="300" rx="24" fill="#fbdf81" stroke="#161c3a" stroke-width="15"/>
+   <rect x="25" y="27" width="186" height="190" rx="14" fill="#332355"/>
+   <path d="M55 82h116M55 116h84M55 150h106" stroke="#adffeb" stroke-width="15" stroke-linecap="round"/>
+   <circle cx="118" cy="253" r="13" fill="#45266b"/>
+ </g>
+ <g transform="translate(845 180) rotate(17)">
+   <rect width="213" height="282" rx="23" fill="url(#card)" stroke="#161c3a" stroke-width="15"/>
+   <rect x="28" y="30" width="157" height="166" rx="14" fill="#4a2253"/>
+   <path d="M60 92h89M104 56v73" stroke="#ffe6bc" stroke-width="17" stroke-linecap="round"/>
+   <path d="M63 239h90" stroke="#4a2253" stroke-width="14" stroke-linecap="round"/>
+ </g>
+</g>
+<g transform="translate(352 132) rotate(-3)" filter="url(#ds)">
+  <path d="M108 8h374q68 0 68 72v381q0 65-65 65H90q-62 0-62-64V83Q28 8 108 8Z" fill="url(#frame)" stroke="#17162f" stroke-width="18"/>
+  <rect x="71" y="51" width="429" height="343" rx="27" fill="url(#screen)" stroke="#7e7aa8" stroke-width="12"/>
+  <path d="M99 100h376M99 131h376M99 162h376M99 193h376M99 224h376M99 255h376M99 286h376M99 317h376M99 348h376" stroke="#d5aaff" stroke-opacity=".09" stroke-width="3"/>
+  <path d="M169 183l68-7m114 3 70 8" fill="none" stroke="#a9ffea" stroke-width="26" stroke-linecap="round"/>
+  <path d="M174 258q100 95 239-4" fill="none" stroke="#ffabbd" stroke-width="17" stroke-linecap="round"/>
+  <path d="M241 297l-17-28m146 26 10-34" stroke="#ffabbd" stroke-width="12" stroke-linecap="round"/>
+  <circle cx="281" cy="432" r="21" fill="#5b5492"/><circle cx="343" cy="432" r="14" fill="#ff79a8"/><path d="M210 526l-25 75h215l-23-75" fill="#b9b8c6" stroke="#17162f" stroke-width="14"/>
+  <rect x="120" y="594" width="342" height="27" rx="13" fill="#c4c3ce" stroke="#17162f" stroke-width="11"/>
+</g>
+<g transform="translate(812 549) rotate(12)" filter="url(#ds)">
+ <path d="M33 8h224q32 0 32 32v130q0 32-32 32h-114l-57 64 7-64H33q-33 0-33-32V40Q0 8 33 8Z" fill="#92f3df" stroke="#171631" stroke-width="15"/>
+ <circle cx="89" cy="107" r="16" fill="#29234a"/><circle cx="145" cy="107" r="16" fill="#29234a"/><circle cx="201" cy="107" r="16" fill="#29234a"/>
+</g>
+<g transform="translate(66 624) rotate(-9)" filter="url(#ds)">
+ <path d="M22 0h245q22 0 22 25v128q0 25-24 25H151l-62 51 11-51H24q-24 0-24-25V26Q0 0 22 0Z" fill="#f4abcf" stroke="#191735" stroke-width="14"/>
+ <path d="M45 63h188M45 96h153M45 129h176" stroke="#432d5e" stroke-width="12" stroke-linecap="round"/>
+</g>
+<g fill="#f9d67b">
+ <path d="M615 62l10 26 27 8-25 11-8 27-12-25-26-8 26-11Z"/>
+ <path d="M1032 696l9 24 25 7-24 11-7 26-11-24-24-8 22-10Z"/>
+ <circle cx="1083" cy="334" r="7"/><circle cx="132" cy="564" r="6"/><circle cx="817" cy="94" r="5"/>
+</g>
+<g fill="#8df6ed"><circle cx="1080" cy="80" r="8"/><circle cx="120" cy="310" r="9"/><circle cx="783" cy="804" r="7"/></g>
+<g fill="#ec87bb"><rect x="840" y="92" width="19" height="19" rx="3" transform="rotate(31 840 92)"/><rect x="283" y="746" width="14" height="14" rx="3" transform="rotate(21 283 746)"/></g>
+</svg>
