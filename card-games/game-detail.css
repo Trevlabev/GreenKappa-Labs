@@ -115,3 +115,8 @@ body.game-detail-page[data-game="unsupervised"]{--gd-accent:#f2a76a;--gd-accent-
   .gd-other-games{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 @media(prefers-reduced-motion:reduce){.gd-actions a,.gd-hero-art a,.gd-other-game{transition:none}.gd-actions a:hover,.gd-other-game:hover{transform:none}}
+
+/* Four-stage AI games use an even editorial sequence instead of an orphan fourth card. */
+.gd-feature-grid:has(> :nth-child(4)){grid-template-columns:repeat(4,minmax(0,1fr))}
+@media(max-width:1100px) and (min-width:761px){.gd-feature-grid:has(> :nth-child(4)){grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:760px){.gd-feature-grid:has(> :nth-child(4)){grid-template-columns:1fr}}
