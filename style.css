@@ -509,3 +509,96 @@ p{line-height:1.68}
 .card-games-teaser-grid span{font-size:.7rem;line-height:1.4}
 @media(min-width:721px) and (max-width:1130px){.card-games-teaser-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:720px){.card-games-teaser-grid{grid-template-columns:1fr}.card-games-teaser-grid img{aspect-ratio:3/2}}
+
+
+/* Homepage / the original tabletop initiative.
+   Artwork is the approved five-game WebP collection; do not substitute stock art. */
+#tabletop-games{scroll-margin-top:96px}
+.tabletop-initiative-statement{
+  display:grid;grid-template-columns:minmax(0,1.5fr) minmax(250px,.7fr);
+  gap:0;overflow:hidden;margin:0 0 1.4rem;border-radius:22px;
+  background:#10271e;color:#fff9ed;border:1px solid rgba(29,59,45,.45);
+  box-shadow:0 24px 65px rgba(10,35,25,.15)
+}
+.tabletop-initiative-copy{padding:clamp(1.5rem,3.7vw,3.4rem);background:
+  radial-gradient(circle at 92% 0,rgba(199,169,110,.1),transparent 40%),#10271e}
+.tabletop-initiative-kicker{
+  margin-bottom:1.3rem;color:#d5b68c;font-size:.72rem;font-weight:850;
+  letter-spacing:.2em
+}
+.tabletop-initiative-copy h3{
+  max-width:680px;margin-bottom:1.25rem;color:#fff6e5;
+  font:400 clamp(2.1rem,4vw,4.2rem)/1.02 Georgia,'Times New Roman',serif;letter-spacing:-.045em
+}
+.tabletop-initiative-copy>p:not(.tabletop-initiative-kicker){
+  max-width:660px;margin-bottom:1.35rem;color:#d9dfd7;font-size:1rem;line-height:1.77
+}
+.tabletop-initiative-link{
+  display:inline-flex;align-items:center;gap:.55rem;color:#f1ce9d;
+  font-weight:790;text-decoration-thickness:1px;text-underline-offset:5px
+}
+.tabletop-initiative-link:hover{color:#fff5df}
+.tabletop-initiative-link:focus-visible{outline:3px solid #f1ce9d;outline-offset:5px}
+.tabletop-initiative-aside{
+  display:flex;flex-direction:column;justify-content:center;align-items:flex-start;gap:.75rem;
+  padding:clamp(1.5rem,3.5vw,3rem);background:#213c31;
+  border-left:1px solid rgba(241,206,157,.2)
+}
+.tabletop-initiative-count{
+  color:#dcb783;font:400 clamp(4.8rem,8vw,8rem)/.85 Georgia,'Times New Roman',serif;
+  letter-spacing:-.06em
+}
+.tabletop-initiative-aside strong{
+  max-width:270px;color:#fff7e8;font:500 clamp(1.28rem,1.8vw,1.85rem)/1.18 Georgia,serif
+}
+.tabletop-initiative-aside p{margin:0;color:#dce3d8;font-size:.91rem;line-height:1.7}
+.tabletop-initiative-status{
+  display:block;margin-top:1rem;padding-top:1rem;border-top:1px solid rgba(241,206,157,.24);
+  color:#dcb783;font-size:.72rem;line-height:1.5;font-weight:750;letter-spacing:.04em
+}
+/* Two editorial lead covers followed by three supporting covers. */
+.card-games-teaser .card-games-teaser-grid{
+  display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:1.1rem
+}
+.card-games-teaser .card-games-teaser-grid a{
+  grid-column:span 2;min-width:0;display:flex;flex-direction:column;
+  border-radius:14px;background:#f8f3e9;overflow:hidden;
+  box-shadow:0 15px 30px rgba(11,36,25,.08)
+}
+.card-games-teaser .card-games-teaser-grid a:nth-child(-n+2){grid-column:span 3}
+.card-games-teaser .card-games-teaser-grid img{
+  display:block;width:100%;height:auto;aspect-ratio:3/2;object-fit:contain;background:#1c2422
+}
+.card-games-teaser .card-games-teaser-grid strong{
+  display:block;padding:1.05rem 1.1rem .15rem;font-size:clamp(.98rem,1.5vw,1.24rem);line-height:1.2;
+  letter-spacing:-.03em;color:#182c24
+}
+.card-games-teaser .card-games-teaser-grid span{
+  display:block;padding:0 1.1rem 1.2rem;color:#52665c;font-size:.81rem;line-height:1.5
+}
+.card-games-teaser-bottom{margin-top:1.7rem}
+@media(max-width:960px){
+  .tabletop-initiative-statement{grid-template-columns:1fr}
+  .tabletop-initiative-aside{border-left:0;border-top:1px solid rgba(241,206,157,.2)}
+  .tabletop-initiative-count{font-size:5rem}
+  .card-games-teaser .card-games-teaser-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .card-games-teaser .card-games-teaser-grid a,
+  .card-games-teaser .card-games-teaser-grid a:nth-child(-n+2){grid-column:span 1}
+  .card-games-teaser .card-games-teaser-grid a:last-child{grid-column:span 2;max-width:calc(50% - .55rem)}
+}
+@media(max-width:640px){
+  .tabletop-initiative-statement{border-radius:16px}
+  .tabletop-initiative-copy,.tabletop-initiative-aside{padding:1.5rem}
+  .tabletop-initiative-copy h3{font-size:clamp(2.2rem,9vw,3rem)}
+  .card-games-teaser .card-games-teaser-grid{grid-template-columns:1fr;gap:1rem}
+  .card-games-teaser .card-games-teaser-grid a,
+  .card-games-teaser .card-games-teaser-grid a:nth-child(-n+2),
+  .card-games-teaser .card-games-teaser-grid a:last-child{
+    grid-column:1;max-width:none;display:flex;flex-direction:column
+  }
+  .card-games-teaser .card-games-teaser-grid img{
+    grid-row:auto;align-self:auto;width:100%;height:auto;aspect-ratio:3/2;object-fit:contain
+  }
+  .card-games-teaser .card-games-teaser-grid strong{padding:.8rem 1rem .1rem}
+  .card-games-teaser .card-games-teaser-grid span{padding:.1rem 1rem 1rem}
+}
