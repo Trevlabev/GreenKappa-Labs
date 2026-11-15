@@ -1,56 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" role="img" aria-labelledby="title desc">
-<title id="title">Unsupervised — original promotional illustration</title>
-<desc id="desc">An eccentric retro computer gleams among confetti, speech bubbles, chaotic cards, and electric bolts.</desc>
-<defs>
-<linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#11122d"/><stop offset=".55" stop-color="#32265b"/><stop offset="1" stop-color="#125b6b"/></linearGradient>
-<radialGradient id="halo"><stop stop-color="#46f3cf" stop-opacity=".48"/><stop offset=".5" stop-color="#b28afa" stop-opacity=".17"/><stop offset="1" stop-color="#34205a" stop-opacity="0"/></radialGradient>
-<linearGradient id="frame" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#f9f0cf"/><stop offset="1" stop-color="#c3c4cc"/></linearGradient>
-<linearGradient id="screen" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#17133b"/><stop offset=".55" stop-color="#133f57"/><stop offset="1" stop-color="#0d213e"/></linearGradient>
-<linearGradient id="card" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffbf9d"/><stop offset="1" stop-color="#ee68a5"/></linearGradient>
-<filter id="ds"><feDropShadow dx="0" dy="22" stdDeviation="21" flood-color="#080a20" flood-opacity=".65"/></filter>
-<pattern id="dots" width="32" height="32" patternUnits="userSpaceOnUse"><circle cx="4" cy="4" r="2" fill="#cfccff" opacity=".12"/></pattern>
-</defs>
-<rect width="1200" height="900" fill="url(#bg)"/><rect width="1200" height="900" fill="url(#dots)"/><circle cx="570" cy="380" r="490" fill="url(#halo)"/>
-<g opacity=".7" stroke-width="7" stroke-linejoin="round" fill="none">
-<path d="M199 143l40 19-28 34 41 23" stroke="#b7ffce"/><path d="M958 137l-25 44 38 24-42 29" stroke="#ffbf79"/><path d="M1107 480l-52 14 26 30-46 29" stroke="#94fff0"/><path d="M118 449l56 14-19 37 52 16" stroke="#ee94f1"/>
-</g>
-<g filter="url(#ds)">
- <g transform="translate(160 218) rotate(-18)">
-   <rect width="238" height="300" rx="24" fill="#fbdf81" stroke="#161c3a" stroke-width="15"/>
-   <rect x="25" y="27" width="186" height="190" rx="14" fill="#332355"/>
-   <path d="M55 82h116M55 116h84M55 150h106" stroke="#adffeb" stroke-width="15" stroke-linecap="round"/>
-   <circle cx="118" cy="253" r="13" fill="#45266b"/>
- </g>
- <g transform="translate(845 180) rotate(17)">
-   <rect width="213" height="282" rx="23" fill="url(#card)" stroke="#161c3a" stroke-width="15"/>
-   <rect x="28" y="30" width="157" height="166" rx="14" fill="#4a2253"/>
-   <path d="M60 92h89M104 56v73" stroke="#ffe6bc" stroke-width="17" stroke-linecap="round"/>
-   <path d="M63 239h90" stroke="#4a2253" stroke-width="14" stroke-linecap="round"/>
- </g>
-</g>
-<g transform="translate(352 132) rotate(-3)" filter="url(#ds)">
-  <path d="M108 8h374q68 0 68 72v381q0 65-65 65H90q-62 0-62-64V83Q28 8 108 8Z" fill="url(#frame)" stroke="#17162f" stroke-width="18"/>
-  <rect x="71" y="51" width="429" height="343" rx="27" fill="url(#screen)" stroke="#7e7aa8" stroke-width="12"/>
-  <path d="M99 100h376M99 131h376M99 162h376M99 193h376M99 224h376M99 255h376M99 286h376M99 317h376M99 348h376" stroke="#d5aaff" stroke-opacity=".09" stroke-width="3"/>
-  <path d="M169 183l68-7m114 3 70 8" fill="none" stroke="#a9ffea" stroke-width="26" stroke-linecap="round"/>
-  <path d="M174 258q100 95 239-4" fill="none" stroke="#ffabbd" stroke-width="17" stroke-linecap="round"/>
-  <path d="M241 297l-17-28m146 26 10-34" stroke="#ffabbd" stroke-width="12" stroke-linecap="round"/>
-  <circle cx="281" cy="432" r="21" fill="#5b5492"/><circle cx="343" cy="432" r="14" fill="#ff79a8"/><path d="M210 526l-25 75h215l-23-75" fill="#b9b8c6" stroke="#17162f" stroke-width="14"/>
-  <rect x="120" y="594" width="342" height="27" rx="13" fill="#c4c3ce" stroke="#17162f" stroke-width="11"/>
-</g>
-<g transform="translate(812 549) rotate(12)" filter="url(#ds)">
- <path d="M33 8h224q32 0 32 32v130q0 32-32 32h-114l-57 64 7-64H33q-33 0-33-32V40Q0 8 33 8Z" fill="#92f3df" stroke="#171631" stroke-width="15"/>
- <circle cx="89" cy="107" r="16" fill="#29234a"/><circle cx="145" cy="107" r="16" fill="#29234a"/><circle cx="201" cy="107" r="16" fill="#29234a"/>
-</g>
-<g transform="translate(66 624) rotate(-9)" filter="url(#ds)">
- <path d="M22 0h245q22 0 22 25v128q0 25-24 25H151l-62 51 11-51H24q-24 0-24-25V26Q0 0 22 0Z" fill="#f4abcf" stroke="#191735" stroke-width="14"/>
- <path d="M45 63h188M45 96h153M45 129h176" stroke="#432d5e" stroke-width="12" stroke-linecap="round"/>
-</g>
-<g fill="#f9d67b">
- <path d="M615 62l10 26 27 8-25 11-8 27-12-25-26-8 26-11Z"/>
- <path d="M1032 696l9 24 25 7-24 11-7 26-11-24-24-8 22-10Z"/>
- <circle cx="1083" cy="334" r="7"/><circle cx="132" cy="564" r="6"/><circle cx="817" cy="94" r="5"/>
-</g>
-<g fill="#8df6ed"><circle cx="1080" cy="80" r="8"/><circle cx="120" cy="310" r="9"/><circle cx="783" cy="804" r="7"/></g>
-<g fill="#ec87bb"><rect x="840" y="92" width="19" height="19" rx="3" transform="rotate(31 840 92)"/><rect x="283" y="746" width="14" height="14" rx="3" transform="rotate(21 283 746)"/></g>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" role="img" aria-label="Editorial illustration of a mischievous machine amid flying paper and unpredictable ideas">
+<defs><filter id="grain"><feTurbulence type="fractalNoise" baseFrequency=".55" numOctaves="3" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter></defs><rect width="1200" height="800" fill="#E9DFC7"/><rect width="1200" height="800" filter="url(#grain)" opacity=".08"/><rect x="25" y="25" width="1150" height="750" fill="none" stroke="#213D4A" opacity=".35"/><path d="M64 111H1138 M64 700H1138" stroke="#213D4A" opacity=".6"/>
+<text x="65" y="87" fill="#213D4A" font-family="Arial,sans-serif" letter-spacing="5" font-size="20">GREENKAPPA LABS</text><text x="1138" y="87" text-anchor="end" fill="#213D4A" font-family="Arial,sans-serif" font-size="16" letter-spacing="3">05 / IMPROV COMEDY</text>
+<circle cx="886" cy="326" r="213" fill="#B6CFBE"/><path d="M718 342l29-58 39 40 50-78 54 51 41-71 81 90" stroke="#E9DFC7" fill="none" stroke-width="20"/>
+<rect x="716" y="348" width="338" height="180" rx="23" fill="#213D4A"/><rect x="741" y="374" width="289" height="97" rx="11" fill="#E9DFC7"/><circle cx="810" cy="417" r="16" fill="#D85B36"/><circle cx="952" cy="417" r="16" fill="#D85B36"/><path d="M818 443q65 49 127-1" stroke="#213D4A" stroke-width="9" fill="none" stroke-linecap="round"/>
+<path d="M760 527l-27 45h304l-30-45" fill="#D85B36" stroke="#213D4A" stroke-width="5"/>
+<g transform="rotate(-13 656 206)"><rect x="590" y="160" width="135" height="85" rx="4" fill="#F8F0DE" stroke="#213D4A" stroke-width="4"/><path d="M615 190h75M617 213h49" stroke="#D85B36" stroke-width="5"/></g>
+<g transform="rotate(11 1080 231)"><rect x="1034" y="172" width="100" height="130" rx="4" fill="#D85B36" stroke="#213D4A" stroke-width="4"/><path d="M1062 221l16 16 21-37" stroke="#F8F0DE" stroke-width="9" fill="none"/></g>
+<path d="M674 301l-31 21 37 5 19 29 8-37 32-25-40-4-16-30Z" fill="#D85B36"/><path d="M1063 368l-29 22 35 5 20 27 6-36 32-25-38-3-15-28Z" fill="#213D4A"/>
+<text x="66" y="605" font-family="Georgia,serif" font-size="70" fill="#213D4A" font-weight="700">Unsupervised</text><text x="70" y="656" font-family="Arial,sans-serif" font-size="18" letter-spacing="2.2" fill="#213D4A">UNEXPECTED IDEAS. EVEN WORSE RESULTS.</text><text x="70" y="745" font-family="Arial,sans-serif" font-size="14" letter-spacing="3" fill="#D85B36">AN ORIGINAL GAME IN DEVELOPMENT</text></svg>
