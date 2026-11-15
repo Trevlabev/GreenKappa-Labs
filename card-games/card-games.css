@@ -235,3 +235,9 @@ body.card-games-page{
   .cg-gallery-card:not(:first-child) img.cg-gallery-poster{object-fit:cover;object-position:center top;aspect-ratio:3/2}
 }
 @media(prefers-reduced-motion:reduce){.cg-poster-link img{transition:none}.cg-poster-link:hover img{transform:none}}
+
+/* Dedicated-game links in the portfolio */
+.cg-detail-link{display:inline-flex;align-items:center;gap:1rem;margin-top:1.55rem;padding:.83rem 0;border-top:1px solid rgba(245,226,187,.34);color:#edc18d;text-decoration:none;font-size:.85rem;font-weight:800;letter-spacing:.015em}
+.cg-detail-link span{transition:transform .2s ease}
+.cg-detail-link:hover,.cg-detail-link:focus-visible{color:#fff0d2}
+.cg-detail-link:hover span{transform:translate(3px,-3px)}
