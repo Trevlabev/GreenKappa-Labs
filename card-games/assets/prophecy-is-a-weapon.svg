@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" role="img" aria-labelledby="title desc">
+<title id="title">Prophecy Is a Weapon — original promotional illustration</title>
+<desc id="desc">A blade piercing a celestial eye and a cryptic parchment, surrounded by interlocking threads of fate and fractured stars.</desc>
+<defs>
+ <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#0c162e"/><stop offset=".5" stop-color="#21203d"/><stop offset="1" stop-color="#4b2542"/></linearGradient>
+ <radialGradient id="vortex"><stop stop-color="#e9b56d" stop-opacity=".32"/><stop offset=".48" stop-color="#7caabd" stop-opacity=".15"/><stop offset="1" stop-color="#0d172e" stop-opacity="0"/></radialGradient>
+ <linearGradient id="steel" x1="0" y1="0" x2="1" y2=".1"><stop stop-color="#728ca4"/><stop offset=".42" stop-color="#f0e8d7"/><stop offset=".68" stop-color="#d8a680"/><stop offset="1" stop-color="#486479"/></linearGradient>
+ <linearGradient id="scroll" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f3dec0"/><stop offset="1" stop-color="#b79e8b"/></linearGradient>
+ <filter id="shade"><feDropShadow dx="0" dy="20" stdDeviation="25" flood-color="#030813" flood-opacity=".8"/></filter>
+ <pattern id="stars" width="74" height="74" patternUnits="userSpaceOnUse"><circle cx="12" cy="20" r="1.5" fill="#e6d4bc" opacity=".3"/><path d="M58 54v8m-4-4h8" stroke="#c4d5dc" stroke-width="1.5" opacity=".2"/></pattern>
+</defs>
+<rect width="1200" height="900" fill="url(#bg)"/><rect width="1200" height="900" fill="url(#stars)"/><circle cx="584" cy="425" r="455" fill="url(#vortex)"/>
+<g fill="none" stroke="#d7ae8c" stroke-opacity=".5" stroke-width="2">
+ <circle cx="600" cy="434" r="330"/><circle cx="600" cy="434" r="280"/><circle cx="600" cy="434" r="230"/>
+ <path d="M0 451Q330 200 600 434T1200 410M70 90Q530 210 600 434T1105 865M50 740Q460 635 600 434T1155 100"/>
+</g>
+<g fill="none" stroke-width="5" opacity=".83">
+ <path d="M-50 170Q275 735 600 434T1250 200" stroke="#e58b80"/>
+ <path d="M-50 665Q430 140 600 434T1250 765" stroke="#8cb7bb"/>
+ <path d="M128 0Q850 570 405 900" stroke="#d8b17a"/>
+ <path d="M1045 0Q350 525 900 900" stroke="#a0bcca"/>
+</g>
+<g transform="translate(600 428)" fill="none" stroke="#d8aa78" stroke-width="3">
+ <path d="M-320 0l-29-14 10 30 19-16m640 0 29-14-10 30-19-16M0-318l-14-29 29 10-15 19M0 318l-14 29 29-10-15-19" fill="#d8aa78"/>
+ <path d="M-213-213l-36-4 4 36m458-32 36-4-4 36M-213 213l-36 4 4-36m458 32 36 4-4-36"/>
+</g>
+<g transform="translate(600 440)" filter="url(#shade)">
+ <g transform="rotate(-8)">
+  <path d="M-190-210Q0-260 184-210l26 420q-200 43-421-8Z" fill="url(#scroll)" stroke="#836c75" stroke-width="11"/>
+  <path d="M-151-158Q0-184 146-159M-148-115Q-24-137 111-115M-136-76Q8-90 133-67M-140 109Q-10 97 150 116M-135 152Q20 143 146 160" stroke="#8d7683" stroke-width="7" opacity=".43" fill="none"/>
+  <circle cx="4" cy="20" r="107" fill="#24354b" stroke="#a77a71" stroke-width="9"/>
+  <path d="M-83 21Q2-68 91 21Q0 111-83 21Z" fill="#d8c09c" stroke="#e0aa79" stroke-width="9"/>
+  <circle cx="4" cy="20" r="40" fill="#a65d63"/><circle cx="4" cy="20" r="24" fill="#17263d"/><circle cx="18" cy="7" r="8" fill="#fff3d6"/>
+  <path d="M-105-24l-36-20m71-46-15-38M87-18l34-27M73-87l21-38" stroke="#b78c6e" stroke-width="6" opacity=".9"/>
+ </g>
+</g>
+<g transform="translate(610 430) rotate(21)" filter="url(#shade)">
+ <path d="M-24-440L28-438L37 176L0 276L-38 176Z" fill="url(#steel)" stroke="#374c61" stroke-width="11"/>
+ <path d="M-5-428V235" stroke="#fff8e8" stroke-width="5" opacity=".7"/>
+ <path d="M-114 174Q0 143 113 175L121 202Q0 187-123 203Z" fill="#e0a66b" stroke="#79566a" stroke-width="10"/>
+ <path d="M-24 202h48l15 120-39 40-39-40Z" fill="#3c5168" stroke="#b89578" stroke-width="10"/>
+ <circle cx="0" cy="195" r="13" fill="#f4dec3"/>
+</g>
+<g fill="#f2d5a8" opacity=".85">
+ <path d="M171 190l8 28 28 9-28 10-8 28-11-28-27-10 27-9Z"/>
+ <path d="M960 630l8 25 25 8-25 11-8 25-10-25-26-11 26-8Z"/>
+ <circle cx="972" cy="180" r="6"/><circle cx="200" cy="640" r="6"/><circle cx="760" cy="83" r="4"/>
+</g>
+<g transform="translate(210 715) rotate(-21)" fill="#eee1bd" stroke="#a88b83" stroke-width="7"><rect width="105" height="151" rx="9"/><path d="M27 39h54M27 58h47M27 79h55" stroke-width="6"/><circle cx="53" cy="119" r="16" fill="#a36376"/></g>
+<g transform="translate(930 158) rotate(16)" fill="#eee1bd" stroke="#a88b83" stroke-width="7"><rect width="105" height="151" rx="9"/><path d="M27 39h54M27 58h47M27 79h55" stroke-width="6"/><circle cx="53" cy="119" r="16" fill="#588293"/></g>
+</svg>
