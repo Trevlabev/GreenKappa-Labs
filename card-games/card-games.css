@@ -178,3 +178,19 @@ body.card-games-page{
   .cg-gallery-card:not(:first-child) img{aspect-ratio:1.2/1}
 }
 @media(prefers-reduced-motion:reduce){.cg-gallery-card{transition:none}}
+
+/* Approved full-box artwork: preserve the complete source compositions. */
+.cg-gallery-card{background:#131820}
+.cg-gallery-card img,
+.cg-gallery-card:first-child img,
+.cg-gallery-card:not(:first-child) img,
+.cg-game-art img{aspect-ratio:3/2;object-fit:contain}
+@media(max-width:1000px){.cg-gallery-card:first-child img{aspect-ratio:3/2}}
+@media(max-width:760px){
+  .cg-gallery-card:first-child img,
+  .cg-gallery-card:not(:first-child) img{aspect-ratio:3/2;object-fit:contain}
+}
+@media(max-width:420px){
+  .cg-gallery-card:first-child img,
+  .cg-gallery-card:not(:first-child) img{aspect-ratio:3/2;object-fit:contain}
+}
