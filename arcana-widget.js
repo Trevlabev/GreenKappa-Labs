@@ -4,6 +4,7 @@
   const CONFIG = window.GREENKAPPA_ARCANA_CONFIG || {};
   const KNOWLEDGE = window.TABLEARC_KNOWLEDGE || null;
   const ASSET_ROOT = "/assets/arcana/";
+  const IS_RED_PAGE = Boolean(document.body && document.body.classList.contains("red-page"));
 
   let history = [];
   let busy = false;
@@ -80,7 +81,27 @@
     return ids.filter(function (id) { return available.has(id); });
   }
 
+  // The RED product is a separate application and must not inherit D&D claims
+  // from the live TableArc guide until that backend has its own RED corpus.
+  function redProjectAnswer(question) {
+    const q = String(question || "").toLowerCase();
+    if (/download|installer|release|available|install|buy|price|test|access/.test(q)) {
+      return { answer: "TableArc RED v0.5.0 is an active development source prototype. A production-certified Windows installer and a public download are not offered on this site. Ask GreenKappa Labs for development-build access at GreenkappaLabs@gmail.com. A prior source test run reported 127 passing automated checks; installed-app and live provider acceptance remain unverified.", sources: [] };
+    }
+    if (/black ice|demon|vehicle|cyberware|martial|complete|finished|what.*missing|limitation/.test(q)) {
+      return { answer: "TableArc RED does not yet automate the entire Cyberpunk RED ruleset. Full Black ICE/Demon operations, vehicles, many Role Abilities, cyberware and Humanity/therapy economics, and certain critical-injury effects still require GM judgment. Automated artwork is intentionally excluded for now.", sources: [] };
+    }
+    if (/openai|ollama|api|model|offline|provider/.test(q)) {
+      return { answer: "The standalone source includes OpenAI and Ollama provider integrations. OpenAI requires the user's own API key; Ollama can serve a local or LAN model. Live production connectivity remains unverified, and the OpenAI key is intended to stay in session memory rather than being exported with campaigns.", sources: [] };
+    }
+    if (/difference|original|d&d|dungeon|separate|same app/.test(q)) {
+      return { answer: "Original TableArc and TableArc RED are separate desktop projects. TableArc RED has its own Electron identity, profile and saves and is built specifically for the Cyberpunk RED tabletop RPG. It does not import the original D&D gameplay runtime.", sources: [] };
+    }
+    return { answer: "TableArc RED is GreenKappa Labs' independent, local-first Cyberpunk RED AI-GM desktop prototype. The v0.5.0 source contains free-form written GM narration, structured gigs, character and campaign records, tactical combat and medical helpers, local NET Architecture operations, 2-meter tactical maps, save/recovery features, and OpenAI/Ollama provider paths. The AI proposes state changes for review rather than silently editing the campaign. Some mechanics remain partial, and a public certified Windows installer is not yet available. For current development details, see this page or email GreenkappaLabs@gmail.com.", sources: [] };
+  }
+
   function offlineAnswer(question, priorHistory) {
+    if (IS_RED_PAGE) return redProjectAnswer(question);
     const context = intentText(question, priorHistory);
 
     if (/\b(fun|enjoy|enjoyable|entertaining|exciting|why play|thats fun|that's fun)\b/.test(context)) {
@@ -400,6 +421,22 @@
     setStatus("Checking project record", "loading");
     setSprite("review");
 
+    // RED questions are answered only from locally packaged, scope-limited facts.
+    // The Netlify guide is currently trained on the original D&D TableArc.
+    if (IS_RED_PAGE) {
+      const local = redProjectAnswer(clean);
+      updateMessage(pendingId, local.answer);
+      renderSources(local.sources);
+      history.push({ role: "assistant", content: local.answer });
+      history = history.slice(-8);
+      setStatus("RED project facts", "offline", "Local reference: TableArc RED v0.5.0 development status.");
+      setSprite("waving");
+      busy = false;
+      if (send) send.disabled = false;
+      if (input) input.focus();
+      return;
+    }
+
     try {
       const data = await postChat({
         question: clean,
@@ -488,7 +525,7 @@
         event.preventDefault();
         openWidget();
         if (window.location.hash !== "#ask-arcana") {
-          history.replaceState(null, "", window.location.pathname + window.location.search + "#ask-arcana");
+          window.history.replaceState(null, "", window.location.pathname + window.location.search + "#ask-arcana");
         }
       });
     });
@@ -497,6 +534,24 @@
   function initialize() {
     if (document.getElementById("arcanaAssistant")) return;
     document.body.insertAdjacentHTML("beforeend", markup());
+
+    if (IS_RED_PAGE) {
+      const setText = (selector, value) => {
+        const el = document.querySelector(selector);
+        if (el) el.textContent = value;
+      };
+      setText("#arcanaNudge strong", "Questions about TableArc RED?");
+      setText(".arcana-launcher-copy small", "RED project reference");
+      setText("#arcanaWidgetMessages .arcana-widget-bubble p", "Ask about the separate TableArc RED desktop project, current systems, limitations, or access. Answers here use locally packaged project facts.");
+      setText('label[for="arcanaWidgetInput"]', "Ask about TableArc RED");
+      const prompts = document.querySelectorAll("[data-arcana-widget-question]");
+      const questions = ["What is TableArc RED?", "How is RED different from TableArc?", "Is there a public Windows download?"];
+      prompts.forEach((button, index) => {
+        if (!questions[index]) return;
+        button.textContent = questions[index];
+        button.setAttribute("data-arcana-widget-question", questions[index]);
+      });
+    }
 
     const launcher = $("arcanaAssistantLauncher");
     const close = $("arcanaWidgetClose");
@@ -538,8 +593,12 @@
 
     bindTriggers();
 
-    setStatus("Checking live guide", "loading");
-    probeLiveGuide();
+    if (IS_RED_PAGE) {
+      setStatus("RED project facts", "offline", "Local factual reference; not an AI model or public build.");
+    } else {
+      setStatus("Checking live guide", "loading");
+      probeLiveGuide();
+    }
 
     if (sessionStorage.getItem("arcana-nudge-dismissed") === "1") {
       $("arcanaNudge").hidden = true;
