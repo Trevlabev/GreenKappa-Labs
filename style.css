@@ -595,14 +595,10 @@ p{line-height:1.68}
 }
 
 /* Studio expansion home */
-.gkl-play{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(280px,.9fr);gap:2rem;align-items:center;padding:clamp(1.6rem,4vw,3rem);border-radius:30px;background:linear-gradient(135deg,#0b281a,#1d4333);color:#fff7e9;box-shadow:var(--shadow)}
-.gkl-play .eyebrow{color:#f1d188}.gkl-play h2{font-size:clamp(2.7rem,5.5vw,5rem)}.gkl-play p:not(.eyebrow){max-width:520px;color:#dce6d9}.gkl-play img{border-radius:20px;width:100%;aspect-ratio:4/3;object-fit:cover}
-.gkl-play .gkl-caveat{font-size:.76rem;opacity:.82;margin:1.25rem 0 0}
 .gkl-pillars{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1rem}.gkl-pillars>a{padding:1.3rem;border:1px solid var(--line);border-radius:21px;background:rgba(255,250,240,.8);min-height:265px;display:flex;flex-direction:column;text-decoration:none;transition:transform .18s ease}
 .gkl-pillars>a:hover{transform:translateY(-3px)}.gkl-pillars span{font-size:.72rem;font-weight:850;color:#367447;letter-spacing:.11em}.gkl-pillars h3{font-size:1.85rem;margin:1rem 0}.gkl-pillars p{color:#4d5d52;font-size:.91rem}.gkl-pillars strong{font-size:.83rem;color:#235c3b;margin-top:auto}
 .gkl-next{display:flex;flex-wrap:wrap;align-items:center;gap:.7rem;padding:1rem 0;margin-top:1.1rem}.gkl-next>div{flex:1;min-width:220px}.gkl-next p{margin:.25rem 0;color:#526257}
 @media(max-width:980px){.gkl-pillars{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:770px){.gkl-play{grid-template-columns:1fr}}
 @media(max-width:560px){.gkl-pillars{grid-template-columns:1fr}.gkl-pillars>a{min-height:200px}}
 
 /* Five-project rotating homepage gallery */
@@ -689,3 +685,12 @@ p{line-height:1.68}
 .gkl-slide-cover-link:focus-visible{outline:4px solid #f7db92;outline-offset:-7px;border-radius:10px}
 .gkl-showcase-slide:hover .gkl-slide-link,.gkl-showcase-slide:focus-within .gkl-slide-link{background:#fff;transform:translateY(-2px)}
 .gkl-slide-link{transition:background .18s ease,transform .18s ease}
+
+.studio-strip{
+  width:min(1180px,calc(100% - 2rem));margin:1.5rem auto 0;padding:1rem 1.3rem;
+  display:flex;align-items:center;justify-content:center;gap:1rem;flex-wrap:wrap;
+  border:1px solid var(--line);border-radius:999px;background:rgba(255,250,240,.74);box-shadow:var(--shadow)
+}
+.studio-strip span{font-size:.8rem;font-weight:790}
+.studio-strip i{width:5px;height:5px;border-radius:50%;background:var(--gold)}
+@media(max-width:720px){.studio-strip{border-radius:20px}.studio-strip i{display:none}}
