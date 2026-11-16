@@ -1,0 +1,62 @@
+/* Small Gods, Large Debts — concept showcase, 2026-11-16 */
+body.game-detail-page[data-game="small-gods-large-debts"]{--gd-accent:#ffcc6e;--gd-accent-rgb:255,204,110;--gd-paper:#f1eadb;--gd-text:#242b37;--gd-wash:#eee3d6}
+body[data-game="small-gods-large-debts"] .gd-hero{background:radial-gradient(circle at 75% 30%,rgba(234,51,159,.14),transparent 40%),linear-gradient(145deg,#0a1422,#101725 58%,#160f29)}
+body[data-game="small-gods-large-debts"] .gd-hero h1{font-weight:600;letter-spacing:-.07em}
+body[data-game="small-gods-large-debts"] .gd-hero h1 em{color:#ffc96a}
+.sgld-hero-media a{background:#07111e!important;border-color:rgba(255,105,178,.5)!important;padding:5px!important}
+.sgld-hero-media img{aspect-ratio:16/9!important;object-fit:contain!important}
+.sgld-specs{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+.sgld-thesis{background:#070e1b;border-top:1px solid rgba(255,255,255,.07);border-bottom:1px solid rgba(255,255,255,.09);color:#eee8f3}
+.sgld-thesis .section{padding-block:clamp(3rem,6vw,6rem)}
+.sgld-thesis-inner{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);column-gap:4rem;align-items:center}
+.sgld-thesis .gd-overline{grid-column:1/-1;color:#ffb8d9}
+.sgld-thesis-line{font:700 clamp(2.1rem,5vw,5.2rem)/1.04 Georgia,serif;letter-spacing:-.04em;color:#ffcb76;margin:0}
+.sgld-thesis-line span{color:#e565b3}
+.sgld-thesis-inner>p:last-child{font-size:1.15rem;line-height:1.75;color:#c4d1dd;max-width:44ch}
+.sgld-artwork{background:radial-gradient(circle at 85% 0%,rgba(149,60,168,.15),transparent 55%),#0b1222}
+.sgld-artwork .gd-art-heading{margin-bottom:2rem}
+.sgld-media-grid{display:grid;grid-template-columns:1.25fr .75fr;gap:1.6rem;align-items:start}
+.sgld-media{margin:0;min-width:0;background:#101d30;border:1px solid rgba(255,255,255,.13);padding:.65rem;border-radius:10px}
+.sgld-media a{display:block;overflow:hidden;border-radius:6px;background:#050c19}
+.sgld-media img{display:block;width:100%;height:auto;object-fit:contain;transition:transform .25s}
+.sgld-media a:hover img,.sgld-media a:focus-visible img{transform:scale(1.015)}
+.sgld-media figcaption{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;padding:.85rem .3rem .25rem;font-size:.84rem}
+.sgld-media figcaption strong{color:#fff1d5}
+.sgld-media figcaption span{color:#b9c1d2}
+.sgld-media-feature{grid-column:1;grid-row:1}
+.sgld-media-tall{grid-column:2;grid-row:1 / span 2}
+.sgld-media-poster{grid-column:2;grid-row:3}
+.sgld-artwork .gd-art-note{margin-top:1.4rem;max-width:90ch;color:#c5d0dd}
+.sgld-pantheon-section{background:#11182b;color:#f8f0ec}
+.sgld-pantheon-section .section{padding-block:clamp(4rem,7vw,7rem)}
+.sgld-section-heading{display:flex;align-items:end;justify-content:space-between;gap:2rem;margin-bottom:2rem}
+.sgld-section-heading h2{font:600 clamp(2.5rem,4.5vw,4.6rem)/1.04 Georgia,serif;letter-spacing:-.05em;margin:0}
+.sgld-section-heading>p{max-width:420px;color:#bdc5d4;line-height:1.65}
+.sgld-pantheon-section .gd-section-index{color:#ffcb77}
+.sgld-gods-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem}
+.sgld-gods-grid article{padding:1.7rem;border-radius:8px;border:1px solid rgba(255,255,255,.12);background:linear-gradient(145deg,rgba(142,59,162,.13),rgba(7,14,27,.18));position:relative;overflow:hidden}
+.sgld-gods-grid article:before{content:"";position:absolute;top:0;left:0;right:0;height:4px;background:#f25ba9}
+.sgld-gods-grid article:nth-child(2):before{background:#fe7057}
+.sgld-gods-grid article:nth-child(3):before{background:#ffbc52}
+.sgld-gods-grid article:nth-child(4):before{background:#c67fe9}
+.sgld-gods-grid article:nth-child(5):before{background:#54c9ee}
+.sgld-gods-grid article:nth-child(6):before{background:#99dc65}
+.sgld-god-index{font-size:.73rem;letter-spacing:.2em;color:#a5aabb}
+.sgld-gods-grid h3{margin:.7rem 0 .12rem;font:600 2rem/1.1 Georgia,serif}
+.sgld-gods-grid small{font-size:.75rem;color:#ffc86a;letter-spacing:.05em;text-transform:uppercase}
+.sgld-gods-grid p{color:#c4cad8;line-height:1.6;margin:1rem 0 0}
+.sgld-pantheon-note{margin:1.6rem 0 0;color:#bfcbd6;max-width:85ch;line-height:1.7}
+.sgld-deck-section .section{padding-block:clamp(4rem,6vw,7rem)}
+.sgld-deck-section .sgld-section-heading>p{color:#625c59}
+.sgld-deck-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1rem}
+.sgld-deck-grid article{background:#fffdf6;border:1px solid #d9c6b0;border-radius:8px;padding:1.4rem;box-shadow:0 8px 20px rgba(28,24,21,.06)}
+.sgld-deck-grid article strong{display:block;font:700 3.5rem/1 Georgia,serif;color:#96507c}
+.sgld-deck-grid article:nth-child(2) strong{color:#3c7b6b}
+.sgld-deck-grid article:nth-child(3) strong{color:#9b5b32}
+.sgld-deck-grid article:nth-child(4) strong{color:#5666a5}
+.sgld-deck-grid h3{font-size:1.1rem;margin:1rem 0 .4rem;color:#222b36}
+.sgld-deck-grid p{font-size:.92rem;line-height:1.6;color:#514b47}
+.sgld-status-line{margin:2rem 0 0;padding:1rem 1.1rem;border-left:4px solid #d788a5;background:#fff8f3;color:#423c41}
+@media(max-width:900px){.sgld-thesis-inner{grid-template-columns:1fr;row-gap:1rem}.sgld-media-grid{grid-template-columns:1fr 1fr}.sgld-media-feature{grid-column:1/-1;grid-row:auto}.sgld-media-tall,.sgld-media-poster{grid-column:auto;grid-row:auto}.sgld-gods-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.sgld-deck-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.sgld-section-heading{display:block}.sgld-section-heading>p{margin-top:1rem}}
+@media(max-width:560px){.sgld-specs{grid-template-columns:repeat(2,minmax(0,1fr))!important}.sgld-media-grid,.sgld-gods-grid{grid-template-columns:1fr}.sgld-media-feature,.sgld-media-tall,.sgld-media-poster{grid-column:1;grid-row:auto}.sgld-media figcaption{display:block}.sgld-media figcaption span{display:block;margin-top:.35rem}.sgld-deck-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:.55rem}.sgld-deck-grid article{padding:1rem}.sgld-deck-grid article strong{font-size:2.6rem}.sgld-section-heading h2{font-size:2.5rem}.sgld-thesis-line{font-size:2.8rem}}
+@media(prefers-reduced-motion:reduce){.sgld-media img{transition:none}.sgld-media a:hover img,.sgld-media a:focus-visible img{transform:none}}
