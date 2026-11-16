@@ -88,7 +88,7 @@
     function sync() {
       if (timer !== null) clearInterval(timer);
       timer = null;
-      if (!paused && !motion.matches && !hovered && !focused && !document.hidden)
+      if (!paused && !hovered && !focused && !document.hidden)
         timer = setInterval(() => show(current + 1), 6500);
     }
     function navigate(index) { show(index); sync(); }
