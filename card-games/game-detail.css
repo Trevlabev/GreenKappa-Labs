@@ -8,7 +8,7 @@ body.game-detail-page[data-game="not-to-scale"]{--gd-accent:#c08d7b;--gd-accent-
 body.game-detail-page[data-game="small-gods-large-debts"]{--gd-accent:#d7b17a;--gd-accent-rgb:215,177,122;--gd-paper:#f1e9dc;--gd-text:#2f2937;--gd-wash:#e4d9c7}
 body.game-detail-page[data-game="trial-of-a-dead-god"]{--gd-accent:#cbb3a0;--gd-accent-rgb:203,179,160;--gd-paper:#ece6df;--gd-text:#28252d;--gd-wash:#ddd4d0}
 body.game-detail-page[data-game="who-broke-the-prompt"]{--gd-accent:#e0ab8b;--gd-accent-rgb:224,171,139;--gd-paper:#f3eadd;--gd-text:#2c2927;--gd-wash:#e4d3c2}
-body.game-detail-page[data-game="unsupervised"]{--gd-accent:#f2a76a;--gd-accent-rgb:242,167,106;--gd-paper:#f7eddb;--gd-text:#293744;--gd-wash:#e8d9c5}
+body.game-detail-page[data-game="agent-fault"]{--gd-accent:#e2f67a;--gd-accent-rgb:226,246,122;--gd-paper:#f8f2e4;--gd-text:#2e2940;--gd-wash:#eae0cd}
 .game-detail-page .section{width:min(1260px,calc(100% - 3rem))}
 .game-detail-page .nav a[aria-current="page"]{color:var(--gd-accent);background:rgba(var(--gd-accent-rgb),.10)}
 .gd-breadcrumb{display:flex;flex-wrap:wrap;align-items:center;gap:.66rem;margin-bottom:clamp(2rem,4vw,4rem);font-size:.77rem;letter-spacing:.065em;text-transform:uppercase}

@@ -64,19 +64,19 @@ body.card-games-page{
 .cg-game-kicker span+span{color:#a5b4bd}
 .cg-game h3{margin-bottom:1.1rem;font-size:clamp(3.2rem,5vw,5.7rem);line-height:.94;letter-spacing:-.074em}
 .cg-game h3 i{font-style:normal;color:#f3bd87}
-.cg-unsupervised h3{font-size:clamp(3rem,5vw,5.55rem);letter-spacing:-.073em;overflow-wrap:anywhere}
+.cg-agent-fault h3{font-size:clamp(3rem,5vw,5.55rem);letter-spacing:-.073em;overflow-wrap:anywhere}
 .cg-title-period{color:#88efe2}
 .cg-tagline{font-size:clamp(1.18rem,2vw,1.52rem);line-height:1.35;font-weight:780;color:#f7e5d1!important;letter-spacing:-.035em}
 .cg-game-copy>p:not(.cg-tagline){color:#bdc8cc;font-size:.97rem;line-height:1.75}
 .cg-pills{display:flex;flex-wrap:wrap;gap:.5rem;margin:1.5rem 0}
 .cg-pills span{padding:.44rem .69rem;border:1px solid rgba(250,217,179,.23);border-radius:999px;background:rgba(255,255,255,.045);color:#eed8b8;font-size:.72rem;font-weight:780}
 .cg-game-copy .cg-micro{padding-top:1.2rem;border-top:1px solid rgba(240,216,183,.14);font-size:.8rem!important;color:#9cb3b6!important}
-.cg-unsupervised{direction:rtl}
-.cg-unsupervised>*{direction:ltr}
-.cg-unsupervised .cg-game-art{grid-column:1;grid-row:1}
-.cg-unsupervised .cg-game-copy{grid-column:2;grid-row:1}
-.cg-unsupervised .cg-game-art{border-color:rgba(144,234,225,.31)}
-.cg-unsupervised .cg-game h3 i{color:#8ce7d7}
+.cg-agent-fault{direction:rtl}
+.cg-agent-fault>*{direction:ltr}
+.cg-agent-fault .cg-game-art{grid-column:1;grid-row:1}
+.cg-agent-fault .cg-game-copy{grid-column:2;grid-row:1}
+.cg-agent-fault .cg-game-art{border-color:rgba(144,234,225,.31)}
+.cg-agent-fault .cg-game h3 i{color:#8ce7d7}
 .cg-prophecy .cg-game-art{border-color:rgba(170,187,222,.25)}
 .cg-ethos{padding-top:5rem;padding-bottom:7rem}
 .cg-ethos-heading{max-width:780px;margin-bottom:2.2rem}
@@ -98,9 +98,9 @@ body.card-games-page{
 .cg-footer a:hover{color:#ffe3b5}
 .card-games-page .button:focus-visible,.card-games-page a:focus-visible,.card-games-page button:focus-visible{outline:3px solid #e7b875;outline-offset:4px}
 @media(min-width:901px){
-  .cg-unsupervised{direction:ltr}
-  .cg-unsupervised .cg-game-copy{grid-column:1;grid-row:1}
-  .cg-unsupervised .cg-game-art{grid-column:2;grid-row:1}
+  .cg-agent-fault{direction:ltr}
+  .cg-agent-fault .cg-game-copy{grid-column:1;grid-row:1}
+  .cg-agent-fault .cg-game-art{grid-column:2;grid-row:1}
 }
 @media(max-width:1000px){
   .card-games-page .cg-hero{grid-template-columns:1fr;min-height:auto}
@@ -116,7 +116,7 @@ body.card-games-page{
   .cg-cover-stamp{right:1rem;bottom:0}
   .cg-game{padding:2.5rem 0}
   .cg-game-art,.cg-game-copy{grid-column:1!important;grid-row:auto!important}
-  .cg-unsupervised{direction:ltr}
+  .cg-agent-fault{direction:ltr}
   .cg-game-copy{max-width:100%}
   .cg-game h3{font-size:clamp(3rem,10vw,4.5rem)}
   .cg-ethos{padding-top:3rem;padding-bottom:4rem}
@@ -228,7 +228,7 @@ body.card-games-page{
   aspect-ratio:3/2;
 }
 #who-broke .cg-game-poster-art{border-color:rgba(83,210,210,.32)}
-#unsupervised .cg-game-poster-art{border-color:rgba(213,123,244,.34)}
+#agent-fault .cg-game-poster-art{border-color:rgba(213,123,244,.34)}
 @media(max-width:760px){
   .cg-game-poster-art{width:min(100%,560px);margin-inline:auto}
   .cg-game-poster-art .cg-poster-link img{height:auto;aspect-ratio:1122/1402;object-fit:contain}

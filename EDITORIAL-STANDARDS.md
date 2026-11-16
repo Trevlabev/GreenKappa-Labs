@@ -5,7 +5,7 @@ Approved direction: Moderate Countervoice revision · 15 November 2026
 Describe what a product does and what the visitor can do with it before promising a philosophy. Keep the approved studio tagline **Strange ideas. Serious systems.** as a short anchor, not a phrase to paraphrase in every section.
 
 ## Editorial registers
-- **Games:** Precise mechanics, dry humor, distinctive stakes. Let each game's writing reflect its decisions: disorientation in *Not to Scale*, obligations in *Small Gods, Large Debts*, rhetoric in *The Trial of a Dead God*, suspicious instructions in *Who Broke the Prompt?*, and cascading callbacks in *Unsupervised*.
+- **Games:** Precise mechanics, dry humor, distinctive stakes. Let each game's writing reflect its decisions: disorientation in *Not to Scale*, obligations in *Small Gods, Large Debts*, rhetoric in *The Trial of a Dead God*, suspicious instructions in *Who Broke the Prompt?*, and blind agent interference in *AGENT/FAULT*.
 - **TableArc:** Technical but accessible. Explain canonical state, runtime responsibility, persistence, rule resolution, and provider options only where relevant. Distinguish tested behavior from intended functionality.
 - **Playground:** Show the playable experiment first. Keep instructions and rule differences clear.
 - **Lab Notes:** Identify decisions, limitations, and unresolved questions. No invented user reactions, usage statistics, or personal anecdotes.
