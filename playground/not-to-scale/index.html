@@ -2,12 +2,12 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Not to Scale — The Shifting House Demo | GreenKappa Labs</title>
-<meta name="description" content="Play a free browser microgame inspired by Not to Scale. Navigate nine rooms, collect three records and escape before the twelfth shift.">
+<title>No Such Room — The Shifting House Demo | GreenKappa Labs</title>
+<meta name="description" content="Play a free browser microgame inspired by No Such Room. Navigate nine rooms, collect three records and escape before the twelfth shift.">
 <meta name="theme-color" content="#081b16">
 <link rel="canonical" href="https://greenkappalabs.art/playground/not-to-scale/">
-<meta property="og:type" content="website"><meta property="og:title" content="Not to Scale — The Shifting House Demo | GreenKappa Labs">
-<meta property="og:description" content="Play a free browser microgame inspired by Not to Scale. Navigate nine rooms, collect three records and escape before the twelfth shift."><meta property="og:url" content="https://greenkappalabs.art/playground/not-to-scale/">
+<meta property="og:type" content="website"><meta property="og:title" content="No Such Room — The Shifting House Demo | GreenKappa Labs">
+<meta property="og:description" content="Play a free browser microgame inspired by No Such Room. Navigate nine rooms, collect three records and escape before the twelfth shift."><meta property="og:url" content="https://greenkappalabs.art/playground/not-to-scale/">
 <meta property="og:image" content="https://greenkappalabs.art/assets/greenkappa-logo.png">
 <link rel="icon" href="/assets/greenkappa-logo.png">
 <link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="/studio.css">
@@ -17,7 +17,7 @@
 <a class="skip-link" href="#main">Skip to main content</a>
 <header class="site-header dark-header"><a class="brand" href="/" aria-label="GreenKappa Labs home"><span class="brand-mark"><img src="/assets/greenkappa-logo.png" alt=""></span><span class="brand-text"><strong>GreenKappa Labs</strong><small>Strange ideas. Serious systems.</small></span></a>
 <button class="menu-button dark-menu" type="button" aria-expanded="false" aria-controls="primary-nav"><span></span><span></span><span></span><b>Menu</b></button>
-<nav class="nav" id="primary-nav" aria-label="Primary navigation"><a href="/">Home</a><a href="/card-games/">Games</a><a href="/playground/">Playground</a><a href="/tablearc/">TableArc</a><a href="/worlds/">Worlds</a><a href="/tools/">Tools</a><a href="/#contact" class="nav-cta dark-nav-cta">Contact</a></nav></header>
+<nav class="nav" id="primary-nav" aria-label="Primary navigation"><a href="/">Home</a><a href="/#interactive">Interactive</a><a href="/card-games/">Games</a><a href="/worlds/">Worlds</a><a href="/tools/">Tools</a><a href="/playground/">Playground</a><a href="/work/">Work</a><a href="/#contact" class="nav-cta dark-nav-cta">Contact</a></nav></header>
 <main id="main">
 <section class="lab-hero lab-container"><p class="lab-kicker">Playground / Interactive prototype 001</p><h1>The floor plan<br><em>is lying.</em></h1><p class="lab-lede">Nine rooms, three records, twelve Shifts. Get the records back to the Foyer before the house runs out of patience. If your room moves, you go with it.</p></section>
 <section class="lab-section lab-container" style="padding-top:0"><div class="lab-game-layout"><div class="lab-game-panel"><div class="lab-hud" role="status" aria-label="Game status"><span id="turnDisplay">Turn 1</span><span id="apDisplay">2 actions</span><span id="proofDisplay">0 of 3 records</span><span id="shiftDisplay">0 of 12 shifts</span></div><div id="house" class="house-grid" role="group" aria-label="Nine room tiles; select an adjacent tile to move"></div><p class="lab-small" style="margin:1rem 0 0">Select an adjacent room to STEP (1 action). Your marker stays attached to its room when the house shifts. Dashed outlines mark the next forecast.</p></div><aside class="lab-game-panel"><h2>Actions &amp; forecast</h2><p id="roomDisplay" class="lab-small">Current room: Foyer</p><div id="forecastDisplay" class="lab-log" aria-live="polite">Forecast preparing…</div><div class="lab-stack" style="margin-top:1rem"><button class="lab-action" id="traceBtn" type="button">TRACE record · 1 action</button><button class="lab-action" id="focusBtn" type="button">SIGNAL focus · 1 action</button><button class="lab-action" id="exitBtn" type="button">EXIT house · 1 action</button><button class="lab-action primary" id="endTurnBtn" type="button">End turn</button><button class="lab-action" id="resetBtn" type="button">New house</button></div><p id="gameMessage" class="lab-log" aria-live="polite" style="margin-top:1rem">Welcome. The house is quiet for now.</p></aside></div></section>
