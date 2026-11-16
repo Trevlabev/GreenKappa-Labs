@@ -918,3 +918,8 @@ html{scroll-behavior:smooth}
 @media (max-width: 720px) {
   .gkl-gallery-swipe-hint { display:block; text-align:center; margin:.65rem .8rem 0; font-size:.76rem; line-height:1.45; color:#3c5646; letter-spacing:.01em; }
 }
+
+/* TableArc uses the same responsive art direction as the already-approved RED gallery slide. */
+@media (max-width:680px) {
+ .gkl-art-slide.gkl-theme-tablearc .gkl-art-picture { aspect-ratio:1; }
+}
