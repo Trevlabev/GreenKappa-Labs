@@ -3,8 +3,8 @@ Date: 2026-11-15
 
 ## Scope of the initial implementation
 - New interactive Playground with Not to Scale 9-room browser microgame.
-- Who Broke the Prompt? private alpha playtest invitation and local score tracker.
-- New studio content sections: Worlds, Tools, Work, Lab Notes.
+- Playtest inquiry page for No Such Room, Small Gods, Large Debts and AGENT/FAULT.
+- Four homepage studio divisions: Interactive, Games, Worlds and Tools, plus Work and Lab Notes.
 - Homepage/collection integration and sitemap updates.
 - Static website only; no backend, accounts, analytics, email captures or paid services.
 
@@ -25,3 +25,10 @@ Date: 2026-11-15
 ## Expansion positioning
 Strange ideas. Serious systems.
 Original games, interactive worlds and intelligent tools.
+
+## November 16, 2026: revised studio architecture
+- **Interactive:** TableArc and TableArc RED, separately developed RPG software projects.
+- **Games:** No Such Room, Small Gods, Large Debts, and AGENT/FAULT, all untested and not for sale.
+- **Worlds:** Five illustrated sourcebook collections and four adventures; underlying Drive documents remain private.
+- **Tools:** Flowglass, Proofline, Printflight, Lorelock, and Handoff Atlas are early-stage product concepts, with design and requirements work only.
+- Completed source-level link, anchor, nav, and asset checks must be distinguished from live cross-browser and human accessibility acceptance.

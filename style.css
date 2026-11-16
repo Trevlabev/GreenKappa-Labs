@@ -795,3 +795,6 @@ html{scroll-behavior:smooth}
 @media(max-width:740px){.gkl-division-switcher{grid-template-columns:repeat(2,minmax(0,1fr))}.gkl-tools-home-lede{grid-template-columns:1fr}.gkl-tools-home-lede .eyebrow{grid-column:auto}.gkl-tools-product{min-height:245px}}
 @media(max-width:480px){.gkl-division-switcher a{padding:1rem}.gkl-division-heading h2{font-size:clamp(2.25rem,10vw,3.5rem)}.gkl-tools-products{grid-template-columns:1fr}.gkl-tools-product{min-height:0}.gkl-tools-home-footer{padding:1.2rem}.gkl-tools-home-footer .button{width:100%}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.gkl-division-switcher a{transition:none}}
+
+/* Eight-link studio navigation: compact between desktop and mobile breakpoints. */
+@media(min-width:901px) and (max-width:1180px){.site-header .nav a{padding:.5rem .55rem;font-size:.77rem}}
