@@ -804,3 +804,21 @@ html{scroll-behavior:smooth}
 .gkl-tools-product h3 a:hover{border-bottom-color:currentColor}
 .gkl-tools-product h3 a:focus-visible{outline:3px solid #286f57;outline-offset:3px;border-radius:3px}
 .gkl-js-fallback{font-size:.92rem;background:rgba(237,204,143,.17);padding:1rem!important}
+
+/* TableArc & TableArc RED new promotional visual assets, preserving natural ratios. */
+.gkl-slide-media-tablearc{background:radial-gradient(circle at 50% 45%,rgba(152,210,171,.2),transparent 62%)}
+.gkl-slide-media-red{background:radial-gradient(circle at 52% 50%,rgba(253,68,80,.24),transparent 64%)}
+.gkl-promo-media{display:flex;flex-direction:column;gap:.65rem;justify-content:center;align-items:center;min-width:0;min-height:0;width:100%;height:100%;margin:0}
+.gkl-promo-media img{display:block;width:100%;max-width:100%;max-height:92%;height:auto;object-fit:contain;border:1px solid rgba(255,255,255,.19);border-radius:9px;box-shadow:0 22px 38px rgba(0,0,0,.32)}
+.gkl-slide-media-tablearc .gkl-promo-media img{max-width:740px}
+.gkl-slide-media-red .gkl-promo-media img{max-width:690px;border-color:rgba(255,66,85,.45)}
+.gkl-promo-media figcaption{color:rgba(248,233,208,.78);font-size:.67rem;line-height:1.3;letter-spacing:.04em;text-align:center}
+.gkl-tablearc-feature-visual{background:#0e252a;border-color:rgba(236,215,178,.24)}
+.gkl-tablearc-feature-visual>img{width:100%;height:auto;aspect-ratio:auto;object-fit:contain}
+.gkl-tablearc-feature-visual figcaption{display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;background:#ecf3eb;font-size:.74rem}
+.gkl-tablearc-feature-visual figcaption a{color:#1c5c48;font-weight:800;text-underline-offset:3px}
+.gkl-red-feature-photo{display:flex;flex-direction:column;gap:.7rem;margin:0;align-self:center;min-width:0;overflow:hidden;padding:clamp(.6rem,1.4vw,1rem)}
+.gkl-red-feature-photo img{display:block;width:100%;max-width:100%;height:auto;aspect-ratio:auto;object-fit:contain;border:1px solid rgba(241,80,94,.38);border-radius:6px}
+.gkl-red-feature-photo figcaption{font-size:.69rem;line-height:1.4;color:#edb4af;font-weight:720;letter-spacing:.035em;text-align:center}
+@media(max-width:900px){.gkl-promo-media{justify-content:center}.gkl-promo-media img{max-height:min(330px,40vh)}}
+@media(max-width:640px){.gkl-slide-media .gkl-promo-media{gap:.45rem}.gkl-slide-media .gkl-promo-media img{max-height:290px}.gkl-promo-media figcaption{font-size:.61rem}.gkl-tablearc-feature-visual figcaption{display:grid;gap:.3rem}.gkl-red-feature-photo figcaption{font-size:.63rem}}
