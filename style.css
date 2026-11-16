@@ -874,3 +874,38 @@ html{scroll-behavior:smooth}
  .gkl-interactive-poster-actions{flex-direction:column;align-items:stretch}
  .gkl-interactive-poster-actions .button{width:100%}
 }
+
+/* Games showroom: artwork leads, not a large introductory panel. */
+.gkl-showcase-intro h1{max-width:880px;font-size:clamp(2.55rem,5.1vw,4.8rem);line-height:1.04;letter-spacing:-.067em}
+.gkl-showcase-intro h1 em{font-style:normal;color:#276d4d}
+.gkl-showcase-intro>p{max-width:320px}
+.gkl-division-games .gkl-games-showcase{padding-top:clamp(1.6rem,3vw,2.8rem)}
+.gkl-games-intro{display:flex;justify-content:space-between;align-items:baseline;gap:1.5rem;margin-bottom:1.35rem}
+.gkl-games-intro>span{font-size:.7rem;letter-spacing:.15em;font-weight:850;color:#765a48}
+.gkl-games-intro>p{margin:0;max-width:590px;color:#4d6055;font-size:.93rem}
+.gkl-game-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(.9rem,2vw,1.5rem)}
+.gkl-game-card{display:flex;flex-direction:column;min-width:0;text-decoration:none;overflow:hidden;border:1px solid rgba(34,44,47,.15);border-radius:19px;background:#fcf8f0;box-shadow:0 20px 45px rgba(15,34,30,.11);transition:transform .18s ease,box-shadow .18s ease}
+.gkl-game-card:hover{transform:translateY(-5px);box-shadow:0 26px 48px rgba(15,34,30,.18)}
+.gkl-game-card:focus-visible{outline:3px solid #246c57;outline-offset:5px}
+.gkl-game-card-media{display:grid;place-items:center;min-height:0;aspect-ratio:3/2;overflow:hidden;background:#171c25}
+.gkl-game-card-no-such-room .gkl-game-card-media{background:linear-gradient(145deg,#192a32,#344451)}
+.gkl-game-card-small-gods .gkl-game-card-media{background:linear-gradient(145deg,#201d2d,#533243)}
+.gkl-game-card-agent-fault .gkl-game-card-media{background:linear-gradient(145deg,#181d31,#3a325e)}
+.gkl-game-card-media img{display:block;width:100%;height:100%;object-fit:contain;object-position:center}
+.gkl-game-card-content{display:flex;flex:1;flex-direction:column;align-items:flex-start;padding:clamp(1.05rem,2vw,1.55rem)}
+.gkl-game-card-index{font-size:.63rem;line-height:1.5;letter-spacing:.1em;color:#66776f;font-weight:840}
+.gkl-game-card h3{font-size:clamp(1.55rem,2.35vw,2.2rem);line-height:1.04;letter-spacing:-.06em;color:#1b2b2b;margin:.7rem 0}
+.gkl-game-card-content p{font-size:.88rem;line-height:1.65;color:#506157;margin:0 0 1.4rem}
+.gkl-game-card-action{margin-top:auto;color:#1f624d;font-weight:850;font-size:.83rem;border-bottom:1px solid rgba(39,104,78,.32);padding-bottom:.17rem}
+.gkl-game-card-agent-fault .gkl-game-card-action{color:#514378;border-color:#9483ab}
+.gkl-game-card-small-gods .gkl-game-card-action{color:#825a35;border-color:#c6a077}
+.gkl-games-footer{display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;margin-top:1.55rem}
+.gkl-games-footer p{margin:0;color:#53645a;font-size:.83rem}
+.gkl-worlds-collection-bar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;padding:.1rem .1rem 1.25rem;color:#536c6e}
+.gkl-worlds-collection-bar span:first-child{font-size:.72rem;letter-spacing:.17em;font-weight:860}
+.gkl-worlds-collection-bar span:last-child{font-size:.76rem;font-weight:790}
+.gkl-division-worlds .gkl-worlds-home{padding-top:clamp(1.6rem,3vw,2.8rem)}
+@media(max-width:1000px){.gkl-game-card-content{padding:1.05rem}.gkl-game-card h3{font-size:clamp(1.45rem,2.5vw,1.85rem)}.gkl-game-card-content p{font-size:.84rem}}
+@media(max-width:800px){.gkl-game-grid{grid-template-columns:1fr}.gkl-game-card{display:grid;grid-template-columns:minmax(0,44%) minmax(0,56%);min-height:280px}.gkl-game-card-media{aspect-ratio:auto}.gkl-game-card-content{padding:1.25rem}.gkl-game-card h3{font-size:clamp(1.8rem,4vw,2.4rem)}.gkl-game-card-content p{font-size:.91rem}.gkl-games-intro{align-items:flex-start;flex-direction:column;gap:.4rem}}
+@media(max-width:570px){.gkl-game-card{display:flex;min-height:0}.gkl-game-card-media{aspect-ratio:3/2}.gkl-game-card-content{padding:1.2rem}.gkl-games-footer .button{width:100%}}
+@media(prefers-reduced-motion:reduce){.gkl-game-card{transition:none}}
