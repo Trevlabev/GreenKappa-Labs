@@ -240,3 +240,38 @@ body.card-games-page{
 .cg-detail-link span{transition:transform .2s ease}
 .cg-detail-link:hover,.cg-detail-link:focus-visible{color:#fff0d2}
 .cg-detail-link:hover span{transform:translate(3px,-3px)}
+
+/* Mobile swipe collection gallery — 2026-11-16. */
+.cg-swipe-cue{display:none}
+@media(max-width:760px){
+  .cg-swipe-cue{
+    display:flex;grid-column:1/-1;justify-content:space-between;align-items:center;
+    width:100%;max-width:780px;margin:0 auto;
+    color:#eac795;font-size:.83rem;font-weight:700;letter-spacing:.03em;
+  }
+  .cg-swipe-cue span{font-size:1.35rem;color:#f4cb8c}
+  .cg-hero-five .cg-gallery{
+    display:flex;flex-wrap:nowrap;align-items:stretch;gap:12px;
+    width:100%;max-width:100%;margin:1rem 0 0;
+    overflow-x:auto;overflow-y:hidden;
+    -webkit-overflow-scrolling:touch;overscroll-behavior-inline:contain;
+    scroll-snap-type:x mandatory;scroll-padding-inline:2px;
+    padding:2px max(12%,24px) 12px 2px;
+    scrollbar-color:#e4b97c #1b2533;scrollbar-width:thin;
+  }
+  .cg-hero-five .cg-gallery-card,
+  .cg-hero-five .cg-gallery-card:first-child{
+    flex:0 0 min(81vw,430px);grid-column:auto;scroll-snap-align:start;scroll-snap-stop:always;
+  }
+  .cg-hero-five .cg-gallery-card img,
+  .cg-hero-five .cg-gallery-card:first-child img,
+  .cg-hero-five .cg-gallery-card:not(:first-child) img,
+  .cg-hero-five .cg-gallery-card:not(:first-child) img.cg-gallery-poster{
+    width:100%;height:auto;aspect-ratio:3/2;object-fit:contain;
+  }
+  .cg-gallery-label{display:none}
+  .cg-gallery:focus-visible{outline:2px solid #e4b97c;outline-offset:5px}
+  .cg-gallery::-webkit-scrollbar{height:5px}
+  .cg-gallery::-webkit-scrollbar-thumb{background:#e4b97c;border-radius:6px}
+  .cg-gallery::-webkit-scrollbar-track{background:#1b2533}
+}
