@@ -4,7 +4,7 @@ body.game-detail-page{
   --gd-accent:#b38671;--gd-accent-rgb:179,134,113;--gd-paper:#f2ede2;--gd-text:#252626;--gd-wash:#e8ded1;
   background:#101522;color:#f8f1e5;
 }
-body.game-detail-page[data-game="not-to-scale"]{--gd-accent:#c08d7b;--gd-accent-rgb:192,141,123;--gd-paper:#efe9e1;--gd-text:#2e292b;--gd-wash:#e5dbd5}
+body.game-detail-page[data-game="not-to-scale"]{--gd-accent:#62b5b6;--gd-accent-rgb:98,181,182;--gd-paper:#f0e9dc;--gd-text:#1a2833;--gd-wash:#d9e3df}
 body.game-detail-page[data-game="small-gods-large-debts"]{--gd-accent:#d7b17a;--gd-accent-rgb:215,177,122;--gd-paper:#f1e9dc;--gd-text:#2f2937;--gd-wash:#e4d9c7}
 body.game-detail-page[data-game="trial-of-a-dead-god"]{--gd-accent:#cbb3a0;--gd-accent-rgb:203,179,160;--gd-paper:#ece6df;--gd-text:#28252d;--gd-wash:#ddd4d0}
 body.game-detail-page[data-game="who-broke-the-prompt"]{--gd-accent:#e0ab8b;--gd-accent-rgb:224,171,139;--gd-paper:#f3eadd;--gd-text:#2c2927;--gd-wash:#e4d3c2}
@@ -120,3 +120,9 @@ body.game-detail-page[data-game="agent-fault"]{--gd-accent:#e2f67a;--gd-accent-r
 .gd-feature-grid:has(> :nth-child(4)){grid-template-columns:repeat(4,minmax(0,1fr))}
 @media(max-width:1100px) and (min-width:761px){.gd-feature-grid:has(> :nth-child(4)){grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:760px){.gd-feature-grid:has(> :nth-child(4)){grid-template-columns:1fr}}
+
+/* No Such Room: Ghost Blueprint accent and packaging concept treatment. */
+body.game-detail-page[data-game="not-to-scale"] .gd-hero-art a{background:#0b1825;border-color:rgba(98,181,182,.42)}
+body.game-detail-page[data-game="not-to-scale"] .gd-hero-art img{aspect-ratio:3/2;object-fit:cover}
+body.game-detail-page[data-game="not-to-scale"] .gd-art-tile{background:#102333}
+body.game-detail-page[data-game="not-to-scale"] .gd-art-note{max-width:78ch}
