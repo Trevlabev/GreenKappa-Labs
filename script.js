@@ -60,13 +60,13 @@
 
   const gallery = $("[data-showcase]");
   if (gallery) {
-    const slides = $("[data-showcase-slide]", gallery);
-    const tabs = $("[data-showcase-tab]", gallery);
+    const slides = $$("[data-showcase-slide]", gallery);
+    const tabs = $$("[data-showcase-tab]", gallery);
     const prev = $("[data-showcase-prev]", gallery);
     const next = $("[data-showcase-next]", gallery);
     const pause = $("[data-showcase-pause]", gallery);
     const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
-    let current = 0, paused = motion.matches, hovered = false, focused = false, timer = null;
+    let current = 0, paused = motion.matches, timer = null;
     function show(index) {
       current = (index + slides.length) % slides.length;
       slides.forEach((slide, i) => {
@@ -88,7 +88,7 @@
     function sync() {
       if (timer !== null) clearInterval(timer);
       timer = null;
-      if (!paused && !hovered && !focused && !document.hidden)
+      if (!paused && !document.hidden)
         timer = setInterval(() => show(current + 1), 6500);
     }
     function navigate(index) { show(index); sync(); }
@@ -96,12 +96,6 @@
     next.addEventListener("click", () => navigate(current + 1));
     tabs.forEach((tab, i) => tab.addEventListener("click", () => navigate(i)));
     pause.addEventListener("click", () => { paused = !paused; controls(); sync(); });
-    gallery.addEventListener("mouseenter", () => { hovered = true; sync(); });
-    gallery.addEventListener("mouseleave", () => { hovered = false; sync(); });
-    gallery.addEventListener("focusin", () => { focused = true; sync(); });
-    gallery.addEventListener("focusout", e => {
-      if (!gallery.contains(e.relatedTarget)) { focused = false; sync(); }
-    });
     document.addEventListener("visibilitychange", sync);
     motion.addEventListener("change", () => {
       if (motion.matches) paused = true;

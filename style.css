@@ -692,3 +692,9 @@ p{line-height:1.68}
 .card-games-teaser .card-games-teaser-grid{grid-template-columns:1fr}
 .card-games-teaser .card-games-teaser-grid a,.card-games-teaser .card-games-teaser-grid a:nth-child(-n+2),.card-games-teaser .card-games-teaser-grid a:last-child{grid-column:1;max-width:none}}
 @media(prefers-reduced-motion:reduce){.gkl-showcase-slide{transition:none;transform:none}}
+
+/* Entire feature opens its individual project page; controls remain separate. */
+.gkl-slide-cover-link{position:absolute;inset:0;z-index:5;display:block;cursor:pointer}
+.gkl-slide-cover-link:focus-visible{outline:4px solid #f7db92;outline-offset:-7px;border-radius:10px}
+.gkl-showcase-slide:hover .gkl-slide-link,.gkl-showcase-slide:focus-within .gkl-slide-link{background:#fff;transform:translateY(-2px)}
+.gkl-slide-link{transition:background .18s ease,transform .18s ease}
