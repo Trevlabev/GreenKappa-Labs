@@ -104,7 +104,7 @@
     show(0); controls(); sync();
   }
 
-  const copyButtons = $("[data-copy]");
+  const copyButtons = $$("[data-copy]");
   copyButtons.forEach((button) => {
     button.addEventListener("click", async () => {
       const value = button.dataset.copy || "";
