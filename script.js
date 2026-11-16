@@ -57,7 +57,60 @@
     });
   }
 
-  const copyButtons = $$("[data-copy]");
+
+  const gallery = $("[data-showcase]");
+  if (gallery) {
+    const slides = $("[data-showcase-slide]", gallery);
+    const tabs = $("[data-showcase-tab]", gallery);
+    const prev = $("[data-showcase-prev]", gallery);
+    const next = $("[data-showcase-next]", gallery);
+    const pause = $("[data-showcase-pause]", gallery);
+    const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let current = 0, paused = motion.matches, hovered = false, focused = false, timer = null;
+    function show(index) {
+      current = (index + slides.length) % slides.length;
+      slides.forEach((slide, i) => {
+        const active = i === current;
+        slide.classList.toggle("is-active", active);
+        slide.setAttribute("aria-hidden", String(!active));
+        slide.inert = !active;
+      });
+      tabs.forEach((tab, i) => {
+        tab.classList.toggle("is-active", i === current);
+        tab.setAttribute("aria-current", String(i === current));
+      });
+    }
+    function controls() {
+      pause.textContent = paused ? "Play" : "Pause";
+      pause.setAttribute("aria-pressed", String(paused));
+      pause.setAttribute("aria-label", paused ? "Resume automatic gallery rotation" : "Pause automatic gallery rotation");
+    }
+    function sync() {
+      if (timer !== null) clearInterval(timer);
+      timer = null;
+      if (!paused && !motion.matches && !hovered && !focused && !document.hidden)
+        timer = setInterval(() => show(current + 1), 6500);
+    }
+    function navigate(index) { show(index); sync(); }
+    prev.addEventListener("click", () => navigate(current - 1));
+    next.addEventListener("click", () => navigate(current + 1));
+    tabs.forEach((tab, i) => tab.addEventListener("click", () => navigate(i)));
+    pause.addEventListener("click", () => { paused = !paused; controls(); sync(); });
+    gallery.addEventListener("mouseenter", () => { hovered = true; sync(); });
+    gallery.addEventListener("mouseleave", () => { hovered = false; sync(); });
+    gallery.addEventListener("focusin", () => { focused = true; sync(); });
+    gallery.addEventListener("focusout", e => {
+      if (!gallery.contains(e.relatedTarget)) { focused = false; sync(); }
+    });
+    document.addEventListener("visibilitychange", sync);
+    motion.addEventListener("change", () => {
+      if (motion.matches) paused = true;
+      controls(); sync();
+    });
+    show(0); controls(); sync();
+  }
+
+  const copyButtons = $("[data-copy]");
   copyButtons.forEach((button) => {
     button.addEventListener("click", async () => {
       const value = button.dataset.copy || "";

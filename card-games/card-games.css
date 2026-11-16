@@ -138,7 +138,7 @@ body.card-games-page{
 }
 
 
-/* Founding Five / minimalist editorial portfolio */
+/* Original tabletop collection / minimalist editorial portfolio */
 .cg-hero-five{grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr);gap:clamp(2rem,5vw,5rem)}
 .cg-hero-five h1{font-size:clamp(4rem,7vw,7rem);line-height:.93}
 .cg-gallery{position:relative;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;align-content:center}
@@ -227,7 +227,6 @@ body.card-games-page{
   object-fit:cover;object-position:center top;
   aspect-ratio:3/2;
 }
-#who-broke .cg-game-poster-art{border-color:rgba(83,210,210,.32)}
 #agent-fault .cg-game-poster-art{border-color:rgba(213,123,244,.34)}
 @media(max-width:760px){
   .cg-game-poster-art{width:min(100%,560px);margin-inline:auto}

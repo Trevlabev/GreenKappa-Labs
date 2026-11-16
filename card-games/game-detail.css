@@ -1,4 +1,4 @@
-/* GreenKappa Labs / Founding Five individual game pages
+/* GreenKappa Labs / original tabletop individual game pages
    Shared editorial framework — the images are the original production concept artwork. */
 body.game-detail-page{
   --gd-accent:#b38671;--gd-accent-rgb:179,134,113;--gd-paper:#f2ede2;--gd-text:#252626;--gd-wash:#e8ded1;
@@ -6,8 +6,6 @@ body.game-detail-page{
 }
 body.game-detail-page[data-game="not-to-scale"]{--gd-accent:#62b5b6;--gd-accent-rgb:98,181,182;--gd-paper:#f0e9dc;--gd-text:#1a2833;--gd-wash:#d9e3df}
 body.game-detail-page[data-game="small-gods-large-debts"]{--gd-accent:#d7b17a;--gd-accent-rgb:215,177,122;--gd-paper:#f1e9dc;--gd-text:#2f2937;--gd-wash:#e4d9c7}
-body.game-detail-page[data-game="trial-of-a-dead-god"]{--gd-accent:#cbb3a0;--gd-accent-rgb:203,179,160;--gd-paper:#ece6df;--gd-text:#28252d;--gd-wash:#ddd4d0}
-body.game-detail-page[data-game="who-broke-the-prompt"]{--gd-accent:#e0ab8b;--gd-accent-rgb:224,171,139;--gd-paper:#f3eadd;--gd-text:#2c2927;--gd-wash:#e4d3c2}
 body.game-detail-page[data-game="agent-fault"]{--gd-accent:#e2f67a;--gd-accent-rgb:226,246,122;--gd-paper:#f8f2e4;--gd-text:#2e2940;--gd-wash:#eae0cd}
 .game-detail-page .section{width:min(1260px,calc(100% - 3rem))}
 .game-detail-page .nav a[aria-current="page"]{color:var(--gd-accent);background:rgba(var(--gd-accent-rgb),.10)}
