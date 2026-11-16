@@ -95,6 +95,57 @@
     prev.addEventListener("click", () => navigate(current - 1));
     next.addEventListener("click", () => navigate(current + 1));
     tabs.forEach((tab, i) => tab.addEventListener("click", () => navigate(i)));
+
+    // Horizontal touch gestures navigate the featured projects; vertical scrolling stays native.
+    const viewport = $(".gkl-showcase-viewport", gallery);
+    if (viewport) {
+      let touchStart = null;
+      let suppressLinkClickUntil = 0;
+      const swipeDistance = () => Math.max(44, Math.min(82, viewport.clientWidth * 0.12));
+
+      viewport.addEventListener("touchstart", (event) => {
+        if (event.touches.length !== 1) {
+          touchStart = null;
+          return;
+        }
+        const touch = event.touches[0];
+        touchStart = { id: touch.identifier, x: touch.clientX, y: touch.clientY };
+        // Prevent the auto-rotation timer from advancing mid-gesture.
+        if (timer !== null) clearInterval(timer);
+        timer = null;
+      }, { passive: true });
+
+      viewport.addEventListener("touchend", (event) => {
+        if (!touchStart) return;
+        const start = touchStart;
+        touchStart = null;
+        const touch = Array.from(event.changedTouches).find((t) => t.identifier === start.id);
+        if (!touch) { sync(); return; }
+        const dx = touch.clientX - start.x;
+        const dy = touch.clientY - start.y;
+        if (Math.abs(dx) >= swipeDistance() && Math.abs(dx) > Math.abs(dy) * 1.4) {
+          // Swipes change slides but must not open the invisible full-slide project link.
+          suppressLinkClickUntil = Date.now() + 500;
+          navigate(current + (dx < 0 ? 1 : -1));
+        } else {
+          sync();
+        }
+      }, { passive: true });
+
+      viewport.addEventListener("touchcancel", () => {
+        touchStart = null;
+        sync();
+      }, { passive: true });
+
+      viewport.addEventListener("click", (event) => {
+        if (Date.now() <= suppressLinkClickUntil) {
+          event.preventDefault();
+          event.stopImmediatePropagation();
+          suppressLinkClickUntil = 0;
+        }
+      }, true);
+    }
+
     pause.addEventListener("click", () => { paused = !paused; controls(); sync(); });
     document.addEventListener("visibilitychange", sync);
     motion.addEventListener("change", () => {

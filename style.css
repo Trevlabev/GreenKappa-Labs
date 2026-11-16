@@ -909,3 +909,12 @@ html{scroll-behavior:smooth}
 @media(max-width:800px){.gkl-game-grid{grid-template-columns:1fr}.gkl-game-card{display:grid;grid-template-columns:minmax(0,44%) minmax(0,56%);min-height:280px}.gkl-game-card-media{aspect-ratio:auto}.gkl-game-card-content{padding:1.25rem}.gkl-game-card h3{font-size:clamp(1.8rem,4vw,2.4rem)}.gkl-game-card-content p{font-size:.91rem}.gkl-games-intro{align-items:flex-start;flex-direction:column;gap:.4rem}}
 @media(max-width:570px){.gkl-game-card{display:flex;min-height:0}.gkl-game-card-media{aspect-ratio:3/2}.gkl-game-card-content{padding:1.2rem}.gkl-games-footer .button{width:100%}}
 @media(prefers-reduced-motion:reduce){.gkl-game-card{transition:none}}
+
+/* Touch-first featured project carousel. Native vertical page scrolling and pinch zoom remain enabled. */
+@media (hover: none) and (pointer: coarse) {
+  .gkl-showcase-viewport { touch-action: pan-y pinch-zoom; overscroll-behavior-x: contain; }
+}
+.gkl-gallery-swipe-hint { display:none; }
+@media (max-width: 720px) {
+  .gkl-gallery-swipe-hint { display:block; text-align:center; margin:.65rem .8rem 0; font-size:.76rem; line-height:1.45; color:#3c5646; letter-spacing:.01em; }
+}
