@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#0a0b0f">
+  <title>TableArc RED — Cyberpunk RED AI-GM Desktop App | GreenKappa Labs</title>
+  <meta name="description" content="TableArc RED is a standalone, local-first Cyberpunk RED desktop RPG prototype with AI-GM narration, structured gigs, tactical firefights, NET Architecture, campaign state and OpenAI/Ollama connectivity. Active development.">
+  <link rel="canonical" href="https://greenkappalabs.art/tablearc-red/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="TableArc RED — Edgerunner Operations Console">
+  <meta property="og:description" content="A separate Cyberpunk RED desktop game engine: living gigs, consequential choices, tactical mechanics and persistent campaign state. Development prototype.">
+  <meta property="og:url" content="https://greenkappalabs.art/tablearc-red/">
+  <meta property="og:image" content="https://greenkappalabs.art/assets/greenkappa-logo.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="../assets/greenkappa-logo.png">
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="red.css">
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"SoftwareApplication",
+    "name":"TableArc RED",
+    "applicationCategory":"GameApplication",
+    "operatingSystem":"Windows (desktop target)",
+    "description":"Standalone, local-first Cyberpunk RED tabletop AI-GM and campaign management prototype. Active development; no public downloadable Windows release is currently offered.",
+    "url":"https://greenkappalabs.art/tablearc-red/",
+    "author":{"@type":"Organization","name":"GreenKappa Labs","url":"https://greenkappalabs.art/"}
+  }
+  </script>
+</head>
+<body class="red-page">
+  <a class="skip-link dark-skip" href="#main">Skip to content</a>
+  <header class="site-header dark-header">
+    <a class="brand" href="../" aria-label="GreenKappa Labs home">
+      <span class="brand-mark"><img src="../assets/greenkappa-logo.png" alt=""></span>
+      <span class="brand-text"><strong>GreenKappa Labs</strong><small>Applied technology &amp; creative systems</small></span>
+    </a>
+    <button class="menu-button dark-menu" type="button" aria-expanded="false" aria-controls="primary-nav">
+      <span></span><span></span><span></span><b>Menu</b>
+    </button>
+    <nav class="nav" id="primary-nav" aria-label="Primary navigation">
+      <a href="../">Home</a>
+      <a href="../tablearc/">TableArc</a>
+      <a href="#systems">Systems</a>
+      <a href="#workflow">Play loop</a>
+      <a href="#status">Development status</a>
+      <a href="#ask-arcana">Ask Arcana</a>
+      <a class="nav-cta" href="#contact">Get in touch</a>
+    </nav>
+  </header>
+  <main id="main">
+    <section class="red-hero red-width" aria-labelledby="red-title">
+      <div>
+        <span class="red-kicker">GreenKappa Labs / Standalone desktop RPG</span>
+        <h1 id="red-title">TableArc <span>RED</span></h1>
+        <h2>Run the gig. Keep the receipts.</h2>
+        <p>Cyberpunk RED deserves an AI-GM that remembers the firefight, the favor you owe, the witness you burned and the floor where your Netrunner got trapped. TableArc RED is a separate desktop project built around structured, consequential tabletop play.</p>
+        <div class="red-badges" aria-label="Project characteristics">
+          <span>Version 0.5 · prototype</span>
+          <span>Local-first</span>
+          <span>Windows desktop target</span>
+          <span>OpenAI / Ollama</span>
+        </div>
+        <div class="red-actions">
+          <a class="red-action" href="#systems">Explore the systems <span aria-hidden="true">↗</span></a>
+          <a class="red-action ghost" href="#contact">Request a development build</a>
+        </div>
+        <p class="red-small" style="margin-top:1.2rem">Independent fan-made tool for the Cyberpunk RED tabletop RPG. Not affiliated with or endorsed by R. Talsorian Games. A copy of the official rulebook is required for play.</p>
+      </div>
+      <div class="red-console" role="img" aria-label="Illustrative TableArc RED interface concept: mission header, dossier, tactical status and GM log; this is a mockup, not a live application screenshot">
+        <div class="red-console-head"><span>RED / OPS CONSOLE · ILLUSTRATIVE PREVIEW</span><span class="red-lights" aria-hidden="true"><i></i><i></i><i></i></span></div>
+        <div class="red-console-layout">
+          <div class="red-console-nav" aria-hidden="true">
+            <span>OPS</span><span>Dossier</span><span>Combat</span><span>NET</span><span>Gigs</span><span>Intel</span><span>Trauma</span>
+          </div>
+          <div class="red-console-main">
+            <div class="red-console-meta">
+              <div><small>ACTIVE OP / FICTIONAL DEMO</small><b>Dead Channel</b></div>
+              <span class="red-stamp">RUN LIVE</span>
+            </div>
+            <div class="red-console-stats">
+              <div class="red-console-stat"><small>HP</small><strong>32 / 40</strong></div>
+              <div class="red-console-stat hot"><small>HEAT *</small><strong>03 / 06</strong></div>
+              <div class="red-console-stat"><small>ARMOR SP</small><strong>11</strong></div>
+            </div>
+            <div class="red-console-log">
+              <small>GM / SECURE CHANNEL</small>
+              <p>Across the loading dock, a red security light blinks twice. The courier has stopped moving. Someone just changed the pickup time.</p>
+              <p class="red-dialogue">“Choom, we have about sixty seconds before somebody asks questions.”</p>
+              <div class="red-console-bottom">
+                <span>NPC: COURIER / ALIVE</span>
+                <span><b>ALARM CLOCK 03/06</b></span>
+              </div>
+            </div>
+            <div class="red-console-bottom"><span>CHECK: PERCEPTION · PENDING</span><span>NO ACTION COMMITTED</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="red-section" id="systems">
+      <div class="red-width">
+        <div class="red-section-head">
+          <div><span class="red-kicker">01 / Capability map</span><h2>A campaign OS for the Time of the Red.</h2></div>
+          <p>Built as its own Electron application—not a D&amp;D theme overlay. The goal is to keep narrative improvisation accountable to character resources, tactical positions, evidence and the Street's long memory.</p>
+        </div>
+        <div class="red-feature-grid">
+          <article class="red-feature"><small>01 / LIVE PLAY</small><h3>AI-GM operations</h3><p>Free-form declared actions, written narration, optional speech synthesis, and reviewable proposed state changes. The AI suggests consequences; the runtime controls what is recorded.</p></article>
+          <article class="red-feature"><small>02 / GIGS</small><h3>Adventure Foundry</h3><p>Draft and validate structured jobs with scene connections, NPC identities, clues, objectives, faction pressures and possible endings. Activate modules for play.</p></article>
+          <article class="red-feature"><small>03 / ENGAGEMENT</small><h3>Tactical firefights</h3><p>Initiative, positions, range, cover, ammunition, armor, selected ranged and melee actions, Suppressive Fire, shotgun shells and injury tracking.</p></article>
+          <article class="red-feature"><small>04 / NETSPACE</small><h3>Netrunner operations</h3><p>Local Access Points and NET Architecture floors, Interface actions, files, passwords and control nodes. Full Black ICE and Demon combat remains a development target.</p></article>
+          <article class="red-feature"><small>05 / THE STREET</small><h3>Living campaign record</h3><p>Edgerunner dossiers, NPCs, clocks, evidence, relationships, Reputation, eurobucks, downtime, session archives and portable JSON saves.</p></article>
+          <article class="red-feature"><small>06 / THE RULES</small><h3>Medical &amp; spatial tools</h3><p>Two-meter tactical grids, paths and cover; critical-injury lookup, stabilization, Quick Fixes, Treatments and daily recovery procedures—with explicit GM overrides where needed.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="red-section" id="workflow">
+      <div class="red-width">
+        <div class="red-section-head">
+          <div><span class="red-kicker">02 / Runtime philosophy</span><h2>The AI narrates. The game state answers.</h2></div>
+          <p>The operating principle is open player agency with mechanical accountability. Interesting failure is allowed; invented resources and silent state edits are not.</p>
+        </div>
+        <div class="red-steps">
+          <article class="red-step"><h3>Declare anything.</h3><p>Investigate a forged manifest, call in a favor, sneak through a loading dock, put a round through the camera, or jack into an actual NET Architecture.</p></article>
+          <article class="red-step"><h3>Adjudicate the cost.</h3><p>Resolve known RED rules with explicit rolls, position, ammunition and consequences. Unsupported procedures are flagged for GM judgment rather than invented as canon.</p></article>
+          <article class="red-step"><h3>Carry it forward.</h3><p>Review proposed mutations; record HP, gear, leads, clocks, NPC attitudes and losses in persistent campaign state that can survive the session.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="red-section" id="status">
+      <div class="red-width">
+        <div class="red-section-head">
+          <div><span class="red-kicker">03 / Transparency</span><h2>Development build. Not a commercial release.</h2></div>
+          <p>The current branch is source-tested and undergoing Windows installation and play-session verification. No public, production-certified installer is being offered on this site.</p>
+        </div>
+        <div class="red-limit">
+          <div>
+            <span class="red-kicker">Build record / v0.5.0</span>
+            <h3>Implemented in source, still under validation</h3>
+            <p>Standalone Electron architecture, native RED interface, OpenAI/Ollama connection paths, a structured Adventure Foundry, tactical/medical modules and save recovery are present in the development source. A prior automated source suite reported 127 passing tests.</p>
+          </div>
+          <div>
+            <h3>What is not finished</h3>
+            <ul>
+              <li>Complete Cyberpunk RED rules coverage, including all Role Abilities, Black ICE/Demons, cyberware economy and vehicle combat.</li>
+              <li>Long-session AI-provider acceptance and a certified Windows installer.</li>
+              <li>Automatic artwork generation (intentionally excluded from the current roadmap).</li>
+            </ul>
+            <p class="red-small">No copyrighted rulebook is bundled. AI provider access may require your own API credentials or local model installation.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div id="ask-arcana" class="arcana-widget-anchor" aria-hidden="true"></div>
+    <section class="red-cta red-width" id="contact">
+      <div><span class="red-kicker">04 / Collaborate or test</span><h2>Got a job for the engine?</h2><p>Interested in early testing, rules coverage, local AI workflows or developing a longer-running Cyberpunk RED campaign? Get in touch. TableArc RED is developed alongside—but separately from—the original TableArc platform.</p></div>
+      <div class="red-actions"><a class="red-action" href="mailto:GreenkappaLabs@gmail.com?subject=TableArc%20RED%20Development%20Build%20Inquiry">Request development access</a><a class="red-action ghost" href="../tablearc/">See original TableArc</a></div>
+    </section>
+  </main>
+  <footer class="site-footer dark-footer">
+    <div><strong>TableArc RED</strong><span>Independent GreenKappa Labs desktop prototype · Not affiliated with R. Talsorian Games.</span></div>
+    <div><a href="../">GreenKappa Labs</a><a href="../tools/">Software</a><a href="../card-games/">Games</a><a href="../privacy.html">Privacy</a><span>© <span id="year"></span> GreenKappa Labs</span></div>
+  </footer>
+  <script src="../script.js"></script>
+  <script src="/assets/arcana/tablearc-knowledge.js"></script>
+  <script src="/arcana-config.js"></script>
+  <script src="/arcana-widget.js"></script>
+</body>
+</html>
