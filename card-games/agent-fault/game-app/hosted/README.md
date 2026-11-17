@@ -60,3 +60,9 @@ When using Netlify local database, apply migrations as instructed by `netlify da
 ## Design provenance
 
 Card content is unchanged from `AGENT_FAULT_WEB_SCENARIO.json`, `AGENT_FAULT_WEB_INTERFERENCE.json`, and `AGENT_FAULT_WEB_FAULT.json` (24/36/6). Original GreenKappa Labs midnight navy #141736, warm cream #FFF6E9, lime #E5F91B, lilac #C982EC, coral #FF7568, and robot mascot retained.
+
+## Reliability update (November 17, 2026)
+
+Scoring still requires a **strict majority of every active player**. The host no longer waits indefinitely for all votes: after a 60-second grace period, an absent player counts as a non-approval. If a majority voted YES the host can finalize; without it the host must reopen the proposal. This is a deterministic recovery path, not automatic judge override. The host and player review screens now show the Bonus evidence; the host sees votes, required majority, and the deadline.
+
+The Classic AI generation remains one batched provider call. Candidate replies are separately requested in one prompt, **not inference-isolated**; do not describe them as independently generated until a separate fairness benchmark is completed. No card art/text changes.

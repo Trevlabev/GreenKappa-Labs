@@ -26,3 +26,38 @@ test('8-player draw and contest owner protections',()=>{const {r,people}=setup(8
 test('majority voting is strict and cannot duplicate points',()=>{const {r,people}=setup();applyAction(r,'host',null,'start');applyAction(r,'player',people[0].p,'lock_profile',{profile:'Sincere but confused'});for(const {p} of people.slice(1))applyAction(r,'player',p,'submit',{card_id:p.hand[0]});applyAction(r,'host',null,'manual_answers',{text:'A: one\nB: two\nC: three'});applyAction(r,'player',people[0].p,'spotlight',{label:'A'});applyAction(r,'player',people[0].p,'propose_bonus',{claims:{},bonus:null});for(const [i,{p}] of people.entries())applyAction(r,'player',p,'approve',{yes:i<2});assert.throws(()=>applyAction(r,'host',null,'finalize'),/strict majority/);applyAction(r,'host',null,'reopen');assert.equal(r.phase,'adjudicate')});
 test('pricing calculator matches documented token math',()=>{assert.equal(estimateUsd('gpt-4.1-mini',{input_tokens:599,output_tokens:277}),0.0006828);assert.equal(estimateUsd('unknown',{input_tokens:10,output_tokens:10}),null);assert.equal(estimateUsd('gpt-4.1-mini',{input_tokens:800,output_tokens:200,input_tokens_details:{cached_tokens:80}}),.000616)});
 test('answer parsing strips excess words',()=>{let text='A: '+Array(40).fill('word').join(' ')+'\nB: okay';let result=parseAnswers(text,['A','B']);assert.equal(result.A.split(' ').length,30);assert.equal(result.B,'okay')});
+
+
+test('Classic review grace period handles disconnected votes without weakening strict majority',()=>{
+ const {r,people}=setup();
+ applyAction(r,'host',null,'start');
+ applyAction(r,'player',people[0].p,'lock_profile',{profile:'A municipal assistant'});
+ for(const {p} of people.slice(1))applyAction(r,'player',p,'submit',{card_id:p.hand[0]});
+ applyAction(r,'host',null,'manual_answers',{text:'A: First complete candidate.\\nB: Second complete candidate.\\nC: Third complete candidate.'});
+ applyAction(r,'player',people[0].p,'spotlight',{label:'A'});
+ const start=1_000_000;
+ applyAction(r,'player',people[0].p,'propose_bonus',{claims:{},bonus:null},start);
+ assert.equal(r.review_deadline,start+60000);
+ const state=visible(r,'host',null);
+ assert.equal(state.review_deadline,start+60000);
+ for(const {p} of people.slice(0,3))applyAction(r,'player',p,'approve',{yes:true},start+1000);
+ assert.throws(()=>applyAction(r,'host',null,'finalize',{},start+59999),/Waiting for votes/);
+ applyAction(r,'host',null,'finalize',{},start+60000);
+ assert.equal(r.phase,'results');
+ assert.equal(r.players.reduce((a,p)=>a+p.score,0),1);
+});
+test('Classic does not award a contested proposal when disconnected votes leave no majority',()=>{
+ const {r,people}=setup();
+ applyAction(r,'host',null,'start');
+ applyAction(r,'player',people[0].p,'lock_profile',{profile:'A careful administrator'});
+ for(const {p} of people.slice(1))applyAction(r,'player',p,'submit',{card_id:p.hand[0]});
+ applyAction(r,'host',null,'manual_answers',{text:'A: First complete candidate.\\nB: Second complete candidate.\\nC: Third complete candidate.'});
+ applyAction(r,'player',people[0].p,'spotlight',{label:'A'});
+ applyAction(r,'player',people[0].p,'propose_bonus',{claims:{},bonus:null},2000);
+ applyAction(r,'player',people[0].p,'approve',{yes:true});
+ applyAction(r,'player',people[1].p,'approve',{yes:true});
+ assert.throws(()=>applyAction(r,'host',null,'finalize',{},62000),/strict majority/);
+ applyAction(r,'host',null,'reopen');
+ assert.equal(r.phase,'adjudicate');
+ assert.equal(r.review_deadline,null);
+});
