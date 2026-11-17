@@ -24,7 +24,19 @@
       nav.classList.toggle("open", !open);
     });
 
-    $$(".nav a").forEach((link) => link.addEventListener("click", closeMenu));
+    $(".nav a").forEach((link) => link.addEventListener("click", closeMenu));
+    // The responsive menu also closes by keyboard or a tap outside its header.
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && menuButton.getAttribute("aria-expanded") === "true") {
+        closeMenu();
+        menuButton.focus();
+      }
+    });
+    document.addEventListener("pointerdown", (event) => {
+      if (menuButton.getAttribute("aria-expanded") === "true" && header && !header.contains(event.target)) {
+        closeMenu();
+      }
+    });
     window.addEventListener("resize", () => {
       if (window.innerWidth > 900) closeMenu();
     });
@@ -66,7 +78,8 @@
     const next = $("[data-showcase-next]", gallery);
     const pause = $("[data-showcase-pause]", gallery);
     const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
-    let current = 0, paused = motion.matches, timer = null;
+    let current = 0, paused = motion.matches, timer = null, interacting = false;
+    const position = $(".gkl-showcase-position", gallery);
     function show(index) {
       current = (index + slides.length) % slides.length;
       slides.forEach((slide, i) => {
@@ -79,6 +92,10 @@
         tab.classList.toggle("is-active", i === current);
         tab.setAttribute("aria-current", String(i === current));
       });
+      if (position) {
+        const name = slides[current].getAttribute("aria-label")?.split(": ").slice(1).join(": ") || "Featured project";
+        position.textContent = "Viewing " + (current + 1) + " of " + slides.length + " · " + name;
+      }
     }
     function controls() {
       pause.textContent = paused ? "Play" : "Pause";
@@ -88,13 +105,27 @@
     function sync() {
       if (timer !== null) clearInterval(timer);
       timer = null;
-      if (!paused && !document.hidden)
+      if (!paused && !document.hidden && !interacting)
         timer = setInterval(() => show(current + 1), 6500);
     }
     function navigate(index) { show(index); sync(); }
     prev.addEventListener("click", () => navigate(current - 1));
     next.addEventListener("click", () => navigate(current + 1));
     tabs.forEach((tab, i) => tab.addEventListener("click", () => navigate(i)));
+
+    // Pause rotation while visitors read or operate the carousel.
+    gallery.addEventListener("mouseenter", () => { interacting = true; sync(); });
+    gallery.addEventListener("mouseleave", () => { interacting = false; sync(); });
+    gallery.addEventListener("focusin", () => { interacting = true; sync(); });
+    gallery.addEventListener("focusout", (event) => {
+      if (!gallery.contains(event.relatedTarget)) { interacting = false; sync(); }
+    });
+    gallery.addEventListener("keydown", (event) => {
+      if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
+        event.preventDefault();
+        navigate(current + (event.key === "ArrowRight" ? 1 : -1));
+      }
+    });
 
     // Horizontal touch gestures navigate the featured projects; vertical scrolling stays native.
     const viewport = $(".gkl-showcase-viewport", gallery);
