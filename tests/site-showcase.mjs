@@ -21,7 +21,8 @@ try{
   await desktopImage.evaluate(img=>img.decode());
   assert.ok((await desktopImage.evaluate(img=>img.currentSrc)).includes("flowglass-gallery-wide.webp"),"Wide artwork selected");
   assert.equal(await desktopImage.evaluate(img=>img.naturalWidth),1672,"Wide asset loads");
-  assert.ok((await slide.innerText()).includes("Illustrative concept art"),"Image disclaimer is present");
+  assert.match(await slide.locator(".gkl-flowglass-art-note").textContent(),/Illustrative concept art/,"Disclaimer text exists");
+  assert.ok(await slide.locator(".gkl-flowglass-art-note").isVisible(),"Desktop disclaimer is visible");
   await desktop.goto(origin+"/tools/",{waitUntil:"networkidle"});
   assert.equal(await desktop.locator(".gkt-release-card").count(),2,"Tools page has two active product cards");
   assert.equal(await desktop.locator(".gkt-product-list > article.gkt-product").count(),6,"All existing tools remain listed");
