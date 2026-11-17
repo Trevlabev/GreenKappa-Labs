@@ -16,10 +16,15 @@ try{
   for (const width of [390,1280]){
     const context=await browser.newContext({viewport:{width,height:860},reducedMotion:"reduce"});
     const page=await context.newPage();
+    page.setDefaultTimeout(6000);
     for (const route of pages){
       const runtime=[];
       page.on("pageerror",error=>runtime.push(error.message));
-      const response=await page.goto(origin+route,{waitUntil:"domcontentloaded",timeout:20000});
+      // A full DOMContentLoaded wait can be blocked by optional third-party modules.
+      // Check the parsed local page, then independently exercise its own navigation.
+      console.log("CHECK",width,route);
+      const response=await page.goto(origin+route,{waitUntil:"commit",timeout:10000});
+      await page.waitForFunction(() => document.readyState !== "loading",null,{timeout:10000});
       if(!response || response.status()>=400) findings.push(route+" @ "+width+": HTTP "+response?.status());
       const h1=page.locator("h1");
       if(await h1.count()!==1) findings.push(route+" @ "+width+": missing/duplicate main heading");
