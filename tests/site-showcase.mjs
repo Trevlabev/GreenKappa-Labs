@@ -46,7 +46,7 @@ try{
   assert.match(await courtSlide.getAttribute("class"),/is-active/,"CourtFlow gallery slide can be selected");
   assert.equal(await courtSlide.locator("a.gkl-slide-cover-link").getAttribute("href"),"courtflow/");
   assert.ok(await courtSlide.locator(".cfp-screen .cfp-metrics > div").count()===4,"CourtFlow preview includes four operational metrics");
-  assert.ok((await courtSlide.locator(".cfp-exception").innerText()).includes("unresolved exception"),"Illustration represents real exception handling");
+  assert.match(await courtSlide.locator(".cfp-exception").textContent(),/unresolved exception/,"Illustration represents real exception handling");
   assert.ok(await courtSlide.locator(".cfp-image-note").isVisible(),"CourtFlow illustration is disclosed on desktop");
   assert.equal(await desktop.locator(".gkl-tools-products--live > article").count(),4,"Homepage showcases four runnable tools");
   assert.equal(await desktop.locator(".gkl-tools-products--concepts > article").count(),2,"Homepage shows two design concepts");
