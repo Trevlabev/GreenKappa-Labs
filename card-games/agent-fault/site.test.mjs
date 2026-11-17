@@ -28,3 +28,12 @@ test('both demos run locally without server-side AI requests',()=>{
  assert(showcase.includes('.cd-nav{position:sticky'));
  assert(showcase.includes('prefers-reduced-motion'));
 });
+
+test('tabbed demos appear immediately between The Idea and The Player Experience',()=>{
+ const markers=['01 / The idea','id="animated-demo"','02 / The player experience','id="play-options"','04 / Artwork','05 / Development questions'];
+ const positions=markers.map(m=>html.indexOf(m));
+ assert(positions.every(v=>v>=0));
+ assert(positions.every((v,i)=>i===0||v>positions[i-1]));
+ assert(html.includes('id="player-experience"'));
+ assert.equal((html.match(/id="animated-demo"/g)||[]).length,1);
+});
