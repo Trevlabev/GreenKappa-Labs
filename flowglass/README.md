@@ -28,6 +28,7 @@ node --check flowglass/core.mjs
 node --check flowglass/examples.mjs
 node --check flowglass/app.mjs
 node --test flowglass/tests/core.test.mjs
+# Browser smoke tests run in GitHub Actions via Playwright + Chromium
 ~~~
 
 No npm packages or CDNs are required.

@@ -27,3 +27,22 @@ jobs:
           node --check flowglass/app.mjs
       - name: Run deterministic graph tests
         run: node --test flowglass/tests/core.test.mjs
+
+  browser:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install browser test dependency
+        run: npm install --no-save --no-audit --no-fund playwright@1.56.1
+      - name: Install headless Chromium
+        run: npx playwright install chromium --with-deps
+      - name: Run real-browser smoke tests
+        run: |
+          python3 -m http.server 8000 --bind 127.0.0.1 > /tmp/flowglass-server.log 2>&1 &
+          sleep 2
+          node flowglass/tests/browser-smoke.mjs

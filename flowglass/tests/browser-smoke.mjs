@@ -1,0 +1,57 @@
+/* Browser-level regression smoke test. Requires playwright in CI only. */
+import assert from "node:assert/strict";
+import fs from "node:fs/promises";
+import {chromium} from "playwright";
+
+const browser=await chromium.launch({headless:true,args:["--no-sandbox"]});
+const page=await browser.newPage({viewport:{width:1440,height:900},acceptDownloads:true});
+const errors=[];
+page.on("pageerror",e=>errors.push(String(e)));
+try{
+ await page.goto("http://127.0.0.1:8000/flowglass/",{waitUntil:"networkidle"});
+ await page.locator(".fg-node").first().waitFor();
+ assert.equal(await page.locator(".fg-node").count(),9,"Synthetic demo should display nine nodes");
+ assert.equal(await page.locator("#metric-edges").innerText(),"10");
+ assert.equal(await page.locator("#metric-nodes").innerText(),"9");
+ const impact=Number(await page.locator("#metric-impact").innerText());
+ assert.ok(impact>0,"Demo case list should have downstream impact");
+ await page.locator("#add-node").click();
+ assert.equal(await page.locator("#metric-nodes").innerText(),"10");
+ await page.locator("#node-label").fill("Browser smoke component");
+ await page.locator("#node-system").fill("Synthetic test");
+ await page.locator("#node-documentation").fill("TEST-REF");
+ await page.locator("#node-form button[type=submit]").click();
+ assert.ok((await page.locator("#node-list").innerText()).includes("Browser smoke component"));
+ await page.locator("#connection-target").selectOption("archive");
+ await page.locator("#connection-label").fill("smoke link");
+ await page.locator("#connection-form button[type=submit]").click();
+ assert.equal(await page.locator("#metric-edges").innerText(),"11");
+ const [download]=await Promise.all([page.waitForEvent("download"),page.locator("#export-json").click()]);
+ const exported=JSON.parse(await fs.readFile(await download.path(),"utf8"));
+ assert.equal(exported.nodes.length,10);assert.equal(exported.edges.length,11);
+ page.once("dialog",dialog=>dialog.accept());
+ await page.locator("#new-project").click();
+ assert.equal(await page.locator("#metric-nodes").innerText(),"0");
+ page.once("dialog",dialog=>dialog.accept());
+ await page.locator("#file-input").setInputFiles({name:"flowglass-smoke.json",mimeType:"application/json",buffer:Buffer.from(JSON.stringify(exported))});
+ await page.waitForFunction(()=>document.getElementById("metric-nodes")?.textContent==="10");
+ assert.equal(await page.locator("#metric-edges").innerText(),"11");
+ await page.reload({waitUntil:"networkidle"});
+ assert.equal(await page.locator("#metric-nodes").innerText(),"10","LocalStorage should retain project state");
+ await page.locator("#help-button").click();
+ assert.equal(await page.locator("#help-dialog").getAttribute("open"),"");
+ await page.locator("#close-help").click();
+ assert.equal(await page.locator("#help-dialog").getAttribute("open"),null);
+ const mobile=await browser.newPage({viewport:{width:390,height:844},isMobile:true,hasTouch:true});
+ mobile.on("pageerror",e=>errors.push("Mobile: "+String(e)));
+ await mobile.goto("http://127.0.0.1:8000/flowglass/",{waitUntil:"networkidle"});
+ await mobile.locator(".fg-node").first().waitFor();
+ const sizing=await mobile.evaluate(()=>({viewport:innerWidth,scrollWidth:document.documentElement.scrollWidth,map:document.getElementById("graph-viewport").getBoundingClientRect().width}));
+ assert.ok(sizing.map>260,"Mobile map should occupy usable width");
+ assert.ok(sizing.scrollWidth<=sizing.viewport+4,"Mobile document should not overflow horizontally: "+JSON.stringify(sizing));
+ await mobile.locator("#zoom-in").click();
+ assert.notEqual(await mobile.locator("#zoom-label").innerText(),"100%","Mobile zoom should be interactive");
+ await mobile.close();
+ assert.deepEqual(errors,[],"No uncaught application errors");
+ console.log("PASS: desktop editing, impact, graph links, import/export, local persistence, help, mobile layout and zoom");
+}finally{await browser.close();}
