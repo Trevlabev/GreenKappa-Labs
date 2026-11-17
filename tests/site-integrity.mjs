@@ -7,12 +7,16 @@ function walk(dir){return fs.readdirSync(dir,{withFileTypes:true}).flatMap(e=>{i
 const appMounts=[
   ['card-games/agent-fault/game-app/local/static/','card-games/agent-fault/game-app/local/'],
   ['card-games/agent-fault/game-app/api-edition/static/','card-games/agent-fault/game-app/api-edition/'],
-  ['card-games/agent-fault/game-app/hosted/public/','card-games/agent-fault/game-app/hosted/public/']
+  ['card-games/agent-fault/game-app/hosted/public/','card-games/agent-fault/game-app/hosted/public/'],
+  ['card-games/agent-fault/game-app/cascade/public/','card-games/agent-fault/game-app/cascade/public/']
 ];
 const appShells=new Map([
   ['card-games/agent-fault/game-app/local/static/index.html','card-games/agent-fault/game-app/local/static/app.js'],
   ['card-games/agent-fault/game-app/api-edition/static/index.html','card-games/agent-fault/game-app/api-edition/static/app.js'],
   ['card-games/agent-fault/game-app/hosted/public/index.html','card-games/agent-fault/game-app/hosted/public/static/app.js'],
+  ['card-games/agent-fault/game-app/cascade/public/index.html','card-games/agent-fault/game-app/cascade/public/static/cascade.js'],
+  ['card-games/agent-fault/game-app/cascade/public/demo.html','card-games/agent-fault/game-app/cascade/public/static/cascade-demo.js'],
+  ['card-games/agent-fault/game-app/cascade/public/CASCADE_OFFLINE_PREVIEW.html','card-games/agent-fault/game-app/cascade/public/static/cascade-demo-offline.js'],
   ['card-games/agent-fault/live-preview/index.html','card-games/agent-fault/live-preview/index.html']
 ]);
 // Ignore HTML-shaped strings inside embedded code, while still validating actual script/link tags.
