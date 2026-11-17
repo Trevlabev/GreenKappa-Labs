@@ -275,3 +275,10 @@ body.card-games-page{
   .cg-gallery::-webkit-scrollbar-thumb{background:#e4b97c;border-radius:6px}
   .cg-gallery::-webkit-scrollbar-track{background:#1b2533}
 }
+
+/* Finished AGENT/FAULT digital product: direct game-launch links. */
+.cg-online-links{display:flex;flex-wrap:wrap;gap:10px;margin:12px 0 16px}
+.cg-online-links a{display:inline-flex;min-height:42px;align-items:center;justify-content:center;padding:10px 14px;border-radius:4px;background:#e5f91b;color:#111835!important;text-decoration:none;font-size:.83rem;font-weight:850}
+.cg-online-links a:nth-child(2){background:#d0a9ef}
+.cg-online-links a:focus-visible{outline:3px solid #fff6e9;outline-offset:3px}
+@media(max-width:570px){.cg-online-links a{flex:1 1 100%}}
