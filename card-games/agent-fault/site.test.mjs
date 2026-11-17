@@ -16,7 +16,7 @@ test('accessible tab semantics and two separately labeled playable showcases',()
  for(const s of ['id="af-tab-classic"','id="af-tab-cascade"','id="af-panel-classic"','id="af-panel-cascade"','role="tablist"','role="tabpanel"','aria-selected="false"','aria-controls="af-panel-cascade"'])assert(html.includes(s),s);
  assert(tabs.includes("'ArrowRight'")&&tabs.includes("'ArrowLeft'")&&tabs.includes("'Home'")&&tabs.includes("'End'"));
  assert(css.includes('.af-demo-panel[hidden]'));
- const frames=[...html.matchAll(/<iframe\\b[^>]*\\bsrc="([^"]+)"/g)]; assert.equal(frames.length,1); assert.equal(frames[0][1],'./product-3d/viewer.html?embed=1','Only the same-origin local 3D viewer may be embedded');
+ const frames=[...html.matchAll(/<iframe\b[^>]*\bsrc="([^"]+)"/g)]; assert.equal(frames.length,1); assert.equal(frames[0][1],'./product-3d/viewer.html?embed=1','Only the same-origin local 3D viewer may be embedded');
 });
 test('both demos run locally without server-side AI requests',()=>{
  assert(classic.includes("document.getElementById('agent-fault-demo')"));
