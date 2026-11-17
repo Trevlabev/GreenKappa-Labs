@@ -1073,3 +1073,63 @@ html{scroll-behavior:smooth}
  .gkl-portfolio-slide .gkl-portfolio-description{font-size:.8rem}
  .gkl-portfolio-slide .gkl-portfolio-action{font-size:.73rem;margin-top:.55rem}
 }
+
+/* Worlds homepage / Adventure Sourcebooks. Original adventure leads the collection. */
+.gkl-worlds-adventures{margin-top:clamp(2rem,4.6vw,4rem);padding-top:clamp(1.6rem,3vw,2.7rem);border-top:1px solid rgba(38,78,82,.19)}
+.gkl-worlds-adventures-heading{display:flex;align-items:end;justify-content:space-between;gap:1.4rem;flex-wrap:wrap;margin-bottom:1.35rem}
+.gkl-worlds-adventures-label{display:block;text-transform:uppercase;letter-spacing:.14em;color:#6b5a76;font-size:.72rem;font-weight:850;margin-bottom:.55rem}
+.gkl-worlds-adventures-heading h3{margin:0;color:#1b2b34;font-size:clamp(2.25rem,4.4vw,4.4rem);letter-spacing:-.065em;line-height:1.04}
+.gkl-worlds-adventures-heading h3 em{font-family:Georgia,serif;font-weight:400;color:#836a84}
+.gkl-worlds-adventures-heading>p{max-width:350px;color:#53645f;font-size:.9rem;line-height:1.6;margin:0}
+.gkl-adventure-feature{display:grid;grid-template-columns:minmax(225px,.77fr) minmax(0,1.23fr);align-items:stretch;gap:clamp(1.2rem,3.4vw,3rem);min-width:0;padding:clamp(1.1rem,2.6vw,2.2rem);border:1px solid rgba(239,207,162,.35);border-radius:23px;overflow:hidden;background:radial-gradient(circle at 8% 25%,rgba(175,120,151,.18),transparent 37%),linear-gradient(125deg,#1d2430,#36303c 70%,#322b38);color:#fdf4e8;text-decoration:none;box-shadow:0 22px 44px rgba(16,23,32,.2);transition:transform .18s ease,box-shadow .18s ease}
+.gkl-adventure-feature:hover{transform:translateY(-3px);box-shadow:0 26px 52px rgba(16,23,32,.3)}
+.gkl-adventure-feature:focus-visible,.gkl-adventure-publication:focus-visible{outline:3px solid #b57e4b;outline-offset:4px}
+.gkl-adventure-feature-cover{display:flex;align-items:center;justify-content:center;min-width:0}
+.gkl-adventure-feature-cover img{display:block;max-width:100%;width:min(100%,385px);height:auto;aspect-ratio:auto;object-fit:contain;border-radius:6px 12px 12px 6px;filter:drop-shadow(0 20px 20px rgba(0,0,0,.37))}
+.gkl-adventure-feature-copy{display:flex;flex-direction:column;align-items:start;justify-content:center;min-width:0}
+.gkl-adventure-feature-overline{font-size:.68rem;text-transform:uppercase;font-weight:900;letter-spacing:.15em;color:#efc995;margin-bottom:clamp(.85rem,2vw,1.5rem)}
+.gkl-adventure-feature-heading{font-size:clamp(2.7rem,5.4vw,5.3rem);font-weight:900;line-height:.94;letter-spacing:-.075em;color:#fff8ee}
+.gkl-adventure-feature-heading em{font:italic 400 1em/.94 Georgia,serif;color:#f4cba0}
+.gkl-adventure-feature-lede{margin-top:1.2rem;font-size:clamp(1.08rem,1.8vw,1.45rem);font-weight:780;color:#f2ded1;line-height:1.35}
+.gkl-adventure-feature-body{margin-top:.8rem;max-width:590px;font-size:.94rem;line-height:1.66;color:#e1dce0}
+.gkl-adventure-feature-qualification{margin-top:1.15rem;font-size:.73rem;line-height:1.5;color:#cdb9bc}
+.gkl-adventure-feature-cta{display:inline-flex;gap:.7rem;align-items:center;margin-top:clamp(1.1rem,2vw,1.7rem);padding:.75rem 1.1rem;border-radius:6px;font-size:.84rem;font-weight:900;background:#f0c994;color:#2c2130}
+.gkl-adventure-publications{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(.75rem,1.6vw,1.2rem);margin-top:clamp(.9rem,1.6vw,1.25rem)}
+.gkl-adventure-publication{display:grid;grid-template-columns:minmax(0,38%) minmax(0,62%);align-items:center;gap:.8rem;min-width:0;padding:clamp(.65rem,1.35vw,1rem);border:1px solid rgba(36,57,66,.18);border-radius:16px;background:#f8f3eb;text-decoration:none;color:#243440;box-shadow:0 12px 30px rgba(27,36,42,.075);transition:transform .18s ease,box-shadow .18s ease}
+.gkl-adventure-publication:hover{transform:translateY(-3px);box-shadow:0 18px 36px rgba(27,36,42,.13)}
+.gkl-adventure-publication-cover{display:grid;place-items:center;min-width:0}
+.gkl-adventure-publication-cover img{display:block;width:100%;height:auto;max-width:100%;aspect-ratio:auto;object-fit:contain;border-radius:3px 7px 7px 3px;filter:drop-shadow(0 10px 11px rgba(0,0,0,.18))}
+.gkl-adventure-publication-content{display:flex;flex-direction:column;gap:.45rem;min-width:0;overflow-wrap:anywhere}
+.gkl-adventure-publication-index{color:#78667e;font-size:.56rem;font-weight:890;letter-spacing:.06em;line-height:1.5;text-transform:uppercase}
+.gkl-adventure-publication-content strong{font-size:clamp(.95rem,1.35vw,1.28rem);letter-spacing:-.04em;line-height:1.14}
+.gkl-adventure-publication-summary{font-size:.73rem;line-height:1.46;color:#5b6670}
+.gkl-adventure-publication-link{color:#695376;font-weight:850;font-size:.73rem;margin-top:auto}
+.gkl-division-worlds .gkl-worlds-home-bottom{margin-top:1.5rem}
+/* On the Worlds Adventures gallery slide, put the original Records House cover front and center. */
+.gkl-portfolio-adventures .gkl-portfolio-four-covers .gkl-portfolio-book-cover:nth-child(1){left:30%;top:6%;width:38%;height:86%;transform:rotate(-1deg);z-index:8}
+.gkl-portfolio-adventures .gkl-portfolio-four-covers .gkl-portfolio-book-cover:nth-child(2){left:3%;top:23%;width:28%;height:72%;transform:rotate(-13deg);z-index:2}
+.gkl-portfolio-adventures .gkl-portfolio-four-covers .gkl-portfolio-book-cover:nth-child(3){left:60%;top:20%;width:27%;height:73%;transform:rotate(9deg);z-index:3}
+.gkl-portfolio-adventures .gkl-portfolio-four-covers .gkl-portfolio-book-cover:nth-child(4){left:78%;top:31%;width:23%;height:60%;transform:rotate(16deg);z-index:1}
+@media(max-width:1100px){.gkl-adventure-publications{grid-template-columns:1fr}.gkl-adventure-publication{grid-template-columns:120px minmax(0,1fr)}.gkl-adventure-publication-content strong{font-size:1.2rem}}
+@media(max-width:740px){
+ .gkl-adventure-feature{grid-template-columns:minmax(0,180px) minmax(0,1fr)}
+ .gkl-adventure-feature-heading{font-size:clamp(2.2rem,6.2vw,3.5rem)}
+ .gkl-adventure-feature-body{font-size:.87rem}
+ .gkl-adventure-feature-lede{font-size:1.05rem}
+ .gkl-adventure-publication{grid-template-columns:110px minmax(0,1fr)}
+}
+@media(max-width:570px){
+ .gkl-worlds-adventures-heading{align-items:start}
+ .gkl-adventure-feature{grid-template-columns:1fr;gap:1rem}
+ .gkl-adventure-feature-cover img{width:min(68%,255px)}
+ .gkl-adventure-feature-copy{align-items:start}
+ .gkl-adventure-feature-heading{font-size:clamp(2.8rem,11vw,4rem)}
+ .gkl-adventure-feature-body{font-size:.88rem}
+ .gkl-adventure-publication{grid-template-columns:100px minmax(0,1fr);gap:.8rem}
+ .gkl-portfolio-adventures .gkl-portfolio-four-covers .gkl-portfolio-book-cover:nth-child(1){left:28%;top:7%;width:44%;height:82%}
+ .gkl-portfolio-adventures .gkl-portfolio-four-covers .gkl-portfolio-book-cover:nth-child(2){left:-7%;top:20%;width:37%;height:71%}
+ .gkl-portfolio-adventures .gkl-portfolio-four-covers .gkl-portfolio-book-cover:nth-child(3){left:65%;top:23%;width:35%;height:68%}
+ .gkl-portfolio-adventures .gkl-portfolio-four-covers .gkl-portfolio-book-cover:nth-child(4){left:85%;top:34%;width:23%;height:53%}
+}
+@media(max-width:360px){.gkl-adventure-publication{grid-template-columns:85px minmax(0,1fr)}.gkl-adventure-publication-content strong{font-size:1.05rem}.gkl-adventure-feature-cover img{width:min(78%,250px)}}
+@media(prefers-reduced-motion:reduce){.gkl-adventure-feature,.gkl-adventure-publication{transition:none}}
