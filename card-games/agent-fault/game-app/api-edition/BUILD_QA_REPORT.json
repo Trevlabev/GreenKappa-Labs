@@ -1,0 +1,36 @@
+{
+  "version": "0.2.0-api",
+  "based_on": "0.1.0",
+  "contents": "private local/LAN server; no API key included",
+  "counts": {
+    "Scenario": 24,
+    "Interference": 36,
+    "Fault": 6
+  },
+  "card_source_sha256": {
+    "Scenario": "b26a9a8a9bccb65a7c45b0a80b7014f4b02389878b9e2641cf9065156c6488de",
+    "Interference": "3c16d749838939adf079b5b13355731762ee529ab5fa4e8a5e892a23daeb19e7",
+    "Fault": "ef0c3b1aa1ad53970f8ce26f88224be755d375ee4659605c31676540bc697a87"
+  },
+  "api_generation": "server-side host action (never automatic on startup)",
+  "security": "Windows DPAPI optional; no secret embedded; private LAN only",
+  "tests": {
+    "core_api": 4,
+    "mock_ai": 3,
+    "total_passed": 7,
+    "live_api_calls_during_build": 0,
+    "browser_smoke": "not verified (sandbox browser network restriction)"
+  },
+  "safety_limits": {
+    "model_ids": [
+      "gpt-4.1-mini",
+      "gpt-5-mini",
+      "gpt-4o-mini"
+    ],
+    "requests_per_room": 12,
+    "requests_per_utc_day": 48,
+    "daily_estimated_usd_threshold": 0.25,
+    "max_output_tokens": 500
+  },
+  "files": 25
+}

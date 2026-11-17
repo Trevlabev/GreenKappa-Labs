@@ -1,0 +1,27 @@
+AGENT/FAULT LIVE -- OPENAI API EDITION v0.2.0
+==========================================
+1. EXTRACT THE ZIP.
+2. ON WINDOWS: DOUBLE-CLICK START_API_WINDOWS.bat
+   -> On first run, paste your existing OpenAI API key into the hidden prompt.
+   -> It saves encrypted with your Windows user account; not in this ZIP.
+   -> If you already set OPENAI_API_KEY in Windows, the launcher uses it.
+3. OPEN http://localhost:8766 on the host computer.
+4. For phones on the SAME trusted Wi-Fi, open http://YOUR-PC-IPv4:8766
+   (use ipconfig to find IPv4; allow Windows Firewall on Private networks only).
+5. Click HOST A GAME, then CHECK AI CONNECTION (no generation charge).
+6. Once 4-8 phones join, START GAME. At AI phase, click
+   GENERATE ALL ANSWERS WITH MY API. One paid call handles A-G outputs.
+7. The judge privately scores; fallback manual mode is still available.
+
+IMPORTANT:
+- No raw API key is included in these files. A GitHub Actions secret is not
+  recoverable, so you must use the original key if you saved it elsewhere,
+  or issue a NEW API key under your OpenAI Platform account.
+- Estimated cost logs are NOT invoices or hard provider-side spending caps.
+- This version is for LAN play only; do not expose the server to public Internet.
+- No live API requests were made to create/test this ZIP.
+
+To reset locally stored Windows key:
+  powershell -ExecutionPolicy Bypass -File .\RESET_SAVED_KEY_WINDOWS.ps1
+
+Docs: README.md / ARCHITECTURE.md / API_PRICING.md
