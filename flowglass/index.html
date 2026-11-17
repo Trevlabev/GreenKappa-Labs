@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+ <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+ <meta name="theme-color" content="#0b151c">
+ <title>Flowglass — Workflow Dependency Intelligence | GreenKappa Labs</title>
+ <meta name="description" content="Flowglass is a working, local-first graph editor for tracing workflow dependencies, analyzing change impact, and reviewing documentation gaps. Try the interactive demo.">
+ <link rel="canonical" href="https://greenkappalabs.art/flowglass/">
+ <meta property="og:type" content="website"><meta property="og:title" content="Flowglass — Map the work behind the work">
+ <meta property="og:description" content="A working dependency-map editor with impact analysis, cycle detection and review reports.">
+ <meta property="og:url" content="https://greenkappalabs.art/flowglass/">
+ <meta property="og:image" content="https://greenkappalabs.art/assets/greenkappa-logo.png">
+ <link rel="icon" href="/assets/greenkappa-logo.png">
+ <link rel="stylesheet" href="/flowglass/styles.css?v=1">
+ <script type="module" src="/flowglass/app.mjs?v=1"></script>
+</head>
+<body>
+ <a class="fg-skip" href="#fg-workspace">Skip to workspace</a>
+ <header class="fg-topbar">
+  <a class="fg-brand" href="/tools/" aria-label="Back to GreenKappa Tools"><span class="fg-logo"><img src="/assets/greenkappa-logo.png" alt=""></span><span><strong>GREENKAPPA <b>/</b> TOOLS</strong><small>SOFTWARE FOR COMPLEX SYSTEMS</small></span></a>
+  <div class="fg-product"><span class="fg-product-mark" aria-hidden="true">◇</span> FLOWGLASS <span class="fg-version">ALPHA 0.1</span></div>
+  <nav class="fg-toplinks" aria-label="Studio navigation"><a href="/tools/">Tools index</a><a href="/">Studio home</a></nav>
+ </header>
+ <main id="fg-workspace">
+  <section class="fg-intro" aria-labelledby="fg-title">
+   <div><p class="fg-overline"><span class="fg-live-dot"></span> INTERACTIVE SYSTEMS WORKBENCH / LOCAL-FIRST</p><h1 id="fg-title">See the system <em>behind the screen.</em></h1><p class="fg-intro-lede">Map dependencies. Trace downstream change. Find the gaps before they find you.</p></div>
+   <div class="fg-intro-aside"><p><strong>Real application, synthetic sample data.</strong> Flowglass analyzes graphs you supply. It does not connect to your tenant, scan live automations, or upload projects to a server.</p><button id="help-button" class="fg-linkbutton" type="button">How to use Flowglass <span aria-hidden="true">↗</span></button></div>
+  </section>
+  <section class="fg-project-head" aria-label="Project and data actions">
+   <div class="fg-project-fields"><label for="project-name">WORKSPACE NAME</label><input id="project-name" type="text" maxlength="120" autocomplete="off" aria-label="Workspace name"><label for="project-description" class="fg-sr-only">Workspace description</label><input id="project-description" type="text" maxlength="1000" placeholder="Describe this workflow..." autocomplete="off"></div>
+   <div class="fg-file-actions">
+    <button id="new-project" type="button" class="fg-btn fg-btn-ghost">New graph</button>
+    <button id="load-demo" type="button" class="fg-btn fg-btn-ghost">Load sample</button>
+    <button id="import-json" type="button" class="fg-btn fg-btn-ghost">Import JSON</button>
+    <button id="export-json" type="button" class="fg-btn fg-btn-primary">Export JSON <span aria-hidden="true">↗</span></button>
+    <input id="file-input" type="file" accept=".json,application/json" hidden>
+   </div>
+  </section>
+  <section class="fg-metrics" aria-label="Project statistics">
+    <div class="fg-metric"><span>COMPONENTS</span><strong id="metric-nodes">0</strong><small>Documented systems</small></div>
+    <div class="fg-metric"><span>CONNECTIONS</span><strong id="metric-edges">0</strong><small>Directional links</small></div>
+    <div class="fg-metric"><span>DOWNSTREAM IMPACT</span><strong id="metric-impact">—</strong><small id="metric-impact-desc">Select a component</small></div>
+    <div class="fg-metric fg-metric-review"><span>REVIEW FINDINGS</span><strong id="metric-issues">0</strong><small id="metric-issues-desc">Documentation · cycles · isolation</small></div>
+  </section>
+  <section class="fg-workbench" aria-label="Workflow dependency editor">
+   <aside class="fg-pane fg-explorer" aria-labelledby="fg-explorer-heading">
+    <div class="fg-pane-heading"><div><p>01 / INVENTORY</p><h2 id="fg-explorer-heading">Components</h2></div><button id="add-node" type="button" class="fg-mini-btn" aria-label="Add a component" title="Add a component">+</button></div>
+    <label for="node-search" class="fg-sr-only">Search components</label><input class="fg-search" id="node-search" type="search" placeholder="Search components…" autocomplete="off">
+    <label for="node-filter" class="fg-small-label">FILTER BY TYPE</label>
+    <select id="node-filter" class="fg-select"><option value="">All component types</option><option value="trigger">Triggers</option><option value="automation">Automations</option><option value="data">Data stores</option><option value="approval">Approvals</option><option value="notification">Notifications</option><option value="report">Reports</option><option value="external">External systems</option><option value="other">Other</option></select>
+    <div class="fg-inventory-heading"><span>PROJECT COMPONENTS</span><span id="inventory-count">0</span></div>
+    <ol id="node-list" class="fg-node-list" aria-label="Workflow components"></ol>
+    <div class="fg-inventory-footer"><p><strong>Local workspace</strong> · Changes save to this browser only. Export JSON to back up or share.</p></div>
+   </aside>
+   <section class="fg-map-shell" aria-labelledby="fg-map-heading">
+    <div class="fg-map-toolbar"><div><p>02 / RELATIONSHIP MAP</p><h2 id="fg-map-heading">System topology</h2></div><div class="fg-map-actions" aria-label="Map controls"><button id="zoom-out" class="fg-zoom-btn" type="button" aria-label="Zoom out" title="Zoom out">−</button><output id="zoom-label" aria-live="off">100%</output><button id="zoom-in" class="fg-zoom-btn" type="button" aria-label="Zoom in" title="Zoom in">+</button><button id="fit-map" class="fg-zoom-btn fg-fit-btn" type="button">Fit</button></div></div>
+    <div id="graph-viewport" class="fg-viewport" role="group" aria-label="Interactive workflow map. Drag the background to pan, use the zoom controls to zoom, select a component to inspect.">
+      <div id="graph-world" class="fg-world"></div>
+      <div id="graph-empty" class="fg-graph-empty" hidden><span aria-hidden="true">◇</span><strong>Nothing mapped yet.</strong><p>Add a component to begin or load the sample workflow.</p><button id="empty-add" class="fg-btn fg-btn-primary" type="button">Add your first component</button></div>
+    </div>
+    <div class="fg-map-footer"><div class="fg-legend"><span><i class="fg-key-selected"></i>Selected</span><span><i class="fg-key-downstream"></i>Downstream</span><span><i class="fg-key-upstream"></i>Upstream</span></div><p>Drag to move · Scroll to zoom · Arrow keys move a focused node</p></div>
+   </section>
+   <aside class="fg-pane fg-inspector" aria-labelledby="fg-inspector-heading">
+    <div class="fg-pane-heading"><div><p>03 / COMPONENT DETAIL</p><h2 id="fg-inspector-heading">Inspector</h2></div><span id="inspector-state" class="fg-pane-indicator">STANDBY</span></div>
+    <div id="inspector-placeholder" class="fg-inspector-placeholder"><span aria-hidden="true">◇</span><strong>Select any component.</strong><p>Inspect its details, edit connections, and see what changes downstream.</p></div>
+    <div id="inspector-active" hidden>
+      <form id="node-form" class="fg-form">
+       <div class="fg-inspector-tag"><span id="selected-node-id"></span><span id="selected-type-badge"></span></div>
+       <label for="node-label">COMPONENT NAME</label><input id="node-label" required maxlength="120">
+       <div class="fg-form-row"><div><label for="node-type">TYPE</label><select id="node-type"><option value="trigger">Trigger</option><option value="automation">Automation</option><option value="data">Data store</option><option value="approval">Approval</option><option value="notification">Notification</option><option value="report">Report</option><option value="external">External</option><option value="other">Other</option></select></div><div><label for="node-owner">OWNER</label><input id="node-owner" maxlength="120" placeholder="Unassigned"></div></div>
+       <label for="node-system">SYSTEM / PLATFORM</label><input id="node-system" maxlength="120" placeholder="e.g. Power Automate">
+       <label for="node-description">PURPOSE</label><textarea id="node-description" rows="2" maxlength="1200" placeholder="What does this component do?"></textarea>
+       <label for="node-documentation">DOCUMENTATION REFERENCE</label><input id="node-documentation" maxlength="500" placeholder="Document ID, URL or reference">
+       <div class="fg-form-actions"><button type="submit" class="fg-btn fg-btn-primary">Save details</button><button id="delete-node" type="button" class="fg-btn fg-btn-danger">Delete</button></div>
+      </form>
+      <section class="fg-impact" aria-labelledby="fg-impact-heading"><div class="fg-subhead"><h3 id="fg-impact-heading">Change impact</h3><span id="impact-count" class="fg-impact-count">0 affected</span></div><p id="impact-summary" class="fg-small-copy"></p><div class="fg-impact-split"><div><h4>DOWNSTREAM <span id="downstream-count">0</span></h4><ul id="downstream-list" class="fg-impact-list"></ul></div><div><h4>UPSTREAM <span id="upstream-count">0</span></h4><ul id="upstream-list" class="fg-impact-list"></ul></div></div><button id="export-report" type="button" class="fg-btn fg-btn-ghost fg-report-btn">Export impact report (.md)</button></section>
+      <section class="fg-connections" aria-labelledby="fg-connections-heading"><div class="fg-subhead"><h3 id="fg-connections-heading">Connections</h3></div><ul id="connection-list" class="fg-connection-list"></ul><form id="connection-form" class="fg-connection-form"><label for="connection-target">CONNECT DOWNSTREAM TO</label><select id="connection-target" required></select><label for="connection-label">RELATIONSHIP</label><input id="connection-label" maxlength="140" placeholder="e.g. status update"><button class="fg-btn fg-btn-ghost" type="submit">Add connection +</button></form></section>
+    </div>
+   </aside>
+  </section>
+  <section class="fg-review" aria-labelledby="fg-review-heading"><div class="fg-review-heading"><div><p>04 / CONTROL &amp; REVIEW</p><h2 id="fg-review-heading">Graph health</h2><p>Structural checks of the graph you supplied—not a live systems assessment.</p></div><button id="review-help" type="button" class="fg-linkbutton">Understanding the findings</button></div><div id="review-items" class="fg-review-cards"></div></section>
+  <footer class="fg-footer"><p><strong>FLOWGLASS / ALPHA 0.1</strong> · Client-side only · No sign-in · No telemetry · Import/export for data portability</p><nav aria-label="Footer"><a href="/tools/">GreenKappa Tools</a><a href="/privacy.html">Privacy</a><a href="https://github.com/Trevlabev/GreenKappa-Labs/tree/main/flowglass" rel="noopener noreferrer">View source</a></nav></footer>
+ </main>
+ <div id="toast" role="status" aria-live="polite" aria-atomic="true"></div>
+ <dialog id="help-dialog" aria-labelledby="help-title"><div class="fg-help-head"><div><p>OPERATIONS GUIDE</p><h2 id="help-title">Working with Flowglass</h2></div><button id="close-help" type="button" aria-label="Close help">×</button></div><ol><li><strong>Explore:</strong> Select a component in the inventory or map. Downstream components glow teal; upstream components glow gold.</li><li><strong>Edit:</strong> Use the Inspector to change metadata, add relationships, or remove connections. Drag components to rearrange the graph.</li><li><strong>Review:</strong> Documentation gaps, isolated components and cyclic groups appear under Graph health. Cycles can be intentional review or retry loops.</li><li><strong>Share:</strong> Export your project as JSON or a selected component's change-impact report as Markdown. Import JSON to continue later.</li><li><strong>Move around:</strong> Drag empty map space to pan, scroll or use +/− to zoom, and select Fit to reset. Focus a node and press arrow keys for keyboard repositioning.</li></ol><p class="fg-help-note">All analysis is based solely on a user-provided dependency graph; it does not claim to discover tenant assets, permissions, runtime failures, or actual deployment risk.</p><button id="help-done" class="fg-btn fg-btn-primary" type="button">Return to workspace</button></dialog>
+</body>
+</html>
