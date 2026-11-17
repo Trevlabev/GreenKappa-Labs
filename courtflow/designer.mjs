@@ -165,7 +165,7 @@ export function mountWorkflowDesigner({getProfiles,onSave,onNotice}){
  }
  function moveSelected(deltaX,deltaY){
   const t=chosen();if(!t)return;
-  const p=draft.layout[t.id];p.x=Math.max(0,Math.min(3000,p.x+deltaX));p.y=Math.max(0,Math.min(2200,p.y+deltaY));
+  const p=draft.layout[t.id];p.x=Math.max(0,Math.min(4500,p.x+deltaX));p.y=Math.max(0,Math.min(2200,p.y+deltaY));
   markDirty();draw();
  }
  select.addEventListener("change",()=>{
@@ -242,7 +242,7 @@ export function mountWorkflowDesigner({getProfiles,onSave,onNotice}){
    const dy=event.clientY-startY+el("designer-viewport").scrollTop-scrollTop;
    if(Math.hypot(dx,dy)>5)moved=true;
    if(!moved)return;
-   draft.layout[taskId]={x:Math.max(0,Math.min(3000,Math.round(origin.x+dx))),y:Math.max(0,Math.min(2200,Math.round(origin.y+dy)))};
+   draft.layout[taskId]={x:Math.max(0,Math.min(4500,Math.round(origin.x+dx))),y:Math.max(0,Math.min(2200,Math.round(origin.y+dy)))};
    node.style.left=draft.layout[taskId].x+"px";node.style.top=draft.layout[taskId].y+"px";
    drawEdges();
   }

@@ -63,7 +63,7 @@ export function validateProfile(p){
  if(p.layout!==undefined){
   if(!p.layout||typeof p.layout!=="object"||Array.isArray(p.layout)||Object.keys(p.layout).some(id=>!ids.has(id)))throw Error("Invalid node layout.");
   for(const pos of Object.values(p.layout)){
-   if(!pos||typeof pos!=="object"||!Number.isFinite(pos.x)||!Number.isFinite(pos.y)||pos.x<0||pos.y<0||pos.x>3000||pos.y>2200)throw Error("Invalid node position.");
+   if(!pos||typeof pos!=="object"||!Number.isFinite(pos.x)||!Number.isFinite(pos.y)||pos.x<0||pos.y<0||pos.x>4500||pos.y>2200)throw Error("Invalid node position.");
   }
  }
  for(const t of p.tasks)for(const dep of t.dependsOn)if(!ids.has(dep)||dep===t.id)throw Error("Invalid dependency in "+t.id);

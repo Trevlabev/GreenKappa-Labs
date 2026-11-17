@@ -102,3 +102,12 @@ test("designer priority preview is deterministic without mutating a profile",()=
  assert.equal(routeApplies(t,"Urgent"),true);
  assert.equal(routeApplies({id:"always"},"Routine"),true);
 });
+
+test("auto-arrange supports the full 12-step chain without exceeding portable layout limits",()=>{
+ let p=structuredClone(blankWorkspace().profiles[0]);
+ p.tasks=[...Array(11)].map((_,i)=>({id:"step"+i,label:"Step "+i,offset:i,dependsOn:i?["step"+(i-1)]:[],final:false}));
+ p.tasks.push({id:"handoff",label:"Final handoff",offset:12,dependsOn:["step10"],final:true});
+ p.layout=autoArrange(p);
+ assert.ok(p.layout.handoff.x>3000);
+ assert.doesNotThrow(()=>validateProfile(p));
+});
