@@ -1406,3 +1406,24 @@ html{scroll-padding-top:90px}
 @media(max-width:570px){.gkl-game-card-featured .gkl-game-product-image{aspect-ratio:16/10}.gkl-game-card-featured h3{font-size:3.1rem}.gkl-game-featured-link{flex:1 1 100%}.gkl-game-live-stamp{font-size:.58rem;padding:7px 9px}.gkl-portfolio-agent-live-deck{right:-4%;bottom:0;width:63%;height:58%}.gkl-agent-gallery-note{font-size:.58rem}}
 @media(prefers-reduced-motion:reduce){.gkl-game-card-featured .gkl-game-product-image img{transition:none}}
 /* END AGENT/FAULT finished digital product hero */
+
+/* User-supplied CourtFlow gallery artwork: maintain complete native 1672x941 composition. */
+.gkl-showcase-slide.gkl-theme-courtflow.gkl-art-slide{background:#0b1b2b}
+.gkl-theme-courtflow .gkl-art-picture{background:linear-gradient(90deg,#0b1b2b,#10283d 65%,#091829)}
+.gkl-theme-courtflow .gkl-art-picture img{object-fit:contain;object-position:center}
+.gkl-courtflow-art-note{position:absolute;z-index:5;right:1rem;bottom:.8rem;background:rgba(8,23,37,.9);padding:.35rem .6rem;border:1px solid rgba(238,195,138,.27);border-radius:6px;color:#f3d5a8;font-size:.62rem;font-weight:700;pointer-events:none}
+@media(max-width:900px){
+ .gkl-theme-courtflow .gkl-art-mobile-caption{position:relative;display:flex;flex-direction:column;justify-content:center;background:linear-gradient(180deg,#0b1b2b 0%,#142e42 100%);border-top:0}
+ .gkl-theme-courtflow .gkl-art-mobile-caption::before{content:"";position:absolute;inset:-30px 0 auto;height:30px;pointer-events:none;background:linear-gradient(180deg,transparent,#0b1b2b)}
+ .gkl-theme-courtflow .gkl-art-mobile-caption p{color:#edc58f}
+ .gkl-theme-courtflow .gkl-art-mobile-caption h2{color:#fff5e8}
+ .gkl-theme-courtflow .gkl-art-mobile-caption h2 em{font-style:normal;color:#edc58f}
+ .gkl-theme-courtflow .gkl-art-mobile-caption>span{color:#d4e2e7}
+ .gkl-theme-courtflow .gkl-art-mobile-caption>strong{background:#edc58f;color:#0c2535}
+ .gkl-theme-courtflow .gkl-art-mobile-caption>small{color:#b6cfda;font-size:.64rem}
+ .gkl-courtflow-art-note{display:none}
+}
+@media(max-width:680px){
+ .gkl-theme-courtflow .gkl-art-picture{aspect-ratio:1672/941}
+ .gkl-theme-courtflow .gkl-art-mobile-caption{padding:1.1rem 1.3rem}
+}
