@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0b1a27">
+<title>CourtFlow — Court Operations Workflow Simulator | GreenKappa Tools</title>
+<meta name="description" content="Try CourtFlow, an interactive, synthetic court operations simulation with intake, case queues, dependencies, exception handling, audit trails and configurable workflow profiles.">
+<link rel="canonical" href="https://greenkappalabs.art/courtflow/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="CourtFlow — A clearer path through complex casework">
+<meta property="og:description" content="Working court operations workflow simulator. Synthetic cases, configurable task graphs, queues and immutable activity history.">
+<meta property="og:url" content="https://greenkappalabs.art/courtflow/">
+<meta property="og:image" content="https://greenkappalabs.art/assets/greenkappa-logo.png">
+<link rel="icon" href="/assets/greenkappa-logo.png">
+<link rel="stylesheet" href="/courtflow/styles.css?v=1">
+<script type="module" src="/courtflow/app.mjs?v=1"></script>
+</head>
+<body>
+<a href="#workspace" class="cf-skip">Skip to CourtFlow workspace</a>
+<header class="cf-header">
+  <a class="cf-brand" href="/tools/" aria-label="Return to GreenKappa Tools"><span class="cf-brand-icon"><img src="/assets/greenkappa-logo.png" alt=""></span><span><strong>GREENKAPPA <em>/</em> TOOLS</strong><small>DEVELOPMENT STUDIO</small></span></a>
+  <div class="cf-wordmark"><span class="cf-wordmark-glyph" aria-hidden="true">⌁</span> COURT<span>FLOW</span><sup>ALPHA 0.1</sup></div>
+  <nav aria-label="Product links" class="cf-topnav"><a href="/tools/">Tools</a><a href="/">Home</a><a href="https://github.com/Trevlabev/GreenKappa-Labs/tree/main/courtflow" target="_blank" rel="noopener noreferrer">Source ↗</a></nav>
+</header>
+<main id="workspace">
+  <section class="cf-intro">
+    <div>
+      <p class="cf-kicker"><span class="cf-pulse"></span> LEGAL OPERATIONS / INTERACTIVE SYSTEMS DEMO</p>
+      <h1>Every case has<br><em>a path forward.</em></h1>
+      <p class="cf-lede">An operational workbench for intake, queue management, dependent tasks, exceptions and traceable case handoffs.</p>
+      <div class="cf-intro-badges"><span>01 / CASE QUEUES</span><span>02 / WORKFLOW RULES</span><span>03 / AUDIT TRAILS</span></div>
+    </div>
+    <aside class="cf-safety">
+      <span class="cf-safety-index">DATA BOUNDARY / DEMONSTRATION</span>
+      <strong>Fictional workflows. Real interaction.</strong>
+      <p>CourtFlow is a local-first simulator. Records are synthetic or supplied by you; they stay in this browser. Target dates are illustrative calendar-day offsets—not court rules, statutory deadlines, legal advice or filing confirmation.</p>
+      <p class="cf-safety-warning">Do not enter real litigant information, sealed records, or confidential court material.</p>
+    </aside>
+  </section>
+  <section class="cf-actions" aria-label="Workspace controls">
+    <div class="cf-actions-name"><span class="cf-overline">ACTIVE WORKSPACE</span><b>COURT OPERATIONS / DEMO</b><small id="save-status">Local browser storage</small></div>
+    <div class="cf-actions-buttons">
+      <button type="button" id="new-intake" class="cf-btn cf-btn-primary"><span aria-hidden="true">＋</span> New intake</button>
+      <button type="button" id="load-demo" class="cf-btn cf-btn-secondary">Reset sample</button>
+      <button type="button" id="import-json" class="cf-btn cf-btn-secondary">Import JSON</button>
+      <button type="button" id="export-json" class="cf-btn cf-btn-secondary">Export workspace</button>
+      <input id="import-file" type="file" accept=".json,application/json" hidden>
+    </div>
+  </section>
+  <section class="cf-metrics" aria-label="Workflow metrics">
+    <div class="cf-metric"><span>ACTIVE CASES</span><strong id="metric-open">0</strong><small>Workflows in progress</small></div>
+    <div class="cf-metric cf-metric-amber"><span>OVERDUE TARGETS</span><strong id="metric-overdue">0</strong><small>Simulated, not legal deadlines</small></div>
+    <div class="cf-metric cf-metric-rose"><span>OPEN EXCEPTIONS</span><strong id="metric-exceptions">0</strong><small>Cases needing resolution</small></div>
+    <div class="cf-metric"><span>COMPLETED</span><strong id="metric-completed">0</strong><small>Handed off and closed</small></div>
+  </section>
+  <div class="cf-tabs" role="tablist" aria-label="CourtFlow work areas">
+    <button id="tab-queue" role="tab" type="button" aria-selected="true" aria-controls="pane-queue" data-tab="queue" class="is-active">01 <span>Case queue</span></button>
+    <button id="tab-studio" role="tab" type="button" aria-selected="false" aria-controls="pane-studio" data-tab="studio">02 <span>Workflow studio</span></button>
+    <button id="tab-audit" role="tab" type="button" aria-selected="false" aria-controls="pane-audit" data-tab="audit">03 <span>Audit history</span></button>
+  </div>
+  <section id="pane-queue" class="cf-tabpanel" role="tabpanel" aria-labelledby="tab-queue">
+    <div class="cf-section-heading"><div><p class="cf-overline">OPERATIONS DESK / LIVE STATE</p><h2>Casework <em>queue.</em></h2></div><p>Select a case, inspect dependencies and resolve the next action. Every change is recorded locally.</p></div>
+    <div class="cf-filters" aria-label="Queue filtering controls">
+      <label class="cf-search">Search queue <input id="filter-search" type="search" placeholder="Reference, title, summary…" autocomplete="off"></label>
+      <label>Status <select id="filter-status"><option value="all">All statuses</option><option>Active</option><option>Due soon</option><option>Overdue</option><option>Exception</option><option>Completed</option></select></label>
+      <label>Workflow <select id="filter-profile"><option value="all">All workflows</option></select></label>
+      <label>Assigned team <select id="filter-team"><option value="all">All teams</option></select></label>
+    </div>
+    <div class="cf-work-grid">
+      <section class="cf-panel cf-queue-panel" aria-labelledby="queue-title">
+        <div class="cf-panel-head"><h3 id="queue-title">Queue <span id="queue-count" class="cf-count">0</span></h3><span class="cf-panel-meta">Action priority first</span></div>
+        <div id="queue-list" class="cf-queue-list" aria-label="Cases in queue"></div>
+      </section>
+      <section class="cf-panel cf-detail-panel" aria-labelledby="case-detail-title">
+        <div id="case-detail" class="cf-case-detail"><p>Select a case to inspect its workflow.</p></div>
+      </section>
+    </div>
+  </section>
+  <section id="pane-studio" class="cf-tabpanel" role="tabpanel" aria-labelledby="tab-studio" hidden>
+    <div class="cf-section-heading"><div><p class="cf-overline">CONFIGURATION / SNAPSHOT RULES</p><h2>Workflow <em>studio.</em></h2></div><p>Edit synthetic workflow profiles. Newly created cases inherit your changes; existing cases retain their original task snapshots.</p></div>
+    <div class="cf-studio-grid">
+      <section class="cf-panel cf-profile-form"><div class="cf-panel-head"><h3>Profile editor</h3><span class="cf-panel-meta">Strict JSON schema</span></div>
+        <label class="cf-field" for="profile-select">Choose workflow profile <select id="profile-select"></select></label>
+        <label class="cf-field" for="profile-editor">Editable task and dependency definition<textarea id="profile-editor" spellcheck="false" rows="18" aria-describedby="profile-hint"></textarea></label>
+        <p id="profile-hint" class="cf-help">Each task has a unique <code>id</code>, a <code>label</code>, a nonnegative simulated calendar-day <code>offset</code>, a <code>dependsOn</code> array, and one task marked <code>final: true</code>. The graph must be acyclic.</p>
+        <div class="cf-inline-actions"><button id="save-profile" type="button" class="cf-btn cf-btn-primary">Validate &amp; save profile</button><button id="reset-profile" type="button" class="cf-btn cf-btn-secondary">Restore editor</button></div>
+      </section>
+      <section class="cf-panel cf-profile-preview"><div class="cf-panel-head"><h3>Workflow preview</h3><span class="cf-panel-meta">Read-only</span></div><div id="profile-preview"></div>
+        <div class="cf-caution"><strong>Simulated targets only.</strong><p>Offsets use ordinary calendar days from intake. No jurisdictional rules, holiday calculations, judicial deadlines or automatic court actions are included.</p></div>
+      </section>
+    </div>
+  </section>
+  <section id="pane-audit" class="cf-tabpanel" role="tabpanel" aria-labelledby="tab-audit" hidden>
+    <div class="cf-section-heading"><div><p class="cf-overline">PROVENANCE / RECORDED ACTIONS</p><h2>Activity <em>ledger.</em></h2></div><p>Each case intake, task completion, exception and reassignment creates a timestamped event in the local workspace.</p></div>
+    <div class="cf-panel cf-audit-panel">
+      <div class="cf-panel-head"><h3>Local event history <span class="cf-count" id="audit-count">0</span></h3><button id="export-audit" type="button" class="cf-btn cf-btn-secondary">Export audit CSV ↗</button></div>
+      <div class="cf-audit-scroll"><table class="cf-audit-table"><thead><tr><th scope="col">Timestamp (UTC)</th><th scope="col">Reference</th><th scope="col">Action</th><th scope="col">Actor</th></tr></thead><tbody id="audit-rows"></tbody></table></div>
+      <p class="cf-help">This is an application activity log, not a cryptographically tamper-evident audit service. Browser storage can be cleared or modified by its owner.</p>
+    </div>
+  </section>
+  <section class="cf-bottom-note"><div><p class="cf-overline">PRODUCT SCOPE / v0.1</p><h2>Designed for <em>controlled complexity.</em></h2><p>Independent workflow engine, synthetic case records, local persistence, import/export, dependency checks and an inspectable implementation. Not connected to any court, e-filing portal, case management system, or production database.</p></div><a href="/tools/" class="cf-btn cf-btn-secondary">All GreenKappa Tools ↗</a></section>
+</main>
+<dialog id="intake-dialog" class="cf-dialog" aria-labelledby="intake-dialog-title">
+  <form id="intake-form" novalidate>
+    <div class="cf-dialog-header"><div><p class="cf-overline">CREATE / SYNTHETIC CASE</p><h2 id="intake-dialog-title">New intake</h2></div><button type="button" class="cf-icon-button" id="close-intake" aria-label="Close new intake form">×</button></div>
+    <p class="cf-dialog-notice">Use fictional details only. This demo does not collect real court filings.</p>
+    <label class="cf-field">Case title <input name="title" type="text" maxlength="140" required placeholder="e.g. Sample F · Petition packet"></label>
+    <label class="cf-field">Workflow <select name="profileId" id="intake-profile" required></select></label>
+    <div class="cf-form-two"><label class="cf-field">Received date <input name="receivedDate" type="date" id="intake-date" required></label><label class="cf-field">Team <select name="team" id="intake-team" required></select></label></div>
+    <label class="cf-field">Priority <select name="priority" id="intake-priority" required></select></label>
+    <label class="cf-field">Summary (optional) <textarea name="summary" maxlength="1200" rows="3" placeholder="Fictional context for the demonstration…"></textarea></label>
+    <div class="cf-dialog-footer"><button type="button" id="cancel-intake" class="cf-btn cf-btn-secondary">Cancel</button><button type="submit" class="cf-btn cf-btn-primary">Create synthetic case</button></div>
+  </form>
+</dialog>
+<div id="notice" role="status" aria-live="polite" class="cf-toast" hidden></div>
+<footer class="cf-footer"><span>© <span id="year"></span> GreenKappa Labs · CourtFlow alpha 0.1</span><span>All demo workflows fictional · Do not use for legal deadlines</span><a href="/tools/">GreenKappa Tools</a></footer>
+</body>
+</html>
