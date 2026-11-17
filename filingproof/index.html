@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0b1721">
+<title>FilingProof — PDF Preflight for Legal Workflows | GreenKappa Labs</title>
+<meta name="description" content="Inspect electronic-filing PDFs in your browser. Detect searchable-text gaps, interactive forms, embedded attachments, and technical review risks. Download an evidence-linked report.">
+<link rel="canonical" href="https://greenkappalabs.art/filingproof/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="FilingProof — Legal Document Preflight">
+<meta property="og:description" content="A working, local-first PDF technical preflight and reporting tool. Court acceptance and legal sufficiency require separate review.">
+<meta property="og:url" content="https://greenkappalabs.art/filingproof/">
+<meta property="og:image" content="https://greenkappalabs.art/assets/greenkappa-logo.png">
+<link rel="icon" href="/assets/greenkappa-logo.png">
+<link rel="stylesheet" href="/filingproof/styles.css?v=1">
+<script type="module" src="/filingproof/app.mjs?v=1"></script>
+</head>
+<body>
+<a href="#workspace" class="fp-skip">Skip to preflight workspace</a>
+<header class="fp-topbar">
+ <a class="fp-brand" href="/tools/" aria-label="GreenKappa Tools home"><span class="fp-brand-image"><img src="/assets/greenkappa-logo.png" alt=""></span><span><b>GREENKAPPA <em>/</em> TOOLS</b><small>PROCEDURAL SOFTWARE · PUBLIC ALPHA</small></span></a>
+ <div class="fp-product">FILING<span>PROOF</span><sup>v0.1</sup></div>
+ <nav class="fp-nav" aria-label="Product navigation"><a href="/tools/">All tools</a><a href="/">Studio</a><a href="https://github.com/Trevlabev/GreenKappa-Labs/tree/main/filingproof" target="_blank" rel="noopener noreferrer">Source ↗</a></nav>
+</header>
+<main id="workspace">
+ <section class="fp-hero">
+  <div class="fp-heading">
+    <p class="fp-kicker"><span class="fp-pulse"></span> LEGAL TECHNOLOGY / DOCUMENT QUALITY ASSURANCE</p>
+    <h1>Catch the issue <em>before the filing.</em></h1>
+    <p class="fp-lede">A practical, source-aware PDF preflight. Inspect document structure and potential technical risks before submitting to a court.</p>
+    <div class="fp-hero-tags"><span>Browser-side PDF analysis</span><span>Sourced validation profiles</span><span>Exportable review reports</span></div>
+  </div>
+  <aside class="fp-hero-note">
+    <span class="fp-note-idx">INFORMATION BOUNDARY / 01</span>
+    <b>Technical review, not legal approval.</b>
+    <p>FilingProof does not file documents, replace human review, verify redaction, assess legal sufficiency, or guarantee court acceptance.</p>
+    <button type="button" id="about-button" class="fp-text-button">How this works <span aria-hidden="true">↗</span></button>
+  </aside>
+ </section>
+ <section class="fp-workspace-grid" aria-label="PDF preflight controls">
+  <div class="fp-panel fp-drop-panel">
+   <div class="fp-panel-head"><div><span class="fp-overline">01 / FILE INPUT</span><h2>Documents</h2></div><span class="fp-head-meta">PDF · Max 12 files</span></div>
+   <input class="fp-sr-only" id="pdf-files" type="file" accept=".pdf,application/pdf" multiple>
+   <label id="drop-zone" class="fp-drop-zone" for="pdf-files" tabindex="0">
+     <span class="fp-drop-symbol" aria-hidden="true">↥</span>
+     <strong>Drop your PDFs here</strong>
+     <span>or select documents from your device</span>
+     <span class="fp-drop-button">Choose PDF files ↗</span>
+   </label>
+   <div class="fp-inline-privacy"><span class="fp-status-dot" aria-hidden="true"></span><p><strong>Files stay in this browser tab.</strong> The PDF parser is loaded from a pinned external library CDN; selected document bytes are not uploaded by FilingProof.</p></div>
+   <div class="fp-demo-row"><button type="button" class="fp-secondary" id="demo-button">Run synthetic example</button><span>Try the engine without private documents</span></div>
+   <div class="fp-selected" id="selected-list" aria-live="polite"></div>
+  </div>
+  <div class="fp-panel fp-profile-panel">
+   <div class="fp-panel-head"><div><span class="fp-overline">02 / VALIDATION CONTEXT</span><h2>Review profile</h2></div><span class="fp-head-meta">Source-aware rules</span></div>
+   <label for="profile">Inspection profile</label>
+   <select id="profile">
+    <option value="baseline">General PDF diagnostics — no court limit assumed</option>
+    <option value="oregon">U.S. District Court, District of Oregon — reference rules</option>
+   </select>
+   <div class="fp-profile-info" id="profile-info"><b>General PDF diagnostics</b><p>Inspect technical features. No court-specific size or acceptance threshold is assumed.</p><a href="https://www.pacer.uscourts.gov/file-case/how-file-case" target="_blank" rel="noopener noreferrer">Review federal filing guidance ↗</a></div>
+   <div class="fp-field-row">
+     <div class="fp-field"><label for="max-size">Size threshold (MB)</label><input type="number" id="max-size" min="0.01" max="10000" step="0.01" inputmode="decimal" placeholder="Not configured"><small>Optional · Decimal MB (1 MB = 1,000,000 bytes)</small></div>
+     <div class="fp-field"><label for="text-rule">Text-searchability</label><select id="text-rule"><option value="auto">Use selected profile</option><option value="required">Warn if pages lack text</option><option value="review">Manual review only</option></select></div>
+   </div>
+   <p class="fp-profile-disclaimer">Court requirements vary and change. The Oregon reference is an educational rule subset; confirm the current court procedures before reliance. Custom thresholds are user-provided, not authoritative.</p>
+   <button type="button" class="fp-primary fp-run" id="run-button" disabled>Inspect selected documents <span aria-hidden="true">↗</span></button>
+   <p class="fp-progress" id="progress" role="status" aria-live="polite"></p>
+  </div>
+ </section>
+ <section class="fp-results" id="results" aria-labelledby="results-title">
+  <div class="fp-results-heading">
+   <div><span class="fp-overline">03 / INSPECTION FINDINGS</span><h2 id="results-title">Review report</h2><p class="fp-results-sub">Automated signals, documented limitations, and next-review actions.</p></div>
+   <div class="fp-report-actions"><button type="button" class="fp-secondary" id="export-json" disabled>Export JSON ↗</button><button type="button" class="fp-secondary" id="print-report" disabled>Print / Save PDF ↗</button></div>
+  </div>
+  <div class="fp-stat-grid" aria-label="Batch inspection statistics">
+   <div class="fp-stat"><span>FILES EXAMINED</span><strong id="stat-files">—</strong></div>
+   <div class="fp-stat"><span>FLAGGED FILES</span><strong id="stat-flagged">—</strong></div>
+   <div class="fp-stat"><span>BLOCKED FILES</span><strong id="stat-blocked">—</strong></div>
+   <div class="fp-stat"><span>PAGES REPORTED</span><strong id="stat-pages">—</strong></div>
+  </div>
+  <div class="fp-report-empty" id="report-empty"><span class="fp-empty-icon">◎</span><h3>No documents inspected yet</h3><p>Select PDFs or run the synthetic sample to see structured, file-level findings.</p></div>
+  <div id="reports" class="fp-report-list" aria-live="polite"></div>
+ </section>
+ <section class="fp-method">
+  <div><p class="fp-overline">METHOD &amp; TRANSPARENCY</p><h2>Know what was checked.<br><em>Know what wasn’t.</em></h2></div>
+  <div class="fp-method-grid">
+   <article><span>01 / DOCUMENTS</span><h3>No automatic uploads</h3><p>Parsing runs client-side. Document text is not included in exported reports; filenames and diagnostic metadata are. The parsing library itself is fetched over the network.</p></article>
+   <article><span>02 / LIMITATIONS</span><h3>Signals, not certification</h3><p>Searchable text is not proof of readable OCR. Privacy-pattern checks are incomplete. Signatures, redactions, encryption permissions, and legal filing eligibility require independent review.</p></article>
+   <article><span>03 / SOURCES</span><h3>Rules are traceable</h3><p>Built-in reference rules link to published filing guidance. This alpha does not automatically refresh court policies or determine a jurisdiction's current upload limits.</p></article>
+  </div>
+  <div class="fp-sources"><a href="https://www.pacer.uscourts.gov/file-case/how-file-case" target="_blank" rel="noopener noreferrer">PACER / How to File a Case ↗</a><a href="https://ord.uscourts.gov/index.php/filing-and-forms/cm-ecf/user-manual/187-section-05-electronic-filing-protocols/2079-creating-and-filing-documents" target="_blank" rel="noopener noreferrer">District of Oregon / PDF guidance ↗</a><a href="https://github.com/mozilla/pdf.js" target="_blank" rel="noopener noreferrer">Mozilla / PDF.js ↗</a></div>
+ </section>
+</main>
+<footer class="fp-footer"><span><b>GREENKAPPA LABS</b> / APPLIED SYSTEMS</span><span>FilingProof alpha v0.1 · Technical preflight only</span><a href="/tools/">← Back to tools</a></footer>
+<dialog id="about-dialog" class="fp-dialog" aria-labelledby="dialog-title"><div><span class="fp-overline">PRODUCT SCOPE / V0.1</span><h2 id="dialog-title">What FilingProof actually does</h2><p>PDF.js parses selected files in browser memory. The app evaluates a deterministic rules engine and creates a report of checks, warnings, items not evaluated, and source links.</p><p>Reference profiles are curated, versioned subsets of published technical guidance. They do not represent a complete court policy and may become outdated. The currently selected PDF is never transmitted to GreenKappa Labs servers.</p><p><strong>Not supported:</strong> e-filing submission, virus scanning, complete active-content inspection, signature verification, redaction verification, substantive legal analysis, legal advice, privileged document storage, OCR, or guaranteed court acceptance.</p><p>If a document is sealed, restricted, or otherwise subject to organizational handling rules, obtain authorization before opening it in any third-party software.</p><button type="button" class="fp-primary" id="close-dialog">Return to workspace</button></div></dialog>
+</body>
+</html>
