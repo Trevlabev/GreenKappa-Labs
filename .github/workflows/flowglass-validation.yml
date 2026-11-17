@@ -29,7 +29,7 @@ jobs:
         run: node --test flowglass/tests/core.test.mjs
 
   browser:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     permissions:
       contents: read
     steps:
