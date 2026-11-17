@@ -31,7 +31,7 @@ test('both demos run locally without server-side AI requests',()=>{
 });
 
 test('tabbed demos appear immediately between The Idea and The Player Experience',()=>{
- const markers=['01 / The idea','id="animated-demo"','02 / The player experience','id="play-options"','04 / Artwork','05 / Development questions'];
+ const markers=['01 / The idea','id="animated-demo"','02 / The player experience','id="play-options"','id="art-title"','05 / Development questions'];
  const positions=markers.map(m=>html.indexOf(m));
  assert(positions.every(v=>v>=0));
  assert(positions.every((v,i)=>i===0||v>positions[i-1]));
