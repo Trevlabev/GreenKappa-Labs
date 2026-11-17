@@ -43,3 +43,36 @@ test("workspace import rejects duplicate exception identifiers",()=>{
  bad.cases[0].exceptions.push(structuredClone(bad.cases[0].exceptions[0]));
  assert.throws(()=>importWorkspace(bad),/Duplicate case exception ID/);
 });
+
+test("intake-time routing creates only applicable tasks and retains a stable snapshot",()=>{
+ let s=blankWorkspace(),p=structuredClone(s.profiles[0]),final=p.tasks.find(t=>t.final);
+ p.tasks.splice(-1,0,
+  {id:"routine_review",label:"Routine review",offset:3,dependsOn:["register"],final:false,when:{priority:"Routine"}},
+  {id:"urgent_review",label:"Urgent review",offset:2,dependsOn:["register"],final:false,when:{priority:"Urgent"}});
+ final.dependsOn.push("routine_review","urgent_review");s=updateProfile(s,p);
+ const intake=priority=>({title:"Simulated "+priority,profileId:"petition",receivedDate:"2026-11-16",priority,team:"Intake"});
+ s=createCase(s,intake("Urgent"),now);
+ let c=s.cases[0],names=c.tasks.map(t=>t.id);
+ assert.ok(names.includes("urgent_review")&&!names.includes("routine_review"));
+ assert.ok(!c.tasks.find(t=>t.final).dependsOn.includes("routine_review"));
+ assert.ok(s.events.some(e=>e.detail.includes("Routing evaluated at intake")));
+ s=reprioritize(s,c.id,"Routine",now);
+ assert.deepEqual(s.cases[0].tasks.map(t=>t.id),names);
+ s=createCase(s,intake("Routine"),now);
+ c=s.cases[0];assert.ok(c.tasks.some(t=>t.id==="routine_review"));assert.ok(!c.tasks.some(t=>t.id==="urgent_review"));
+ assert.deepEqual(importWorkspace(s),s);
+});
+test("conditional routing rejects invalid predicates and dangling active prerequisites",()=>{
+ let p=structuredClone(blankWorkspace().profiles[0]);p.tasks[0].when={priority:"Deadline required"};
+ assert.throws(()=>validateProfile(p),/Invalid conditional priority/);
+ p=structuredClone(blankWorkspace().profiles[0]);p.tasks.find(t=>t.final).when={priority:"Urgent"};
+ assert.throws(()=>validateProfile(p),/Final handoff cannot/);
+ p=structuredClone(blankWorkspace().profiles[0]);p.tasks.find(t=>t.id==="register").when={priority:"Urgent"};
+ assert.throws(()=>validateProfile(p),/unmet prerequisite/);
+});
+test("profile layout is portable, bounded, and subject to validation",()=>{
+ let s=blankWorkspace(),p=structuredClone(s.profiles[0]);
+ p.layout={register:{x:72,y:110},close:{x:850,y:140}};
+ s=updateProfile(s,p);assert.deepEqual(importWorkspace(s).profiles[0].layout,p.layout);
+ p.layout.close.x=90000;assert.throws(()=>validateProfile(p),/Invalid node position/);
+});

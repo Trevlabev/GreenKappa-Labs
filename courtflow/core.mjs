@@ -52,12 +52,34 @@ export function validateProfile(p){
   if(!Array.isArray(t.dependsOn)||new Set(t.dependsOn).size!==t.dependsOn.length||typeof t.final!=="boolean")throw Error("Invalid dependency or final flag.");
   ids.add(t.id);map[t.id]=t;
  }
+
+ // Intake-time route conditions support one explicitly validated field: priority.
+ for(const t of p.tasks){
+  if(t.when!==undefined){
+   if(!t.when||typeof t.when!=="object"||Array.isArray(t.when)||Object.keys(t.when).length!==1||!PRIORITIES.includes(t.when.priority))throw Error("Invalid conditional priority on "+t.id+".");
+   if(t.final)throw Error("Final handoff cannot have a route condition.");
+  }
+ }
+ if(p.layout!==undefined){
+  if(!p.layout||typeof p.layout!=="object"||Array.isArray(p.layout)||Object.keys(p.layout).some(id=>!ids.has(id)))throw Error("Invalid node layout.");
+  for(const pos of Object.values(p.layout)){
+   if(!pos||typeof pos!=="object"||!Number.isFinite(pos.x)||!Number.isFinite(pos.y)||pos.x<0||pos.y<0||pos.x>3000||pos.y>2200)throw Error("Invalid node position.");
+  }
+ }
  for(const t of p.tasks)for(const dep of t.dependsOn)if(!ids.has(dep)||dep===t.id)throw Error("Invalid dependency in "+t.id);
  const visiting=new Set(),visited=new Set();
  const visit=id=>{if(visiting.has(id))throw Error("Dependency cycle.");if(visited.has(id))return;visiting.add(id);for(const dep of map[id].dependsOn)visit(dep);visiting.delete(id);visited.add(id);};
  for(const id of ids)visit(id);
  const finals=p.tasks.filter(t=>t.final);if(finals.length!==1)throw Error("Exactly one final handoff required.");
  for(const t of p.tasks)if(!pathTo(finals[0].id,t.id,map))throw Error("All tasks must lead to the final handoff.");
+ // For every intake priority, validate the executable subgraph before deployment.
+ for(const priority of PRIORITIES){
+  const active=p.tasks.filter(t=>!t.when||t.when.priority===priority),selected=new Set(active.map(t=>t.id));
+  if(active.length<2)throw Error("Route "+priority+" must include work before final handoff.");
+  for(const t of active)if(!t.final&&t.dependsOn.some(id=>!selected.has(id)))throw Error("Route "+priority+" leaves an unmet prerequisite for "+t.id+".");
+  const activeMap=Object.fromEntries(active.map(t=>[t.id,{dependsOn:t.dependsOn.filter(id=>selected.has(id))}]));
+  for(const t of active)if(!pathTo(finals[0].id,t.id,activeMap))throw Error("Route "+priority+" has work that does not lead to the final handoff.");
+ }
  return clone(p);
 }
 export function blankWorkspace(){return {version:VERSION,nextCase:1,nextEvent:1,nextException:1,profiles:clone(DEFAULT_PROFILES),cases:[],events:[]};}
@@ -111,8 +133,19 @@ export function createCase(w,input,at=new Date()){
  if(!p||!isDate(input.receivedDate)||!PRIORITIES.includes(input.priority)||!TEAMS.includes(input.team))throw Error("Invalid workflow, date, priority or team.");
  const summary=typeof input.summary==="string"?input.summary.trim():"";if(summary.length>1200)throw Error("Summary too long.");
  const id="CF-"+String(s.nextCase++).padStart(4,"0");
- s.cases.unshift({id,reference:id,title,profileId:p.id,receivedDate:input.receivedDate,priority:input.priority,team:input.team,summary,createdAt:iso(at),closedAt:null,tasks:p.tasks.map(t=>({...clone(t),doneAt:null})),exceptions:[]});
- addEvent(s,id,"Intake created · "+p.name+" · "+input.team,at);return s;
+ // Route once, at intake. Later priority changes do not rewrite historical tasks.
+ const active=p.tasks.filter(t=>!t.when||t.when.priority===input.priority),included=new Set(active.map(t=>t.id));
+ const routedTasks=active.map(t=>{
+  const snapshot=clone(t);
+  delete snapshot.when;
+  snapshot.dependsOn=snapshot.dependsOn.filter(dep=>included.has(dep));
+  snapshot.doneAt=null;
+  return snapshot;
+ });
+ s.cases.unshift({id,reference:id,title,profileId:p.id,receivedDate:input.receivedDate,priority:input.priority,team:input.team,summary,createdAt:iso(at),closedAt:null,tasks:routedTasks,exceptions:[]});
+ addEvent(s,id,"Intake created · "+p.name+" · "+input.team,at);
+ if(p.tasks.some(t=>t.when))addEvent(s,id,"Routing evaluated at intake · "+input.priority+" · "+routedTasks.length+" active steps",at);
+ return s;
 }
 export function taskAvailability(c,t){
  if(t.doneAt)return {status:"done",reason:"Completed"};
