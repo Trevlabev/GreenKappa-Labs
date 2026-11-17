@@ -1247,3 +1247,39 @@ html{scroll-behavior:smooth}
  .gkl-showcase-tab{min-width:30px;padding-inline:0}
 }
 @media(max-width:385px){.gkl-showcase-tab{min-width:28px;font-size:.64rem}}
+
+/* FilingProof promotional gallery: smooth artwork/caption blend and navy/gold identity. */
+.gkl-showcase-slide.gkl-theme-filingproof.gkl-art-slide{background:#0b1827}
+.gkl-theme-filingproof .gkl-art-picture{background:#0b1827}
+.gkl-filingproof-art-note{position:absolute;z-index:5;right:1rem;bottom:.9rem;padding:.35rem .6rem;border-radius:6px;background:rgba(7,20,31,.87);font-size:.64rem;font-weight:750;color:#efd0a2;pointer-events:none}
+.gkl-tools-products{grid-template-columns:repeat(3,minmax(0,1fr))}
+.gkl-tools-product-filing{grid-column:span 2;display:grid;grid-template-columns:minmax(0,.83fr) minmax(0,1.17fr);gap:1.35rem;align-items:center;background:linear-gradient(145deg,#0e2735,#172f41);border-color:rgba(234,199,148,.5)}
+.gkl-tools-product-filing .gkl-tools-product-copy{min-width:0;display:flex;flex-direction:column;align-items:flex-start}
+.gkl-tools-product-filing .gkl-tools-product-index{color:#f2cb92}
+.gkl-tools-product-filing h3{color:#fff1db}
+.gkl-tools-product-filing p{color:#d4e3e1}
+.gkl-tools-product-filing small{color:#c9dcd6}
+.gkl-tools-product-filing .gkl-tools-product-action{color:#f4d19d}
+.gkl-tools-product-art{margin:0;min-width:0;display:flex;flex-direction:column;gap:.5rem}
+.gkl-tools-product-art img{display:block;width:100%;height:auto;object-fit:contain;border:1px solid rgba(233,198,148,.35);border-radius:11px;box-shadow:0 15px 32px rgba(0,0,0,.3)}
+.gkl-tools-product-art figcaption{color:#bdcecb;font-size:.65rem}
+@media(max-width:1040px){.gkl-tools-products{grid-template-columns:repeat(2,minmax(0,1fr))}.gkl-tools-product-filing{grid-column:span 2}}
+@media(max-width:740px){.gkl-tools-product-filing{grid-template-columns:1fr}}
+@media(max-width:480px){.gkl-tools-products{grid-template-columns:1fr}.gkl-tools-product-filing{grid-column:span 1}}
+@media(max-width:900px){
+ .gkl-art-slide.gkl-theme-filingproof .gkl-art-picture{position:relative}
+ .gkl-art-slide.gkl-theme-filingproof .gkl-art-picture::after{content:"";position:absolute;inset:auto 0 0;height:27%;pointer-events:none;background:linear-gradient(180deg,transparent,#0b1827)}
+ .gkl-art-slide.gkl-theme-filingproof .gkl-art-mobile-caption{position:relative;display:flex;flex-direction:column;justify-content:center;background:linear-gradient(180deg,#0b1827,#123044);border-top:0}
+ .gkl-art-slide.gkl-theme-filingproof .gkl-art-mobile-caption::before{content:"";position:absolute;inset:-30px 0 auto;height:30px;background:linear-gradient(180deg,transparent,#0b1827);pointer-events:none}
+ .gkl-art-slide.gkl-theme-filingproof .gkl-art-mobile-caption p{color:#f1cb93}
+ .gkl-art-slide.gkl-theme-filingproof .gkl-art-mobile-caption h2{color:#fff5e7}
+ .gkl-art-slide.gkl-theme-filingproof .gkl-art-mobile-caption h2 em{color:#e9bb79;font-style:normal}
+ .gkl-art-slide.gkl-theme-filingproof .gkl-art-mobile-caption>span{color:#d3e1e1}
+ .gkl-art-slide.gkl-theme-filingproof .gkl-art-mobile-caption>strong{color:#142735;background:#e8c38b}
+ .gkl-art-slide.gkl-theme-filingproof .gkl-art-mobile-caption>small{color:#b4cfca;font-size:.65rem;line-height:1.4}
+ .gkl-filingproof-art-note{display:none}
+}
+@media(max-width:680px){
+ .gkl-art-slide.gkl-theme-filingproof .gkl-art-picture{aspect-ratio:1}
+ .gkl-art-slide.gkl-theme-filingproof .gkl-art-mobile-caption{padding:1rem 1.3rem}
+}
