@@ -1,0 +1,31 @@
+[build]
+  publish = "public"
+  command = "npm run build"
+
+[functions]
+  node_bundler = "esbuild"
+
+[[redirects]]
+  from = "/host/*"
+  to = "/index.html"
+  status = 200
+[[redirects]]
+  from = "/play/*"
+  to = "/index.html"
+  status = 200
+[[redirects]]
+  from = "/collection"
+  to = "/index.html"
+  status = 200
+[[redirects]]
+  from = "/demo"
+  to = "/demo.html"
+  status = 200
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    X-Frame-Options = "DENY"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"

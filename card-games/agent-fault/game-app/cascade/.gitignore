@@ -1,0 +1,10 @@
+node_modules/
+.netlify/
+.env
+.env.*.local
+*.log
+*.sqlite3
+.DS_Store
+# Approved 7MB source is restored from pinned 10-part build assets.
+public/static/assets/fronts/
+public/static/assets/backs/
