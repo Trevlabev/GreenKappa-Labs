@@ -1,0 +1,17 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import {blankWorkspace,createCase,completeTask,addException,resolveException,taskAvailability,reassign,reprioritize,updateProfile,validateProfile,importWorkspace,describeCase,dashboard,caseReport,auditCSV} from "../core.mjs";
+import {demoWorkspace} from "../sample.mjs";
+const now="2026-11-16T12:00:00.000Z";
+const one=()=>createCase(blankWorkspace(),{title:"Synthetic",profileId:"petition",receivedDate:"2026-11-14",priority:"Routine",team:"Intake",summary:"Test"},now);
+test("intake creates snapshot and audit",()=>{const s=one();assert.equal(s.cases[0].tasks.length,5);assert.equal(s.events.length,1);});
+test("dependencies block out-of-order completion",()=>{const s=one();assert.equal(taskAvailability(s.cases[0],s.cases[0].tasks[3]).status,"blocked");assert.throws(()=>completeTask(s,"CF-0001","route",now),/Awaiting/);});
+test("all ordered tasks close a case",()=>{let s=one();for(const id of ["register","screen","verify","route","close"])s=completeTask(s,"CF-0001",id,now);assert.equal(describeCase(s.cases[0],"2026-11-16").status,"Completed");});
+test("open exceptions block final handoff",()=>{let s=addException(one(),"CF-0001","Missing","2026-11-16T12:00:00Z");for(const id of ["register","screen","verify","route"])s=completeTask(s,"CF-0001",id,now);assert.throws(()=>completeTask(s,"CF-0001","close",now),/Resolve/);s=resolveException(s,"CF-0001",s.cases[0].exceptions[0].id,now);s=completeTask(s,"CF-0001","close",now);assert.ok(s.cases[0].closedAt);});
+test("assignment and priority create audit events",()=>{let s=one();s=reassign(s,"CF-0001","Review",now);s=reprioritize(s,"CF-0001","Urgent",now);assert.equal(s.events.length,3);});
+test("reject cyclic profile, allow valid one",()=>{const p={id:"x",name:"X",description:"",tasks:[{id:"a",label:"A",offset:0,dependsOn:["b"],final:false},{id:"b",label:"B",offset:1,dependsOn:["a"],final:true}]};assert.throws(()=>validateProfile(p),/cycle/i);p.tasks[0].dependsOn=[];assert.doesNotThrow(()=>validateProfile(p));});
+test("editing a profile preserves existing case task snapshot",()=>{let s=one(),p=structuredClone(s.profiles[0]);p.tasks[0].label="New";s=updateProfile(s,p);assert.equal(s.cases[0].tasks[0].label,"Register submission");});
+test("overdue state is simulated from calendar offsets",()=>{const s=one();assert.equal(describeCase(s.cases[0],"2026-11-16").status,"Overdue");assert.equal(dashboard(s,"2026-11-16").overdue,1);});
+test("import rejects unsupported version and missing dependencies",()=>{const s=one();assert.deepEqual(importWorkspace(s),s);assert.throws(()=>importWorkspace({...s,version:5}),/version/);const x=structuredClone(s);x.cases[0].tasks[0].dependsOn=["absent"];assert.throws(()=>importWorkspace(x),/dependency/);});
+test("demo exhibits completed, blocked and overdue cases",()=>{const s=demoWorkspace(new Date(now));const statuses=s.cases.map(c=>describeCase(c,"2026-11-16").status);assert.equal(s.cases.length,5);for(const p of ["Completed","Exception","Overdue"])assert.ok(statuses.includes(p));});
+test("exports retain warning and escape spreadsheet formulas",()=>{const s=addException(one(),"CF-0001","=HYPERLINK(1)",now);assert.match(caseReport(s,"CF-0001","2026-11-16"),/not statutory/);assert.match(auditCSV(s),/'=HYPERLINK/);});
