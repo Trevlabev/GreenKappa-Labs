@@ -1,6 +1,6 @@
 [build]
   publish = "public"
-  command = "npm run test && npm run check"
+  command = "node scripts/prepare-digital.mjs && npm run test && npm run check"
 [functions]
   node_bundler = "esbuild"
 [[redirects]]
@@ -13,6 +13,10 @@
   status = 200
 [[redirects]]
   from = "/demo"
+  to = "/index.html"
+  status = 200
+[[redirects]]
+  from = "/collection"
   to = "/index.html"
   status = 200
 [[headers]]

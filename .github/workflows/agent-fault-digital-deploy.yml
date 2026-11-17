@@ -1,0 +1,73 @@
+name: AGENT-FAULT Digital — deploy hosted app
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'card-games/agent-fault/game-app/hosted/**'
+      - '.github/workflows/agent-fault-digital-deploy.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: agent-fault-digital-production
+  cancel-in-progress: false
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: card-games/agent-fault/game-app/hosted
+    env:
+      NETLIFY_SITE_ID: a66ce6c9-6a5c-455d-91d3-408e72416187
+      NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN || secrets.NETLIFY_API_TOKEN || secrets.NETLIFY_TOKEN }}
+    steps:
+      - name: Check out app repository
+        uses: actions/checkout@v4
+      - name: Install Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+      - name: Restore and validate original 66-card illustrated deck
+        run: node scripts/prepare-digital.mjs
+      - name: Run game-state tests and client syntax checks
+        run: |
+          npm test
+          npm run check
+      - name: Verify Netlify deployment credentials
+        run: |
+          if [ -z "$NETLIFY_AUTH_TOKEN" ]; then
+            echo '::error title=Netlify authentication needed::Add a GitHub Actions repository secret NETLIFY_AUTH_TOKEN (or NETLIFY_API_TOKEN). The code build passed but public deployment cannot begin.'
+            exit 1
+          fi
+          echo 'Netlify deployment credential is present; beginning deploy.'
+      - name: Deploy digital game to reserved Netlify site
+        run: |
+          npx --yes netlify-cli@latest deploy --prod --build \
+            --site "$NETLIFY_SITE_ID" \
+            --auth "$NETLIFY_AUTH_TOKEN" \
+            --dir public \
+            --functions netlify/functions
+      - name: Verify production game health
+        run: |
+          python3 - <<'PY'
+          import json,time,urllib.request,sys
+          url='https://agent-fault-live-online.netlify.app/api/health'
+          for attempt in range(12):
+              try:
+                  with urllib.request.urlopen(url,timeout=15) as response:
+                      data=json.load(response)
+                  if data.get('status')=='ok' and data.get('cards')=={'Scenario':24,'Interference':36,'Fault':6}:
+                      print('Verified HTTPS production game health and complete card manifest:',data)
+                      sys.exit(0)
+              except Exception as err:
+                  print('Health check attempt',attempt+1,'failed:',type(err).__name__)
+              time.sleep(5)
+          raise SystemExit('Production health not verified; review Netlify logs and database provisioning')
+          PY
