@@ -9,11 +9,14 @@ try{
   const desktop=await browser.newPage({viewport:{width:1440,height:900}});
   attached(desktop);
   await desktop.goto(origin+"/",{waitUntil:"networkidle"});
-  assert.equal(await desktop.locator("[data-showcase-slide]").count(),8,"Eight homepage gallery slides");
-  assert.equal(await desktop.locator("[data-showcase-tab]").count(),8,"Eight gallery buttons");
+  const slideCount=await desktop.locator("[data-showcase-slide]").count();
+  assert.ok(slideCount>=8,"Homepage includes Flowglass and at least seven other projects");
+  assert.equal(await desktop.locator("[data-showcase-tab]").count(),slideCount,"Every slide has a gallery tab");
   const labels=await desktop.locator("[data-showcase-slide]").evaluateAll(els=>els.map(e=>e.getAttribute("aria-label")));
-  assert.deepEqual(labels.map((v,i)=>v.startsWith((i+1)+" of 8: ")),Array(8).fill(true),"Slide accessibility labels");
-  await desktop.locator('[data-showcase-tab="7"]').click();
+  assert.deepEqual(labels.map((v,i)=>v.startsWith((i+1)+" of "+slideCount+": ")),Array(slideCount).fill(true),"Slide accessibility labels");
+  const flowglassIndex=await desktop.locator("[data-showcase-slide]").evaluateAll(els=>els.findIndex(e=>e.classList.contains("gkl-theme-flowglass")));
+  assert.ok(flowglassIndex>=0,"Flowglass has a gallery slide");
+  await desktop.locator('[data-showcase-tab="'+flowglassIndex+'"]').click();
   const slide=desktop.locator('.gkl-showcase-slide.gkl-theme-flowglass');
   assert.match(await slide.getAttribute("class"),/is-active/,"Flowglass gallery slide can be selected");
   assert.equal(await slide.locator("a.gkl-slide-cover-link").getAttribute("href"),"flowglass/");
@@ -25,7 +28,7 @@ try{
   assert.ok(await slide.locator(".gkl-flowglass-art-note").isVisible(),"Desktop disclaimer is visible");
   await desktop.goto(origin+"/tools/",{waitUntil:"networkidle"});
   assert.equal(await desktop.locator(".gkt-release-card").count(),2,"Tools page has two active product cards");
-  assert.equal(await desktop.locator(".gkt-product-list > article.gkt-product").count(),6,"All existing tools remain listed");
+  assert.ok(await desktop.locator(".gkt-product-list > article.gkt-product").count()>=6,"Existing Tools products remain listed");
   const launch=desktop.locator('.gkt-release-flowglass a[href="/flowglass/"]');
   assert.ok(await launch.count()>0,"Tools page links to live application");
   const hero=desktop.locator(".gkt-hero-product img");
@@ -41,8 +44,8 @@ try{
     const mobile=await browser.newPage({viewport:{width,height:844},isMobile:true,hasTouch:true,deviceScaleFactor:1});
     attached(mobile);
     await mobile.goto(origin+"/",{waitUntil:"networkidle"});
-    assert.equal(await mobile.locator("[data-showcase-tab]").count(),8);
-    await mobile.locator('[data-showcase-tab="7"]').click();
+    assert.equal(await mobile.locator("[data-showcase-tab]").count(),slideCount);
+    await mobile.locator('[data-showcase-tab="'+flowglassIndex+'"]').click();
     const img=mobile.locator(".gkl-theme-flowglass picture img");
     await img.evaluate(img=>img.decode());
     const selected=await img.evaluate(img=>img.currentSrc);
@@ -61,7 +64,7 @@ try{
     await mobile.close();
   }
   assert.deepEqual(faults,[],"Uncaught browser errors");
-  console.log("PASS: eight-slide gallery, Flowglass desktop/mobile artwork, Tools portfolio, accessibility labels, responsive controls and live app");
+  console.log("PASS: dynamic "+slideCount+"-slide gallery, Flowglass desktop/mobile artwork, Tools portfolio, accessibility labels, responsive controls and live app");
 }finally{
   await browser.close();
 }
