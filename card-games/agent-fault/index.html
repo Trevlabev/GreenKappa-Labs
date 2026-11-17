@@ -1,14 +1,15 @@
 <!doctype html><html lang="en">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#111442">
-<title>AGENT/FAULT — Original AI Party Game | GreenKappa Labs</title>
-<meta name="description" content="AGENT/FAULT is a 66-card AI party game with a live web edition, private illustrated hands, a rotating Judge and an interactive six-stage animated walkthrough.">
+<title>AGENT/FAULT — Physical Cards, Classic &amp; Cascade Online | GreenKappa Labs</title>
+<meta name="description" content="AGENT/FAULT is a 66-card AI party game you can prototype with printed cards and a shared AI chat or play online in Classic and Cascade modes. Explore both animated demos.">
 <link rel="canonical" href="https://greenkappalabs.art/card-games/agent-fault/">
-<meta property="og:type" content="website"><meta property="og:title" content="AGENT/FAULT | GreenKappa Labs"><meta property="og:url" content="https://greenkappalabs.art/card-games/agent-fault/"><meta property="og:description" content="One agent. Everyone else is a problem. Try the animated walkthrough or play the 66-card digital party game online."><meta property="og:image" content="https://greenkappalabs.art/card-games/assets/agent-fault.svg"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://greenkappalabs.art/card-games/assets/agent-fault.svg">
+<meta property="og:type" content="website"><meta property="og:title" content="AGENT/FAULT | GreenKappa Labs"><meta property="og:url" content="https://greenkappalabs.art/card-games/agent-fault/"><meta property="og:description" content="One agent. Everyone else is a problem. Physical-card playtests and two browser-hosted multiplayer modes: Classic and Cascade."><meta property="og:image" content="https://greenkappalabs.art/card-games/assets/agent-fault.svg"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://greenkappalabs.art/card-games/assets/agent-fault.svg">
 <link rel="icon" href="../../assets/greenkappa-logo.png"><link rel="preload" as="image" href="../assets/agent-fault.svg">
 <link rel="stylesheet" href="../../style.css"><link rel="stylesheet" href="../card-games.css"><link rel="stylesheet" href="../game-detail.css">
 <link rel="stylesheet" href="./demo-embed.css">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"AGENT/FAULT — GreenKappa Labs","url":"https://greenkappalabs.art/card-games/agent-fault/","about":{"@type":"CreativeWork","name":"AGENT/FAULT","genre":"AI-assisted competitive party card game","description":"Proposed game: a Judge programs an AI agent and other players anonymously submit Interference instructions. Public Breakpoints, a hidden Fault and comedy judging determine the winner.","creator":{"@type":"Organization","name":"GreenKappa Labs"}}}</script>
+<link rel="stylesheet" href="./cascade-demo-embed.css">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"AGENT/FAULT — GreenKappa Labs","url":"https://greenkappalabs.art/card-games/agent-fault/","about":{"@type":"CreativeWork","name":"AGENT/FAULT","genre":"AI-assisted competitive party card game","description":"Prototype 66-card AI party game. Play Classic with anonymous independent replies, or Cascade with a continuing conversation and different-player Handoffs. Online playtest editions are available; physical print proofs remain unvalidated.","creator":{"@type":"Organization","name":"GreenKappa Labs"}}}</script>
 </head>
 <body class="card-games-page game-detail-page" data-game="agent-fault">
   <a class="skip-link dark-skip" href="#main">Skip to content</a>
@@ -28,50 +29,116 @@
 <div class="gd-hero-layout"><div class="gd-intro">
 <p class="gd-overline">Field note 05 / AI party sabotage</p><h1 id="gd-title">AGENT<em>/FAULT</em></h1>
 <p class="gd-lead">One agent. Everyone else is a problem.</p>
-<p class="gd-intro-copy">A Judge privately sets an AI personality and draws a secret Fault. Everyone else selects from four illustrated Interference cards, competing for the funniest answer and a measurable Breakpoint. Explore the animated game demo below, or play the digital edition online.</p>
-<div class="gd-actions"><a class="gd-button-primary" href="#animated-demo">Try the animated demo</a><a class="gd-button-outline" href="https://agent-fault-live-online.netlify.app/" target="_blank" rel="noopener">Play online ↗</a><a class="gd-button-outline" href="#inside">Explore the rules</a></div>
-<dl class="gd-specs"><div><dt>Players</dt><dd>4–8 players</dd></div><div><dt>Duration</dt><dd>20–35 min target · unvalidated</dd></div><div><dt>Technology</dt><dd>Browser host screen + phone controllers</dd></div><div><dt>Development</dt><dd>66-card v0.9-P · online playtest</dd></div></dl>
+<p class="gd-intro-copy">A 66-card party game for 4–8 people. Use a printed prototype deck with one shared AI chat, or play entirely in your browsers. In <strong>Classic</strong>, anonymous Interferences compete as separate AI replies. In <strong>Cascade</strong>, players inherit each other’s changes in one ongoing conversation.</p>
+<div class="gd-actions"><a class="gd-button-primary" href="#play-options">Choose how to play</a><a class="gd-button-outline" href="#animated-demo">Compare both demos</a><a class="gd-button-outline" href="./review-v09/">Explore the deck ↗</a></div>
+<dl class="gd-specs"><div><dt>Players</dt><dd>4–8 · plus host interface online</dd></div><div><dt>Deck</dt><dd>24 Scenarios · 36 Interferences · 6 Faults</dd></div><div><dt>Ways to play</dt><dd>Physical prototype / Classic / Cascade</dd></div><div><dt>Release status</dt><dd>Digital playtests live · physical proofs pending</dd></div></dl>
 </div><figure class="gd-hero-art"><a href="../assets/agent-fault.svg" target="_blank" rel="noopener" aria-label="View AGENT/FAULT promotional artwork"><img src="../assets/agent-fault.svg" alt="AGENT/FAULT: a friendly glitching CRT robot with minimal Scenario, Interference and Fault cards" width="1536" height="1024" fetchpriority="high" decoding="async"></a><figcaption><span>GREENKAPPA LABS / ORIGINAL CONCEPT ART</span><span>OPEN FULL SIZE ↗</span></figcaption></figure></div></section>
 <div class="gd-paper"><section id="inside" class="section" aria-labelledby="inside-title">
-<p class="gd-section-index">01 / The idea</p><div class="gd-story-head"><h2 id="inside-title">You know the job. Not the programming.</h2><p>Each Scenario announces the agent’s assignment and two public Breakpoints. The Judge privately locks a short agent personality and draws one of six secret Faults. Everyone else selects an Interference from a private hand of four. A shared AI generates anonymous replies; people decide the outcomes.</p></div>
+<p class="gd-section-index">01 / The idea</p><div class="gd-story-head"><h2 id="inside-title">You know the job. Not the programming.</h2><p>Each Scenario sets a public assignment and two measurable Breakpoints. A rotating Judge adds a short personality and holds a secret Fault. Contestants choose Interference cards to distort the AI. The game offers two rule paths: <strong>Classic</strong> compares independent, anonymous AI replies; <strong>Cascade</strong> follows one conversation as different players respond to each other’s interference. People—not the AI—award the points.</p></div>
 <p class="gd-section-index">02 / The player experience</p><div class="gd-feature-grid">
 <article class="gd-feature"><span class="gd-feature-number">01</span><h3>Reveal the Scenario</h3><p>The Judge reads the public assignment, required behavior and two Breakpoints. The secret agent personality is locked before submissions.</p></article>
-<article class="gd-feature"><span class="gd-feature-number">02</span><h3>Interfere</h3><p>Each player anonymously chooses one card. A single shared chat generates a short answer for each competing variation.</p></article>
+<article class="gd-feature"><span class="gd-feature-number">02</span><h3>Choose a mode</h3><p>Classic secretly submits each Interference for independent replies. Cascade randomizes card order and passes every AI reply to another player for a freeform Handoff.</p></article>
 <article class="gd-feature"><span class="gd-feature-number">03</span><h3>Judge the results</h3><p>Spotlight awards one point for the Judge’s favorite answer. A second point may go to a literal Breakpoint hit, or a hidden Fault if no Breakpoint qualifies.</p></article>
 </div>
-<div class="gd-highlight"><div><span>Signature mechanic</span><strong>Blind interference, visible consequences.</strong></div><p>Private hands and hidden instructions make every response a surprise. Human players adjudicate a separate comedy point and an optional objective-based Bonus; the AI does not judge itself.</p></div>
-</section></div>
+<div class="gd-highlight"><div><span>Signature mechanic</span><strong>One deck. Two kinds of chaos.</strong></div><p>Classic rewards choosing the right card. Cascade adds improvisation: your Handoff exploits the AI response to someone else’s card. Both use human judging for Spotlight and an optional objective-based Bonus.</p></div>
+</section>
+<section id="play-options" class="section af-play-section" aria-labelledby="af-play-title">
+  <p class="gd-section-index">03 / Ways to play</p>
+  <div class="af-play-heading">
+    <div><h2 id="af-play-title">Pick your table.</h2><p>Same 66-card universe. One physical playtest format and two independently hosted digital modes.</p></div>
+    <a href="./review-v09/" class="af-play-library">Explore all 66 cards ↗</a>
+  </div>
+  <div class="af-mode-grid">
+    <article class="af-mode-card af-mode-physical">
+      <span class="af-mode-eyebrow">01 / Tabletop prototype</span>
+      <h3>Physical cards</h3>
+      <p class="af-mode-lead">Cards in your hands. One AI in the room.</p>
+      <p>Use a <strong>printed prototype deck</strong>, a shared AI chat on one device, and a score sheet. Players handle shuffling, hidden cards, prompts and judging at the table.</p>
+      <ul><li>4–8 players; one person facilitates the AI chat</li><li>Choose Classic rules, or adapt to Cascade with spoken Handoffs</li><li>Not a standalone, AI-free card game</li></ul>
+      <a class="af-mode-cta" href="#physical-play">How physical play works</a>
+      <p class="af-mode-status">Prototype instructions · physical production and print certification pending</p>
+    </article>
+    <article class="af-mode-card af-mode-classic">
+      <span class="af-mode-eyebrow">02 / Browser game</span>
+      <h3>Classic mode</h3>
+      <p class="af-mode-lead">Separate attempts. Anonymous answers.</p>
+      <p>Players join a room on their phones and privately select one of four cards. The AI generates <strong>independent, anonymous responses</strong> to the same Scenario. The Judge picks Spotlight and proposes any Derailment Bonus.</p>
+      <ul><li>No physical cards or installation</li><li>Shared host display plus player devices</li><li>Faster, more straightforward party format</li></ul>
+      <a class="af-mode-cta" href="https://agent-fault-live-online.netlify.app/" target="_blank" rel="noopener">Play Classic online ↗</a>
+      <p class="af-mode-status">Live browser playtest · balance not validated</p>
+    </article>
+    <article class="af-mode-card af-mode-cascade">
+      <span class="af-mode-eyebrow">03 / Browser game</span>
+      <h3>Cascade mode</h3>
+      <p class="af-mode-lead">One conversation. Everyone inherits the damage.</p>
+      <p>Players lock cards, then a random order sends them into <strong>one continuing AI conversation</strong>. After each card's AI reply, a <strong>different player</strong> sends a freeform Handoff before the next card.</p>
+      <ul><li>Private hands and rotating Judge, like Classic</li><li>One Handoff per contestant; no one follows their own card</li><li>More improvisation and more AI replies</li></ul>
+      <a class="af-mode-cta" href="https://agent-fault-cascade-playtest.netlify.app/" target="_blank" rel="noopener">Play Cascade online ↗</a>
+      <p class="af-mode-status">Experimental digital playtest · longer rounds likely</p>
+    </article>
+  </div>
+  <div id="physical-play" class="af-physical-guide">
+    <div class="af-physical-title"><span class="af-mode-eyebrow">Tabletop playtest / manual facilitation</span><h3>How the physical deck works</h3></div>
+    <ol>
+      <li><strong>Prepare the table.</strong> Use the 24 Scenario, 36 Interference and six Fault cards as separate decks, with a shared AI chat device and a way to track scores.</li>
+      <li><strong>Establish the agent.</strong> Reveal a Scenario and its two public Breakpoints. The Judge privately chooses a short personality and draws a hidden Fault; deal four Interference cards per contestant.</li>
+      <li><strong>Play your mode.</strong> In Classic, shuffle face-down submissions and enter each instruction as an anonymous candidate against the same assignment. In Cascade, generate an initial AI answer, lock/shuffle the played cards, and alternate each card's AI reply with a different contestant's spoken or typed Handoff, preserving the transcript.</li>
+      <li><strong>Judge and repeat.</strong> Read the AI replies, award Spotlight (+1) and an optional qualifying Derailment Bonus (+1), record scores, replenish used cards and rotate the Judge.</li>
+    </ol>
+    <p><strong>Important:</strong> Printed cards alone cannot produce AI responses. This is a manually facilitated adaptation of the proposed rules, not a certified printed release. The web apps automate the decks, rooms, hidden information and round transitions; they do not require a physical deck.</p>
+  </div>
+</section>
+</div>
 <section class="gd-art-section" aria-labelledby="art-title"><div class="section">
-<div class="gd-art-heading"><div><p class="gd-overline">03 / Artwork</p><h2 id="art-title">Retro robot. Minimal cards.</h2></div><p>Expressive 1990s-inspired CRT characters, rich cobalt and acidic yellow-green, bold coral and violet, with clean typography for the playable card faces.</p></div>
+<div class="gd-art-heading"><div><p class="gd-overline">04 / Artwork</p><h2 id="art-title">Retro robot. Minimal cards.</h2></div><p>Expressive 1990s-inspired CRT characters, rich cobalt and acidic yellow-green, bold coral and violet, with clean typography for the playable card faces.</p></div>
 <div class="gd-art-grid">
 <figure class="gd-art-tile"><a href="../assets/agent-fault.svg" target="_blank" rel="noopener" aria-label="Open AGENT/FAULT promotional artwork"><img src="../assets/agent-fault.svg" alt="Original retro AGENT/FAULT robot illustration and gameplay sample cards" width="1536" height="1024" loading="lazy" decoding="async"></a><figcaption><strong>Promotional concept</strong><span>View full size</span></figcaption></figure>
 <figure class="gd-art-tile gd-art-secondary"><a href="../assets/agent-fault-cards.svg" target="_blank" rel="noopener" aria-label="Open AGENT/FAULT example card layout"><img src="../assets/agent-fault-cards.svg" alt="Four readable prototype cards: The Goose Administration, Keep Digging, Full Transparency, and Phantom Authority" width="1536" height="1024" loading="lazy" decoding="async"></a><figcaption><strong>Card concept studies</strong><span>Not production files</span></figcaption></figure>
-</div><p class="gd-art-note">These are early promotional concept studies. The animated walkthrough below features the current illustrated 66-card v0.9-P candidate deck and its corrected category backs. Physical print certification remains outstanding.</p>
+</div><p class="gd-art-note">These are early promotional concept studies. Both demos below use actual illustrations from the 66-card v0.9-P candidate deck and its corrected category backs. Physical print certification and manufacturing remain outstanding.</p>
 </div></section>
+
 
 <section id="animated-demo" class="af-demo-section" aria-labelledby="af-demo-title">
   <div class="section">
     <div class="af-demo-head">
-      <div>
-        <p class="gd-overline">04 / Interactive walkthrough</p>
-        <h2 id="af-demo-title">Watch the cards misbehave.</h2>
+      <div><p class="gd-overline">05 / Interactive demos</p><h2 id="af-demo-title">Two ways to break the agent.</h2></div>
+      <p>Compare the fast, independent-response Classic mode with Cascade's continuing conversation and different-player Handoffs. Both walkthroughs use real card art and clearly labeled scripted examples.</p>
+    </div>
+    <div class="af-demo-tabs" role="tablist" aria-label="Choose an AGENT/FAULT animated demo">
+      <button id="af-tab-classic" class="af-demo-tab" role="tab" type="button" aria-selected="true" aria-controls="af-panel-classic" tabindex="0">
+        <strong>Classic</strong><span>Independent replies</span>
+      </button>
+      <button id="af-tab-cascade" class="af-demo-tab" role="tab" type="button" aria-selected="false" aria-controls="af-panel-cascade" tabindex="-1">
+        <strong>Cascade</strong><span>Continuing conversation</span>
+      </button>
+    </div>
+    <section id="af-panel-classic" class="af-demo-panel" role="tabpanel" aria-labelledby="af-tab-classic" tabindex="0">
+      <p class="af-demo-intro">One card per contestant. Separate anonymous AI replies. Spotlight and an optional objective-based Bonus.</p>
+      <div id="agent-fault-demo" class="afd" role="region" aria-label="Classic Mode six-stage animated demonstration">
+        <p style="padding:2rem;color:#fff6e9">Loading the illustrated Classic walkthrough…</p>
       </div>
-      <p>Follow a round from the first shuffle to the human verdict. This six-stage animated preview uses the real illustrated cards, but its example answers and awards are scripted.</p>
-    </div>
-    <div id="agent-fault-demo" class="afd" role="region" aria-label="Animated, interactive six-stage AGENT/FAULT game demonstration">
-      <p style="padding:2rem;color:#fff6e9">Loading the illustrated game walkthrough…</p>
-    </div>
-    <div class="afd-links">
-      <a class="afd-play-now" href="https://agent-fault-live-online.netlify.app/" target="_blank" rel="noopener">Play the full online game ↗</a>
-      <a href="https://agent-fault-live-online.netlify.app/demo" target="_blank" rel="noopener">Open full-screen digital demo ↗</a>
-      <a href="./review-v09/">Browse the 66-card review ↗</a>
-    </div>
+      <div class="afd-links">
+        <a class="afd-play-now" href="https://agent-fault-live-online.netlify.app/" target="_blank" rel="noopener">Play Classic online ↗</a>
+        <a href="./review-v09/">Browse the original illustrated deck ↗</a>
+      </div>
+    </section>
+    <section id="af-panel-cascade" class="af-demo-panel" role="tabpanel" aria-labelledby="af-tab-cascade" tabindex="0" hidden>
+      <p class="af-demo-intro">One evolving AI conversation. Each player's Interference sets up another player's freeform Handoff. Try different scripted choices in Stage 5.</p>
+      <div id="agent-fault-cascade-demo" class="af-cascade-showcase" role="region" aria-label="Cascade Mode six-stage animated demonstration">
+        <p style="padding:2rem;color:#fff6e9">Loading the illustrated Cascade walkthrough…</p>
+      </div>
+      <div class="afd-links">
+        <a class="afd-play-now" href="https://agent-fault-cascade-playtest.netlify.app/" target="_blank" rel="noopener">Play Cascade online ↗</a>
+        <a href="https://agent-fault-cascade-playtest.netlify.app/demo" target="_blank" rel="noopener">Open Cascade demo full screen ↗</a>
+      </div>
+    </section>
+    <p class="af-demo-disclosure">Both demos are scripted walkthroughs, not live AI sessions. Viewing or switching demos makes no paid AI requests. These editions are playtest candidates, not manufacturing-certified releases.</p>
   </div>
 </section>
 
 <div class="gd-development"><section class="section" aria-labelledby="dev-title">
-<div><p class="gd-section-index">05 / Development questions</p><h2 id="dev-title">Break the agent, not the pace.</h2><p>AGENT/FAULT has a working web-hosted digital playtest edition and a fully illustrated 66-card candidate deck. Its commercial readiness, balance and real-table pacing still require human validation.</p><div class="gd-actions"><a class="gd-button-primary" href="mailto:GreenkappaLabs@gmail.com?subject=AGENT%2FFault%20playtest%20inquiry">Talk to the studio</a></div></div>
-<div><ol class="gd-dev-list"><li><b>01</b><span>Can players make meaningful choices without seeing the Judge's programming?</span></li><li><b>02</b><span>Are the two Breakpoints and the hidden Fault reliably adjudicable?</span></li><li><b>03</b><span>Do one-chat candidate responses remain distinct, quick and funny?</span></li></ol><p class="gd-development-note">The digital edition is available for playtesting, not a commercially validated release. The scripted demo is not a live AI request or an AI safety benchmark. No physical manufacturing date or price has been announced.</p></div>
+<div><p class="gd-section-index">06 / Development questions</p><h2 id="dev-title">Break the agent, not the pace.</h2><p>AGENT/FAULT now has two separately hosted digital playtest editions and a fully illustrated 66-card candidate deck. Physical card play requires manual AI facilitation, and printable production files have not been certified. Balance, fairness and real-table pacing remain to be tested.</p><div class="gd-actions"><a class="gd-button-primary" href="mailto:GreenkappaLabs@gmail.com?subject=AGENT%2FFault%20playtest%20inquiry">Talk to the studio</a></div></div>
+<div><ol class="gd-dev-list"><li><b>01</b><span>Do Classic's independent responses remain distinct, funny and fair?</span></li><li><b>02</b><span>Does Cascade's different-player Handoff increase strategy without making rounds too long?</span></li><li><b>03</b><span>Can physical-card play be facilitated clearly, and are future print proofs readable?</span></li></ol><p class="gd-development-note">Classic and Cascade are online playtests, not commercially validated releases. The physical deck is a proposed prototype, not a product currently for sale. Animated demo replies and awards are scripted, not live AI requests.</p></div>
 </section></div>
 <section class="gd-end" aria-labelledby="more-title"><div class="section"><div class="gd-end-heading"><h2 id="more-title">Elsewhere in the collection.</h2><a href="../">View all three games ↗</a></div><nav class="gd-other-games" aria-label="Explore other GreenKappa Labs card games">
 <a class="gd-other-game" href="../not-to-scale/"><img src="../assets/no-such-room-product.webp" loading="lazy" alt=""><strong>No Such Room</strong><span>Spatial mystery</span></a>
@@ -87,5 +154,7 @@
   <script src="/arcana-config.js"></script>
   <script src="/arcana-widget.js"></script>
   <script src="./demo-embed.js" defer></script>
+  <script src="./cascade-demo-embed.js" defer></script>
+  <script src="./demo-tabs.js" defer></script>
 </body>
 </html>

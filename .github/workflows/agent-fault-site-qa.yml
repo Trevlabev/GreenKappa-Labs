@@ -1,0 +1,30 @@
+name: AGENT/FAULT site dual-demo QA
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'card-games/agent-fault/index.html'
+      - 'card-games/agent-fault/demo-embed.js'
+      - 'card-games/agent-fault/demo-embed.css'
+      - 'card-games/agent-fault/cascade-demo-embed.js'
+      - 'card-games/agent-fault/cascade-demo-embed.css'
+      - 'card-games/agent-fault/demo-tabs.js'
+      - 'card-games/agent-fault/site.test.mjs'
+      - '.github/workflows/agent-fault-site-qa.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify-website:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate dual demos and physical/digital copy
+        run: |
+          node --check card-games/agent-fault/demo-embed.js
+          node --check card-games/agent-fault/cascade-demo-embed.js
+          node --check card-games/agent-fault/demo-tabs.js
+          node --test card-games/agent-fault/site.test.mjs

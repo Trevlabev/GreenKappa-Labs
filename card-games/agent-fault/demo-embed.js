@@ -76,6 +76,7 @@
   function schedule(){if(timer){clearTimeout(timer);timer=null;}root.dataset.playing=String(playing && visible && !document.hidden);if(playing && visible && !document.hidden){timer=setTimeout(()=>{current=(current+1)%steps.length;render();schedule();},duration);}}
   if('IntersectionObserver' in window){new IntersectionObserver(entries=>{visible=entries[0]?.isIntersecting||false;schedule();},{threshold:0.15}).observe(root);}else visible=true;
   document.addEventListener('visibilitychange',schedule);
+  root.addEventListener('af-demo-visibility',event=>{if(!event.detail?.active){playing=false;schedule();}});
   root.addEventListener('mouseenter',()=>{if(playing){root.dataset.playing='false';if(timer){clearTimeout(timer);timer=null;}}});
   root.addEventListener('mouseleave',()=>schedule());
   root.addEventListener('focusin',()=>{if(playing){root.dataset.playing='false';if(timer){clearTimeout(timer);timer=null;}}});
