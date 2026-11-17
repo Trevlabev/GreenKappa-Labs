@@ -24,7 +24,7 @@
       nav.classList.toggle("open", !open);
     });
 
-    $(".nav a").forEach((link) => link.addEventListener("click", closeMenu));
+    $$(".nav a").forEach((link) => link.addEventListener("click", closeMenu));
     // The responsive menu also closes by keyboard or a tap outside its header.
     document.addEventListener("keydown", (event) => {
       if (event.key === "Escape" && menuButton.getAttribute("aria-expanded") === "true") {
