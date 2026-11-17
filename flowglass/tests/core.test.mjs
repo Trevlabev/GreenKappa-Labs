@@ -37,14 +37,14 @@ test("self-loop is a cycle",()=>{
 });
 test("invalid references, duplicate IDs, unsupported schema and duplicate pairs rejected",()=>{
  const p=example();p.edges.push({id:"bad",from:"missing",to:"b"});
- assert.match(validateProject(p).join(" "),"missing node");
+ assert.match(validateProject(p).join(" "),/missing node/);
  assert.throws(()=>normalizeProject(p));
  const q=example();q.nodes.push({...q.nodes[0]});
- assert.match(validateProject(q).join(" "),"Duplicate node");
+ assert.match(validateProject(q).join(" "),/Duplicate node/);
  const z=example();z.schemaVersion=2;
- assert.match(validateProject(z).join(" "),"schemaVersion");
+ assert.match(validateProject(z).join(" "),/schemaVersion/);
  const w=example();w.edges.push({id:"other",from:"a",to:"b"});
- assert.match(validateProject(w).join(" "),"Duplicate directional");
+ assert.match(validateProject(w).join(" "),/Duplicate directional/);
 });
 test("isolated nodes and empty graphs do not falsely produce cycles",()=>{
  const p=normalizeProject({schemaVersion:1,name:"Empty",nodes:[],edges:[]});

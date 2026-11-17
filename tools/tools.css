@@ -83,3 +83,8 @@
 .gkt-end-actions{display:flex;flex-direction:column;gap:.7rem}
 @media(max-width:950px){.gkt-hero-layout,.gkt-product-top,.gkt-section-intro,.gkt-method{grid-template-columns:1fr}.gkt-hero-layout{gap:0}.gkt-hero-visual{min-height:360px}.gkt-product-art{min-height:240px}.gkt-end{grid-template-columns:1fr}.gkt-end-actions{flex-direction:row;flex-wrap:wrap}}
 @media(max-width:620px){.gkt-hero-layout{padding-block:3.5rem}.gkt-hero h1{font-size:clamp(3.15rem,12vw,5rem)}.gkt-hero-visual{min-height:260px}.gkt-system-orbit{width:min(74%,300px)}.gkt-orbit-tag{font-size:.45rem}.gkt-orbit-core{font-size:.6rem}.gkt-orbit-core small{font-size:.34rem}.gkt-index a{font-size:.73rem;padding:.55rem .75rem}.gkt-product{padding:1.2rem}.gkt-detail-content{grid-template-columns:1fr}.gkt-product-art{min-height:210px}.gkt-end-actions{flex-direction:column}.gkt-end-actions .lab-action{width:100%}.gkt-visual-lore{width:200px}}
+
+/* Flowglass is available; other product cards remain explicitly concept-stage. */
+.gkt-status-live{color:#93efcf!important;border-color:rgba(145,239,207,.55)!important;background:rgba(49,130,107,.16)!important}
+.gkt-flowglass-launch{display:inline-flex!important;margin-top:1.2rem;text-decoration:none!important}
+.gkt-scope-note{font-size:.77rem!important;color:#9bb9b1!important;line-height:1.55!important;margin-top:1rem!important}

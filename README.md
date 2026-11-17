@@ -16,7 +16,8 @@ Source for the static GitHub Pages website at **https://greenkappalabs.art/**.
 | `/worlds/` | Portal linking to independent universe sourcebook and adventure catalogs | Public portfolio hub |
 | `/worlds/sourcebooks/` | Five universe sourcebook collections, The Oldest House featured | Illustrated development portfolio |
 | `/worlds/adventures/` | Four distinct adventure entries, The Records House featured | Illustrated development portfolio |
-| `/tools/` | Five concept-stage utility product briefs | Requirements & design |
+| `/tools/` | One working alpha and four concept-stage utility briefs | Public product directory |
+| `/flowglass/` | Local-first dependency-map editor and structural impact analysis | Working browser alpha v0.1 |
 | `/work/` | Portfolio and case studies | Public-facing site |
 | `/journal/` | Development notes | First entry implemented |
 
@@ -30,6 +31,9 @@ Static HTML, CSS, and vanilla JavaScript. No JavaScript framework or site-build 
 - `script.js` — navigation and shared progressive enhancement
 - `playground/not-to-scale/demo.js` — interactive microgame logic
 - `tools/tools.css` — custom GreenKappa Tools design system
+- `flowglass/core.mjs` — pure dependency graph engine, validation and report generation
+- `flowglass/app.mjs` — browser UI, editing, local project state and import/export
+- `flowglass/tests/core.test.mjs` — Node built-in unit tests (no npm dependencies)
 - `EXPANSION-ROADMAP.md` — production and validation gates
 
 ## Publishing
@@ -43,7 +47,7 @@ The custom domain is declared in `CNAME`. Intended GitHub Pages publishing confi
 
 - The No Such Room browser microgame is a simplified prototype at the legacy `/playground/not-to-scale/` URL. It does **not** implement the full tabletop game's rules.
 - The playtest page invites inquiries for No Such Room, Small Gods, Large Debts and AGENT/FAULT; it does not publish private deck files.
-- GreenKappa Tools product names are provisional; their features are planned rather than implemented, and no release dates are announced.
+- Flowglass v0.1 is a real local-first browser alpha that analyzes user-supplied graphs. It does **not** discover tenant assets, access Microsoft APIs or infer production risks. The other four GreenKappa Tools remain design concepts. No commercial release dates are announced.
 - These games are not commercial releases. Human playtest results, balance certification, print readiness, manufacturing costs, and market demand remain unverified.
 - Changes committed to `main` have been read back through GitHub. Actual public-domain deployment and real-browser behavior require separate verification.
 
