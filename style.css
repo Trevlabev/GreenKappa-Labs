@@ -1173,3 +1173,28 @@ html{scroll-behavior:smooth}
  .gkl-portfolio-adventures .gkl-portfolio-four-covers .gkl-portfolio-book-cover:nth-child(2){width:36%;height:73%;left:-5%;top:19%}
  .gkl-portfolio-adventures .gkl-portfolio-four-covers .gkl-portfolio-book-cover:nth-child(4){width:24%;height:50%;left:85%;top:36%}
 }
+
+/* Gallery: two-cover Custom Adventures composition, avoiding clutter and distortion. */
+.gkl-portfolio-adventures .gkl-portfolio-media{
+ background:radial-gradient(ellipse at 52% 48%,rgba(157,108,136,.26),transparent 70%),linear-gradient(125deg,#211b25,#392c3b);
+}
+.gkl-portfolio-adventures .gkl-adventure-duo{
+ position:relative;z-index:2;display:grid;grid-template-columns:minmax(0,1.08fr) minmax(0,.92fr);
+ gap:clamp(.7rem,2vw,2.1rem);align-items:center;justify-items:center;
+ width:min(83%,760px);height:86%;min-width:0;min-height:0;
+}
+.gkl-portfolio-adventures .gkl-adventure-duo-cover{
+ display:flex;align-items:center;justify-content:center;min-width:0;min-height:0;width:100%;height:100%;
+}
+.gkl-portfolio-adventures .gkl-adventure-duo-cover img{
+ display:block;width:100%;height:100%;max-height:100%;object-fit:contain;object-position:center;
+ border-radius:6px;filter:drop-shadow(0 18px 20px rgba(0,0,0,.5));
+}
+.gkl-portfolio-adventures .gkl-adventure-duo-primary img{filter:drop-shadow(0 24px 24px rgba(0,0,0,.56))}
+@media(max-width:900px){
+ .gkl-portfolio-adventures .gkl-adventure-duo{width:min(85%,660px);height:90%;gap:clamp(.6rem,2.8vw,1.4rem)}
+}
+@media(max-width:680px){
+ .gkl-portfolio-adventures .gkl-adventure-duo{width:91%;height:95%;gap:.8rem}
+ .gkl-portfolio-adventures .gkl-portfolio-media{background:radial-gradient(ellipse at 50% 42%,rgba(157,108,136,.28),transparent 70%),#211b25}
+}
