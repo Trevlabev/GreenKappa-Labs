@@ -1,0 +1,39 @@
+name: GreenKappa homepage and Tools visuals
+on:
+  push:
+    paths:
+      - "index.html"
+      - "style.css"
+      - "tools/**"
+      - "assets/promos/flowglass-*.webp"
+      - "tests/site-showcase.mjs"
+      - ".github/workflows/site-showcase.yml"
+  pull_request:
+    paths:
+      - "index.html"
+      - "style.css"
+      - "tools/**"
+      - "assets/promos/flowglass-*.webp"
+      - "tests/site-showcase.mjs"
+      - ".github/workflows/site-showcase.yml"
+  workflow_dispatch:
+
+jobs:
+  browser:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install browser testing dependency
+        run: npm install --no-save --no-audit --no-fund playwright@1.56.1
+      - name: Install Chromium
+        run: npx playwright install chromium --with-deps
+      - name: Exercise homepage gallery, Tools, and Flowglass at desktop and mobile sizes
+        run: |
+          python3 -m http.server 8765 --bind 127.0.0.1 > /tmp/greenkappa-site.log 2>&1 &
+          sleep 2
+          node tests/site-showcase.mjs
