@@ -28,3 +28,22 @@ jobs:
           node --check filingproof/tests/core.test.mjs
       - name: Run deterministic preflight tests
         run: node --test filingproof/tests/core.test.mjs
+
+  browser:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install Playwright test dependency
+        run: npm install --no-save --no-audit --no-fund playwright@1.56.1
+      - name: Install headless Chromium
+        run: npx playwright install chromium --with-deps
+      - name: Run browser-level synthetic PDF smoke tests
+        run: |
+          python3 -m http.server 8000 --bind 127.0.0.1 > /tmp/filingproof-server.log 2>&1 &
+          sleep 2
+          node filingproof/tests/browser-smoke.mjs
