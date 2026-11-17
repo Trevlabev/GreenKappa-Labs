@@ -41,10 +41,36 @@ try{
  const serialized=JSON.parse(await readFile(await backup.path(),"utf8"));
  assert.equal(serialized.schemaVersion,1);
  assert.equal(serialized.procedures.length,3);
- await page.setViewportSize({width:390,height:844});
- await page.waitForTimeout(100);
- const layout=await page.evaluate(()=>({screen:document.documentElement.clientWidth,content:document.documentElement.scrollWidth}));
- assert.ok(layout.content<=layout.screen+4,"Unexpected mobile horizontal overflow: "+JSON.stringify(layout));
+ // Exercise duplicate/delete lifecycle, preserving completed records.
+ await page.locator('[data-procedure-action="duplicate"]').click();
+ await page.locator("#ha-save-draft").click();
+ await page.locator('[data-view="library"]').click();
+ assert.equal(await page.locator("#ha-procedure-list [data-select-procedure]").count(),4);
+ page.once("dialog",dialog=>dialog.accept());
+ await page.locator('[data-procedure-action="delete"]').click();
+ assert.equal(await page.locator("#ha-procedure-list [data-select-procedure]").count(),3);
+ await page.locator('[data-view="records"]').click();
+ assert.equal(await page.locator(".ha-record").count(),1,"Deletion retains completed records");
+ // Restore original sample data, then import the exported workspace backup.
+ page.once("dialog",dialog=>dialog.accept());
+ await page.locator("#ha-reset").click();
+ await page.locator('[data-view="records"]').click();
+ assert.equal(await page.locator(".ha-record").count(),0);
+ page.once("dialog",dialog=>dialog.accept());
+ await page.locator("#ha-import-file").setInputFiles(await backup.path());
+ await page.locator("#ha-procedure-list [data-select-procedure]").first().waitFor();
+ await page.locator('[data-view="records"]').click();
+ assert.equal(await page.locator(".ha-record").count(),1,"Workspace JSON import restores completed runs");
+ await page.reload({waitUntil:"networkidle"});
+ await page.locator("#ha-procedure-list [data-select-procedure]").first().waitFor();
+ await page.locator('[data-view="records"]').click();
+ assert.equal(await page.locator(".ha-record").count(),1,"History survives page reload in local storage");
+ for(const width of [390,320]){
+  await page.setViewportSize({width,height:844});
+  await page.waitForTimeout(100);
+  const layout=await page.evaluate(()=>({screen:document.documentElement.clientWidth,content:document.documentElement.scrollWidth}));
+  assert.ok(layout.content<=layout.screen+4,"Unexpected horizontal overflow at "+width+": "+JSON.stringify(layout));
+ }
  assert.deepEqual(pageErrors,[]);
- console.log("Handoff Atlas browser smoke passed: library, runner, choices, records, Markdown, editor, revisions, export, mobile layout.");
+ console.log("Handoff Atlas browser smoke passed: library, routing, records, versioning, duplicate/delete, workspace import/export, persistence, and mobile layout.");
 }finally{await browser.close();}
