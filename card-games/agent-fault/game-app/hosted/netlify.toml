@@ -1,0 +1,24 @@
+[build]
+  publish = "public"
+  command = "npm run test && npm run check"
+[functions]
+  node_bundler = "esbuild"
+[[redirects]]
+  from = "/host/*"
+  to = "/index.html"
+  status = 200
+[[redirects]]
+  from = "/play/*"
+  to = "/index.html"
+  status = 200
+[[redirects]]
+  from = "/demo"
+  to = "/index.html"
+  status = 200
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "no-referrer"
+    X-Frame-Options = "DENY"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"

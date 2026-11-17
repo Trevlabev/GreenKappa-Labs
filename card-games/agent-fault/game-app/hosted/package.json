@@ -1,0 +1,14 @@
+{
+  "name": "agent-fault-live-hosted",
+  "private": true,
+  "version": "0.3.0",
+  "type": "module",
+  "description": "AGENT/FAULT LIVE · isolated online multiplayer edition",
+  "engines": {"node": ">=20.12"},
+  "scripts": {"test": "node --test tests/*.test.mjs", "check": "node --check lib/game.mjs && node --check public/static/app.js"},
+  "dependencies": {
+    "@netlify/database": "latest",
+    "@netlify/functions": "latest",
+    "qrcode": "^1.5.4"
+  }
+}

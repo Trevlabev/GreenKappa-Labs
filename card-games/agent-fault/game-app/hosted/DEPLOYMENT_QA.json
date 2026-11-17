@@ -1,0 +1,16 @@
+{
+  "edition": "hosted-v0.3.0-P",
+  "status": "SOURCE_READY__NETLIFY_PROJECT_CREATED__NOT_DEPLOYED",
+  "netlify_project": "agent-fault-live-online",
+  "netlify_project_id": "a66ce6c9-6a5c-455d-91d3-408e72416187",
+  "card_counts": {"Scenario":24,"Interference":36,"Fault":6},
+  "unit_tests_passed": 6,
+  "unit_tests_failed": 0,
+  "node_js_syntax_check": true,
+  "netlify_function_typescript_parse_check": true,
+  "live_provider_api_calls": 0,
+  "database_migration_applied": false,
+  "production_deploy_verified": false,
+  "public_gameplay_verified": false,
+  "notes": "Created site shell only. Git repo linking and secret provisioning require the account owner's authorized setup."
+}
