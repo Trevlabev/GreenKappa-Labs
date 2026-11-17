@@ -25,6 +25,7 @@ try{
   assert.ok((await desktopImage.evaluate(img=>img.currentSrc)).includes("flowglass-gallery-wide.webp"),"Wide artwork selected");
   assert.equal(await desktopImage.evaluate(img=>img.naturalWidth),1672,"Wide asset loads");
   assert.match(await slide.locator(".gkl-flowglass-art-note").textContent(),/Illustrative concept art/,"Disclaimer text exists");
+  await slide.locator(".gkl-flowglass-art-note").waitFor({state:"visible",timeout:5000});
   assert.ok(await slide.locator(".gkl-flowglass-art-note").isVisible(),"Desktop disclaimer is visible");
   const filingIndex=await desktop.locator("[data-showcase-slide]").evaluateAll(els=>els.findIndex(e=>e.classList.contains("gkl-theme-filingproof")));
   assert.ok(filingIndex>=0,"FilingProof should have a gallery slide");
@@ -36,6 +37,7 @@ try{
   await filingWide.evaluate(img=>img.decode());
   assert.match(await filingWide.evaluate(img=>img.currentSrc),/filingproof-gallery\.webp/);
   assert.equal(await filingWide.evaluate(img=>img.naturalWidth),1400,"FilingProof wide image loads");
+  await filing.locator(".gkl-filingproof-art-note").waitFor({state:"visible",timeout:5000});
   assert.match(await filing.locator(".gkl-filingproof-art-note").innerText(),/Illustrative concept art/);
   const filingHomepage=desktop.locator(".gkl-tools-product-filing img");
   await filingHomepage.evaluate(img=>img.decode());
