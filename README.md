@@ -6,14 +6,16 @@ Source for the static GitHub Pages website at **https://greenkappalabs.art/**.
 
 | Route | Function | Status |
 | --- | --- | --- |
-| `/` | Six-slide gallery and four studio divisions | Public-facing site |
+| `/` | Seven-slide gallery and four studio divisions | Public-facing site |
 | `/tablearc/` | Original TableArc local-first RPG engine | Active development |
 | `/tablearc-red/` | Standalone Cyberpunk RED AI-GM and operations-console project | v0.5.0 source prototype; Windows acceptance pending |
 | `/card-games/` | Three original card-driven games | In development |
 | `/card-games/playtest/` | Playtest inquiries for the three current card games | Intake page |
 | `/playground/` | Public experiments and free interactive prototypes | First experiment implemented |
 | `/playground/not-to-scale/` | No Such Room shifting-house microgame (legacy URL) | Browser concept demo |
-| `/worlds/` | Five illustrated sourcebook collections and four adventures | Development portfolio |
+| `/worlds/` | Portal linking to independent universe sourcebook and adventure catalogs | Public portfolio hub |
+| `/worlds/sourcebooks/` | Five universe sourcebook collections, The Oldest House featured | Illustrated development portfolio |
+| `/worlds/adventures/` | Four distinct adventure entries, The Records House featured | Illustrated development portfolio |
 | `/tools/` | Five concept-stage utility product briefs | Requirements & design |
 | `/work/` | Portfolio and case studies | Public-facing site |
 | `/journal/` | Development notes | First entry implemented |
