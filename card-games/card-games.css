@@ -340,3 +340,50 @@ body.card-games-page{
    width:100%;max-width:none;margin:0;
  }
 }
+
+
+/* NO SUCH ROOM / replace unapproved product photography with text-led cards. */
+.cg-gallery-card-nsr {
+  display:flex;min-width:0;background:#1a303d;
+}
+.cg-nsr-gallery-type {
+  display:flex;flex:1;flex-direction:column;justify-content:space-between;
+  padding:clamp(17px,3vw,35px);min-height:215px;
+  aspect-ratio:3/2;color:#f4ebdc;
+}
+.cg-nsr-gallery-type small,.cg-nsr-gallery-type em {
+  font:750 clamp(.58rem,.85vw,.73rem)/1.5 system-ui,sans-serif;
+  letter-spacing:.12em;font-style:normal;color:#add1cb;
+}
+.cg-nsr-gallery-type strong {
+  font:400 clamp(1.65rem,3vw,3.15rem)/1 Georgia,serif;
+  letter-spacing:-.065em;color:#fff2e3;
+}
+#not-to-scale .cg-nsr-art-free {
+  display:flex;flex-direction:column;justify-content:space-between;
+  gap:18px;background:#172e3b;border:1px solid rgba(154,200,196,.3);
+}
+.cg-nsr-feature-type {
+  display:flex;flex-direction:column;justify-content:space-between;flex:1;
+  min-height:clamp(260px,35vw,410px);padding:clamp(23px,4vw,47px);
+  color:#f4ebdc;
+}
+.cg-nsr-feature-type>span,.cg-nsr-feature-type>small {
+  font:750 .7rem/1.5 system-ui,sans-serif;letter-spacing:.14em;color:#b4d2ca;
+}
+.cg-nsr-feature-type>strong {
+  font:400 clamp(3rem,5vw,5.5rem)/.98 Georgia,serif;
+  letter-spacing:-.07em;color:#fff4e8;
+}
+.cg-nsr-art-caption {
+  margin:0;padding:0 clamp(20px,3vw,40px) 16px;
+  font:700 .69rem/1.5 system-ui,sans-serif;
+  letter-spacing:.12em;color:#afc9c7;
+}
+@media(max-width:760px) {
+  .cg-gallery-card-nsr{flex:0 0 min(81vw,430px)}
+  .cg-nsr-gallery-type{aspect-ratio:3/2;min-height:0}
+  .cg-nsr-gallery-type strong{font-size:clamp(2rem,6vw,3rem)}
+  .cg-nsr-feature-type{min-height:290px}
+  .cg-nsr-feature-type>strong{font-size:clamp(3rem,12vw,5rem)}
+}
