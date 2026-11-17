@@ -1,0 +1,506 @@
+[
+  {
+    "fixtureId": "S01",
+    "scenarioId": "AF-SCN-001",
+    "title": "The Goose Administration",
+    "tone": "Surreal",
+    "profile": "A proud public employee who considers orderliness a personal virtue.",
+    "faultId": "AF-FLT-001",
+    "interferenceIds": [
+      "AF-INF-029",
+      "AF-INF-019",
+      "AF-INF-003",
+      "AF-INF-014"
+    ],
+    "labels": [
+      "A",
+      "B",
+      "C",
+      "D"
+    ],
+    "fixtureSeed": "AGENT-FAULT-S24-v0.8-2026-11-16"
+  },
+  {
+    "fixtureId": "S02",
+    "scenarioId": "AF-SCN-002",
+    "title": "Dearly Departed",
+    "tone": "Surreal",
+    "profile": "A nervous professional who wants everyone to feel appreciated.",
+    "faultId": "AF-FLT-002",
+    "interferenceIds": [
+      "AF-INF-033",
+      "AF-INF-015",
+      "AF-INF-035",
+      "AF-INF-025"
+    ],
+    "labels": [
+      "A",
+      "B",
+      "C",
+      "D"
+    ],
+    "fixtureSeed": "AGENT-FAULT-S24-v0.8-2026-11-16"
+  },
+  {
+    "fixtureId": "S03",
+    "scenarioId": "AF-SCN-003",
+    "title": "Customer Service for the Apocalypse",
+    "tone": "Surreal",
+    "profile": "A suspicious bureaucrat with an irrational love of paperwork.",
+    "faultId": "AF-FLT-003",
+    "interferenceIds": [
+      "AF-INF-023",
+      "AF-INF-031",
+      "AF-INF-008",
+      "AF-INF-026"
+    ],
+    "labels": [
+      "A",
+      "B",
+      "C",
+      "D"
+    ],
+    "fixtureSeed": "AGENT-FAULT-S24-v0.8-2026-11-16"
+  },
+  {
+    "fixtureId": "S04",
+    "scenarioId": "AF-SCN-004",
+    "title": "The Museum of Tomorrow\u2019s Mistakes",
+    "tone": "Surreal",
+    "profile": "An upbeat manager who treats every setback as a marketing opportunity.",
+    "faultId": "AF-FLT-004",
+    "interferenceIds": [
+      "AF-INF-035",
+      "AF-INF-036",
+      "AF-INF-020",
+      "AF-INF-021"
+    ],
+    "labels": [
+      "A",
+      "B",
+      "C",
+      "D"
+    ],
+    "fixtureSeed": "AGENT-FAULT-S24-v0.8-2026-11-16"
+  },
+  {
+    "fixtureId": "S05",
+    "scenarioId": "AF-SCN-005",
+    "title": "The Wi-Fi Is a Tenant",
+    "tone": "Surreal",
+    "profile": "A dramatic advisor who cannot resist treating tiny problems as historic.",
+    "faultId": "AF-FLT-005",
+    "interferenceIds": [
+      "AF-INF-034",
+      "AF-INF-011",
+      "AF-INF-035",
+      "AF-INF-003"
+    ],
+    "labels": [
+      "A",
+      "B",
+      "C",
+      "D"
+    ],
+    "fixtureSeed": "AGENT-FAULT-S24-v0.8-2026-11-16"
+  },
+  {
+    "fixtureId": "S06",
+    "scenarioId": "AF-SCN-006",
+    "title": "The Orbital Subscription Plan",
+    "tone": "Surreal",
+    "profile": "A pedantic consultant desperate to be seen as competent.",
+    "faultId": "AF-FLT-006",
+    "interferenceIds": [
+      "AF-INF-006",
+      "AF-INF-019",
+      "AF-INF-022",
+      "AF-INF-012"
+    ],
+    "labels": [
+      "A",
+      "B",
+      "C",
+      "D"
+    ],
+    "fixtureSeed": "AGENT-FAULT-S24-v0.8-2026-11-16"
+  },
+  {
+    "fixtureId": "S07",
+    "scenarioId": "AF-SCN-007",
+    "title": "A Volcano Needs Feedback",
+    "tone": "Surreal",
+    "profile": "A well-meaning clerk who reveres tradition and procedures.",
+    "faultId": "AF-FLT-001",
+    "interferenceIds": [
+      "AF-INF-011",
+      "AF-INF-032",
+      "AF-INF-002",
+      "AF-INF-005"
+    ],
+    "labels": [
+      "A",
+      "B",
+      "C",
+      "D"
+    ],
+    "fixtureSeed": "AGENT-FAULT-S24-v0.8-2026-11-16"
+  },
+  {
+    "fixtureId": "S08",
+    "scenarioId": "AF-SCN-008",
+    "title": "The Copier Went to 1987",
+    "tone": "Surreal",
+    "profile": "An excessively enthusiastic official who dislikes disappointing anyone.",
+    "faultId": "AF-FLT-002",
+    "interferenceIds": [
+      "AF-INF-020",
+      "AF-INF-004",
+      "AF-INF-006",
+      "AF-INF-024"
+    ],
+    "labels": [
+      "A",
+      "B",
+      "C",
+      "D"
+    ],
+    "fixtureSeed": "AGENT-FAULT-S24-v0.8-2026-11-16"
+  },
+  {
+    "fixtureId": "S09",
+    "scenarioId": "AF-SCN-009",
+    "title": "The Accidental Reply-All",
+    "tone": "Grounded",
+    "profile": "A proud public employee who considers orderliness a personal virtue.",
+    "faultId": "AF-FLT-003",
+    "interferenceIds": [
+      "AF-INF-021",
+      "AF-INF-005",
+      "AF-INF-013",
+      "AF-INF-030"
+    ],
+    "labels": [
+      "A",
+      "B",
+      "C",
+      "D"
+    ],
+    "fixtureSeed": "AGENT-FAULT-S24-v0.8-2026-11-16"
+  },
+  {
+    "fixtureId": "S10",
+    "scenarioId": "AF-SCN-010",
+    "title": "The Birthday Bill",
+    "tone": "Grounded",
+    "profile": "A nervous professional who wants everyone to feel appreciated.",
+    "faultId": "AF-FLT-004",
+    "interferenceIds": [
+      "AF-INF-024",
+      "AF-INF-009",
+      "AF-INF-010",
+      "AF-INF-036"
+    ],
+    "labels": [
+      "A",
+      "B",
+      "C",
+      "D"
+    ],
+    "fixtureSeed": "AGENT-FAULT-S24-v0.8-2026-11-16"
+  },
+  {
+    "fixtureId": "S11",
+    "scenarioId": "AF-SCN-011",
+    "title": "The Seating Chart Hostage Crisis",
+    "tone": "Grounded",
+    "profile": "A suspicious bureaucrat with an irrational love of paperwork.",
+    "faultId": "AF-FLT-005",
+    "interferenceIds": [
+      "AF-INF-023",
+      "AF-INF-010",
+      "AF-INF-028",
+      "AF-INF-016"
+    ],
+    "labels": [
+      "A",
+      "B",
+      "C",
+      "D"
+    ],
+    "fixtureSeed": "AGENT-FAULT-S24-v0.8-2026-11-16"
+  },
+  {
+    "fixtureId": "S12",
+    "scenarioId": "AF-SCN-012",
+    "title": "Aggressively Competent",
+    "tone": "Grounded",
+    "profile": "An upbeat manager who treats every setback as a marketing opportunity.",
+    "faultId": "AF-FLT-006",
+    "interferenceIds": [
+      "AF-INF-024",
+      "AF-INF-023",
+      "AF-INF-004",
+      "AF-INF-011"
+    ],
+    "labels": [
+      "A",
+      "B",
+      "C",
+      "D"
+    ],
+    "fixtureSeed": "AGENT-FAULT-S24-v0.8-2026-11-16"
+  },
+  {
+    "fixtureId": "S13",
+    "scenarioId": "AF-SCN-013",
+    "title": "The Missing Package Tribunal",
+    "tone": "Grounded",
+    "profile": "A dramatic advisor who cannot resist treating tiny problems as historic.",
+    "faultId": "AF-FLT-001",
+    "interferenceIds": [
+      "AF-INF-028",
+      "AF-INF-001",
+      "AF-INF-018",
+      "AF-INF-020"
+    ],
+    "labels": [
+      "A",
+      "B",
+      "C",
+      "D"
+    ],
+    "fixtureSeed": "AGENT-FAULT-S24-v0.8-2026-11-16"
+  },
+  {
+    "fixtureId": "S14",
+    "scenarioId": "AF-SCN-014",
+    "title": "The Surprise Party Debrief",
+    "tone": "Grounded",
+    "profile": "A pedantic consultant desperate to be seen as competent.",
+    "faultId": "AF-FLT-002",
+    "interferenceIds": [
+      "AF-INF-027",
+      "AF-INF-014",
+      "AF-INF-016",
+      "AF-INF-030"
+    ],
+    "labels": [
+      "A",
+      "B",
+      "C",
+      "D"
+    ],
+    "fixtureSeed": "AGENT-FAULT-S24-v0.8-2026-11-16"
+  },
+  {
+    "fixtureId": "S15",
+    "scenarioId": "AF-SCN-015",
+    "title": "The Third Wrong Sofa",
+    "tone": "Grounded",
+    "profile": "A well-meaning clerk who reveres tradition and procedures.",
+    "faultId": "AF-FLT-003",
+    "interferenceIds": [
+      "AF-INF-034",
+      "AF-INF-017",
+      "AF-INF-033",
+      "AF-INF-009"
+    ],
+    "labels": [
+      "A",
+      "B",
+      "C",
+      "D"
+    ],
+    "fixtureSeed": "AGENT-FAULT-S24-v0.8-2026-11-16"
+  },
+  {
+    "fixtureId": "S16",
+    "scenarioId": "AF-SCN-016",
+    "title": "The Bake Sale Appeal",
+    "tone": "Grounded",
+    "profile": "An excessively enthusiastic official who dislikes disappointing anyone.",
+    "faultId": "AF-FLT-004",
+    "interferenceIds": [
+      "AF-INF-022",
+      "AF-INF-033",
+      "AF-INF-018",
+      "AF-INF-027"
+    ],
+    "labels": [
+      "A",
+      "B",
+      "C",
+      "D"
+    ],
+    "fixtureSeed": "AGENT-FAULT-S24-v0.8-2026-11-16"
+  },
+  {
+    "fixtureId": "S17",
+    "scenarioId": "AF-SCN-017",
+    "title": "The Sponsored Breakup",
+    "tone": "Heightened",
+    "profile": "A proud public employee who considers orderliness a personal virtue.",
+    "faultId": "AF-FLT-005",
+    "interferenceIds": [
+      "AF-INF-026",
+      "AF-INF-032",
+      "AF-INF-014",
+      "AF-INF-009"
+    ],
+    "labels": [
+      "A",
+      "B",
+      "C",
+      "D"
+    ],
+    "fixtureSeed": "AGENT-FAULT-S24-v0.8-2026-11-16"
+  },
+  {
+    "fixtureId": "S18",
+    "scenarioId": "AF-SCN-018",
+    "title": "Emotional Boarding Group C",
+    "tone": "Heightened",
+    "profile": "A nervous professional who wants everyone to feel appreciated.",
+    "faultId": "AF-FLT-006",
+    "interferenceIds": [
+      "AF-INF-026",
+      "AF-INF-031",
+      "AF-INF-013",
+      "AF-INF-008"
+    ],
+    "labels": [
+      "A",
+      "B",
+      "C",
+      "D"
+    ],
+    "fixtureSeed": "AGENT-FAULT-S24-v0.8-2026-11-16"
+  },
+  {
+    "fixtureId": "S19",
+    "scenarioId": "AF-SCN-019",
+    "title": "The Mascot Is Management",
+    "tone": "Heightened",
+    "profile": "A suspicious bureaucrat with an irrational love of paperwork.",
+    "faultId": "AF-FLT-001",
+    "interferenceIds": [
+      "AF-INF-017",
+      "AF-INF-007",
+      "AF-INF-006",
+      "AF-INF-002"
+    ],
+    "labels": [
+      "A",
+      "B",
+      "C",
+      "D"
+    ],
+    "fixtureSeed": "AGENT-FAULT-S24-v0.8-2026-11-16"
+  },
+  {
+    "fixtureId": "S20",
+    "scenarioId": "AF-SCN-020",
+    "title": "Apologies Are Premium",
+    "tone": "Heightened",
+    "profile": "An upbeat manager who treats every setback as a marketing opportunity.",
+    "faultId": "AF-FLT-002",
+    "interferenceIds": [
+      "AF-INF-019",
+      "AF-INF-029",
+      "AF-INF-027",
+      "AF-INF-022"
+    ],
+    "labels": [
+      "A",
+      "B",
+      "C",
+      "D"
+    ],
+    "fixtureSeed": "AGENT-FAULT-S24-v0.8-2026-11-16"
+  },
+  {
+    "fixtureId": "S21",
+    "scenarioId": "AF-SCN-021",
+    "title": "Graduation, Sponsored by Soda",
+    "tone": "Heightened",
+    "profile": "A dramatic advisor who cannot resist treating tiny problems as historic.",
+    "faultId": "AF-FLT-003",
+    "interferenceIds": [
+      "AF-INF-007",
+      "AF-INF-028",
+      "AF-INF-025",
+      "AF-INF-012"
+    ],
+    "labels": [
+      "A",
+      "B",
+      "C",
+      "D"
+    ],
+    "fixtureSeed": "AGENT-FAULT-S24-v0.8-2026-11-16"
+  },
+  {
+    "fixtureId": "S22",
+    "scenarioId": "AF-SCN-022",
+    "title": "The Mayor\u2019s Birthday Budget",
+    "tone": "Heightened",
+    "profile": "A pedantic consultant desperate to be seen as competent.",
+    "faultId": "AF-FLT-004",
+    "interferenceIds": [
+      "AF-INF-008",
+      "AF-INF-001",
+      "AF-INF-029",
+      "AF-INF-025"
+    ],
+    "labels": [
+      "A",
+      "B",
+      "C",
+      "D"
+    ],
+    "fixtureSeed": "AGENT-FAULT-S24-v0.8-2026-11-16"
+  },
+  {
+    "fixtureId": "S23",
+    "scenarioId": "AF-SCN-023",
+    "title": "The Dating App Exit Interview",
+    "tone": "Heightened",
+    "profile": "A well-meaning clerk who reveres tradition and procedures.",
+    "faultId": "AF-FLT-005",
+    "interferenceIds": [
+      "AF-INF-031",
+      "AF-INF-015",
+      "AF-INF-002",
+      "AF-INF-001"
+    ],
+    "labels": [
+      "A",
+      "B",
+      "C",
+      "D"
+    ],
+    "fixtureSeed": "AGENT-FAULT-S24-v0.8-2026-11-16"
+  },
+  {
+    "fixtureId": "S24",
+    "scenarioId": "AF-SCN-024",
+    "title": "The Drone Was the Headliner",
+    "tone": "Heightened",
+    "profile": "An excessively enthusiastic official who dislikes disappointing anyone.",
+    "faultId": "AF-FLT-006",
+    "interferenceIds": [
+      "AF-INF-016",
+      "AF-INF-005",
+      "AF-INF-034",
+      "AF-INF-007"
+    ],
+    "labels": [
+      "A",
+      "B",
+      "C",
+      "D"
+    ],
+    "fixtureSeed": "AGENT-FAULT-S24-v0.8-2026-11-16"
+  }
+]

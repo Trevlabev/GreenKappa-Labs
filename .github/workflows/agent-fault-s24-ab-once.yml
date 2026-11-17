@@ -1,0 +1,37 @@
+name: AGENT-FAULT S24 2x2 controlled test (single-use)
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/agent-fault-s24-ab-once.yml'
+      - 'card-games/agent-fault/benchmark/experiments/s24/**'
+permissions:
+  contents: read
+concurrency:
+  group: agent-fault-s24-one-shot
+  cancel-in-progress: false
+jobs:
+  run-once:
+    if: github.event.head_commit.message == '[AGENT-FAULT] Execute S24 generation and scoring A/B once' && github.run_attempt == 1
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate 66-card candidate and 24 paired fixtures without API usage
+        run: node --test card-games/agent-fault/benchmark/experiments/s24/tests/validation.test.mjs
+      - name: Generate and blind-grade 24 scenario A/B sample (paid; max 192 requests)
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          GITHUB_RUN_ATTEMPT: ${{ github.run_attempt }}
+        run: node card-games/agent-fault/benchmark/experiments/s24/run-s24.mjs
+      - name: Save complete and partial empirical outputs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: agent-fault-s24-AB-results
+          path: card-games/agent-fault/benchmark/experiments/s24/output/
+          if-no-files-found: warn
+          retention-days: 30
