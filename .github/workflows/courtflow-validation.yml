@@ -1,0 +1,48 @@
+name: CourtFlow validation
+on:
+  push:
+    paths:
+      - "courtflow/**"
+      - ".github/workflows/courtflow-validation.yml"
+  pull_request:
+    paths:
+      - "courtflow/**"
+      - ".github/workflows/courtflow-validation.yml"
+  workflow_dispatch:
+jobs:
+  unit:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Module syntax checks
+        run: |
+          node --check courtflow/core.mjs
+          node --check courtflow/sample.mjs
+          node --check courtflow/app.mjs
+          node --check courtflow/tests/core.test.mjs
+          node --check courtflow/tests/browser-smoke.mjs
+      - name: Deterministic unit tests
+        run: node --test courtflow/tests/core.test.mjs
+  browser:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install Playwright
+        run: npm install --no-save --no-audit --no-fund playwright@1.56.1
+      - name: Install Chromium
+        run: npx playwright install chromium --with-deps
+      - name: Exercise browser workflows and mobile layout
+        run: |
+          python3 -m http.server 8000 --bind 127.0.0.1 > /tmp/courtflow-server.log 2>&1 &
+          sleep 2
+          node courtflow/tests/browser-smoke.mjs
