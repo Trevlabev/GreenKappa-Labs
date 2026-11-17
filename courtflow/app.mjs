@@ -1,6 +1,6 @@
-import {PRIORITIES,TEAMS,blankWorkspace,importWorkspace,createCase,completeTask,taskAvailability,addException,resolveException,reassign,reprioritize,updateProfile,validateProfile,describeCase,dashboard,addDays,caseReport,auditCSV} from "./core.mjs";
+import {PRIORITIES,TEAMS,blankWorkspace,importWorkspace,createCase,completeTask,taskAvailability,addException,resolveException,reassign,reprioritize,updateProfile,validateProfile,describeCase,dashboard,addDays,caseReport,auditCSV} from "./core.mjs?v=3";
 import {demoWorkspace} from "./sample.mjs";
-import {mountWorkflowDesigner} from "./designer.mjs";
+import {mountWorkflowDesigner} from "./designer.mjs?v=3";
 
 const $=(selector,root=document)=>root.querySelector(selector);
 const $$=(selector,root=document)=>Array.from(root.querySelectorAll(selector));

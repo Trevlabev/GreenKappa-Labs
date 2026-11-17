@@ -1,6 +1,6 @@
 /* CourtFlow visual workflow designer (alpha 0.2).
    All routes are fictional intake-time priority predicates, never court rules. */
-import {PRIORITIES,validateProfile} from "./core.mjs";
+import {PRIORITIES,validateProfile} from "./core.mjs?v=3";
 const copy=value=>JSON.parse(JSON.stringify(value));
 const safe=value=>String(value??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");
 const W=224,H=118,STEP_X=286,STEP_Y=152;

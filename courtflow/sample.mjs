@@ -1,4 +1,4 @@
-import {blankWorkspace,createCase,completeTask,addException,addDays,dateKey} from "./core.mjs";
+import {blankWorkspace,createCase,completeTask,addException,addDays,dateKey} from "./core.mjs?v=3";
 export function demoWorkspace(at=new Date()){
  const now=at instanceof Date?at:new Date(at),today=dateKey(now);let s=blankWorkspace();
  const intake=(title,profileId,ago,priority,team,summary)=>{
