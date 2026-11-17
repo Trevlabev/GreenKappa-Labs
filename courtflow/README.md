@@ -14,7 +14,7 @@ CourtFlow is a **working, synthetic workflow simulator** for intake, queues, dep
 - Show fictional calendar-day targets and derived status.
 - Edit and validate profile JSON: acyclic graph, unique task IDs, exactly one final handoff.
 - Existing cases retain their original task definitions when the shared profile changes.
-- Browser-local storage, validated workspace JSON import/export, Markdown reports and CSV activity export.
+- Browser-local storage, validated workspace JSON import/export (including snapshot dependency graphs and closure consistency), Markdown reports and CSV activity export.
 - Timestamped local audit events for relevant actions.
 
 ## Safety and boundaries

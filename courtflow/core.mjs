@@ -81,11 +81,21 @@ export function importWorkspace(w){
    if(t.doneAt!==null){if(typeof t.doneAt!=="string")throw Error("Invalid task timestamp.");iso(t.doneAt);}
   }
   for(const t of c.tasks)for(const dep of t.dependsOn)if(!tIds.has(dep))throw Error("Missing case task dependency.");
+  // Imported task snapshots are independent copies of the current profile.
+  // Validate their graph, final handoff and completion invariants before trusting any imported state.
+  validateProfile({id:c.profileId,name:"Case task snapshot",description:"",tasks:c.tasks});
+  iso(c.createdAt);
+  const completed=new Set(c.tasks.filter(t=>t.doneAt!==null).map(t=>t.id));
+  for(const t of c.tasks)if(t.doneAt!==null&&t.dependsOn.some(dep=>!completed.has(dep)))throw Error("Completed task has an incomplete prerequisite.");
+  if(Boolean(c.closedAt)!==(completed.size===c.tasks.length))throw Error("Case closure does not match task completion.");
   if(c.closedAt!==null){if(typeof c.closedAt!=="string")throw Error("Invalid closure.");iso(c.closedAt);}
+  const exceptionIds=new Set();
   for(const ex of c.exceptions){
    required(ex.id,"Exception ID",50);required(ex.note,"Exception note",400);iso(ex.createdAt);
+   if(exceptionIds.has(ex.id))throw Error("Duplicate case exception ID.");exceptionIds.add(ex.id);
    if(ex.resolvedAt!==null)iso(ex.resolvedAt);
   }
+  if(c.closedAt!==null&&c.exceptions.some(ex=>ex.resolvedAt===null))throw Error("Closed case cannot retain open exceptions.");
  }
  for(const e of w.events){if(!e||!caseIds.has(e.caseId))throw Error("Audit entry without case.");required(e.id,"Event ID",50);required(e.detail,"Audit detail",500);required(e.actor,"Actor",50);iso(e.at);}
  return clone(w);

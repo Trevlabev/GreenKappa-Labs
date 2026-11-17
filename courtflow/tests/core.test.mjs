@@ -15,3 +15,31 @@ test("overdue state is simulated from calendar offsets",()=>{const s=one();asser
 test("import rejects unsupported version and missing dependencies",()=>{const s=one();assert.deepEqual(importWorkspace(s),s);assert.throws(()=>importWorkspace({...s,version:5}),/version/);const x=structuredClone(s);x.cases[0].tasks[0].dependsOn=["absent"];assert.throws(()=>importWorkspace(x),/dependency/);});
 test("demo exhibits completed, blocked and overdue cases",()=>{const s=demoWorkspace(new Date(now));const statuses=s.cases.map(c=>describeCase(c,"2026-11-16").status);assert.equal(s.cases.length,5);for(const p of ["Completed","Exception","Overdue"])assert.ok(statuses.includes(p));});
 test("exports retain warning and escape spreadsheet formulas",()=>{const s=addException(one(),"CF-0001","=HYPERLINK(1)",now);assert.match(caseReport(s,"CF-0001","2026-11-16"),/not statutory/);const injected=structuredClone(s);injected.events[1].detail="=HYPERLINK(1)";assert.match(auditCSV(injected),/'=HYPERLINK/);});
+
+test("workspace import rejects cyclic or incomplete task snapshots",()=>{
+ const s=one();
+ const cycle=structuredClone(s);
+ cycle.cases[0].tasks.find(t=>t.id==="register").dependsOn=["close"];
+ assert.throws(()=>importWorkspace(cycle),/cycle/i);
+ const orphan=structuredClone(s);
+ orphan.cases[0].tasks.find(t=>t.id==="close").dependsOn=[];
+ assert.throws(()=>importWorkspace(orphan),/lead to the final handoff/);
+});
+test("workspace import enforces closure and task prerequisite invariants",()=>{
+ const s=one();
+ const skipped=structuredClone(s);
+ skipped.cases[0].tasks.find(t=>t.id==="route").doneAt=now;
+ assert.throws(()=>importWorkspace(skipped),/incomplete prerequisite/);
+ const premature=structuredClone(s);
+ premature.cases[0].closedAt=now;
+ assert.throws(()=>importWorkspace(premature),/closure does not match/);
+ const completed=structuredClone(s);
+ completed.cases[0].tasks.forEach(t=>t.doneAt=now);
+ assert.throws(()=>importWorkspace(completed),/closure does not match/);
+});
+test("workspace import rejects duplicate exception identifiers",()=>{
+ const s=addException(one(),"CF-0001","Fictional issue",now);
+ const bad=structuredClone(s);
+ bad.cases[0].exceptions.push(structuredClone(bad.cases[0].exceptions[0]));
+ assert.throws(()=>importWorkspace(bad),/Duplicate case exception ID/);
+});
