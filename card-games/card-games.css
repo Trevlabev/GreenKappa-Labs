@@ -284,7 +284,7 @@ body.card-games-page{
 @media(max-width:570px){.cg-online-links a{flex:1 1 100%}}
 
 /* AGENT/FAULT canonical horizontal campaign: no thumbnails, frames, or portrait swap. */
-.cg-hero-five{display:flex;flex-direction:column;align-items:stretch;gap:clamp(1.4rem,3vw,2.5rem)}
+.card-games-page .cg-hero-five{display:flex;flex-direction:column;align-items:stretch;gap:clamp(1.4rem,3vw,2.5rem);padding-top:clamp(1rem,2vw,2rem)}
 .cg-hero-five .cg-gallery{
  order:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
  width:100%;max-width:none;gap:clamp(.65rem,2vw,1.2rem);margin:0;
