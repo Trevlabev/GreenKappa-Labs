@@ -49,6 +49,7 @@ try{
   assert.ok(await courtSlide.locator(".cfp-screen .cfp-metrics > div").count()===4,"CourtFlow preview includes four operational metrics");
   assert.match(await courtSlide.locator(".cfp-exception").textContent(),/unresolved exception/,"Illustration represents real exception handling");
   const courtDisclaimer=courtSlide.locator(".cfp-gallery-caution");
+  await courtDisclaimer.waitFor({state:"visible",timeout:5000});
   assert.ok(await courtDisclaimer.isVisible(),"CourtFlow gallery caption is visible on desktop");
   assert.match(await courtDisclaimer.textContent(),/Interface illustration, not a live screenshot/,"CourtFlow art is correctly disclosed");
   assert.equal(await desktop.locator(".gkl-tools-products--live > article").count(),4,"Homepage showcases four runnable tools");
