@@ -16,8 +16,9 @@ Source for the static GitHub Pages website at **https://greenkappalabs.art/**.
 | `/worlds/` | Portal linking to independent universe sourcebook and adventure catalogs | Public portfolio hub |
 | `/worlds/sourcebooks/` | Five universe sourcebook collections, The Oldest House featured | Illustrated development portfolio |
 | `/worlds/adventures/` | Four distinct adventure entries, The Records House featured | Illustrated development portfolio |
-| `/tools/` | Product portfolio subpage with two working alphas and four concept-stage utilities | Public product directory |
+| `/tools/` | Product portfolio subpage with three working alphas and four concept-stage utilities | Public product directory |
 | `/filingproof/` | Local legal PDF preflight, source-aware rules and structured reports | Working browser alpha v0.1 |
+| `/courtflow/` | Synthetic court casework simulator: intake, dependencies, exceptions and audit logs | Working browser alpha v0.1 |
 | `/flowglass/` | Local-first dependency-map editor and structural impact analysis | Working browser alpha v0.1 |
 | `/work/` | Portfolio and case studies | Public-facing site |
 | `/journal/` | Development notes | First entry implemented |
@@ -38,6 +39,9 @@ Static HTML, CSS, and vanilla JavaScript. No JavaScript framework or site-build 
 - `filingproof/core.mjs` — deterministic legal PDF technical-preflight rule engine
 - `filingproof/app.mjs` — browser-local PDF analysis and review interface
 - `filingproof/tests/core.test.mjs` — deterministic Node unit tests
+- `courtflow/core.mjs` — workflow engine and dependency-validation logic
+- `courtflow/app.mjs` — intake, queues, profile editor, audit and local persistence
+- `courtflow/tests/core.test.mjs` — deterministic workflow tests
 - `EXPANSION-ROADMAP.md` — production and validation gates
 
 ## Publishing

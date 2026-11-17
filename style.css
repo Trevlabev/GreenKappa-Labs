@@ -1283,3 +1283,6 @@ html{scroll-behavior:smooth}
  .gkl-art-slide.gkl-theme-filingproof .gkl-art-picture{aspect-ratio:1}
  .gkl-art-slide.gkl-theme-filingproof .gkl-art-mobile-caption{padding:1rem 1.3rem}
 }
+
+/* CourtFlow homepage: 3 × 2 tools grid */
+@media(min-width:1041px){.gkl-tools-products{grid-template-columns:repeat(3,minmax(0,1fr))}}
