@@ -18,7 +18,7 @@ Source for the static GitHub Pages website at **https://greenkappalabs.art/**.
 | `/worlds/adventures/` | Four distinct adventure entries, The Records House featured | Illustrated development portfolio |
 | `/tools/` | Product portfolio with four working alphas and two concept-stage utilities | Public product directory |
 | `/filingproof/` | Local legal PDF preflight, source-aware rules and structured reports | Working browser alpha v0.1 |
-| `/courtflow/` | Synthetic court casework simulator: intake, dependencies, exceptions and audit logs | Working browser alpha v0.1 |
+| `/courtflow/` | Synthetic court casework simulator and visual workflow designer | Working browser alpha v0.2 |
 | `/flowglass/` | Local-first dependency-map editor and structural impact analysis | Working browser alpha v0.1 |
 | `/tools/handoff-atlas/` | Procedure builder, branching guided runner and handoff history | Working browser alpha v0.1 |
 | `/work/` | Portfolio and case studies | Public-facing site |
