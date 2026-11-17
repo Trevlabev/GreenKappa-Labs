@@ -95,7 +95,8 @@ function renderDetails(){
    '<button type="button" class="ha-btn ha-btn-primary" data-procedure-action="run" '+(canRun?"":"disabled")+'>'+ (canRun?"Start guided run":"Publish a valid version first")+'</button>'+
    '<button type="button" class="ha-btn ha-btn-quiet" data-procedure-action="edit">Edit procedure</button>'+
    '<button type="button" class="ha-btn ha-btn-quiet" data-procedure-action="duplicate">Duplicate</button>'+
-   '<button type="button" class="ha-btn ha-btn-quiet" data-procedure-action="export">Export JSON</button>'+
+   '<button type="button" class="ha-btn ha-btn-quiet" data-procedure-action="export">Export JSON</button>'+ 
+   '<button type="button" class="ha-btn ha-btn-danger" data-procedure-action="delete">Delete procedure</button>'+
   '</div>';
 }
 function openEditor(p){
@@ -346,6 +347,18 @@ function wireEvents(){
   if(action==="run")runProcedure(p);
   if(action==="edit")openEditor(p);
   if(action==="export")download(safeName(p.title)+".json",JSON.stringify(p,null,2),"application/json");
+  if(action==="delete"){
+   const warning="Delete \""+p.title+"\" from this browser? This also removes its saved revision snapshots. Completed handoff records remain available. Export a JSON backup first if needed.";
+   if(!confirm(warning))return;
+   workspace.procedures=workspace.procedures.filter(item=>item.id!==p.id);
+   delete workspace.revisions[p.id];
+   if(draft?.id===p.id){draft=null;dirty=false;selectedStepId="";}
+   if(activeRun?.procedureId===p.id){activeRun=null;}
+   selectedId=workspace.procedures[0]?.id||"";
+   workspace.updatedAt=clock();
+   persist();renderLibrary();notify("Procedure deleted from this browser.");
+   return;
+  }
   if(action==="duplicate"){
    if(workspace.procedures.length>=LIMITS.procedures){notify("Procedure limit reached.","error");return;}
    const duplicated=clone(p);duplicated.id=uniqueId(workspace.procedures.map(x=>x.id),p.id+"-copy");duplicated.title=p.title+" (copy)";
