@@ -45,3 +45,4 @@ jobs:
           python3 -m http.server 8765 --bind 127.0.0.1 > /tmp/greenkappa-site.log 2>&1 &
           sleep 2
           node tests/site-showcase.mjs
+          node tests/site-navigation.mjs
