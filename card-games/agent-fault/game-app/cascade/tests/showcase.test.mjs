@@ -1,0 +1,41 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import {resolve,dirname} from 'node:path';
+import {fileURLToPath} from 'node:url';
+const ROOT=resolve(dirname(fileURLToPath(import.meta.url)),'..');
+const read=relative=>readFileSync(resolve(ROOT,relative),'utf8');
+const live=read('public/static/cascade-demo.js');
+const offline=read('public/static/cascade-demo-offline.js');
+const css=read('public/static/cascade-showcase.css');
+const html=read('public/demo.html');
+const offlineHtml=read('public/CASCADE_OFFLINE_PREVIEW.html');
+test('both online and offline demos use identical scripted mechanics and original art',()=>{
+ assert.equal(live,offline);
+ for(const id of ['AF-SCN-001','AF-INF-001','AF-INF-009','AF-INF-010','AF-INF-013'])assert(live.includes(id));
+ assert(live.includes("const back = category => assets + 'backs/'"));
+ assert(live.includes("location.protocol === 'file:'"));
+ for(const feature of ['ONE CONTINUING CONVERSATION','PLAYER A · CARD PLAY','PLAYER C · YOUR HANDOFF','SCRIPTED AI RESPONSE','BREAKPOINT A','BREAKPOINT B'])assert(live.includes(feature),feature);
+ assert(!/fetch\s*\(|XMLHttpRequest|OPENAI_API_KEY|\/api\/rooms/.test(live),'Demo must never call paid API');
+});
+test('cinematic Classic-inspired card sequences are isolated from the live Cascade interface',()=>{
+ for(const sequence of ['cd-card-flip','cd-hand-deal','cd-interfere-in','cd-bubble-in','cd-score-pop','cd-deck-drop'])assert(css.includes(sequence));
+ for(const attr of ['.cd-visual','.cd-copy','.cd-showcase','.cd-nav{position:sticky'])assert(css.includes(attr));
+ assert(html.includes('/static/cascade-showcase.css'));
+ assert(offlineHtml.includes('./static/cascade-showcase.css'));
+ assert(!read('public/index.html').includes('cascade-showcase.css'),'Live game must remain unmodified');
+});
+test('accessible navigation, motion, branch selection and card inspection are preserved',()=>{
+ for(const attr of ['data-prev','data-next','data-play','aria-pressed','aria-current','aria-label','aria-live','aria-modal','role="dialog"','data-reaction','data-inspect'])assert(live.includes(attr),attr);
+ assert(live.indexOf('function navigation()')<live.indexOf('function render('));
+ assert(live.includes('playing:!supportsReduced?.matches'));
+ assert(css.includes('prefers-reduced-motion:reduce'));
+ assert(css.includes('max-width:590px'));
+ assert(live.includes("e.key==='Escape'"));
+ assert(live.includes("e.key==='Tab'"));
+ assert(live.includes('state.hover=true'));
+ assert(live.includes('state.focus=true'));
+ assert(live.includes('IntersectionObserver'));
+ assert(live.includes('visibilitychange'));
+ assert(css.includes('cd-progress-fill'));
+});

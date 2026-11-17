@@ -71,3 +71,7 @@ The pure rules engine has deterministic *invariant tests* but uses cryptographic
 ### Offline preview (no network or API required)
 
 The source package also includes `public/CASCADE_OFFLINE_PREVIEW.html` and `public/static/cascade-demo-offline.js`. Open that HTML file after extracting the package to browse the new six-step animated demo without running Netlify. Only the original bundled card illustrations are displayed; interactive scripted demo replies make no API calls. The companion `CASCADE_ANIMATED_DEMO_OFFLINE.zip` contains just this preview and its required image assets.
+
+## Demo presentation refresh — v0.3-P (visual layer only)
+
+The six-stage demo now reuses the clearer Classic visual design: large original card artwork, illustrated category backs, three-dimensional scenario flips, fanned dealing, staged card/AI/Handoff reveals and score pop-ins. It places sticky Previous / Pause / Next controls **above** the variable-height scene and uses the same accessible hierarchy on mobile. Autoplay pauses on hover, keyboard focus, hidden tabs or out-of-view scenes; motion-reduced users start with autoplay disabled. The three branching Handoff choices remain independent of player identity and make **no OpenAI API calls**. Gameplay engine v0.2-P is unchanged; the visual refresh cannot change game rules or scoring.

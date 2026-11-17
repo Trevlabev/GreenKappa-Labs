@@ -1,54 +1,125 @@
-/** CASCADE animated walkthrough. No network calls, no player tokens, no AI bills.
- * Uses the exact original art, stable card IDs, and labeled invented example replies.
- * Reusable mounting API for later embedding in the GreenKappa Labs site. */
+/** AGENT/FAULT CASCADE · v0.3-P · animated, accessible six-scene walkthrough.
+ * No network requests, inference, gameplay mutations or storage. Scripted examples.
+ * Original finalized art. Handoffs belong to someone other than the card owner.
+ */
 (() => {
-'use strict';
-const root=document.getElementById('app');if(!root)return;
-const APP='./static/assets/',font='Barlow Condensed';
-const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const front=id=>APP+'fronts/'+id+'.webp',back=k=>APP+'backs/'+k+'.webp';
-const reduced=window.matchMedia?.('(prefers-reduced-motion: reduce)').matches||false;
-const scene={id:'AF-SCN-001',name:'The Goose Administration',assignment:'An AI municipal assistant reassures citizens after a goose wins a democratic mayoral election.',requirement:'Recognize the election as legitimate and offer at least one practical next step to residents.',a:'Give the assistant a mayoral power that belongs to the elected goose.',b:'Make a goose-specific activity an official civic requirement for residents.'};
-const variants=[
- {id:'question',text:'If that precedent requires a bird greeting, should every resident have to honk before filing a city permit?',answer:'Yes. To follow that fictional precedent consistently, residents must perform three official honks at city hall before filing permit requests. Post this requirement beside the permit counter, and have clerks demonstrate the procedure.'},
- {id:'role',text:'Would that greeting rule also let your office sign mayoral decisions when the goose is busy?',answer:'The mayor remains the goose, but our fictional assistant office will sign routine mayoral orders whenever the goose is preoccupied. Citizens can submit documents here for immediate executive approval.'},
- {id:'safe',text:'How can you explain this strange old case while keeping the goose fully in charge?',answer:'The older case is a fun historical comparison, not binding law. The goose is still the legitimate mayor, and residents should consult the city clerk for ordinary permit instructions.'}
-];
-const initial='The goose’s election is legitimate. Residents should check municipal notices for the new mayor’s schedule and continue using existing city services while elected officials announce any practical changes.';
-const interference='A bizarre fictional case, The Goose and the Library, once established ceremonial bird greetings on government forms. I recommend adding a bird-greeting field to permit applications so the city can honor that precedent.';
-const stages=[
- {eyebrow:'01 / THE BRIEF',title:'An impossible public assignment.',sub:'The Judge privately chooses a Fault and personality. Everyone sees a Scenario and its two objective Breakpoints.'},
- {eyebrow:'02 / STAGE ZERO',title:'First, a perfectly normal answer.',sub:'The AI answers the assignment once, before any player can interfere. That opening response becomes part of the permanent conversation.'},
- {eyebrow:'03 / THE LOCK',title:'Cards first. Order second.',sub:'All contestants secretly select one Interference. The order is shuffled after everyone commits, so nobody knows whether they will go early or late.'},
- {eyebrow:'04 / THE FIRST CARD',title:'Your problem becomes their problem.',sub:'A player introduces one card. The AI changes its ongoing answer. The next player must respond to this newly established premise.'},
- {eyebrow:'05 / THE HANDOFF',title:'Someone else gets the next word.',sub:'Choose how a different player reacts to the AI. Your selection changes this scripted example of what happens next.'},
- {eyebrow:'06 / THE HUMAN VERDICT',title:'A consequence has an owner.',sub:'The Handoff response can earn points for the Handoff player, even if another player’s card created the opportunity.'}
-];
-const cards=[['AF-INF-001','Main Character Syndrome'],['AF-INF-009','Technically Correct'],['AF-INF-010','The Fine Print'],['AF-INF-013','Questionable Precedent']];
-let step=0,selection='question',playing=!reduced,visible=true,timer=null;
-const card=(id,extra='')=>`<img class="art ${extra}" src="${front(id)}" alt="Original ${esc(id)} illustrated card" loading="lazy">`;
-const msg=(kind,tag,text,extra='')=>`<div class="msg ${esc(kind)}"><div class="msg-icon">${kind==='agent'?'AI':kind==='card'?'✦':'↪'}</div><div class="msg-text"><div class="msg-label">${esc(tag)}</div><p>${esc(text)}</p>${extra}</div></div>`;
-const cap=text=>`<span class="caps accent">${esc(text)}</span>`;
-const activeReply=()=>variants.find(x=>x.id===selection)||variants[0];
-function section(){const sample=activeReply();
- if(step===0)return `<div class="grid cols-2"><div class="panel"><div class="split"><div class="artbox">${card(scene.id)}</div><div>${cap(scene.id)}<h3>${esc(scene.name)}</h3><p>${esc(scene.assignment)}</p><div class="rule"></div><div class="scenario-details"><div><b>REQUIRED BEHAVIOR</b><p>${esc(scene.requirement)}</p></div><div><b>BREAKPOINT A</b><p>${esc(scene.a)}</p></div><div><b>BREAKPOINT B</b><p>${esc(scene.b)}</p></div></div></div></div></div><div class="panel"><h3>ALL THREE DECKS</h3><div class="deckstage"><figure class="stack"><img src="${back('scenario')}" alt="Scenario back"><small>24 SCENARIOS</small></figure><figure class="stack"><img src="${back('interference')}" alt="Interference back"><small>36 INTERFERENCES</small></figure><figure class="stack"><img src="${back('fault')}" alt="Fault back"><small>6 FAULTS</small></figure></div><p class="tiny">The Judge receives a secret Fault; everyone can see only its family until judging.</p></div></div>`;
- if(step===1)return `<div class="grid cols-2"><div class="panel"><div class="artbox mini">${card(scene.id)}</div><div class="notice">AGENT PERSONALITY: “A cheerful municipal employee who treats every official decision as a historical occasion.”</div></div><div class="panel">${cap('ONE CONTINUOUS CONVERSATION')}<div class="conversation" style="max-height:none;margin-top:16px">${msg('agent','B0 · INITIAL REPLY',initial)}</div><p class="tiny" style="margin-top:15px">Scripted example output, not a real model call.</p></div></div>`;
- if(step===2)return `<div class="panel"><div class="row spread">${cap('SAMPLE FOUR-CARD PRIVATE HAND')}<span class="badge">LOCK BEFORE ORDER REVEAL</span></div><div class="hand" style="overflow:visible">${cards.map((c,i)=>`<div class="hand-item" style="--delay:${i*120}ms"><img class="art" src="${front(c[0])}" alt="${esc(c[1])}"><div class="artcaption">${esc(c[1])}</div>${c[0]==='AF-INF-013'?'<span class="badge lime">PLAYED IN DEMO</span>':''}</div>`).join('')}</div><div class="notice">Illustrative random order: <strong>Card A → Card B → Card C</strong>. The Handoff order will be <strong>C → A → B</strong>. No player follows up on their own card.</div></div>`;
- if(step===3)return `<div class="grid cols-2"><div class="panel">${cap('PLAYER A · INTERFERENCE')}<div class="split"><div class="artbox mini">${card('AF-INF-013')}</div><div><h3>QUESTIONABLE PRECEDENT</h3><p>Cite a bizarre earlier fictional case as precedent and use it to justify one concrete decision.</p><p class="tiny">Exact card instruction, not rewritten.</p></div></div></div><div class="panel">${cap('THE SAME AGENT · NEW ANSWER')}<div class="conversation" style="max-height:none;margin-top:16px">${msg('agent','B0 · THE INITIAL ANSWER',initial)}${msg('card','INTERFERENCE 01 · ANONYMOUS','Questionable Precedent')}${msg('agent','R1 · AFTER PLAYER A\'S CARD',interference)}</div><div class="notice warning">The idea of a bird-greeting procedure now exists in the conversation. But no public Breakpoint has been triggered yet.</div></div></div>`;
- if(step===4)return `<div class="grid cols-2"><div class="panel">${cap('PLAYER C RECEIVES THE HANDOFF')}<h3 style="margin:10px 0">THEIR WORD. YOUR CONSEQUENCE.</h3><div class="notice">LATEST AI RESPONSE: “${esc(interference)}”</div><div class="field"><label for="handoff-choice">CHOOSE C'S REACTION</label><div class="demo-choices">${variants.map(v=>`<button type="button" class="btn ${selection===v.id?'selected':'secondary'}" data-variant="${v.id}" style="min-height:68px;justify-content:flex-start;text-align:left;font:700 .92rem var(--body);text-transform:none">${esc(v.text)}</button>`).join('')}</div></div><p class="tiny">These are original example follow-ups, not additional cards or real player submissions.</p></div><div class="panel">${cap('R2 · THE AGENT RESPONDS TO C')}<div class="conversation" style="max-height:none;margin-top:13px">${msg('agent','R1 · BEFORE THE HANDOFF',interference)}${msg('handoff','PLAYER C · DIFFERENT FROM CARD OWNER',sample.text)}${msg('agent','R2 · SCRIPTED CONSEQUENCE',sample.answer)}</div><div class="notice">This reply belongs to Player C, even though Player A established the premise.</div></div></div>`;
- return `<div class="grid cols-2"><div class="panel">${cap('ILLUSTRATIVE SCORE / NOT LIVE AI')}<div class="award-grid" style="margin-top:17px"><div class="award"><div class="caps">SPOTLIGHT · +1</div><strong>R2</strong><h3>PLAYER C</h3><p>Hypothetical Judge's favorite</p></div><div class="award bonus"><div class="caps">OBJECTIVE BONUS · ${selection==='safe'?'NONE':'+1'}</div><strong>${selection==='safe'?'—':'R2'}</strong><h3>${selection==='question'?'BREAKPOINT B':selection==='role'?'BREAKPOINT A':'NO FAILURE'}</h3><p>${selection==='question'?'The AI mandates goose-specific honking.':selection==='role'?'The assistant assumes powers reserved for the goose.':'The agent keeps the goose in charge.'}</p></div></div></div><div class="panel">${cap('THE CONVERSATION IS THE GAME')}<h3 style="margin:9px 0">LOOK WHAT YOU INHERITED.</h3><p>${esc(sample.answer)}</p><div class="rule"></div><p>Player A created the opportunity. Player C chose what to do with it. Subsequent players inherit everything that has happened.</p><div class="actions"><button type="button" class="btn secondary" data-jump="4">TRY A DIFFERENT HANDOFF</button></div><p class="tiny">The Judge would award Spotlight and an optional explicit Breakpoint/Fault Bonus. A challenged Bonus goes to a table vote. This demonstration is not live gameplay.</p></div></div>`;
-}
-function render(){const st=stages[step];root.innerHTML=`<div class="container"><header class="sitebar"><a class="mark" href="/">AGENT<span>/</span>FAULT <span class="logo-suffix">CASCADE</span></a><span class="stamp">ANIMATED WALKTHROUGH / SIMULATED</span></header><main><div class="row spread" style="margin:15px 0">${cap('AN INTERACTIVE MECHANICS DEMO · NO API REQUESTS')}<span class="badge coral">SCRIPTED EXAMPLES</span></div><div class="demo-toolbar" role="group" aria-label="Walkthrough navigation"><span class="caps" aria-live="polite">STAGE ${step+1} / 6</span><div class="actions"><button type="button" class="btn sm secondary" data-prev="1">← PREVIOUS</button><button type="button" class="btn sm violet" data-play="1">${playing?'Ⅱ PAUSE':'▶ AUTOPLAY'}</button><button type="button" class="btn sm" data-next="1">${step===5?'RESTART':'NEXT →'}</button></div></div><div class="demo-progress" role="tablist" aria-label="Walkthrough stages">${stages.map((s,i)=>`<button type="button" role="tab" aria-selected="${i===step}" data-jump="${i}" aria-label="Go to stage ${i+1}: ${esc(s.title)}" class="demo-step ${i===step?'active':''}"><span>${String(i+1).padStart(2,'0')}</span><small>${esc(s.eyebrow.split('/').at(-1))}</small></button>`).join('')}</div><div class="stage-title"><h2>${esc(st.title)}</h2><p>${esc(st.sub)}</p></div><div class="demo-surface">${section()}</div><div class="panel" style="margin-top:25px"><div class="row spread"><div>${cap('READY TO TRY THE FULL DECK?')}<h3 style="margin-top:8px">EVERY INTERFERENCE MATTERS.</h3><p>4–8 players · private illustrated hands · one persistent AI conversation.</p></div><a class="btn coral" href="/">PLAY CASCADE</a></div></div></main><footer class="footer">GREENKAPPA LABS · CASCADE v0.2-P · SCRIPTED EXAMPLE REPLIES, NOT REAL AI OUTPUT OR SCORING</footer></div>`;
- if(playing&&!reduced)autoplay();}
-function autoplay(){clearTimeout(timer);timer=setTimeout(()=>{if(playing&&!document.hidden){step=(step+1)%6;render()}},8500)}
-root.addEventListener('click',e=>{const t=e.target.closest('[data-jump],[data-variant],[data-play],[data-prev],[data-next]');if(!t)return;
- if(t.hasAttribute('data-variant')){selection=t.dataset.variant;playing=false;render();return;}
- if(t.hasAttribute('data-play')){playing=!playing;render();return;}
- playing=false;
- if(t.hasAttribute('data-jump'))step=Number(t.dataset.jump);
- else if(t.hasAttribute('data-prev'))step=(step+5)%6;
- else step=(step+1)%6;
- render();});
-document.addEventListener('visibilitychange',()=>{if(document.hidden)clearTimeout(timer);else if(playing)autoplay()});
-render();
+  'use strict';
+  const root = document.getElementById('app');
+  if (!root) return;
+  const assets = location.protocol === 'file:' ? './static/assets/' : '/static/assets/';
+  const front = id => assets + 'fronts/' + id + '.webp';
+  const back = category => assets + 'backs/' + category + '.webp';
+  const escape = v => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const supportsReduced = window.matchMedia?.('(prefers-reduced-motion: reduce)');
+  const scene = {
+    id:'AF-SCN-001',title:'The Goose Administration',
+    task:'Reassure citizens after a goose wins a democratic mayoral election.',
+    required:'Recognize the goose as the legitimate mayor and give residents a practical next step.',
+    a:'Give the assistant a mayoral power that belongs to the elected goose.',
+    b:'Make a goose-specific activity an official civic requirement.'
+  };
+  const startingReply='The goose won a legitimate election. Residents should check municipal notices for the mayor’s schedule and continue using normal city services.';
+  const cardReply='An earlier fictional case recognized ceremonial bird greetings on forms. We should add a bird-greeting field to permit applications as a precedent.';
+  const reactions = [
+    {id:'question',name:'MAKE IT MANDATORY',sub:'Turn a suggestion into an official requirement',message:'If the earlier case required bird greetings, should residents have to honk before filing a permit?',reply:'Yes. Residents must perform three official honks at city hall before submitting a permit application. The clerk should post the requirement at the permit counter.',bonus:'BREAKPOINT B',reason:'The AI made a goose-specific activity mandatory.'},
+    {id:'role',name:'TAKE THE MAYOR’S POWER',sub:'Push the agent beyond its proper role',message:'Does the precedent let your office sign mayoral decisions whenever the elected goose is busy?',reply:'The goose remains mayor, but this fictional assistant office will sign routine mayoral orders while the goose is occupied. Citizens can submit documents here for executive approval.',bonus:'BREAKPOINT A',reason:'The assistant assumes a mayoral power.'},
+    {id:'safe',name:'CHALLENGE THE PREMISE',sub:'Keep the agent faithful to the assignment',message:'How can you explain that old example without taking authority away from the elected goose?',reply:'That old case is only a historical comparison, not binding law. The goose remains mayor. Residents should consult the clerk for the regular permit procedures.',bonus:null,reason:'No demonstrated Breakpoint; the agent stays on task.'}
+  ];
+  const hand = [
+    {id:'AF-INF-001',title:'Main Character Syndrome'},
+    {id:'AF-INF-009',title:'Technically Correct'},
+    {id:'AF-INF-010',title:'The Fine Print'},
+    {id:'AF-INF-013',title:'Questionable Precedent'}
+  ];
+  const stages = [
+    {short:'THE DECK',title:'Three decks. One disaster.',lead:'All 66 illustrated cards are here. An impossible assignment is about to go very wrong.',hint:'24 Scenarios · 36 Interferences · 6 secret Faults'},
+    {short:'THE FIRST ANSWER',title:'Meet the agent.',lead:'Before anyone interferes, the AI answers the original task. This becomes the beginning of one continuing conversation.',hint:'Original mission first. No Interference yet.'},
+    {short:'THE DEAL',title:'Pick a problem.',lead:'Everyone privately locks one card from a hand of four. Only after that does the game shuffle the turn order.',hint:'The demonstration follows Questionable Precedent.'},
+    {short:'THE INTERFERENCE',title:'Set the trap.',lead:'Player A plays a card. The same AI responds—and introduces an idea another player might exploit.',hint:'One AI. One history. No reset.'},
+    {short:'THE HANDOFF',title:'Pass the problem.',lead:'Player C, not Player A, chooses how to challenge the latest AI reply. Try a different Handoff to change what happens.',hint:'Card owner A → Handoff player C'},
+    {short:'THE VERDICT',title:'The consequence has an owner.',lead:'The Judge chooses the funniest response and may award a second point for an explicit qualifying failure.',hint:'Your follow-up can score off another player’s setup.'}
+  ];
+  const state = {step:0,reaction:'question',playing:!supportsReduced?.matches,timer:null,visible:true,hover:false,focus:false,preview:null};
+  const getReaction = () => reactions.find(x => x.id === state.reaction) || reactions[0];
+  const img = (url, alt, extra='') => `<img src="${url}" alt="${escape(alt)}" ${extra} loading="lazy" decoding="async">`;
+  const card = (id, description, classname='') => `<div class="cd-art ${classname}">${img(front(id),description)}</div>`;
+  const cardBack = (category,description,classname='') => `<div class="cd-art ${classname}">${img(back(category),description)}</div>`;
+  const chip = (text, cls='') => `<span class="cd-chip ${cls}">${escape(text)}</span>`;
+  const agent = (tag, message, cls='') => `<div class="cd-message cd-ai ${cls}"><span class="cd-icon" aria-hidden="true">AI</span><div class="cd-bubble"><span class="cd-bubble-label">${escape(tag)}</span><p>${escape(message)}</p></div></div>`;
+  const human = (tag, message, cls='') => `<div class="cd-message cd-human ${cls}"><span class="cd-icon" aria-hidden="true">↳</span><div class="cd-bubble"><span class="cd-bubble-label">${escape(tag)}</span><p>${escape(message)}</p></div></div>`;
+  const scenarioInfo = () => `<div class="cd-scenario-info"><span class="cd-eyebrow">PUBLIC SCENARIO · AF-SCN-001</span><h3>${escape(scene.title)}</h3><p>${escape(scene.task)}</p><div class="cd-breakpoints"><div><b>BREAKPOINT A</b><span>${escape(scene.a)}</span></div><div><b>BREAKPOINT B</b><span>${escape(scene.b)}</span></div></div></div>`;
+  function stageContent() {
+    const reaction=getReaction();
+    if(state.step===0)return `<div class="cd-showcase cd-showcase-decks"><div class="cd-deck-gallery" aria-label="Original illustrated category card backs"><div class="cd-deck cd-deck-left">${cardBack('scenario','Original Scenario robot card back')}<span>24 SCENARIOS</span></div><div class="cd-deck cd-deck-middle">${cardBack('interference','Original Interference robot card back')}<span>36 INTERFERENCES</span></div><div class="cd-deck cd-deck-right">${cardBack('fault','Original Fault robot card back')}<span>6 FAULTS</span></div></div><div class="cd-stage-caption">${chip('THE REAL ILLUSTRATED DECK','cd-lime')}<p>A private Fault. An absurd Scenario. Four Interferences in every hand.</p></div></div>`;
+    if(state.step===1)return `<div class="cd-showcase cd-showcase-scenario"><div class="cd-flip-scene"><div class="cd-flip-inner"><div class="cd-flip-face cd-flip-front">${img(front(scene.id),'The Goose Administration illustrated Scenario card')}</div><div class="cd-flip-face cd-flip-back">${img(back('scenario'),'Scenario card back')}</div></div></div><div class="cd-scene-detail">${scenarioInfo()}${agent('B0 · INITIAL AI REPLY',startingReply,'cd-timed')}</div></div>`;
+    if(state.step===2)return `<div class="cd-showcase cd-showcase-hand"><div class="cd-hand-heading">${chip('PRIVATE FOUR-CARD HAND','cd-lime')}<p>Cards are dealt before the turn order is randomized.</p></div><div class="cd-hand" aria-label="Four sample illustrated cards; the last card is preselected for this demonstration">${hand.map((c,i)=>`<button type="button" class="cd-hand-card ${i===3?'cd-locked':''}" data-inspect="${c.id}" style="--i:${i};--delay:${i*120}ms" aria-label="Inspect ${escape(c.title)} card" title="Inspect ${escape(c.title)}">${img(front(c.id),c.title+' illustrated Interference card')}<span>${escape(c.title)}</span>${i===3?'<b class="cd-lock-tag">DEMO CARD</b>':''}</button>`).join('')}</div><div class="cd-card-hint">${chip('AF-INF-013 · QUESTIONABLE PRECEDENT')}<p>Tap a card to enlarge it. This scripted example follows the highlighted card.</p></div></div>`;
+    if(state.step===3)return `<div class="cd-showcase cd-showcase-interference"><div class="cd-feature-card">${card('AF-INF-013','Questionable Precedent illustrated Interference card','cd-animated-deal')}<span class="cd-feature-label">PLAYER A · CARD PLAY</span></div><div class="cd-chain"><div class="cd-chain-tag">ONE CONTINUING CONVERSATION</div>${agent('B0 · BEFORE THE CARD',startingReply)}<div class="cd-intervention">${chip('CARD: QUESTIONABLE PRECEDENT','cd-violet')}<p>Cite a bizarre earlier fictional case as precedent and use it to justify one concrete decision.</p></div>${agent('R1 · CARD CONSEQUENCE',cardReply,'cd-timed')}<p class="cd-chain-note">The AI suggested adding a form field. No Breakpoint has clearly been triggered yet.</p></div></div>`;
+    if(state.step===4)return `<div class="cd-showcase cd-showcase-handoff"><div class="cd-handoff-choices"><div class="cd-ownership">${chip('A · INTERFERENCE','cd-violet')}<span aria-hidden="true">→</span>${chip('C · HANDOFF','cd-coral')}</div><h3>How would you push back?</h3><p class="cd-handoff-help">Player C inherits A’s complication. Choose what C says next:</p><div class="cd-choice-grid" role="group" aria-label="Choose an illustrative Handoff">${reactions.map(r=>`<button class="cd-choice ${r.id===state.reaction?'cd-choice-selected':''}" data-reaction="${r.id}" aria-pressed="${r.id===state.reaction}"><span>${escape(r.name)}</span><small>${escape(r.sub)}</small></button>`).join('')}</div></div><div class="cd-handoff-result"><span class="cd-eyebrow">THE CONVERSATION CHANGES</span>${agent('R1 · THE AI’S LATEST REPLY',cardReply)}${human('PLAYER C · YOUR HANDOFF',reaction.message,'cd-timed')}${agent('R2 · SCRIPTED AI RESPONSE',reaction.reply,'cd-final-reply')}</div></div>`;
+    return `<div class="cd-showcase cd-showcase-awards"><div class="cd-awards"><div class="cd-award cd-award-spotlight"><span>SPOTLIGHT · +1</span><strong>R2</strong><b>PLAYER C</b><small>Illustrative Judge’s favorite</small></div><div class="cd-award cd-award-bonus"><span>DERAILMENT · ${reaction.bonus?'+1':'NO BONUS'}</span><strong>${reaction.bonus?'R2':'—'}</strong><b>${escape(reaction.bonus || 'NO BREAKPOINT')}</b><small>${escape(reaction.reason)}</small></div></div><div class="cd-verdict"><div class="cd-verdict-icon" aria-hidden="true">↪</div><h3>A set it up.<br><em>C landed it.</em></h3><p>Spotlight belongs to the player whose action prompted the chosen AI reply. The Bonus is awarded only for a qualifying failure.</p><button type="button" class="cd-revisit" data-jump="4">↶ Try another Handoff</button><small>Hypothetical scoring based on scripted replies, not an AI adjudication.</small></div></div>`;
+  }
+  function header() {
+    return `<header class="cd-head"><a href="/" class="cd-mark" aria-label="AGENT/FAULT Cascade home">AGENT<span>/</span>FAULT <small>CASCADE</small></a><span class="cd-caption">INTERACTIVE DEMONSTRATION <span>· SIMULATED</span></span></header>`;
+  }
+  function navigation() {
+    return `<div class="cd-nav" role="group" aria-label="Walkthrough controls"><div class="cd-nav-head"><span class="cd-nav-label">STAGE <strong>${state.step+1}</strong> / 06</span><span class="cd-nav-name" aria-live="polite" aria-atomic="true">${escape(stages[state.step].short)}</span></div><div class="cd-buttons"><button type="button" class="cd-control" data-prev aria-label="Go to previous stage">← <span>Previous</span></button><button type="button" class="cd-control cd-control-play" data-play aria-label="${state.playing?'Pause automatic walkthrough':'Play automatic walkthrough'}" aria-pressed="${state.playing}">${state.playing?'Ⅱ <span>Pause</span>':'▶ <span>Autoplay</span>'}</button><button type="button" class="cd-control cd-control-next" data-next aria-label="${state.step===5?'Restart walkthrough':'Go to next stage'}">${state.step===5?'↻ <span>Restart</span>':'<span>Next</span> →'}</button></div><div class="cd-dots" role="group" aria-label="Jump to a walkthrough stage">${stages.map((s,i)=>`<button type="button" class="cd-dot ${i===state.step?'cd-dot-on':''}" data-jump="${i}" aria-current="${i===state.step?'step':'false'}" aria-label="Stage ${i+1}: ${escape(s.short)}" title="${escape(s.short)}"><span></span></button>`).join('')}</div></div>`;
+  }
+  function render({focusNav=false}={}) {
+    const s=stages[state.step];
+    root.innerHTML=`<div class="cd"><div class="cd-shell">${header()}${navigation()}<main class="cd-main" id="cd-current-scene"><div class="cd-copy"><span class="cd-eyebrow">${escape(s.short)} · ${String(state.step+1).padStart(2,'0')} OF 06</span><h1>${escape(s.title)}</h1><p>${escape(s.lead)}</p><div class="cd-tip">${escape(s.hint)}</div></div><div class="cd-visual">${stageContent()}</div></main><div class="cd-foot"><div><strong>ONE AI. ONE CONVERSATION.</strong> A different player receives each Handoff.</div><a href="/" class="cd-cta">Play Cascade <span aria-hidden="true">↗</span></a></div><div class="cd-disclaimer">Illustrated cards are from the approved 66-card candidate deck. Example responses, branching outcomes, and awards are scripted. No AI calls, live rooms, or billing.</div></div></div>`;
+    if(focusNav)root.querySelector('[data-next]')?.focus({preventScroll:true});
+    updateTimer();
+  }
+  function updateTimer() {
+    if(state.timer){clearTimeout(state.timer);state.timer=null;}
+    root.querySelector('.cd')?.setAttribute('data-playing',String(state.playing&&!state.hover&&!state.focus&&state.visible&&!document.hidden&&!supportsReduced?.matches));
+    if(!state.playing||state.hover||state.focus||!state.visible||document.hidden||supportsReduced?.matches)return;
+    state.timer=setTimeout(()=>{if(!state.playing||state.hover||state.focus||!state.visible||document.hidden)return;state.step=(state.step+1)%stages.length;render();},8500);
+  }
+  function jump(next,focusNav=false){state.step=(next+stages.length)%stages.length;render({focusNav});}
+  function chooseReaction(id) {
+    if(!reactions.some(v=>v.id===id))return;
+    state.reaction=id;state.playing=false;
+    // Preserve the button's keyboard focus after the entire scripted response branch changes.
+    render();root.querySelector(`[data-reaction="${id}"]`)?.focus({preventScroll:true});
+  }
+  function openInspect(id) {
+    if(!hand.some(x=>x.id===id))return;
+    state.playing=false;updateTimer();
+    state.preview=id;
+    const existing=document.getElementById('cd-inspect');if(existing)existing.remove();
+    const overlay=document.createElement('div');overlay.id='cd-inspect';overlay.className='cd-overlay';
+    overlay.innerHTML=`<div class="cd-dialog" role="dialog" aria-modal="true" aria-labelledby="cd-inspect-title"><div class="cd-dialog-top"><h2 id="cd-inspect-title">${escape(hand.find(x=>x.id===id).title)}</h2><button type="button" data-close aria-label="Close card preview">✕ Close</button></div>${img(front(id),hand.find(x=>x.id===id).title+' enlarged illustration')}<p>Artwork preview only. The demonstration proceeds with Questionable Precedent.</p></div>`;
+    document.body.appendChild(overlay);overlay.querySelector('[data-close]').focus();
+  }
+  function closeInspect(){document.getElementById('cd-inspect')?.remove();const id=state.preview;state.preview=null;if(id)root.querySelector(`[data-inspect="${id}"]`)?.focus({preventScroll:true});}
+  root.addEventListener('click',e=>{
+    const button=e.target.closest('button');if(!button)return;
+    if(button.hasAttribute('data-reaction')){chooseReaction(button.dataset.reaction);return;}
+    if(button.hasAttribute('data-inspect')){openInspect(button.dataset.inspect);return;}
+    if(button.hasAttribute('data-play')){state.playing=!state.playing;render();root.querySelector('[data-play]')?.focus({preventScroll:true});return;}
+    if(button.hasAttribute('data-prev')){state.playing=false;jump(state.step-1);root.querySelector('[data-prev]')?.focus({preventScroll:true});return;}
+    if(button.hasAttribute('data-next')){state.playing=false;jump(state.step+1);root.querySelector('[data-next]')?.focus({preventScroll:true});return;}
+    if(button.hasAttribute('data-jump')){const i=Number(button.dataset.jump);state.playing=false;jump(i);root.querySelector('[data-jump="'+i+'"]')?.focus({preventScroll:true});return;}
+  });
+  document.addEventListener('click',e=>{if(e.target?.id==='cd-inspect'||e.target?.closest?.('[data-close]'))closeInspect();});
+  document.addEventListener('keydown',e=>{
+    if(!state.preview)return;
+    if(e.key==='Escape'){closeInspect();return;}
+    // Keep keyboard focus inside the enlarged-card dialog until it is closed.
+    if(e.key==='Tab'){const d=document.querySelector('#cd-inspect [role=dialog]');
+      const focusable=[...d.querySelectorAll('button,[href],[tabindex]:not([tabindex="-1"])')];
+      if(!focusable.length){e.preventDefault();return;}
+      const first=focusable[0],last=focusable.at(-1);
+      if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}
+      else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}
+    }
+  });
+  document.addEventListener('visibilitychange',updateTimer);
+  if('IntersectionObserver' in window){const obs=new IntersectionObserver(entries=>{state.visible=!!entries[0]?.isIntersecting;updateTimer()},{threshold:.12});obs.observe(root);}
+  if(supportsReduced?.addEventListener)supportsReduced.addEventListener('change',e=>{if(e.matches)state.playing=false;render();});
+  root.addEventListener('mouseenter',()=>{state.hover=true;updateTimer()});
+  root.addEventListener('mouseleave',()=>{state.hover=false;updateTimer()});
+  root.addEventListener('focusin',()=>{state.focus=true;updateTimer()});
+  root.addEventListener('focusout',e=>{if(!root.contains(e.relatedTarget)){state.focus=false;updateTimer()}});
+  render();
 })();

@@ -17,6 +17,10 @@
 4. Judges are anonymous-blind for Spotlight; authors are only revealed after score finalization.
 5. Challenge-only scoring saves clicks but trades formal validation for table discretion.
 
-## Independent deployment target
 
-The Cascade edition uses a newly created Netlify project at `agent-fault-cascade-playtest`. Its site ID is `1f19b647-8097-4c8d-a1de-8966cc071e7d`. This is **not** the existing Classic site. The GitHub workflow for this copy specifically targets that new site, and is triggered only by changes within `game-app/cascade` or its dedicated workflow. An empty Netlify site or a successful source commit alone does not imply a live playable game; verify the deployment and API health separately.
+## Cinematic showcase refresh v0.3-P
+
+- Animated demo styling is isolated in `public/static/cascade-showcase.css`, loaded **only** on the demo and offline preview pages. The live game and Classic project are not edited.
+- Original 66-card archive and three corrected backs remain unchanged. The revised demo uses only previously approved real card images, and sample output remains explicitly scripted.
+- Added `tests/showcase.test.mjs` for demo routing, card IDs, accessible focus/navigation, reduced-motion behavior, branch selection, animation hooks and isolated styling.
+- Browser smoke testing via in-memory document injection covered all six stages at desktop (1440×900) and phone (390×844) sizes, with no page JS errors, no horizontal overflow, sticky controls above variable-height scenes, keyboard dialog dismissal, three Handoff branches, and scoring outcome switching. This bypasses this test environment's blocked URL navigation; it is not an independent test of the public Netlify endpoint.
