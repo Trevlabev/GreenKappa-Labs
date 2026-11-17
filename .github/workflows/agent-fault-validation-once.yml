@@ -1,0 +1,46 @@
+name: AGENT-FAULT one-time empirical validation
+
+# This workflow is purposely NOT manually dispatchable, scheduled, or triggered by
+# changes to ordinary app files. Only creating/editing THIS exact file on main,
+# with the precise one-time commit message, initiates paid API calls.
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/agent-fault-validation-once.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: agent-fault-controlled-validation
+  cancel-in-progress: false
+
+jobs:
+  run-once:
+    if: github.event.head_commit.message == '[AGENT-FAULT] Execute controlled one-shot 3x validation' && github.run_attempt == 1
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify fixture integrity (free)
+        run: node --test card-games/agent-fault/benchmark/tests/benchmark.test.mjs
+      - name: Run 16 paired fixtures × 3 replicates (paid, max 192 model requests)
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          BENCHMARK_MODEL: gpt-4.1-mini
+          BENCHMARK_REPEATS: 3
+        run: node card-games/agent-fault/benchmark/scripts/run-validation.mjs
+      - name: Preserve complete and partial observed results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: agent-fault-controlled-validation
+          path: |
+            benchmark-output/validation-results.json
+            benchmark-output/validation-report.md
+          if-no-files-found: warn
+          retention-days: 30
