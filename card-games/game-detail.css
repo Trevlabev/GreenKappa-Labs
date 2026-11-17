@@ -156,3 +156,96 @@ body.game-detail-page[data-game="agent-fault"] .gd-specs{max-width:940px}
    font-size:clamp(2.7rem,10vw,4.2rem)!important;
  }
 }
+
+
+/* AGENT/FAULT: desktop hero refinement — preserve the complete horizontal poster.
+   The native 16:9 campaign art stays unframed at the top, but its display height
+   is bounded by the viewport instead of becoming a full-screen 1080px wall.
+   The title is visually hidden on desktop only because it appears in the art;
+   the semantic H1 remains in the document for accessibility. */
+@media(min-width:1001px){
+  body.game-detail-page[data-game="agent-fault"] .af-wide-hero{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:#100d2d;
+  }
+  body.game-detail-page[data-game="agent-fault"] .af-wide-hero img{
+    display:block;
+    width:min(100%,1480px,122svh);
+    max-width:100%;
+    height:auto;
+    aspect-ratio:16/9;
+    object-fit:contain;
+  }
+  body.game-detail-page[data-game="agent-fault"] .gd-hero{
+    width:min(1480px,calc(100% - 3rem));
+    padding-top:clamp(1.15rem,2vw,1.8rem)!important;
+    padding-bottom:clamp(2.5rem,3.5vw,3.8rem)!important;
+  }
+  body.game-detail-page[data-game="agent-fault"] .gd-breadcrumb{
+    margin-bottom:1.1rem;
+  }
+  body.game-detail-page[data-game="agent-fault"] .gd-hero-layout{
+    width:100%;
+    max-width:none;
+  }
+  body.game-detail-page[data-game="agent-fault"] .gd-intro{
+    display:grid;
+    grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);
+    grid-template-areas:
+      "eyebrow actions"
+      "lead actions"
+      "copy specs";
+    column-gap:clamp(1.5rem,3.1vw,3.5rem);
+    row-gap:.7rem;
+    align-items:start;
+  }
+  body.game-detail-page[data-game="agent-fault"] .gd-hero h1{
+    position:absolute!important;
+    width:1px!important;
+    height:1px!important;
+    padding:0!important;
+    margin:-1px!important;
+    overflow:hidden!important;
+    clip:rect(0,0,0,0)!important;
+    white-space:nowrap!important;
+    border:0!important;
+  }
+  body.game-detail-page[data-game="agent-fault"] .gd-overline{
+    grid-area:eyebrow;
+    margin:0;
+  }
+  body.game-detail-page[data-game="agent-fault"] .gd-lead{
+    grid-area:lead;
+    max-width:none;
+    margin:0;
+    font-size:clamp(1.25rem,1.7vw,1.6rem);
+  }
+  body.game-detail-page[data-game="agent-fault"] .gd-intro-copy{
+    grid-area:copy;
+    max-width:65ch;
+    margin:0;
+    font-size:.96rem;
+    line-height:1.65;
+  }
+  body.game-detail-page[data-game="agent-fault"] .gd-actions{
+    grid-area:actions;
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    margin:0;
+    gap:.65rem;
+  }
+  body.game-detail-page[data-game="agent-fault"] .gd-actions a{
+    width:100%;
+    min-height:52px;
+    text-align:center;
+  }
+  body.game-detail-page[data-game="agent-fault"] .gd-specs{
+    grid-area:specs;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    max-width:none;
+    margin:0;
+    padding-top:1rem;
+  }
+}
