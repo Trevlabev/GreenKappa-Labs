@@ -106,6 +106,7 @@
 .gkt-courtflow-feature .cfp-screen-compact .cfp-case-title{padding:.35rem .5rem}
 .gkt-courtflow-feature .cfp-screen-compact .cfp-progress{margin-bottom:.35rem}
 .gkt-courtflow-feature .cfp-screen-compact .cfp-task{margin:.18rem .4rem;padding:.19rem .3rem}
+.gkt-courtflow-feature .cfp-screen-compact .cfp-task.locked{display:none}
 .gkt-courtflow-feature .cfp-screen-compact .cfp-exception{margin:.3rem .4rem;padding:.25rem .35rem}
 .gkt-courtflow-feature .cfp-screen-compact .cfp-bottom{padding:.3rem .45rem;font-size:.41rem}
 .gkt-courtflow-feature>small{font-size:.61rem;text-align:center;line-height:1.4;color:#c9d8d9}
