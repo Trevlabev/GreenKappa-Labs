@@ -6,7 +6,7 @@ Source for the static GitHub Pages website at **https://greenkappalabs.art/**.
 
 | Route | Function | Status |
 | --- | --- | --- |
-| `/` | Seven-slide gallery and four studio divisions | Public-facing site |
+| `/` | Eight-slide gallery including Flowglass, and four studio divisions | Public-facing site |
 | `/tablearc/` | Original TableArc local-first RPG engine | Active development |
 | `/tablearc-red/` | Standalone Cyberpunk RED AI-GM and operations-console project | v0.5.0 source prototype; Windows acceptance pending |
 | `/card-games/` | Three original card-driven games | In development |
@@ -16,7 +16,7 @@ Source for the static GitHub Pages website at **https://greenkappalabs.art/**.
 | `/worlds/` | Portal linking to independent universe sourcebook and adventure catalogs | Public portfolio hub |
 | `/worlds/sourcebooks/` | Five universe sourcebook collections, The Oldest House featured | Illustrated development portfolio |
 | `/worlds/adventures/` | Four distinct adventure entries, The Records House featured | Illustrated development portfolio |
-| `/tools/` | Two working alphas and four concept-stage utility briefs | Public product directory |
+| `/tools/` | Product portfolio subpage with two working alphas and four concept-stage utilities | Public product directory |
 | `/filingproof/` | Local legal PDF preflight, source-aware rules and structured reports | Working browser alpha v0.1 |
 | `/flowglass/` | Local-first dependency-map editor and structural impact analysis | Working browser alpha v0.1 |
 | `/work/` | Portfolio and case studies | Public-facing site |
@@ -56,3 +56,7 @@ The custom domain is declared in `CNAME`. Intended GitHub Pages publishing confi
 - Changes committed to `main` have been read back through GitHub. Actual public-domain deployment and real-browser behavior require separate verification.
 
 Contact: GreenkappaLabs@gmail.com.
+
+### Flowglass promotional assets and gallery
+
+The homepage's eight-slide gallery includes a Flowglass alpha feature linking to `/flowglass/`. GreenKappa Tools has an enhanced product portfolio page at `/tools/`, with featured Flowglass and FilingProof release cards. Promotional images in `assets/promos/flowglass-*.webp` are AI-generated conceptual illustrations; they are **not literal screenshots** of the implemented alpha and must remain labeled as such. The main project has a dedicated square image for mobile. Sourcebook and adventure slide art and links are unchanged.

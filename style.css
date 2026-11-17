@@ -1216,3 +1216,34 @@ html{scroll-behavior:smooth}
 .gkl-worlds-section-footer a:focus-visible{outline:3px solid #7f598b;outline-offset:3px}
 @media(max-width:740px){.gkl-worlds-section-heading{grid-template-columns:1fr;gap:.65rem}.gkl-worlds-adventures{padding:1.2rem .8rem}.gkl-worlds-section-heading h3{font-size:clamp(2.2rem,7vw,3.4rem)}}
 @media(max-width:570px){.gkl-worlds-adventures{border-radius:16px}.gkl-worlds-section-footer{justify-content:flex-start}}
+
+/* Flowglass featured slide: the art has its own mobile square composition. */
+.gkl-showcase-slide.gkl-theme-flowglass.gkl-art-slide{background:#001a20}
+.gkl-art-slide.gkl-theme-flowglass .gkl-art-picture{background:#001a20}
+.gkl-flowglass-art-note{position:absolute;z-index:5;right:1rem;bottom:.9rem;padding:.35rem .6rem;border-radius:6px;background:rgba(3,20,24,.86);font-size:.64rem;font-weight:650;color:#c1ded9;pointer-events:none}
+.gkl-tools-flowglass-feature{position:relative;margin:1.4rem 0 1.75rem;max-width:100%;overflow:hidden;border-radius:18px;border:1px solid rgba(69,169,151,.35);background:#031c22;box-shadow:0 24px 48px rgba(9,28,29,.15)}
+.gkl-tools-flowglass-feature>a{display:block;position:relative}
+.gkl-tools-flowglass-feature img{display:block;width:100%;height:auto;object-fit:cover}
+.gkl-tools-flowglass-cta{position:absolute;right:1.5rem;bottom:1rem;padding:.7rem 1rem;background:rgba(2,35,39,.93);border:1px solid #6fdfc6;color:#d9fcf2;border-radius:9px;font-size:.78rem;font-weight:850;letter-spacing:.03em}
+.gkl-tools-flowglass-feature figcaption{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:.5rem;padding:.5rem 1rem .7rem;font-size:.68rem;color:#c6e9de;background:#092a2f}
+.gkl-tools-flowglass-feature figcaption a{color:#9ee4d3;text-decoration:underline;text-underline-offset:3px}
+@media(max-width:900px){
+ .gkl-art-slide.gkl-theme-flowglass .gkl-art-mobile-caption{position:relative;display:flex;flex-direction:column;justify-content:center;background:linear-gradient(180deg,#001a20 0%,#063237 100%);border-top:0}
+ .gkl-art-slide.gkl-theme-flowglass .gkl-art-mobile-caption::before{content:"";position:absolute;inset:-36px 0 auto;height:36px;pointer-events:none;background:linear-gradient(180deg,transparent,#001a20)}
+ .gkl-art-slide.gkl-theme-flowglass .gkl-art-mobile-caption p{color:#9ae5d2}
+ .gkl-art-slide.gkl-theme-flowglass .gkl-art-mobile-caption h2{color:#e8fcf8}
+ .gkl-art-slide.gkl-theme-flowglass .gkl-art-mobile-caption>span{color:#c0dbd7}
+ .gkl-art-slide.gkl-theme-flowglass .gkl-art-mobile-caption>strong{background:#a1e6d5;color:#03252b}
+ .gkl-art-slide.gkl-theme-flowglass .gkl-art-mobile-caption>small{font-size:.65rem;color:#aacac3;line-height:1.4}
+ .gkl-flowglass-art-note{display:none}
+}
+@media(max-width:680px){
+ .gkl-art-slide.gkl-theme-flowglass .gkl-art-picture{aspect-ratio:1}
+ .gkl-art-slide.gkl-theme-flowglass .gkl-art-mobile-caption{padding:1rem 1.3rem}
+ .gkl-art-slide.gkl-theme-flowglass .gkl-art-mobile-caption::before{inset:-30px 0 auto;height:30px}
+ .gkl-tools-flowglass-cta{right:.6rem;bottom:.5rem;padding:.45rem .6rem;font-size:.64rem}
+ .gkl-showcase-controls{flex-wrap:wrap;justify-content:center;gap:.35rem}
+ .gkl-showcase-tabs{order:4;flex:0 0 100%;gap:.15rem;justify-content:center}
+ .gkl-showcase-tab{min-width:30px;padding-inline:0}
+}
+@media(max-width:385px){.gkl-showcase-tab{min-width:28px;font-size:.64rem}}
