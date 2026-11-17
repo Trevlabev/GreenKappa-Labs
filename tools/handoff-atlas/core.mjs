@@ -74,7 +74,9 @@ export function analyzeProcedure(input){
  return {errors:[...new Set(errors)],warnings,reachable:[...visited],unreachable,stepCount:p.steps.length,terminalCount:p.steps.filter(s=>s.type==="terminal").length};
 }
 export function newWorkspace(procedures=[]){
- return {schemaVersion:1,procedures:procedures.map(normalizeProcedure),runs:[],revisions:{},updatedAt:new Date().toISOString()};
+ const normalized=procedures.map(normalizeProcedure),revisions={};
+ for(const p of normalized)revisions[p.id]=p.status==="published"&&p.revision>0?[{revision:p.revision,at:p.publishedAt||p.updatedAt,snapshot:copy(p)}]:[];
+ return {schemaVersion:1,procedures:normalized,runs:[],revisions,updatedAt:new Date().toISOString()};
 }
 export function normalizeWorkspace(raw){
  if(!raw||typeof raw!=="object"||raw.schemaVersion!==1||!Array.isArray(raw.procedures))throw Error("Unsupported Handoff Atlas workspace file.");
