@@ -45,20 +45,16 @@ try{
  await page.locator("#designer-preview-priority").selectOption("Routine");
  assert.ok(await page.locator('[data-node="step_01"]').evaluate(node=>node.classList.contains("is-skipped")),"Nonmatching branch should be visibly skipped");
  await page.locator("#designer-preview-priority").selectOption("Urgent");
- await page.evaluate(()=>{
-  window.__dragEvents=[];
-  for(const event of ["pointerdown","pointermove","pointerup","pointercancel"]){
-   window.addEventListener(event,e=>{if(window.__dragEvents.length<40)window.__dragEvents.push({type:event,target:e.target?.dataset?.node||"",x:e.clientX,y:e.clientY});},{capture:true});
-  }
- });
+ const node=page.locator('[data-node="step_01"]');
+ await node.scrollIntoViewIfNeeded();
  const beforeDrag=await page.locator('[data-node="step_01"]').evaluate(node=>node.style.left);
- const rect=await page.locator('[data-node="step_01"]').boundingBox();
+ const rect=await node.boundingBox();
+ assert.ok(rect.y>=0&&rect.y+40<900,"Target must be visible for pointer drag.");
  await page.mouse.move(rect.x+60,rect.y+25);
  await page.mouse.down();
  await page.mouse.move(rect.x+130,rect.y+65,{steps:6});
  await page.mouse.up();
  const afterDrag=await page.locator('[data-node="step_01"]').evaluate(node=>node.style.left);
- console.log("Drag diagnostics:",JSON.stringify({beforeDrag,afterDrag,events:await page.evaluate(()=>window.__dragEvents)}));
  assert.notEqual(beforeDrag,afterDrag,"Dragging should reposition a node");
  await page.locator("#designer-save").click();
  assert.ok((await page.locator("#notice").innerText()).includes("Workflow graph saved"));
