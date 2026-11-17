@@ -1,16 +1,16 @@
-# GreenKappa Labs — Public studio expansion
-Date: 2026-11-15
+# GreenKappa Labs — Public studio expansion (historical plan and current status)
+Original plan: 2026-11-15 · Current status updated: 2026-11-16
 
-## Scope of the initial implementation
+## Historical initial scope (not a statement of current availability)
 - New interactive Playground with Not to Scale 9-room browser microgame.
 - Playtest inquiry page for No Such Room, Small Gods, Large Debts and AGENT/FAULT.
 - Four homepage studio divisions: Interactive, Games, Worlds and Tools, plus Work and Lab Notes.
 - Homepage/collection integration and sitemap updates.
 - Static website only; no backend, accounts, analytics, email captures or paid services.
 
-## Product boundaries
+## Historical project notes and boundaries
 - Not to Scale demo is **not** a port of tabletop v0.3. Door matching, rotation, Fold, Echo and Tool mechanics are intentionally omitted.
-- Who Broke the Prompt? uses the existing v0.3-alpha crew/Injector outcome model, 54-card deck, and three-commission structure. Do not publish privately stored source decks without a deliberate rights and release review.
+- The historical Who Broke the Prompt? prototype is not among the three current publicly featured original game projects. Do not publish privately stored source decks without a deliberate review.
 - All original games are in development, not on sale.
 - No playtesting, commercial traction, or manufacturing sign-off is claimed.
 
@@ -32,3 +32,10 @@ Original games, interactive worlds and intelligent tools.
 - **Worlds:** Five illustrated sourcebook collections and four adventures; underlying Drive documents remain private.
 - **Tools:** Flowglass, FilingProof, CourtFlow, and Handoff Atlas have working browser alphas; Proofline and Lorelock are design-stage concepts. None is certified for production or regulated use.
 - Completed source-level link, anchor, nav, and asset checks must be distinguished from live cross-browser and human accessibility acceptance.
+
+## Current website maintenance priorities
+- Maintain ten gallery entries with accurate image disclaimers; mobile swipes, keyboard controls and accessible captions must remain operable.
+- Keep the four working Tools alphas separate from the two unbuilt concepts; never represent a prototype as a certified service.
+- Preserve the three active original card-game pages and the two separate Worlds catalogs.
+- Run repository-wide link and metadata checks and desktop/mobile browser smoke tests on each navigation or content-structure change.
+- Validate GitHub Pages deployment separately from source commits. Human/device accessibility review remains a separate release gate.

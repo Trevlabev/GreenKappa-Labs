@@ -6,7 +6,7 @@ Source for the static GitHub Pages website at **https://greenkappalabs.art/**.
 
 | Route | Function | Status |
 | --- | --- | --- |
-| `/` | Ten-slide gallery featuring Flowglass, FilingProof, CourtFlow and other studio projects | Public-facing site |
+| `/` | Ten-slide gallery, four studio divisions, and product discovery | Public-facing site |
 | `/tablearc/` | Original TableArc local-first RPG engine | Active development |
 | `/tablearc-red/` | Standalone Cyberpunk RED AI-GM and operations-console project | v0.5.0 source prototype; Windows acceptance pending |
 | `/card-games/` | Three original card-driven games | In development |
@@ -67,8 +67,14 @@ Contact: GreenkappaLabs@gmail.com.
 
 ### Flowglass promotional assets and gallery
 
-The homepage's eight-slide gallery includes a Flowglass alpha feature linking to `/flowglass/`. GreenKappa Tools has an enhanced product portfolio page at `/tools/`, with featured Flowglass and FilingProof release cards. Promotional images in `assets/promos/flowglass-*.webp` are AI-generated conceptual illustrations; they are **not literal screenshots** of the implemented alpha and must remain labeled as such. The main project has a dedicated square image for mobile. Sourcebook and adventure slide art and links are unchanged.
+The homepage's ten-slide gallery includes a Flowglass alpha feature linking to `/flowglass/`. GreenKappa Tools has an enhanced product portfolio page at `/tools/`, with four runnable alpha cards and two separately labeled concepts. Promotional images in `assets/promos/flowglass-*.webp` are AI-generated conceptual illustrations; they are **not literal screenshots** of the implemented alpha and must remain labeled as such. The main project has a dedicated square image for mobile. Sourcebook and adventure slide art and links are unchanged.
 
 ### FilingProof promotional media (2026-11-17)
 
 The website now includes four optimized WebP promotional assets under `assets/promos/filingproof-*.webp`: wide gallery illustration, square mobile crop, a Tools portfolio preview, and a secondary feature visual. These images are illustrative AI-generated marketing concepts, **not actual product screenshots, court acceptance decisions, or certifications**. Pages disclose their illustrative status and link to the real FilingProof alpha.
+
+## Site quality gate
+
+Run `node tests/site-integrity.mjs` to verify local HTML links, image references, anchors, canonical routes, accessibility basics, and sitemap entries. Run `node tests/site-navigation.mjs` after starting a local HTTP server and installing Playwright to exercise the public marketing pages on desktop and mobile. GitHub Actions also exercises the primary gallery and application entrypoints.
+
+Maintained marketing pages are intentionally separate from research artifacts (such as AGENT/FAULT experiment reports and the legacy redirect). Automated checks cannot establish human accessibility, legal review, product fitness, or long-session application reliability.
