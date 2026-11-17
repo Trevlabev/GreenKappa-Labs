@@ -203,3 +203,11 @@
 .worlds-catalog-page .gw-hero-copy h1{font-size:clamp(3.3rem,6vw,6rem)}
 .worlds-catalog-page .gw-mini-nav a:focus-visible{outline:3px solid #f2d4a6;outline-offset:3px}
 .worlds-catalog-page .gw-hero-library .gw-hero-books .gw-real-cover{height:auto;object-fit:contain}
+
+/* The separate Adventures page contains only adventure artwork in its hero. */
+.worlds-adventures-page .gw-hero-books .gw-real-cover.gw-hero-book-a{width:40%;max-width:235px;transform:translate(-97%,-47%) rotate(-8deg);z-index:2}
+.worlds-adventures-page .gw-hero-books .gw-real-cover.gw-hero-book-b{width:50%;max-width:285px;transform:translate(-20%,-50%) rotate(3deg);z-index:5}
+@media(max-width:570px){
+ .worlds-adventures-page .gw-hero-books .gw-real-cover.gw-hero-book-a{max-width:155px}
+ .worlds-adventures-page .gw-hero-books .gw-real-cover.gw-hero-book-b{max-width:180px}
+}
