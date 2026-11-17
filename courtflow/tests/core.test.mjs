@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import {blankWorkspace,createCase,completeTask,addException,resolveException,taskAvailability,reassign,reprioritize,updateProfile,validateProfile,importWorkspace,describeCase,dashboard,caseReport,auditCSV} from "../core.mjs";
 import {demoWorkspace} from "../sample.mjs";
+import {autoArrange,insertStep,removeStep,connectSteps,routeApplies} from "../designer.mjs";
 const now="2026-11-16T12:00:00.000Z";
 const one=()=>createCase(blankWorkspace(),{title:"Synthetic",profileId:"petition",receivedDate:"2026-11-14",priority:"Routine",team:"Intake",summary:"Test"},now);
 test("intake creates snapshot and audit",()=>{const s=one();assert.equal(s.cases[0].tasks.length,5);assert.equal(s.events.length,1);});
@@ -75,4 +76,29 @@ test("profile layout is portable, bounded, and subject to validation",()=>{
  p.layout={register:{x:72,y:110},close:{x:850,y:140}};
  s=updateProfile(s,p);assert.deepEqual(importWorkspace(s).profiles[0].layout,p.layout);
  p.layout.close.x=90000;assert.throws(()=>validateProfile(p),/Invalid node position/);
+});
+
+test("visual designer arranges a DAG, inserts a step, and preserves final reachability",()=>{
+ const p=structuredClone(blankWorkspace().profiles[0]);
+ const layout=autoArrange(p);
+ assert.ok(layout.close.x>layout.register.x);
+ const result=insertStep(p,"register"),t=result.profile.tasks.find(x=>x.id===result.selected);
+ assert.ok(t.dependsOn.includes("register"));
+ assert.ok(result.profile.tasks.find(x=>x.final).dependsOn.includes(t.id));
+ assert.doesNotThrow(()=>validateProfile(result.profile));
+});
+test("visual designer reconnects dependencies on step removal and rejects cycles",()=>{
+ const p=structuredClone(blankWorkspace().profiles[0]);
+ const linked=connectSteps(p,"verify","close");
+ assert.ok(linked.tasks.find(t=>t.final).dependsOn.includes("verify"));
+ assert.throws(()=>connectSteps(linked,"close","register"),/cycle/);
+ const removed=removeStep(linked,"screen");
+ assert.ok(!removed.tasks.some(t=>t.id==="screen"));
+ assert.doesNotThrow(()=>validateProfile(removed));
+});
+test("designer priority preview is deterministic without mutating a profile",()=>{
+ const t={id:"check",when:{priority:"Urgent"}};
+ assert.equal(routeApplies(t,"Routine"),false);
+ assert.equal(routeApplies(t,"Urgent"),true);
+ assert.equal(routeApplies({id:"always"},"Routine"),true);
 });
