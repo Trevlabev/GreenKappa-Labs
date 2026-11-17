@@ -1286,3 +1286,19 @@ html{scroll-behavior:smooth}
 
 /* CourtFlow homepage: 3 × 2 tools grid */
 @media(min-width:1041px){.gkl-tools-products{grid-template-columns:repeat(3,minmax(0,1fr))}}
+
+/* GreenKappa Tools homepage: distinguish runnable alphas from unbuilt concepts. */
+.gkl-tools-group-heading{display:flex;justify-content:space-between;align-items:end;gap:1.1rem 2rem;flex-wrap:wrap;border-bottom:1px solid rgba(50,89,79,.22);margin:2rem 0 1rem;padding-bottom:.9rem}
+.gkl-tools-group-heading>div>span{font-size:.67rem;letter-spacing:.13em;font-weight:850;color:#346e60}
+.gkl-tools-group-heading h3{font-size:clamp(1.55rem,2.4vw,2.35rem);line-height:1.1;letter-spacing:-.058em;margin:.4rem 0 0;color:#1b413b}
+.gkl-tools-group-heading>p{font-size:.81rem;margin:0;color:#5c756a;max-width:330px}
+.gkl-tools-group-heading--concepts{margin-top:2.8rem}
+.gkl-tools-products--live{grid-template-columns:repeat(2,minmax(0,1fr))}
+.gkl-tools-products--concepts{grid-template-columns:repeat(2,minmax(0,1fr))}
+.gkl-tools-products--live .gkl-tools-product,.gkl-tools-products--concepts .gkl-tools-product{min-height:265px}
+.gkl-tools-products--concepts .gkl-tools-product{background:linear-gradient(140deg,#edf1e9,#f7f1e6);border-style:dashed}
+.gkl-tools-products .gkl-tools-product-action{display:inline-block;margin-top:.8rem;text-underline-offset:4px;color:#236c5c;font-size:.81rem;font-weight:850}
+.gkl-tools-products--concepts .gkl-tools-stage{color:#7c6446}
+.gkl-tools-products--live .gkl-tools-stage{color:#24705a}
+.gkl-tools-products .gkl-tools-product p{max-width:57ch}
+@media(max-width:740px){.gkl-tools-products--live,.gkl-tools-products--concepts{grid-template-columns:1fr}.gkl-tools-products--live .gkl-tools-product,.gkl-tools-products--concepts .gkl-tools-product{min-height:0}.gkl-tools-group-heading{align-items:start}}

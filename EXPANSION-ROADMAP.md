@@ -30,5 +30,5 @@ Original games, interactive worlds and intelligent tools.
 - **Interactive:** TableArc and TableArc RED, separately developed RPG software projects.
 - **Games:** No Such Room, Small Gods, Large Debts, and AGENT/FAULT, all untested and not for sale.
 - **Worlds:** Five illustrated sourcebook collections and four adventures; underlying Drive documents remain private.
-- **Tools:** Flowglass, Proofline, Printflight, Lorelock, and Handoff Atlas are early-stage product concepts, with design and requirements work only.
+- **Tools:** Flowglass, FilingProof, CourtFlow, and Handoff Atlas have working browser alphas; Proofline and Lorelock are design-stage concepts. None is certified for production or regulated use.
 - Completed source-level link, anchor, nav, and asset checks must be distinguished from live cross-browser and human accessibility acceptance.
