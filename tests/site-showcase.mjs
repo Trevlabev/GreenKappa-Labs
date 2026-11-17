@@ -19,6 +19,17 @@ try{
   assert.ok(flowglassIndex>=0,"Flowglass has a gallery slide");
   await desktop.locator('[data-showcase-tab="'+flowglassIndex+'"]').click();
   const slide=desktop.locator('.gkl-showcase-slide.gkl-theme-flowglass');
+  if (!(await slide.getAttribute("class")).includes("is-active")) {
+    console.error("GALLERY DEBUG", JSON.stringify({
+      errors: faults,
+      activeSlides: await desktop.locator("[data-showcase-slide].is-active").count(),
+      activeTab: await desktop.locator("[data-showcase-tab].is-active").count(),
+      currentTab: await desktop.locator('[data-showcase-tab="'+flowglassIndex+'"]').getAttribute("class"),
+      index: flowglassIndex,
+      scriptSources: await desktop.locator("script[src]").evaluateAll(els=>els.map(x=>x.src)),
+      position: await desktop.locator(".gkl-showcase-position").textContent()
+    }));
+  }
   assert.match(await slide.getAttribute("class"),/is-active/,"Flowglass gallery slide can be selected");
   assert.equal(await slide.locator("a.gkl-slide-cover-link").getAttribute("href"),"flowglass/");
   const desktopImage=slide.locator("picture img");
