@@ -57,3 +57,10 @@ test('Cascade demo top navigation precedes changing slide content in hosted and 
  assert(css.includes('@media(max-width:590px)'));
  assert(css.includes('prefers-reduced-motion'));
 });
+
+test('Cascade host automation requires explicit per-round consent and never retries a step automatically',()=>{
+ const src=fs.readFileSync(ROOT+'/public/static/cascade.js','utf8');
+ for(const pattern of ['AUTO-GENERATE THIS ROUND','window.confirm(message)','autoSteps:new Set()','S.autoSteps.has(key)','S.autoAIround','scheduleAutoAI()','S.autoAI=false;notify',"!['baseline','cascade'].includes(s.phase)"]){assert(src.includes(pattern),pattern);}
+ assert(src.includes('Off by default'));assert(src.includes('billable model calls this round'));
+ assert(src.includes('STOP AUTO AI'));assert(src.includes('clearTimeout(S.autoAITimer)'));
+});
