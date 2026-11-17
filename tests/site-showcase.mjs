@@ -39,6 +39,15 @@ try{
   assert.equal(await filingWide.evaluate(img=>img.naturalWidth),1400,"FilingProof wide image loads");
   await filing.locator(".gkl-filingproof-art-note").waitFor({state:"visible",timeout:5000});
   assert.match(await filing.locator(".gkl-filingproof-art-note").innerText(),/Illustrative concept art/);
+  const courtIndex=await desktop.locator("[data-showcase-slide]").evaluateAll(els=>els.findIndex(e=>e.classList.contains("gkl-portfolio-courtflow")));
+  assert.ok(courtIndex>=0,"CourtFlow appears as its own gallery slide");
+  await desktop.locator('[data-showcase-tab="'+courtIndex+'"]').click();
+  const courtSlide=desktop.locator(".gkl-portfolio-courtflow");
+  assert.match(await courtSlide.getAttribute("class"),/is-active/,"CourtFlow gallery slide can be selected");
+  assert.equal(await courtSlide.locator("a.gkl-slide-cover-link").getAttribute("href"),"courtflow/");
+  assert.ok(await courtSlide.locator(".cfp-screen .cfp-metrics > div").count()===4,"CourtFlow preview includes four operational metrics");
+  assert.ok((await courtSlide.locator(".cfp-exception").innerText()).includes("unresolved exception"),"Illustration represents real exception handling");
+  assert.ok(await courtSlide.locator(".cfp-image-note").isVisible(),"CourtFlow illustration is disclosed on desktop");
   assert.equal(await desktop.locator(".gkl-tools-products--live > article").count(),4,"Homepage showcases four runnable tools");
   assert.equal(await desktop.locator(".gkl-tools-products--concepts > article").count(),2,"Homepage shows two design concepts");
   assert.ok(await desktop.locator('.gkl-tools-products--live a[href="filingproof/"]').count()>0,"Homepage FilingProof launch link exists");
@@ -60,6 +69,7 @@ try{
   assert.match(await hero.getAttribute("alt"),/not a screenshot/,"Promotional imagery accurately disclosed");
   assert.ok(await desktop.locator('#filingproof a[href="/filingproof/"]').count()>=1,"FilingProof launch link works");
   assert.ok(await desktop.locator('#courtflow a[href="/courtflow/"]').count()>=1,"CourtFlow launch link works");
+  assert.equal(await desktop.locator("#courtflow .cfp-screen-compact").count(),1,"Tools catalog showcases the CourtFlow-specific workflow preview");
   assert.ok(await desktop.locator('#handoff-atlas a[href="/tools/handoff-atlas/"]').count()>=1,"Handoff Atlas launch link works");
   await desktop.locator(".gkt-concept-card summary").first().click();
   assert.ok(await desktop.locator(".gkt-concept-card details").first().evaluate(el=>el.open),"Concept details expand");
@@ -87,6 +97,11 @@ try{
     assert.equal(await filingMobile.evaluate(img=>img.naturalWidth),900,"FilingProof square mobile image loads");
     assert.notEqual(await mobile.locator(".gkl-theme-filingproof .gkl-art-mobile-caption").evaluate(el=>getComputedStyle(el).display),"none");
 
+    await mobile.locator('[data-showcase-tab="'+courtIndex+'"]').click();
+    assert.equal(await mobile.locator(".gkl-portfolio-courtflow.is-active").count(),1,"Mobile CourtFlow slide is selectable");
+    assert.ok(await mobile.locator(".gkl-portfolio-courtflow .cfp-screen").isVisible(),"Mobile CourtFlow preview visible");
+    const layout=await mobile.locator(".gkl-portfolio-courtflow .cfp-screen").evaluate(el=>({width:el.clientWidth,parent:el.parentElement.clientWidth}));
+    assert.ok(layout.width<=layout.parent+2,"CourtFlow preview fits mobile gallery at "+width+"px: "+JSON.stringify(layout));
     const styles=await mobile.locator(".gkl-theme-flowglass .gkl-art-mobile-caption").evaluate(el=>({display:getComputedStyle(el).display,background:getComputedStyle(el).backgroundImage}));
     assert.notEqual(styles.display,"none","Mobile caption visible");
     assert.ok(styles.background.includes("linear-gradient"),"Mobile caption extends gallery art");
