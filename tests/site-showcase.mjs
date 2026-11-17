@@ -104,6 +104,7 @@ try{
 
     await mobile.locator('[data-showcase-tab="'+courtIndex+'"]').click();
     assert.equal(await mobile.locator(".gkl-portfolio-courtflow.is-active").count(),1,"Mobile CourtFlow slide is selectable");
+    await mobile.locator(".gkl-portfolio-courtflow .cfp-screen").waitFor({state:"visible",timeout:5000});
     assert.ok(await mobile.locator(".gkl-portfolio-courtflow .cfp-screen").isVisible(),"Mobile CourtFlow preview visible");
     const layout=await mobile.locator(".gkl-portfolio-courtflow .cfp-screen").evaluate(el=>({width:el.clientWidth,parent:el.parentElement.clientWidth}));
     assert.ok(layout.width<=layout.parent+2,"CourtFlow preview fits mobile gallery at "+width+"px: "+JSON.stringify(layout));
