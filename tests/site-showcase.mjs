@@ -26,6 +26,21 @@ try{
   assert.equal(await desktopImage.evaluate(img=>img.naturalWidth),1672,"Wide asset loads");
   assert.match(await slide.locator(".gkl-flowglass-art-note").textContent(),/Illustrative concept art/,"Disclaimer text exists");
   assert.ok(await slide.locator(".gkl-flowglass-art-note").isVisible(),"Desktop disclaimer is visible");
+  const filingIndex=await desktop.locator("[data-showcase-slide]").evaluateAll(els=>els.findIndex(e=>e.classList.contains("gkl-theme-filingproof")));
+  assert.ok(filingIndex>=0,"FilingProof should have a gallery slide");
+  await desktop.locator('[data-showcase-tab="'+filingIndex+'"]').click();
+  const filing=desktop.locator(".gkl-theme-filingproof");
+  assert.match(await filing.getAttribute("class"),/is-active/,"FilingProof gallery slide selectable");
+  assert.equal(await filing.locator("a.gkl-slide-cover-link").getAttribute("href"),"filingproof/");
+  const filingWide=filing.locator("picture img");
+  await filingWide.evaluate(img=>img.decode());
+  assert.match(await filingWide.evaluate(img=>img.currentSrc),/filingproof-gallery\.webp/);
+  assert.equal(await filingWide.evaluate(img=>img.naturalWidth),1400,"FilingProof wide image loads");
+  assert.match(await filing.locator(".gkl-filingproof-art-note").innerText(),/Illustrative concept art/);
+  const filingHomepage=desktop.locator(".gkl-tools-product-filing img");
+  await filingHomepage.evaluate(img=>img.decode());
+  assert.match(await filingHomepage.evaluate(img=>img.currentSrc),/filingproof-feature\.webp/);
+
   await desktop.goto(origin+"/tools/",{waitUntil:"networkidle"});
   assert.equal(await desktop.locator(".gkt-release-card").count(),2,"Tools page has two active product cards");
   assert.ok(await desktop.locator(".gkt-product-list > article.gkt-product").count()>=6,"Existing Tools products remain listed");
@@ -36,6 +51,12 @@ try{
   assert.equal(await hero.evaluate(img=>img.naturalWidth),1672,"Tools feature image loads");
   const toolsPageCaption=await desktop.locator(".gkt-hero-product figcaption").innerText();
   assert.match(toolsPageCaption,/Not an actual UI screenshot/);
+  const filingTools=desktop.locator("#filingproof .gkt-filing-promo img");
+  await filingTools.evaluate(img=>img.decode());
+  assert.equal(await filingTools.evaluate(img=>img.naturalWidth),1200,"FilingProof Tools artwork loads");
+  assert.match(await desktop.locator("#filingproof .gkt-filing-promo figcaption").innerText(),/Conceptual promotional artwork/);
+  assert.ok(await desktop.locator('#filingproof a[href="/filingproof/"]').count()>=1,"FilingProof launch link works");
+
   await desktop.goto(origin+"/flowglass/",{waitUntil:"networkidle"});
   await desktop.locator(".fg-node").first().waitFor();
   assert.equal(await desktop.locator(".fg-node").count(),9,"Flowglass application still works");
@@ -51,6 +72,13 @@ try{
     const selected=await img.evaluate(img=>img.currentSrc);
     assert.match(selected,/flowglass-gallery-mobile\.webp/,"Square image should be selected on mobile");
     assert.equal(await img.evaluate(img=>img.naturalWidth),1254);
+    await mobile.locator('[data-showcase-tab="'+filingIndex+'"]').click();
+    const filingMobile=mobile.locator(".gkl-theme-filingproof picture img");
+    await filingMobile.evaluate(img=>img.decode());
+    assert.match(await filingMobile.evaluate(img=>img.currentSrc),/filingproof-gallery-mobile\.webp/);
+    assert.equal(await filingMobile.evaluate(img=>img.naturalWidth),900,"FilingProof square mobile image loads");
+    assert.notEqual(await mobile.locator(".gkl-theme-filingproof .gkl-art-mobile-caption").evaluate(el=>getComputedStyle(el).display),"none");
+
     const styles=await mobile.locator(".gkl-theme-flowglass .gkl-art-mobile-caption").evaluate(el=>({display:getComputedStyle(el).display,background:getComputedStyle(el).backgroundImage}));
     assert.notEqual(styles.display,"none","Mobile caption visible");
     assert.ok(styles.background.includes("linear-gradient"),"Mobile caption extends gallery art");
@@ -64,7 +92,7 @@ try{
     await mobile.close();
   }
   assert.deepEqual(faults,[],"Uncaught browser errors");
-  console.log("PASS: dynamic "+slideCount+"-slide gallery, Flowglass desktop/mobile artwork, Tools portfolio, accessibility labels, responsive controls and live app");
+  console.log("PASS: dynamic "+slideCount+"-slide gallery, Flowglass and FilingProof desktop/mobile artwork, Tools portfolio, accessibility labels, responsive controls and live app");
 }finally{
   await browser.close();
 }
