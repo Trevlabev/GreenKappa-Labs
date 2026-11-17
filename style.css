@@ -967,3 +967,109 @@ html{scroll-behavior:smooth}
     height:32px;
   }
 }
+
+/* Seven-project showcase: art-forward, individually themed slides.
+   TableArc and RED keep their separately approved artwork and behavior. */
+.gkl-showcase-slide.gkl-portfolio-slide{
+  --gp-bg:#101b2d;--gp-bg2:#1c3042;--gp-accent:#ebc48a;--gp-text:#f7f0e4;
+  display:block;overflow:hidden;background:radial-gradient(ellipse at 78% 42%,var(--gp-bg2),var(--gp-bg) 75%);color:var(--gp-text);
+}
+.gkl-portfolio-gods{--gp-bg:#17121f!important;--gp-bg2:#47303b!important;--gp-accent:#e8b36d!important;--gp-ink:#2b1d25;}
+.gkl-portfolio-room{--gp-bg:#111e2c!important;--gp-bg2:#30444e!important;--gp-accent:#9ed8d7!important;--gp-ink:#122832;}
+.gkl-portfolio-agent{--gp-bg:#181329!important;--gp-bg2:#3b2860!important;--gp-accent:#def284!important;--gp-ink:#251d36;}
+.gkl-portfolio-sourcebooks{--gp-bg:#0d1a29!important;--gp-bg2:#30445a!important;--gp-accent:#ebc999!important;--gp-ink:#13263a;}
+.gkl-portfolio-adventures{--gp-bg:#211b25!important;--gp-bg2:#543c44!important;--gp-accent:#f0bc9c!important;--gp-ink:#2e202a;}
+.gkl-portfolio-slide .gkl-portfolio-media{position:absolute;inset:0 0 0 33%;display:grid;place-items:center;overflow:hidden;isolation:isolate;pointer-events:none;background:radial-gradient(ellipse at 60% 50%,var(--gp-bg2),transparent 75%)}
+.gkl-portfolio-slide .gkl-portfolio-media::after{content:"";position:absolute;inset:0;z-index:3;pointer-events:none;background:linear-gradient(90deg,var(--gp-bg) 0%,transparent 29%,transparent 82%,rgba(5,9,14,.12) 100%)}
+.gkl-portfolio-slide .gkl-portfolio-backdrop{position:absolute;inset:-8%;height:116%;width:116%;object-fit:cover;filter:blur(18px) brightness(.4) saturate(.9);opacity:.56}
+.gkl-portfolio-slide .gkl-portfolio-hero-picture{position:relative;z-index:2;display:grid;place-items:center;width:90%;height:91%;filter:drop-shadow(0 25px 30px rgba(0,0,0,.42))}
+.gkl-portfolio-slide .gkl-portfolio-hero-picture img{display:block;max-width:100%;max-height:100%;width:100%;height:100%;object-fit:contain;object-position:center}
+.gkl-portfolio-slide .gkl-portfolio-copy{position:relative;z-index:4;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:0;width:min(52%,630px);height:100%;padding:clamp(1.6rem,4.2vw,4.25rem);background:linear-gradient(90deg,var(--gp-bg) 0%,rgba(0,0,0,0) 100%)}
+.gkl-portfolio-slide .gkl-portfolio-eyebrow{margin:0 0 clamp(.7rem,1.5vw,1.3rem);font-size:clamp(.63rem,.85vw,.78rem);font-weight:850;letter-spacing:.14em;line-height:1.5;text-transform:uppercase;color:var(--gp-accent)}
+.gkl-portfolio-slide .gkl-portfolio-copy h2{margin:0 0 clamp(.7rem,2vw,1.55rem);color:#fff9ee;font-size:clamp(2.9rem,5.2vw,5.2rem);line-height:.96;letter-spacing:-.075em;text-shadow:0 8px 35px rgba(0,0,0,.27)}
+.gkl-portfolio-slide .gkl-portfolio-copy h2 em{font-family:Georgia,serif;font-style:italic;font-weight:400;color:var(--gp-accent);letter-spacing:-.035em}
+.gkl-portfolio-agent .gkl-portfolio-copy h2{font-family:ui-monospace,Consolas,monospace;font-size:clamp(2.6rem,4.6vw,4.8rem);letter-spacing:-.1em}
+.gkl-portfolio-agent .gkl-portfolio-copy h2 em{font-family:inherit;font-weight:850;font-style:normal}
+.gkl-portfolio-slide .gkl-portfolio-description{max-width:430px;margin:0;color:#eee9e3;font-size:clamp(.88rem,1.08vw,1.08rem);line-height:1.58;text-shadow:0 2px 18px rgba(0,0,0,.4)}
+.gkl-portfolio-slide .gkl-portfolio-action{display:inline-flex;align-items:center;gap:.8rem;margin-top:clamp(1.2rem,2vw,1.8rem);padding:.82rem 1.15rem;border-radius:7px;background:var(--gp-accent);color:var(--gp-ink);font-size:.82rem;font-weight:900;box-shadow:0 6px 24px rgba(0,0,0,.18)}
+.gkl-portfolio-slide:hover .gkl-portfolio-action{filter:brightness(1.09)}
+.gkl-portfolio-agent .gkl-portfolio-action{border-radius:1px;letter-spacing:.06em}
+.gkl-portfolio-room .gkl-portfolio-media{background:repeating-linear-gradient(0deg,transparent 0,transparent 48px,rgba(171,209,216,.045) 49px,transparent 50px),radial-gradient(ellipse at 50% 50%,#36535d,var(--gp-bg) 75%)}
+.gkl-portfolio-gods .gkl-portfolio-hero-picture{width:95%;height:92%}
+.gkl-portfolio-room .gkl-portfolio-hero-picture{width:95%;height:94%}
+/* CRT monitor and actual AGENT/FAULT card visual references. */
+.gkl-portfolio-agent .gkl-portfolio-media{background:radial-gradient(circle at 54% 46%,rgba(172,98,236,.34),transparent 64%),repeating-linear-gradient(0deg,rgba(222,242,132,.02) 0px,rgba(222,242,132,.02) 1px,transparent 2px,transparent 6px)}
+.gkl-portfolio-agent-monitor{position:absolute;z-index:2;width:min(65%,590px);height:78%;left:16%;top:9%;display:grid;place-items:center;transform:rotate(-3deg);filter:drop-shadow(0 28px 28px rgba(0,0,0,.5))}
+.gkl-portfolio-agent-monitor .gkl-portfolio-agent-screen{width:100%;height:100%;object-fit:contain}
+.gkl-portfolio-agent .gkl-portfolio-agent-cards{position:absolute;z-index:3;width:45%;height:auto;max-height:55%;object-fit:contain;right:1%;bottom:-5%;transform:rotate(8deg);filter:drop-shadow(0 18px 15px rgba(0,0,0,.38))}
+/* Reuse the actual illustrated covers for both distinct Worlds gallery entries. */
+.gkl-portfolio-cover-fan{position:relative;width:100%;height:100%;z-index:2}
+.gkl-portfolio-cover-fan .gkl-portfolio-book-cover{position:absolute;width:26%;height:65%;object-fit:contain;filter:drop-shadow(0 20px 18px rgba(0,0,0,.55));border-radius:3px}
+.gkl-portfolio-five-covers .gkl-portfolio-book-cover:nth-child(1){left:2%;top:24%;transform:rotate(-16deg);z-index:1}
+.gkl-portfolio-five-covers .gkl-portfolio-book-cover:nth-child(2){left:19%;top:14%;transform:rotate(-9deg);z-index:2}
+.gkl-portfolio-five-covers .gkl-portfolio-book-cover:nth-child(3){left:37%;top:8%;transform:rotate(-1deg);z-index:5}
+.gkl-portfolio-five-covers .gkl-portfolio-book-cover:nth-child(4){left:57%;top:15%;transform:rotate(8deg);z-index:3}
+.gkl-portfolio-five-covers .gkl-portfolio-book-cover:nth-child(5){left:76%;top:24%;transform:rotate(15deg);z-index:1}
+.gkl-portfolio-four-covers .gkl-portfolio-book-cover{width:29%;height:72%}
+.gkl-portfolio-four-covers .gkl-portfolio-book-cover:nth-child(1){left:3%;top:21%;transform:rotate(-12deg);z-index:1}
+.gkl-portfolio-four-covers .gkl-portfolio-book-cover:nth-child(2){left:25%;top:12%;transform:rotate(-5deg);z-index:2}
+.gkl-portfolio-four-covers .gkl-portfolio-book-cover:nth-child(3){left:49%;top:10%;transform:rotate(5deg);z-index:4}
+.gkl-portfolio-four-covers .gkl-portfolio-book-cover:nth-child(4){left:72%;top:21%;transform:rotate(13deg);z-index:1}
+.gkl-portfolio-slide .gkl-portfolio-copy{min-width:0}
+@media(max-width:1020px) and (min-width:901px){
+ .gkl-portfolio-slide .gkl-portfolio-copy{width:54%;padding:2rem}
+ .gkl-portfolio-slide .gkl-portfolio-copy h2{font-size:clamp(2.85rem,5.1vw,4.1rem)}
+ .gkl-portfolio-slide .gkl-portfolio-description{font-size:.9rem}
+ .gkl-portfolio-slide .gkl-portfolio-media{left:30%}
+}
+@media(max-width:900px){
+ .gkl-showcase-slide.gkl-portfolio-slide{display:flex;flex-direction:column}
+ .gkl-portfolio-slide .gkl-portfolio-media{position:relative;inset:auto;flex:0 0 53%;width:100%;height:53%;min-height:0}
+ .gkl-portfolio-slide .gkl-portfolio-media::after{background:linear-gradient(180deg,transparent 68%,var(--gp-bg) 100%)}
+ .gkl-portfolio-slide .gkl-portfolio-copy{
+   position:relative;flex:1 1 auto;display:flex;width:100%;height:auto;min-height:0;padding:1rem clamp(1.15rem,4vw,2.3rem) 1.55rem;
+   background:linear-gradient(180deg,var(--gp-bg) 0%,var(--gp-bg2) 175%);
+   justify-content:center;align-items:flex-start
+ }
+ .gkl-portfolio-slide .gkl-portfolio-copy::before{content:"";position:absolute;left:0;right:0;top:-40px;height:40px;pointer-events:none;background:linear-gradient(180deg,transparent,var(--gp-bg))}
+ .gkl-portfolio-slide .gkl-portfolio-eyebrow{margin-bottom:.55rem;font-size:.66rem}
+ .gkl-portfolio-slide .gkl-portfolio-copy h2{font-size:clamp(2.5rem,6vw,4rem);margin:0 0 .65rem;line-height:1.02}
+ .gkl-portfolio-slide .gkl-portfolio-description{max-width:750px;font-size:.9rem;line-height:1.48}
+ .gkl-portfolio-slide .gkl-portfolio-action{margin-top:.8rem;padding:.68rem .9rem;font-size:.79rem}
+ .gkl-portfolio-slide .gkl-portfolio-hero-picture{width:87%;height:93%;overflow:hidden}
+ .gkl-portfolio-agent-monitor{height:85%;top:2%;width:52%;left:18%}
+ .gkl-portfolio-agent .gkl-portfolio-agent-cards{max-height:58%;width:38%;right:9%;bottom:-2%}
+ .gkl-portfolio-cover-fan{width:100%;height:100%}
+ .gkl-portfolio-slide .gkl-portfolio-backdrop{opacity:.4}
+}
+@media(max-width:680px){
+ .gkl-portfolio-slide .gkl-portfolio-media{flex-basis:55%;height:55%}
+ .gkl-portfolio-slide .gkl-portfolio-copy{padding:1rem 1.25rem 1.4rem}
+ .gkl-portfolio-slide .gkl-portfolio-eyebrow{font-size:.6rem}
+ .gkl-portfolio-slide .gkl-portfolio-copy h2{font-size:clamp(2.15rem,8vw,3rem);line-height:1}
+ .gkl-portfolio-agent .gkl-portfolio-copy h2{font-size:clamp(2rem,7.8vw,2.85rem)}
+ .gkl-portfolio-slide .gkl-portfolio-description{font-size:.84rem;line-height:1.42}
+ .gkl-portfolio-slide .gkl-portfolio-action{margin-top:.72rem;padding:.64rem .83rem}
+ .gkl-portfolio-slide .gkl-portfolio-media::after{background:linear-gradient(180deg,transparent 61%,var(--gp-bg) 100%)}
+ .gkl-portfolio-slide .gkl-portfolio-hero-picture{width:100%;height:96%}
+ .gkl-portfolio-agent-monitor{top:0;left:10%;width:72%;height:75%}
+ .gkl-portfolio-agent .gkl-portfolio-agent-cards{width:60%;right:-6%;bottom:0}
+ .gkl-portfolio-cover-fan .gkl-portfolio-book-cover{width:36%;height:70%}
+ .gkl-portfolio-five-covers .gkl-portfolio-book-cover:nth-child(1){left:-8%;top:26%}
+ .gkl-portfolio-five-covers .gkl-portfolio-book-cover:nth-child(2){left:8%;top:16%}
+ .gkl-portfolio-five-covers .gkl-portfolio-book-cover:nth-child(3){left:31%;top:8%}
+ .gkl-portfolio-five-covers .gkl-portfolio-book-cover:nth-child(4){left:55%;top:17%}
+ .gkl-portfolio-five-covers .gkl-portfolio-book-cover:nth-child(5){left:74%;top:28%}
+ .gkl-portfolio-four-covers .gkl-portfolio-book-cover{width:39%;height:75%}
+ .gkl-portfolio-four-covers .gkl-portfolio-book-cover:nth-child(1){left:-8%;top:22%}
+ .gkl-portfolio-four-covers .gkl-portfolio-book-cover:nth-child(2){left:15%;top:12%}
+ .gkl-portfolio-four-covers .gkl-portfolio-book-cover:nth-child(3){left:44%;top:10%}
+ .gkl-portfolio-four-covers .gkl-portfolio-book-cover:nth-child(4){left:73%;top:23%}
+}
+@media(max-width:380px){
+ .gkl-portfolio-slide .gkl-portfolio-copy{padding:.75rem 1.05rem 1rem}
+ .gkl-portfolio-slide .gkl-portfolio-eyebrow{font-size:.56rem;margin-bottom:.36rem}
+ .gkl-portfolio-slide .gkl-portfolio-copy h2{font-size:2.15rem;margin-bottom:.4rem}
+ .gkl-portfolio-slide .gkl-portfolio-description{font-size:.8rem}
+ .gkl-portfolio-slide .gkl-portfolio-action{font-size:.73rem;margin-top:.55rem}
+}
