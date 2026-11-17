@@ -175,3 +175,10 @@
  .worlds-page .gw-hero-books .gw-real-cover.gw-hero-book-a{max-width:145px}
  .worlds-page .gw-hero-books .gw-real-cover.gw-hero-book-c{max-width:130px}
 }
+
+/* Worlds catalog: visually and semantically separate sourcebooks from individual adventures. */
+.worlds-page #sourcebooks{padding-bottom:clamp(3rem,5vw,5rem)}
+.worlds-page #adventures{margin-top:clamp(1rem,3vw,2rem);background:linear-gradient(150deg,rgba(39,28,47,.9),rgba(18,34,43,.95));border-top:2px solid rgba(236,204,160,.34)}
+.worlds-page #sourcebooks .gw-section-heading h2 em{color:#dfbe8e}
+.worlds-page #adventures .gw-section-heading h2 em{color:#e3adba}
+.worlds-page .gw-mini-nav a:focus-visible{outline:3px solid #edce98;outline-offset:4px}

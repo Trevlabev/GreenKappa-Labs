@@ -1198,3 +1198,21 @@ html{scroll-behavior:smooth}
  .gkl-portfolio-adventures .gkl-adventure-duo{width:91%;height:95%;gap:.8rem}
  .gkl-portfolio-adventures .gkl-portfolio-media{background:radial-gradient(ellipse at 50% 42%,rgba(157,108,136,.28),transparent 70%),#211b25}
 }
+
+/* GreenKappa Worlds: discrete Universe Sourcebooks and Separate Adventures on the homepage. */
+.gkl-worlds-sourcebooks{display:block;scroll-margin-top:90px}
+.gkl-worlds-section-heading{display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,.75fr);align-items:end;gap:1.4rem 2rem;margin-bottom:1.3rem}
+.gkl-worlds-section-heading h3{color:#1d3139;letter-spacing:-.068em;font-size:clamp(2.3rem,4.4vw,4.3rem);line-height:1.04;margin:.4rem 0 0}
+.gkl-worlds-section-heading h3 em{font-family:Georgia,serif;font-weight:400;color:#70527b}
+.gkl-worlds-section-kicker{display:block;color:#365c68;font-size:.7rem;font-weight:880;letter-spacing:.14em}
+.gkl-worlds-section-heading p{max-width:450px;margin:0;color:#52645e;font-size:.9rem;line-height:1.65}
+.gkl-worlds-section-heading strong,.gkl-worlds-adventures-heading strong{color:#1e464a}
+.gkl-worlds-sourcebooks .gkl-worlds-collection-bar{padding-top:.2rem}
+.gkl-worlds-adventures{margin-top:clamp(3rem,6vw,5.5rem);padding:clamp(2rem,3.4vw,3rem) clamp(.8rem,2.2vw,1.5rem);border:1px solid rgba(145,111,130,.2);border-radius:22px;background:linear-gradient(152deg,rgba(245,240,238,.85),rgba(240,231,238,.75))}
+.gkl-worlds-adventures-heading{margin-bottom:1.7rem}
+.gkl-worlds-section-footer{display:flex;justify-content:flex-end;padding-top:1rem}
+.gkl-worlds-section-footer a{font-size:.82rem;font-weight:860;color:#1a5b63;text-decoration:underline;text-underline-offset:4px}
+.gkl-worlds-section-footer a:hover{color:#784967}
+.gkl-worlds-section-footer a:focus-visible{outline:3px solid #7f598b;outline-offset:3px}
+@media(max-width:740px){.gkl-worlds-section-heading{grid-template-columns:1fr;gap:.65rem}.gkl-worlds-adventures{padding:1.2rem .8rem}.gkl-worlds-section-heading h3{font-size:clamp(2.2rem,7vw,3.4rem)}}
+@media(max-width:570px){.gkl-worlds-adventures{border-radius:16px}.gkl-worlds-section-footer{justify-content:flex-start}}
