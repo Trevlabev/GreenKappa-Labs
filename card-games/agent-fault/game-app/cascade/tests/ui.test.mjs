@@ -45,13 +45,15 @@ test('all 66 source entries render in public visual archive without duplicate ca
 test('Cascade demo top navigation precedes changing slide content in hosted and offline editions',()=>{
  for(const file of ['cascade-demo.js','cascade-demo-offline.js']){
   const src=fs.readFileSync(ROOT+'/public/static/'+file,'utf8');
-  const controls=src.indexOf('class="demo-toolbar"');
-  const slide=src.indexOf('class="demo-surface"');
-  assert(controls>=0&&slide>controls,file+' navigation is not above slide');
+  const controls=src.indexOf('function navigation()');
+  const render=src.indexOf('function render(');
+  assert(controls>=0&&render>controls,file+' navigation definition must precede rendering');
+  assert(src.includes('${header()}${navigation()}<main'),file+' navigation must be above the variable-height scene');
   for(const button of ['data-prev','data-next','data-play'])assert(src.includes(button),file+' missing '+button);
   assert(!src.includes('class="demo-footer"'),file+' retains bottom navigation');
  }
- const css=fs.readFileSync(ROOT+'/public/static/cascade.css','utf8');
- assert(css.includes('.demo-toolbar{position:sticky'));
- assert(css.includes('@media(max-width:710px){.demo-toolbar'));
+ const css=fs.readFileSync(ROOT+'/public/static/cascade-showcase.css','utf8');
+ assert(css.includes('.cd-nav{position:sticky'));
+ assert(css.includes('@media(max-width:590px)'));
+ assert(css.includes('prefers-reduced-motion'));
 });
