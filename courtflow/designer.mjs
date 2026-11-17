@@ -230,7 +230,11 @@ export function mountWorkflowDesigner({getProfiles,onSave,onNotice}){
  });
  nodes.addEventListener("pointerdown",e=>{
   const node=e.target.closest("[data-node]");if(!node||e.button!==0)return;
-  const taskId=node.dataset.node,origin=draft.layout[taskId],startX=e.clientX,startY=e.clientY,scrollLeft=el("designer-viewport").scrollLeft,scrollTop=el("designer-viewport").scrollTop;
+  // Explicit pointer capture prevents leaving the node from cancelling a drag.
+  e.preventDefault();
+  node.focus({preventScroll:true});
+  if(node.setPointerCapture)node.setPointerCapture(e.pointerId);
+  const taskId=node.dataset.node,origin={...draft.layout[node.dataset.node]},startX=e.clientX,startY=e.clientY,scrollLeft=el("designer-viewport").scrollLeft,scrollTop=el("designer-viewport").scrollTop;
   let moved=false;
   function pointerMove(event){
    if(event.pointerId!==e.pointerId)return;
@@ -245,7 +249,7 @@ export function mountWorkflowDesigner({getProfiles,onSave,onNotice}){
   function pointerUp(event){
    if(event.pointerId!==e.pointerId)return;
    window.removeEventListener("pointermove",pointerMove);window.removeEventListener("pointerup",pointerUp);window.removeEventListener("pointercancel",pointerCancel);
-   if(moved){suppressPointerClick=true;markDirty();draw();return;}
+   if(moved){suppressPointerClick=true;setTimeout(()=>{suppressPointerClick=false;},250);markDirty();draw();return;}
    activateNode(taskId);
   }
   function pointerCancel(){window.removeEventListener("pointermove",pointerMove);window.removeEventListener("pointerup",pointerUp);window.removeEventListener("pointercancel",pointerCancel);draw();}
