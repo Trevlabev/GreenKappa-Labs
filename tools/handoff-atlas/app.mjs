@@ -324,6 +324,10 @@ async function importFile(file){
  }catch(err){notify("Import rejected: "+err.message,"error");}
 }
 function wireEvents(){
+ // Enter inside a form must never navigate away and discard a local working copy.
+ for(const formId of ["ha-procedure-form","ha-step-form"]){
+  el(formId).addEventListener("submit",(event)=>{event.preventDefault();flush();notify("Working copy retained locally. Publish when validated.");});
+ }
  document.querySelectorAll("[data-view]").forEach(button=>button.addEventListener("click",()=>{
   if(view==="editor"&&draft)flush();
   switchView(button.dataset.view);
