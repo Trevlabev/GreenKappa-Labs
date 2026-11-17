@@ -282,3 +282,61 @@ body.card-games-page{
 .cg-online-links a:nth-child(2){background:#d0a9ef}
 .cg-online-links a:focus-visible{outline:3px solid #fff6e9;outline-offset:3px}
 @media(max-width:570px){.cg-online-links a{flex:1 1 100%}}
+
+/* AGENT/FAULT canonical horizontal campaign: no thumbnails, frames, or portrait swap. */
+.cg-hero-five{display:flex;flex-direction:column;align-items:stretch;gap:clamp(1.4rem,3vw,2.5rem)}
+.cg-hero-five .cg-gallery{
+ order:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+ width:100%;max-width:none;gap:clamp(.65rem,2vw,1.2rem);margin:0;
+}
+.cg-hero-five .cg-hero-copy{order:2;width:100%;max-width:960px}
+.cg-hero-five .cg-swipe-cue{order:1}
+.cg-hero-five .cg-gallery-card-agent{
+ display:block;grid-column:1/-1;order:-1;
+ width:100%;border:0;border-radius:0;background:transparent;box-shadow:none;
+}
+.cg-hero-five .cg-gallery-card-agent img,
+.cg-hero-five .cg-gallery-card-agent img.cg-gallery-poster{
+ display:block;width:100%;height:auto;aspect-ratio:16/9;
+ object-fit:contain;object-position:center;border-radius:0;
+}
+.cg-hero-five .cg-gallery-card-agent:hover,
+.cg-hero-five .cg-gallery-card-agent:focus-visible{
+ transform:none;border:0;
+}
+#agent-fault.cg-agent-fault{
+ display:flex;flex-direction:column;align-items:stretch;gap:clamp(1.4rem,3vw,2.5rem);
+ direction:ltr;
+}
+#agent-fault.cg-agent-fault .cg-game-poster-art{
+ width:100%;max-width:none;grid-column:auto;grid-row:auto;
+ border:0;border-radius:0;background:transparent;box-shadow:none;
+ padding:0;margin:0;overflow:visible;
+}
+#agent-fault.cg-agent-fault .cg-poster-link{
+ border:0;border-radius:0;background:transparent;overflow:visible;
+}
+#agent-fault.cg-agent-fault .cg-game-poster-art .cg-poster-link img{
+ display:block;width:100%;height:auto;max-width:none;
+ aspect-ratio:16/9;object-fit:contain;border-radius:0;
+}
+#agent-fault.cg-agent-fault .cg-game-copy{
+ grid-column:auto;grid-row:auto;max-width:960px;
+}
+@media(max-width:760px){
+ .cg-hero-five .cg-gallery{
+   display:flex;flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;
+   gap:12px;max-width:100%;scroll-snap-type:x mandatory;
+   padding:2px 5% 10px 0;
+ }
+ .cg-hero-five .cg-gallery-card-agent{
+   flex:0 0 min(94vw,600px);width:auto;scroll-snap-align:start;
+ }
+ .cg-hero-five .cg-gallery-card-agent img,
+ .cg-hero-five .cg-gallery-card-agent img.cg-gallery-poster{
+   width:100%;height:auto;aspect-ratio:16/9;object-fit:contain;
+ }
+ #agent-fault.cg-agent-fault .cg-game-poster-art{
+   width:100%;max-width:none;margin:0;
+ }
+}

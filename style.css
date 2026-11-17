@@ -1427,3 +1427,43 @@ html{scroll-padding-top:90px}
  .gkl-theme-courtflow .gkl-art-picture{aspect-ratio:1672/941}
  .gkl-theme-courtflow .gkl-art-mobile-caption{padding:1.1rem 1.3rem}
 }
+
+/* AGENT/FAULT: canonical horizontal promo appears edge-to-edge rather than
+   inside the old split-image/monitor composition. Leave other slides untouched. */
+.gkl-showcase-slide.gkl-agent-art-slide{background:#100d2d}
+.gkl-agent-art-slide .gkl-art-picture{background:#100d2d}
+.gkl-agent-art-slide .gkl-art-picture img{
+ width:100%;height:100%;object-fit:contain;object-position:center;
+}
+@media(max-width:680px){
+ .gkl-showcase-slide.gkl-agent-art-slide .gkl-art-picture{
+   width:100%;height:auto;aspect-ratio:16/9;
+ }
+ .gkl-agent-art-slide .gkl-art-mobile-caption{
+   background:#100d2d;color:#fff5e9;
+ }
+ .gkl-agent-art-slide .gkl-art-mobile-caption h2{color:#e5f91b}
+ .gkl-agent-art-slide .gkl-art-mobile-caption strong{color:#e5f91b}
+}
+/* Homepage games section: image at the top, full available width, no enclosing card. */
+.gkl-game-grid-product-first .gkl-game-card-featured{
+ display:flex;flex-direction:column;grid-column:1/-1;min-height:0;
+ background:transparent;border:0;border-radius:0;box-shadow:none;overflow:visible;
+}
+.gkl-game-grid-product-first .gkl-game-card-featured .gkl-game-product-image{
+ display:block;flex:none;width:100%;height:auto;max-height:none;
+ aspect-ratio:auto;overflow:visible;background:transparent;border:0;
+}
+.gkl-game-grid-product-first .gkl-game-card-featured .gkl-game-product-image img{
+ display:block;width:100%;height:auto;max-height:none;
+ aspect-ratio:16/9;object-fit:contain;transform:none;
+}
+.gkl-game-grid-product-first .gkl-game-card-featured .gkl-game-card-content{
+ width:100%;padding:clamp(1.4rem,3vw,2.5rem);
+ background:#19142e;color:#fff8e9;align-items:flex-start;
+}
+@media(max-width:570px){
+ .gkl-game-grid-product-first .gkl-game-card-featured .gkl-game-product-image{
+   height:auto;aspect-ratio:auto;max-height:none;
+ }
+}

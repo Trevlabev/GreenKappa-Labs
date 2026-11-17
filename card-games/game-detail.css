@@ -125,73 +125,34 @@ body.game-detail-page[data-game="not-to-scale"] .gd-hero-art img{aspect-ratio:3/
 body.game-detail-page[data-game="not-to-scale"] .gd-art-tile{background:#102333}
 body.game-detail-page[data-game="not-to-scale"] .gd-art-note{max-width:78ch}
 
-
-/* AGENT/FAULT: wide campaign key art on desktop, original portrait art on phones.
-   Scoped to this detail page so other games retain their editorial layouts. */
-body.game-detail-page[data-game="agent-fault"] .gd-hero-art a{
-  overflow:hidden;
-  padding:0;
-  background:#100d2d;
-  border-color:rgba(207,157,239,.32);
+/* AGENT/FAULT: user-approved 16:9 campaign image as a true full-bleed masthead.
+   Preserve its full composition at every breakpoint; no frame, crop or portrait swap. */
+body.game-detail-page[data-game="agent-fault"] .af-wide-hero{
+ display:block;width:100%;max-width:none;margin:0;padding:0;
+ overflow:hidden;background:#100d2d;line-height:0;text-decoration:none;
 }
-body.game-detail-page[data-game="agent-fault"] .gd-hero-art picture{display:block;width:100%}
-body.game-detail-page[data-game="agent-fault"] .gd-hero-art img{
-  display:block;
-  width:100%;
-  height:auto;
-  aspect-ratio:auto;
-  object-fit:contain;
+body.game-detail-page[data-game="agent-fault"] .af-wide-hero img{
+ display:block;width:100%;height:auto;max-width:none;
+ aspect-ratio:16/9;object-fit:contain;object-position:center;
 }
-@media(min-width:1001px){
-  body.game-detail-page[data-game="agent-fault"] .gd-hero{
-    width:min(1640px,calc(100% - 3rem));
-  }
-  body.game-detail-page[data-game="agent-fault"] .gd-hero-layout{
-    grid-template-columns:minmax(310px,.48fr) minmax(0,1.52fr);
-    gap:clamp(1.5rem,3vw,3.5rem);
-  }
-  body.game-detail-page[data-game="agent-fault"] .gd-hero h1{
-    font-size:clamp(3.5rem,5vw,6.4rem);
-  }
+body.game-detail-page[data-game="agent-fault"] .af-wide-hero:focus-visible{
+ outline:3px solid #e5f91b;outline-offset:-3px;
 }
-@media(max-width:1000px){
-  body.game-detail-page[data-game="agent-fault"] .gd-hero-layout{gap:clamp(1.2rem,3vw,2rem)}
+body.game-detail-page[data-game="agent-fault"] .gd-hero{
+ padding-top:clamp(1.5rem,3vw,3rem)!important;
+ padding-bottom:clamp(3rem,5vw,5rem)!important;
 }
+body.game-detail-page[data-game="agent-fault"] .gd-hero-layout{
+ display:block;width:100%;max-width:1050px;margin-inline:auto;
+}
+body.game-detail-page[data-game="agent-fault"] .gd-intro-copy{max-width:68ch}
+body.game-detail-page[data-game="agent-fault"] .gd-specs{max-width:940px}
 @media(max-width:760px){
-  body.game-detail-page[data-game="agent-fault"] .gd-breadcrumb{margin-bottom:1.1rem}
-  body.game-detail-page[data-game="agent-fault"] .gd-hero{
-    padding-top:1.5rem!important;
-    padding-bottom:3rem!important;
-  }
-  body.game-detail-page[data-game="agent-fault"] .gd-hero-layout{
-    display:flex;
-    flex-direction:column;
-    align-items:stretch;
-    gap:1.45rem;
-  }
-  /* Image first in visual order; heading remains first in document reading order. */
-  body.game-detail-page[data-game="agent-fault"] .gd-hero-art{
-    order:-1;
-    width:calc(100% + 2rem);
-    max-width:none;
-    margin-inline:-1rem;
-  }
-  body.game-detail-page[data-game="agent-fault"] .gd-hero-art a{
-    border-left:0;
-    border-right:0;
-    border-radius:0;
-  }
-  body.game-detail-page[data-game="agent-fault"] .gd-hero-art figcaption{display:none}
-  body.game-detail-page[data-game="agent-fault"] .gd-intro{width:100%}
-  body.game-detail-page[data-game="agent-fault"] .gd-hero h1{
-    font-size:clamp(2.7rem,10vw,4.1rem)!important;
-    line-height:.98;
-    margin-bottom:.85rem;
-  }
-  body.game-detail-page[data-game="agent-fault"] .gd-overline{margin-bottom:.85rem}
-  body.game-detail-page[data-game="agent-fault"] .gd-lead{font-size:1.16rem}
-  body.game-detail-page[data-game="agent-fault"] .gd-actions{
-    gap:.55rem;
-    margin:1.2rem 0 1.5rem;
-  }
+ body.game-detail-page[data-game="agent-fault"] .gd-hero{
+   padding-top:1.4rem!important;padding-bottom:2.7rem!important;
+ }
+ body.game-detail-page[data-game="agent-fault"] .gd-breadcrumb{margin-bottom:1.2rem}
+ body.game-detail-page[data-game="agent-fault"] .gd-hero h1{
+   font-size:clamp(2.7rem,10vw,4.2rem)!important;
+ }
 }
