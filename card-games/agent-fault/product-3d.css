@@ -1,0 +1,64 @@
+
+/* AGENT/FAULT v0.9-P: model + product renders. Scoped to page section. */
+.af3d-section{background:#11122d;color:#fff4de;border-top:4px solid #b965ed;border-bottom:4px solid #e9ff23;overflow:hidden}
+.af3d-section *{box-sizing:border-box}
+.af3d-section .section{padding-top:clamp(50px,7vw,96px);padding-bottom:clamp(55px,7vw,96px)}
+.af3d-kicker{margin:0 0 14px;color:#e7ff29;letter-spacing:.16em;font:800 .73rem/1.4 ui-monospace,SFMono-Regular,Consolas,monospace;text-transform:uppercase}
+.af3d-intro{display:grid;grid-template-columns:minmax(0,1.18fr) minmax(250px,.82fr);gap:clamp(26px,6vw,95px);align-items:end;margin-bottom:31px}
+.af3d-intro h2{color:#fff4de;font-size:clamp(2.8rem,6vw,6rem);font-weight:900;letter-spacing:-.06em;line-height:.95;margin:0;max-width:750px;text-wrap:balance}
+.af3d-intro h2 em{font-style:normal;color:#e7ff29}
+.af3d-intro-side{max-width:510px}
+.af3d-intro-side p{color:#dedaf1;line-height:1.65;font-size:clamp(.95rem,1.17vw,1.15rem);margin:0 0 21px}
+.af3d-intro-side strong{color:#fff4de}
+.af3d-quick-links{display:flex;flex-wrap:wrap;gap:15px 22px}
+.af3d-quick-links a,.af3d-stage-footer a{font-size:.86rem;font-weight:800;color:#e7ff29;text-decoration:underline;text-decoration-color:#e7ff2960;text-underline-offset:4px}
+.af3d-quick-links a:hover,.af3d-stage-footer a:hover{color:#fff}
+.af3d-stage{border:2px solid #7972b9;background:#14102e;box-shadow:12px 12px 0 #080918;border-radius:8px;overflow:hidden}
+.af3d-stage-bar{display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:center;background:#201849;color:#f8f1dc;padding:12px 17px;border-bottom:2px solid #66619c;font:800 .71rem/1.4 ui-monospace,Consolas,monospace;letter-spacing:.09em}
+.af3d-stage-bar span:first-child{display:inline-flex;align-items:center;gap:9px}
+.af3d-light{display:inline-block;width:8px;height:8px;border-radius:50%;background:#e7ff29;box-shadow:0 0 10px #e7ff2990}
+.af3d-stage-instruction{color:#c8c4e7}
+.af3d-frame{display:block;width:100%;height:670px;border:0;background:#0d0a22}
+.af3d-stage-footer{display:flex;gap:18px;align-items:center;justify-content:space-between;border-top:2px solid #575084;padding:13px 17px;background:#1e1745;color:#d5cfec;font-size:.82rem;line-height:1.5}
+.af3d-stage-footer a{white-space:nowrap;flex-shrink:0}
+.af3d-gallery-heading{display:flex;align-items:end;justify-content:space-between;gap:30px;margin:clamp(42px,6vw,82px) 0 22px}
+.af3d-gallery-heading h3{font-weight:900;font-size:clamp(1.8rem,3vw,3.3rem);letter-spacing:-.035em;line-height:1.08;margin:0;color:#fff3db}
+.af3d-gallery-heading>p{color:#cfc9e8;font-size:.91rem;max-width:350px;margin:0}
+.af3d-gallery{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.af3d-shot{min-width:0;margin:0;background:#242153;border:2px solid #6e6fa9;border-radius:6px;overflow:hidden;transition:transform .18s ease,border-color .18s ease}
+.af3d-shot:hover{transform:translateY(-3px);border-color:#e7ff29}
+.af3d-shot a{display:block;aspect-ratio:2100/1450;overflow:hidden;background:#161136}
+.af3d-shot a:focus-visible{outline:4px solid #e7ff29;outline-offset:-4px}
+.af3d-shot img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .25s ease}
+.af3d-shot a:hover img{transform:scale(1.04)}
+.af3d-shot figcaption{padding:14px 15px 16px;display:grid;gap:5px}
+.af3d-shot figcaption b{font-size:.94rem;line-height:1.25;color:#fff4de}
+.af3d-shot figcaption span{font-size:.75rem;color:#d2caeb}
+.af3d-note{padding:17px 20px;margin:30px 0 0;background:#24204b;border-left:4px solid #ff6764;color:#cfc9e7;font-size:.85rem;line-height:1.6;max-width:100%}
+.af3d-note strong{color:#fff3db}
+@media(max-width:900px){
+ .af3d-intro{grid-template-columns:1fr;gap:17px}
+ .af3d-intro-side{max-width:700px}
+ .af3d-frame{height:590px}
+ .af3d-stage-bar{font-size:.65rem}
+ .af3d-gallery{gap:10px}
+ .af3d-shot figcaption{padding:12px}
+}
+@media(max-width:640px){
+ .af3d-section .section{padding-top:42px;padding-bottom:55px}
+ .af3d-intro h2{font-size:clamp(2.45rem,11vw,3.6rem)}
+ .af3d-intro-side p{font-size:.93rem}
+ .af3d-stage{box-shadow:5px 6px 0 #080918}
+ .af3d-stage-bar{padding:9px 10px}
+ .af3d-stage-instruction{display:none}
+ .af3d-frame{height:545px}
+ .af3d-stage-footer{padding:12px;align-items:flex-start;flex-direction:column;gap:8px;font-size:.75rem}
+ .af3d-gallery-heading{display:block;margin-top:50px}
+ .af3d-gallery-heading>p{margin-top:10px;font-size:.84rem}
+ .af3d-gallery{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(81%,1fr);grid-template-columns:none;overflow-x:auto;overscroll-behavior-inline:contain;scroll-snap-type:x mandatory;scroll-padding-inline:2px;gap:13px;padding:3px 0 18px;scrollbar-color:#ad78e5 #1c1942}
+ .af3d-shot{scroll-snap-align:start}
+ .af3d-shot:hover{transform:none}
+ .af3d-shot a:hover img{transform:none}
+ .af3d-note{padding:13px 15px;font-size:.78rem}
+}
+@media(prefers-reduced-motion:reduce){.af3d-shot,.af3d-shot img{transition:none!important}}

@@ -16,7 +16,7 @@ test('accessible tab semantics and two separately labeled playable showcases',()
  for(const s of ['id="af-tab-classic"','id="af-tab-cascade"','id="af-panel-classic"','id="af-panel-cascade"','role="tablist"','role="tabpanel"','aria-selected="false"','aria-controls="af-panel-cascade"'])assert(html.includes(s),s);
  assert(tabs.includes("'ArrowRight'")&&tabs.includes("'ArrowLeft'")&&tabs.includes("'Home'")&&tabs.includes("'End'"));
  assert(css.includes('.af-demo-panel[hidden]'));
- assert(!html.includes('<iframe'),'No unsafe cross-origin iframe should be used');
+ const frames=[...html.matchAll(/<iframe\\b[^>]*\\bsrc="([^"]+)"/g)]; assert.equal(frames.length,1); assert.equal(frames[0][1],'./product-3d/viewer.html?embed=1','Only the same-origin local 3D viewer may be embedded');
 });
 test('both demos run locally without server-side AI requests',()=>{
  assert(classic.includes("document.getElementById('agent-fault-demo')"));
@@ -51,4 +51,13 @@ test('66-card gallery inline application script parses and source HTML remains b
   assert.doesNotThrow(()=>new vmScript(gallery[1],{filename:'review-v09-inline.js'}));
   const landing=html;
   assert.equal((landing.match(/<section(?:\s|>)/g)||[]).length,(landing.match(/<\/section>/g)||[]).length,'Site sections should balance');
+});
+
+test('physical-product section retains original assets, status qualifiers and mobile viewer',()=>{
+ assert.equal((html.match(/id="box-cards"/g)||[]).length,1);
+ for(const marker of ['product-3d.css','./product-3d/viewer.html?embed=1','./product-3d/box-and-deck.png','./product-3d/three-decks.png','./product-3d/open-box.png','Prototype visualization','print certification remain pending'])assert(html.includes(marker),marker);
+ assert(html.indexOf('id="play-options"')<html.indexOf('id="box-cards"'));
+ assert(html.indexOf('id="box-cards"')<html.indexOf('class="gd-art-section"'));
+ const stylesheet=read('product-3d.css');assert(stylesheet.includes('scroll-snap-type:x mandatory'));assert(stylesheet.includes('prefers-reduced-motion'));
+ const viewer=read('product-3d/viewer.html');for(const control of ['data-model="closed"','data-model="families"','data-model="open"','id="zoomIn"','id="zoomOut"'])assert(viewer.includes(control),control);
 });
