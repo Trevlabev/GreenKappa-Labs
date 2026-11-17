@@ -16,10 +16,11 @@ Source for the static GitHub Pages website at **https://greenkappalabs.art/**.
 | `/worlds/` | Portal linking to independent universe sourcebook and adventure catalogs | Public portfolio hub |
 | `/worlds/sourcebooks/` | Five universe sourcebook collections, The Oldest House featured | Illustrated development portfolio |
 | `/worlds/adventures/` | Four distinct adventure entries, The Records House featured | Illustrated development portfolio |
-| `/tools/` | Product portfolio subpage with three working alphas and four concept-stage utilities | Public product directory |
+| `/tools/` | Product portfolio with four working alphas and three concept-stage utilities | Public product directory |
 | `/filingproof/` | Local legal PDF preflight, source-aware rules and structured reports | Working browser alpha v0.1 |
 | `/courtflow/` | Synthetic court casework simulator: intake, dependencies, exceptions and audit logs | Working browser alpha v0.1 |
 | `/flowglass/` | Local-first dependency-map editor and structural impact analysis | Working browser alpha v0.1 |
+| `/tools/handoff-atlas/` | Procedure builder, branching guided runner and handoff history | Working browser alpha v0.1 |
 | `/work/` | Portfolio and case studies | Public-facing site |
 | `/journal/` | Development notes | First entry implemented |
 
@@ -42,6 +43,9 @@ Static HTML, CSS, and vanilla JavaScript. No JavaScript framework or site-build 
 - `courtflow/core.mjs` — workflow engine and dependency-validation logic
 - `courtflow/app.mjs` — intake, queues, profile editor, audit and local persistence
 - `courtflow/tests/core.test.mjs` — deterministic workflow tests
+- `tools/handoff-atlas/core.mjs` — pure branching procedure engine and validation
+- `tools/handoff-atlas/app.mjs` — local-first editor, guided runner, import and export
+- `tools/handoff-atlas/tests/core.test.mjs` — deterministic procedure and report tests
 - `EXPANSION-ROADMAP.md` — production and validation gates
 
 ## Publishing
@@ -55,7 +59,7 @@ The custom domain is declared in `CNAME`. Intended GitHub Pages publishing confi
 
 - The No Such Room browser microgame is a simplified prototype at the legacy `/playground/not-to-scale/` URL. It does **not** implement the full tabletop game's rules.
 - The playtest page invites inquiries for No Such Room, Small Gods, Large Debts and AGENT/FAULT; it does not publish private deck files.
-- Flowglass v0.1 is a real local-first browser alpha that analyzes user-supplied graphs. It does **not** discover tenant assets, access Microsoft APIs or infer production risks. FilingProof v0.1 is a working browser-local PDF preflight with sourced reference profiles; it is not a filing service, legal-advice system, redaction certifier or court-acceptance validator. PDF.js is loaded via a pinned third-party CDN but selected PDF contents are not uploaded. The other four GreenKappa Tools remain design concepts. No commercial release dates are announced.
+- Flowglass v0.1 is a real local-first browser alpha that analyzes user-supplied graphs. It does **not** discover tenant assets, access Microsoft APIs or infer production risks. FilingProof v0.1 is a working browser-local PDF preflight with sourced reference profiles; it is not a filing service, legal-advice system, redaction certifier or court-acceptance validator. PDF.js is loaded via a pinned third-party CDN but selected PDF contents are not uploaded. Handoff Atlas v0.1 is a working browser-only procedure builder and guided run demo; it has no authenticated backend or official audit log. Proofline, Printflight and Lorelock remain design concepts. No commercial release dates are announced.
 - These games are not commercial releases. Human playtest results, balance certification, print readiness, manufacturing costs, and market demand remain unverified.
 - Changes committed to `main` have been read back through GitHub. Actual public-domain deployment and real-browser behavior require separate verification.
 

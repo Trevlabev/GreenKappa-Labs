@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0a1823">
+<title>Handoff Atlas — Operational Procedure Workbench | GreenKappa Tools</title>
+<meta name="description" content="A working local-first procedure builder. Design branching runbooks, guide operators through decisions, publish version snapshots, and export handoff records.">
+<link rel="canonical" href="https://greenkappalabs.art/tools/handoff-atlas/">
+<meta property="og:type" content="website"><meta property="og:title" content="Handoff Atlas — Every step has a next step">
+<meta property="og:description" content="Create, validate, and run branching operational procedures in your browser. Export a complete handoff trail.">
+<meta property="og:url" content="https://greenkappalabs.art/tools/handoff-atlas/">
+<meta property="og:image" content="https://greenkappalabs.art/assets/greenkappa-logo.png">
+<link rel="icon" href="/assets/greenkappa-logo.png">
+<link rel="stylesheet" href="./styles.css?v=1">
+<script type="module" src="./app.mjs?v=1"></script>
+</head>
+<body>
+<a class="ha-skip" href="#ha-main">Skip to application</a>
+<header class="ha-topbar">
+ <a class="ha-studio" href="/tools/" aria-label="GreenKappa Tools home"><img src="/assets/greenkappa-logo.png" alt=""><span><strong>GREENKAPPA <em>/</em> TOOLS</strong><small>DESIGNED FOR COMPLICATED WORK</small></span></a>
+ <div class="ha-wordmark"><span class="ha-wordmark-icon" aria-hidden="true">⌁</span><span>HANDOFF <b>ATLAS</b></span><span class="ha-alpha">ALPHA 0.1</span></div>
+ <nav class="ha-global-links" aria-label="Related links"><a href="/tools/">All tools</a><a href="/">Studio home</a><a href="https://github.com/Trevlabev/GreenKappa-Labs/tree/main/tools/handoff-atlas" target="_blank" rel="noopener noreferrer">Source ↗</a></nav>
+</header>
+<main id="ha-main">
+<section class="ha-hero">
+ <div class="ha-hero-copy">
+   <p class="ha-eyebrow"><span class="ha-pulse" aria-hidden="true"></span> PROCEDURAL INTELLIGENCE / LOCAL-FIRST</p>
+   <h1>Every step has<br><em>a next step.</em></h1>
+   <p>Turn complicated instructions into structured decisions. Guide an operator through the right path, capture what happened, and hand over a usable record.</p>
+   <div class="ha-hero-tags"><span>Branching workflows</span><span>Revision snapshots</span><span>Traceable handoffs</span></div>
+ </div>
+ <aside class="ha-privacy" aria-label="Data and security boundaries">
+  <span>DATA BOUNDARY / PUBLIC ALPHA</span>
+  <strong>Real functionality. Fictional demonstrations.</strong>
+  <p>Procedures and run records are stored in this browser only. No accounts, backend, AI processing, or uploads to GreenKappa servers.</p>
+  <p class="ha-privacy-warning">Do not enter real court, client, litigant, personnel, password, or confidential service-ticket information.</p>
+ </aside>
+</section>
+<section class="ha-workspace" aria-label="Handoff Atlas application">
+ <div class="ha-workspace-top">
+  <div><span class="ha-eyebrow">ACTIVE WORKSPACE</span><strong id="ha-workspace-name">Handoff Atlas / Sample library</strong><small id="ha-save-status">Local browser storage</small></div>
+  <div class="ha-workspace-actions">
+   <button type="button" class="ha-btn ha-btn-quiet" id="ha-import">Import JSON</button>
+   <input type="file" id="ha-import-file" accept=".json,application/json" hidden aria-label="Choose workspace JSON">
+   <button type="button" class="ha-btn ha-btn-quiet" id="ha-export">Export workspace</button>
+   <button type="button" class="ha-btn ha-btn-quiet" id="ha-reset">Restore sample</button>
+  </div>
+ </div>
+ <nav class="ha-tabs" aria-label="Application views">
+   <button type="button" class="ha-tab is-active" data-view="library" aria-current="page"><span>01</span> Procedure library</button>
+   <button type="button" class="ha-tab" data-view="editor"><span>02</span> Procedure builder</button>
+   <button type="button" class="ha-tab" data-view="run"><span>03</span> Guided run</button>
+   <button type="button" class="ha-tab" data-view="records"><span>04</span> Handoff records</button>
+ </nav>
+ <section class="ha-view" id="ha-library" aria-labelledby="ha-library-heading">
+  <div class="ha-view-heading"><div><span class="ha-eyebrow">WORKSPACE / PROCEDURES</span><h2 id="ha-library-heading">Your operational <em>playbooks.</em></h2><p>Choose a validated procedure, edit its logic, or start a guided run.</p></div><button class="ha-btn ha-btn-primary" type="button" id="ha-create">+ New procedure</button></div>
+  <div class="ha-library-grid">
+   <div class="ha-library-left"><div class="ha-filters"><label class="ha-field"><span>Search procedures</span><input type="search" id="ha-search" placeholder="Title, topic, owner…" autocomplete="off"></label><label class="ha-field"><span>Category</span><select id="ha-category"><option value="">All categories</option></select></label></div><div id="ha-procedure-list" class="ha-procedure-list" aria-live="polite"></div></div>
+   <div class="ha-library-right"><div id="ha-procedure-details" class="ha-details"><p class="ha-empty">Select a procedure to view details.</p></div></div>
+  </div>
+ </section>
+ <section class="ha-view" id="ha-editor" aria-labelledby="ha-editor-heading" hidden>
+  <div class="ha-view-heading"><div><span class="ha-eyebrow">DESIGN / VERIFY / PUBLISH</span><h2 id="ha-editor-heading">Procedure <em>builder.</em></h2><p>Define steps, connect branches, validate the path, and publish a revision.</p></div><div class="ha-inline-actions"><button id="ha-save-draft" type="button" class="ha-btn ha-btn-quiet">Save draft</button><button id="ha-publish" type="button" class="ha-btn ha-btn-primary">Publish revision</button></div></div>
+  <div class="ha-editor-layout">
+   <div class="ha-editor-left">
+    <div class="ha-panel">
+     <div class="ha-panel-heading"><h3>Procedure details</h3><span id="ha-draft-status">Draft</span></div>
+     <form id="ha-procedure-form" class="ha-stacked-fields">
+      <label class="ha-field"><span>Title</span><input name="title" maxlength="150" required></label>
+      <label class="ha-field"><span>Summary</span><textarea name="summary" rows="3" maxlength="1800"></textarea></label>
+      <div class="ha-two-fields"><label class="ha-field"><span>Category</span><input name="category" maxlength="70"></label><label class="ha-field"><span>Procedure owner</span><input name="owner" maxlength="100"></label></div>
+      <label class="ha-field"><span>Entry step</span><select name="startId" id="ha-start-step"></select></label>
+     </form>
+    </div>
+    <div class="ha-panel"><div class="ha-panel-heading"><h3>Step map <span id="ha-step-count"></span></h3><button id="ha-add-step" class="ha-text-button" type="button">+ Add step</button></div><div id="ha-step-list" class="ha-step-list"></div></div>
+   </div>
+   <div class="ha-editor-right">
+    <div class="ha-panel"><div class="ha-panel-heading"><h3>Step configuration</h3><button type="button" id="ha-delete-step" class="ha-text-button ha-danger-text">Delete step</button></div><div id="ha-step-form"></div></div>
+    <div class="ha-panel"><h3>Path validation</h3><div id="ha-validation"></div></div>
+    <div class="ha-panel"><div class="ha-panel-heading"><h3>Published revision history</h3><span id="ha-history-count"></span></div><div id="ha-revisions"></div></div>
+   </div>
+  </div>
+ </section>
+ <section class="ha-view" id="ha-run" aria-labelledby="ha-run-heading" hidden>
+  <div class="ha-view-heading"><div><span class="ha-eyebrow">RUN / RECORD / HAND OFF</span><h2 id="ha-run-heading">Guided <em>procedure.</em></h2><p id="ha-run-subtitle">Select a published playbook from the library to begin.</p></div><div class="ha-inline-actions"><button type="button" id="ha-abandon-run" class="ha-btn ha-btn-quiet" hidden>End without record</button></div></div>
+  <div id="ha-run-container" class="ha-run-container"><div class="ha-empty">No active procedure. Browse the library and choose “Start guided run.”</div></div>
+ </section>
+ <section class="ha-view" id="ha-records" aria-labelledby="ha-records-heading" hidden>
+  <div class="ha-view-heading"><div><span class="ha-eyebrow">COMPLETED / LOCAL RECORDS</span><h2 id="ha-records-heading">Handoff <em>history.</em></h2><p>Review each completed route and export a portable Markdown or JSON record.</p></div><button type="button" class="ha-btn ha-btn-quiet" id="ha-clear-records">Clear completed records</button></div>
+  <div id="ha-records-list" class="ha-records-list" aria-live="polite"></div>
+ </section>
+</section>
+<section class="ha-explain" aria-labelledby="ha-explain-heading">
+ <div><p class="ha-eyebrow">DESIGN PRINCIPLES / v0.1</p><h2 id="ha-explain-heading">The procedure is not<br><em>the judgment.</em></h2></div>
+ <div class="ha-explain-grid"><article><span>01 / EXPLICIT ROUTES</span><h3>Decisions stay visible.</h3><p>Every branching choice shows its destination. The engine never fabricates an instruction or silently chooses an outcome.</p></article><article><span>02 / REVISION CONTEXT</span><h3>Know which version ran.</h3><p>Published snapshots are retained locally. A run captures the procedure revision it started with.</p></article><article><span>03 / PORTABLE HANDOFFS</span><h3>Make work transferable.</h3><p>Export a structured outcome and route notes for a human reviewer. This is not an authenticated audit system.</p></article></div>
+</section>
+</main>
+<footer class="ha-footer"><div><strong>Handoff Atlas</strong><span>GreenKappa Labs / Working browser alpha · v0.1</span></div><div><a href="/tools/">All tools</a><a href="/privacy.html">Privacy</a><a href="https://github.com/Trevlabev/GreenKappa-Labs/tree/main/tools/handoff-atlas" target="_blank" rel="noopener noreferrer">Source code</a></div><small>Browser-only sample workspace · No production guarantees</small></footer>
+<div class="ha-toast" id="ha-toast" role="status" aria-live="polite"></div>
+</body>
+</html>

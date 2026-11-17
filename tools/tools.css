@@ -169,3 +169,15 @@
 .gkt-release-courtflow .gkt-release-copy>p:first-child{color:#a8deea}
 @media(max-width:950px){.gkt-release-grid{grid-template-columns:1fr}.gkt-release-flowglass{grid-column:auto;display:flex;flex-direction:column}.gkt-release-flowglass .gkt-release-art{height:auto;min-height:0;aspect-ratio:1672/941}}
 @media(max-width:680px){.gkt-release-flowglass .gkt-release-art{aspect-ratio:1}.gkt-courtflow-mark{aspect-ratio:1.7}.gkt-courtflow-mark>span,.gkt-courtflow-mark>p{font-size:.6rem}}
+
+/* Handoff Atlas portfolio: actual application entry, no false screenshot claims. */
+.gkt-handoff-art-link{display:flex;flex-direction:column;align-items:stretch;gap:1rem;text-decoration:none;width:100%;max-width:340px}
+.gkt-handoff-art-link:hover .gkt-handoff-visual-cta{color:#ffe3af}
+.gkt-handoff-visual-cta{text-align:center;color:#d4e8ce;font-size:.72rem;letter-spacing:.12em}
+.gkt-release-handoff .gkt-handoff-release-art{display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1.2rem;min-height:220px;padding:1.7rem;background:radial-gradient(circle at 50% 36%,rgba(84,148,137,.18),transparent 68%),linear-gradient(120deg,#132a33,#294149);border-radius:14px}
+.gkt-handoff-release-eyebrow{font-size:.64rem;color:#edcfa2;font-weight:850;letter-spacing:.12em}
+.gkt-handoff-release-nodes{display:grid;justify-items:center;gap:.25rem;width:min(100%,230px)}
+.gkt-handoff-release-nodes>b{width:100%;text-align:center}
+.gkt-handoff-release-nodes b{display:block;padding:.54rem .65rem;border:1px solid rgba(204,232,216,.55);border-radius:7px;color:#f6f4e9;font-size:.72rem;letter-spacing:.08em;background:#22514e}
+.gkt-handoff-release-nodes i,.gkt-handoff-release-nodes span{color:#e5ca98;font-style:normal;font-weight:900}
+.gkt-handoff-release-nodes>div{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;width:100%}
