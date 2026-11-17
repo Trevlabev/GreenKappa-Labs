@@ -33,8 +33,8 @@ try{
         findings.push(route+" @ "+width+": horizontal overflow "+JSON.stringify(dimensions)+" offenders "+JSON.stringify(
           await page.evaluate(() => [...document.body.querySelectorAll("*")]
             .map(el=>({el,box:el.getBoundingClientRect()}))
-            .filter(x=>x.box.right>innerWidth+10 && x.box.width>5)
-            .slice(0,10).map(x=>({tag:x.el.tagName,cls:String(x.el.className).slice(0,65),right:Math.round(x.box.right),left:Math.round(x.box.left),width:Math.round(x.box.width)}))
+            .filter(x=>(x.box.right>innerWidth+10 && x.box.width>5) || (x.el.scrollWidth>x.el.clientWidth+14 && getComputedStyle(x.el).overflowX==="visible"))
+            .slice(0,10).map(x=>({tag:x.el.tagName,cls:String(x.el.className).slice(0,65),right:Math.round(x.box.right),left:Math.round(x.box.left),width:Math.round(x.box.width),scroll:x.el.scrollWidth,client:x.el.clientWidth}))
           )
         ));
       if(width===390){
