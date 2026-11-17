@@ -145,3 +145,12 @@
 .gkt-cf-brand{display:flex;align-items:baseline;justify-content:space-between;padding-bottom:.9rem;border-bottom:1px solid #4b6573;font-size:1.05rem;font-weight:920;color:#fff5e5;letter-spacing:-.05em}.gkt-cf-brand>span{color:#e8c89b}.gkt-cf-brand small{font-size:.48rem;letter-spacing:.1em;font-weight:700;color:#aac1c5}
 .gkt-cf-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.45rem;margin:.8rem 0}.gkt-cf-stats span{display:flex;flex-direction:column;padding:.6rem;background:#274353;border:1px solid #49636c;border-radius:6px;font-size:.5rem;color:#acc5c8;letter-spacing:.07em}.gkt-cf-stats b{font-size:1.45rem;color:#fbebce;line-height:1.25;letter-spacing:-.05em}
 .gkt-cf-record{display:flex;align-items:center;justify-content:space-between;gap:.5rem;margin:.38rem 0;padding:.65rem .55rem;border-left:3px solid #7cb9ad;background:#284453;color:#d1e0dc;font-size:.57rem}.gkt-cf-record b{font-size:.5rem;color:#eac897}.gkt-cf-record:nth-of-type(2){border-left-color:#e1a97e}.gkt-courtflow-preview>small{display:block;text-align:right;margin-top:.7rem;color:#9eb6ba;font-size:.52rem;letter-spacing:.1em}
+
+/* FilingProof promotional imagery on the GreenKappa Tools product page. */
+.gkt-filing-art{min-width:0;display:block}
+.gkt-filing-promo,.gkt-filing-promo-more{width:100%;margin:0}
+.gkt-filing-promo a{display:block;border-radius:12px}
+.gkt-filing-promo a:focus-visible{outline:3px solid #e8c591;outline-offset:4px}
+.gkt-filing-promo img,.gkt-filing-promo-more img{display:block;width:100%;height:auto;max-height:550px;object-fit:contain;border-radius:12px;border:1px solid rgba(235,204,158,.34);box-shadow:0 20px 40px rgba(0,0,0,.24)}
+.gkt-filing-promo figcaption,.gkt-filing-promo-more figcaption{font-size:.7rem;color:#bed3cd;margin-top:.7rem;line-height:1.45}
+.gkt-filing-promo-more{grid-column:1/-1;max-width:780px;margin-top:.8rem}

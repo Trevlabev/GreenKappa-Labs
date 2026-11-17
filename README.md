@@ -64,3 +64,7 @@ Contact: GreenkappaLabs@gmail.com.
 ### Flowglass promotional assets and gallery
 
 The homepage's eight-slide gallery includes a Flowglass alpha feature linking to `/flowglass/`. GreenKappa Tools has an enhanced product portfolio page at `/tools/`, with featured Flowglass and FilingProof release cards. Promotional images in `assets/promos/flowglass-*.webp` are AI-generated conceptual illustrations; they are **not literal screenshots** of the implemented alpha and must remain labeled as such. The main project has a dedicated square image for mobile. Sourcebook and adventure slide art and links are unchanged.
+
+### FilingProof promotional media (2026-11-17)
+
+The website now includes four optimized WebP promotional assets under `assets/promos/filingproof-*.webp`: wide gallery illustration, square mobile crop, a Tools portfolio preview, and a secondary feature visual. These images are illustrative AI-generated marketing concepts, **not actual product screenshots, court acceptance decisions, or certifications**. Pages disclose their illustrative status and link to the real FilingProof alpha.
