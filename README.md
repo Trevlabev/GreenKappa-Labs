@@ -6,7 +6,7 @@ Source for the static GitHub Pages website at **https://greenkappalabs.art/**.
 
 | Route | Function | Status |
 | --- | --- | --- |
-| `/` | Eight-slide gallery including Flowglass, and four studio divisions | Public-facing site |
+| `/` | Ten-slide gallery featuring Flowglass, FilingProof, CourtFlow and other studio projects | Public-facing site |
 | `/tablearc/` | Original TableArc local-first RPG engine | Active development |
 | `/tablearc-red/` | Standalone Cyberpunk RED AI-GM and operations-console project | v0.5.0 source prototype; Windows acceptance pending |
 | `/card-games/` | Three original card-driven games | In development |
