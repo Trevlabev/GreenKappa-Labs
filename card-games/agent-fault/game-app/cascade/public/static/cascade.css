@@ -16,3 +16,10 @@
 .demo-toolbar .btn{white-space:nowrap}
 .demo-progress{margin-top:12px}
 @media(max-width:710px){.demo-toolbar{padding:10px 9px;flex-direction:column;align-items:stretch;gap:8px}.demo-toolbar>.caps{text-align:center}.demo-toolbar .actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));width:100%;gap:6px}.demo-toolbar .btn{min-width:0;flex:auto;padding:8px 5px;font-size:.89rem}}
+
+/* Long-conversation accessibility and explicit, no-point timeout recovery. */
+.conversation-tools{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:9px 0 13px;padding:11px 13px;border:1px solid #777eaa;border-radius:6px;background:#292d57;color:#e9e9f4;font-size:.85rem}
+.msg.skip .msg-icon{background:#9b9db3;color:#111531}
+.msg.skip .msg-text{border-color:#9696a9;background:#292d4d;color:#e8e9f4}
+.msg.skip .msg-label{color:#d7d7e6}
+[data-skip-ready-at]:disabled{opacity:.6;cursor:not-allowed}

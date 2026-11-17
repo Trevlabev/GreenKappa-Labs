@@ -75,3 +75,9 @@ The source package also includes `public/CASCADE_OFFLINE_PREVIEW.html` and `publ
 ## Demo presentation refresh — v0.3-P (visual layer only)
 
 The six-stage demo now reuses the clearer Classic visual design: large original card artwork, illustrated category backs, three-dimensional scenario flips, fanned dealing, staged card/AI/Handoff reveals and score pop-ins. It places sticky Previous / Pause / Next controls **above** the variable-height scene and uses the same accessible hierarchy on mobile. Autoplay pauses on hover, keyboard focus, hidden tabs or out-of-view scenes; motion-reduced users start with autoplay disabled. The three branching Handoff choices remain independent of player identity and make **no OpenAI API calls**. Gameplay engine v0.2-P is unchanged; the visual refresh cannot change game rules or scoring.
+
+## Round recovery and transcript usability (November 17, 2026)
+
+If a Handoff recipient is unresponsive, the host can **explicitly skip** that Handoff only after a 90-second grace period. This operation does not invent a human message, does not trigger or bill for a replacement AI response, creates no scoring opportunity for the absent action, and records a visible skipped entry. The host must confirm. Player card and handoff ownership remain anonymous until round scoring.
+
+During an active Cascade, older transcript entries collapse to the latest eight (with an accessible button to expand the full conversation). The AI still receives the full actual prior conversation; the UI condensation is for reading only. The host displays the recovery deadline. This does not shorten ordinary seven-to-fifteen-reply rounds, so full-session pacing still requires human testing. All 66 cards, underlying normal turn structure, and voting rules are unchanged.

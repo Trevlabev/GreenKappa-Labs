@@ -122,3 +122,34 @@ test('generation cost model identical to official rates, but estimates not invoi
  assert.equal(estimateUsd('gpt-4.1-mini',{input_tokens:800,output_tokens:200,input_tokens_details:{cached_tokens:80}}),.000616);
  assert.equal(estimateUsd('unknown',{input_tokens:1000,output_tokens:100}),null);
 });
+
+
+test('host can recover from an unresponsive Handoff only after 90 seconds, without fabricating points',()=>{
+ const {r,actors}=setup();
+ take(r,null,'start');baseline(r);cards(r,actors);
+ receiveAgentReply(r,sample);assert.equal(r.phase,'handoff');
+ const skipTarget=handoffOwner(r),deadline=r.handoff_wait_started+90000;
+ const hostState=visible(r,'host',null);
+ assert.equal(hostState.handoff_skip_at,deadline);
+ assert.throws(()=>take(r,actors[1].p,'skip_handoff',{},deadline+1),/Only host/);
+ assert.throws(()=>take(r,null,'skip_handoff',{},deadline-1),/90 seconds/);
+ const repliesBefore=r.replies.length;
+ take(r,null,'skip_handoff',{},deadline);
+ assert.equal(r.phase,'cascade');assert.equal(r.timeline.filter(x=>x.kind==='skip').length,1);
+ assert.equal(r.replies.length,repliesBefore);
+ const skip=visible(r,'player',actors[2].p).timeline.find(x=>x.kind==='skip');
+ assert.equal(skip.kind,'skip');assert.equal(skip.actor_name,null);
+ while(r.phase==='cascade'||r.phase==='handoff'){
+  if(r.phase==='handoff'){const p=actors.find(a=>a.p.id===handoffOwner(r)).p;take(r,p,'handoff',{message:'How should the agency handle that concern?'})}
+  else receiveAgentReply(r,sample);
+ }
+ assert.equal(r.phase,'judging');
+ assert.equal(r.replies.length,2*(actors.length-1)-1);
+ const eligible=new Set(r.replies.map(x=>x.actor_id));
+ assert(!eligible.has(skipTarget)||r.replies.some(x=>x.actor_id===skipTarget),'Skipping creates no phantom reply attribution');
+ take(r,actors[0].p,'propose_awards',{spotlight:'R1',bonus:null},100000);
+ take(r,null,'finalize',{},113000);
+ assert.equal(r.phase,'results');
+ assert.equal(r.last_round.replies.length,5);
+ assert(r.last_round.turns.some(x=>x.handoff_owner==='SKIPPED'));
+});
