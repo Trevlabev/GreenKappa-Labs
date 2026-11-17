@@ -923,3 +923,47 @@ html{scroll-behavior:smooth}
 @media (max-width:680px) {
  .gkl-art-slide.gkl-theme-tablearc .gkl-art-picture { aspect-ratio:1; }
 }
+
+/* TableArc navy/gold mobile continuation — match the source artwork and remove inherited green cast. */
+@media (max-width:900px) {
+  .gkl-showcase-slide.gkl-theme-tablearc.gkl-art-slide {
+    background:#081525;
+  }
+  .gkl-art-slide.gkl-theme-tablearc .gkl-art-mobile-caption {
+    position:relative;
+    isolation:isolate;
+    background:linear-gradient(180deg,#081525 0%,#09192a 48%,#0b2035 100%);
+    border-top:0;
+  }
+  /* An overlapping, non-interactive fade joins the image to the information panel. */
+  .gkl-art-slide.gkl-theme-tablearc .gkl-art-mobile-caption::before {
+    content:"";
+    position:absolute;
+    inset:-40px 0 auto;
+    height:40px;
+    pointer-events:none;
+    background:linear-gradient(180deg,rgba(8,21,37,0) 0%,#081525 100%);
+  }
+  .gkl-art-slide.gkl-theme-tablearc .gkl-art-mobile-caption p {
+    color:#e4bc71;
+  }
+  .gkl-art-slide.gkl-theme-tablearc .gkl-art-mobile-caption h2 {
+    color:#fcf6e9;
+  }
+  .gkl-art-slide.gkl-theme-tablearc .gkl-art-mobile-caption > span {
+    color:#d2dfec;
+  }
+  .gkl-art-slide.gkl-theme-tablearc .gkl-art-mobile-caption > strong {
+    color:#0e2134;
+    background:#e6b967;
+  }
+}
+@media (max-width:680px) {
+  .gkl-art-slide.gkl-theme-tablearc .gkl-art-mobile-caption {
+    background:linear-gradient(180deg,#081525 0%,#0a1a2d 52%,#0b2035 100%);
+  }
+  .gkl-art-slide.gkl-theme-tablearc .gkl-art-mobile-caption::before {
+    top:-32px;
+    height:32px;
+  }
+}
