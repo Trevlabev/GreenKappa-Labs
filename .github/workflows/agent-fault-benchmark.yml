@@ -1,0 +1,70 @@
+name: AGENT-FAULT paid benchmark (manual)
+
+on:
+  workflow_dispatch:
+    inputs:
+      fixture:
+        description: 'Fixture to test; F01 runs 2 paid API calls, all runs 32'
+        required: true
+        type: choice
+        default: F01
+        options:
+          - F01
+          - F02
+          - F03
+          - F04
+          - F05
+          - F06
+          - F07
+          - F08
+          - F09
+          - F10
+          - F11
+          - F12
+          - F13
+          - F14
+          - F15
+          - F16
+          - all
+      model:
+        description: 'OpenAI text model'
+        required: true
+        type: choice
+        default: gpt-4.1-mini
+        options:
+          - gpt-4.1-mini
+          - gpt-5-mini
+
+permissions:
+  contents: read
+
+concurrency:
+  group: agent-fault-benchmark
+  cancel-in-progress: false
+
+jobs:
+  run-paid-trials:
+    name: OpenAI fixture trial
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate 50-card fixtures without API usage
+        run: node --test card-games/agent-fault/benchmark/tests/benchmark.test.mjs
+      - name: Generate actual model responses (billable; manual only)
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          FIXTURE_SELECTION: ${{ inputs.fixture }}
+          BENCHMARK_MODEL: ${{ inputs.model }}
+        run: node card-games/agent-fault/benchmark/scripts/run-manual.mjs
+      - name: Save the results JSON for browser import, including partial failures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: agent-fault-results-${{ github.run_number }}
+          path: benchmark-output/agent-fault-results.json
+          if-no-files-found: warn
+          retention-days: 30
