@@ -154,3 +154,18 @@
 .gkt-filing-promo img,.gkt-filing-promo-more img{display:block;width:100%;height:auto;max-height:550px;object-fit:contain;border-radius:12px;border:1px solid rgba(235,204,158,.34);box-shadow:0 20px 40px rgba(0,0,0,.24)}
 .gkt-filing-promo figcaption,.gkt-filing-promo-more figcaption{font-size:.7rem;color:#bed3cd;margin-top:.7rem;line-height:1.45}
 .gkt-filing-promo-more{grid-column:1/-1;max-width:780px;margin-top:.8rem}
+
+/* Three working products — Flowglass lead release, secondary FilingProof and CourtFlow cards. */
+.gkt-release-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+.gkt-release-flowglass{grid-column:1/-1;display:grid;grid-template-columns:minmax(0,1.13fr) minmax(0,.87fr)}
+.gkt-release-flowglass .gkt-release-art{height:100%;min-height:280px;aspect-ratio:auto}
+.gkt-release-flowglass .gkt-release-art img{object-fit:cover}
+.gkt-release-flowglass .gkt-release-copy{justify-content:center}
+.gkt-release-courtflow{background:linear-gradient(140deg,#142e35,#1b2e39);border-color:rgba(121,188,201,.3)}
+.gkt-courtflow-mark{aspect-ratio:1.88;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:.8rem;background:radial-gradient(ellipse at 50% 50%,rgba(87,165,183,.2),transparent 70%),repeating-linear-gradient(90deg,rgba(176,224,220,.04) 0 1px,transparent 1px 39px),#0e202b}
+.gkt-courtflow-mark>span,.gkt-courtflow-mark>p{margin:0;color:#9fcad0;font-size:.69rem;font-weight:800;letter-spacing:.14em;text-align:center}
+.gkt-courtflow-mark>strong{font-size:clamp(2.7rem,5vw,4.8rem);font-weight:850;letter-spacing:-.07em;color:#eef7f1}
+.gkt-courtflow-mark>strong span{color:#84cbd5}
+.gkt-release-courtflow .gkt-release-copy>p:first-child{color:#a8deea}
+@media(max-width:950px){.gkt-release-grid{grid-template-columns:1fr}.gkt-release-flowglass{grid-column:auto;display:flex;flex-direction:column}.gkt-release-flowglass .gkt-release-art{height:auto;min-height:0;aspect-ratio:1672/941}}
+@media(max-width:680px){.gkt-release-flowglass .gkt-release-art{aspect-ratio:1}.gkt-courtflow-mark{aspect-ratio:1.7}.gkt-courtflow-mark>span,.gkt-courtflow-mark>p{font-size:.6rem}}

@@ -42,7 +42,7 @@ try{
   assert.match(await filingHomepage.evaluate(img=>img.currentSrc),/filingproof-feature\.webp/);
 
   await desktop.goto(origin+"/tools/",{waitUntil:"networkidle"});
-  assert.equal(await desktop.locator(".gkt-release-card").count(),2,"Tools page has two active product cards");
+  assert.ok(await desktop.locator(".gkt-release-card").count()>=3,"Tools page presents all three working application cards");
   assert.ok(await desktop.locator(".gkt-product-list > article.gkt-product").count()>=6,"Existing Tools products remain listed");
   const launch=desktop.locator('.gkt-release-flowglass a[href="/flowglass/"]');
   assert.ok(await launch.count()>0,"Tools page links to live application");
