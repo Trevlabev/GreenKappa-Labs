@@ -9,6 +9,7 @@ try{
   const desktop=await browser.newPage({viewport:{width:1440,height:900}});
   attached(desktop);
   await desktop.goto(origin+"/",{waitUntil:"networkidle"});
+  await desktop.locator("[data-showcase-pause]").click(); // Keep product-visibility assertions independent of auto-rotation timing.
   const slideCount=await desktop.locator("[data-showcase-slide]").count();
   assert.ok(slideCount>=8,"Homepage includes Flowglass and at least seven other projects");
   assert.equal(await desktop.locator("[data-showcase-tab]").count(),slideCount,"Every slide has a gallery tab");
@@ -83,6 +84,7 @@ try{
     const mobile=await browser.newPage({viewport:{width,height:844},isMobile:true,hasTouch:true,deviceScaleFactor:1});
     attached(mobile);
     await mobile.goto(origin+"/",{waitUntil:"networkidle"});
+    await mobile.locator("[data-showcase-pause]").click();
     assert.equal(await mobile.locator("[data-showcase-tab]").count(),slideCount);
     await mobile.locator('[data-showcase-tab="'+flowglassIndex+'"]').click();
     const img=mobile.locator(".gkl-theme-flowglass picture img");
