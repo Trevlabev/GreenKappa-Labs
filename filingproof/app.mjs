@@ -58,6 +58,8 @@ function chooseFiles(selected){
   const supplied=Array.from(selected||[]).slice(0,MAX_FILES);
   const extras=(selected?.length||0)-supplied.length;
   files=supplied;
+  rawReports=[];
+  refresh();
   els.selection.replaceChildren();
   supplied.forEach(f=>{
     const row=document.createElement("div"),name=document.createElement("span"),meta=document.createElement("small");

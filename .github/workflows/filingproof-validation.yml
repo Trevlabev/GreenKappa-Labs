@@ -1,0 +1,30 @@
+name: FilingProof validation
+on:
+  push:
+    paths:
+      - "filingproof/**"
+      - ".github/workflows/filingproof-validation.yml"
+  pull_request:
+    paths:
+      - "filingproof/**"
+      - ".github/workflows/filingproof-validation.yml"
+  workflow_dispatch:
+
+jobs:
+  unit:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Check module syntax
+        run: |
+          node --check filingproof/core.mjs
+          node --check filingproof/sample.mjs
+          node --check filingproof/app.mjs
+          node --check filingproof/tests/core.test.mjs
+      - name: Run deterministic preflight tests
+        run: node --test filingproof/tests/core.test.mjs
