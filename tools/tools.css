@@ -88,3 +88,17 @@
 .gkt-status-live{color:#93efcf!important;border-color:rgba(145,239,207,.55)!important;background:rgba(49,130,107,.16)!important}
 .gkt-flowglass-launch{display:inline-flex!important;margin-top:1.2rem;text-decoration:none!important}
 .gkt-scope-note{font-size:.77rem!important;color:#9bb9b1!important;line-height:1.55!important;margin-top:1rem!important}
+
+/* FilingProof alpha: technical preflight, not a screenshot. */
+.gkt-product-filing{background:radial-gradient(circle at 86% 41%,rgba(197,163,114,.15),transparent 48%),linear-gradient(140deg,rgba(25,49,64,.78),rgba(16,34,44,.92));border-color:rgba(216,185,147,.4)}
+.gkt-product-filing .gkt-product-overline{color:#f0d5a7!important}
+.gkt-filing-preview{min-height:250px;display:grid;grid-template-columns:1fr 1fr;gap:0;align-items:center;padding:20px}
+.gkt-filing-paper{display:block;border:1px solid rgba(226,216,190,.45);background:#e9f0e9;color:#15303d;transform:rotate(-7deg);padding:20px 16px;min-height:215px;box-shadow:8px 20px 30px rgba(0,0,0,.25);border-radius:4px}
+.gkt-filing-paper small{display:block;font-size:9px;letter-spacing:.15em;font-weight:850}
+.gkt-filing-paper strong{display:block;font-size:50px;line-height:1.2;letter-spacing:-.07em;margin-bottom:18px}
+.gkt-filing-paper i{display:block;height:5px;margin-bottom:11px;background:#b1c9cd;border-radius:2px}
+.gkt-filing-paper i:last-child{width:55%}
+.gkt-filing-status{background:#142b39;border:1px solid #54817e;padding:17px 13px;border-radius:9px;box-shadow:0 15px 30px rgba(0,0,0,.3);z-index:2;margin-left:-10px}
+.gkt-filing-status b{display:block;color:#e6c89f;font-size:10px;letter-spacing:.1em;margin-bottom:13px}
+.gkt-filing-status span{display:block;padding:7px 0;font-size:11px;color:#bde0d9;border-top:1px solid rgba(194,222,211,.13)}
+.gkt-filing-status span:nth-last-child(-n+2){color:#f0ce9d}
