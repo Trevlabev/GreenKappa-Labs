@@ -24,6 +24,7 @@ jobs:
           node --check courtflow/core.mjs
           node --check courtflow/sample.mjs
           node --check courtflow/app.mjs
+          node --check courtflow/designer.mjs
           node --check courtflow/tests/core.test.mjs
           node --check courtflow/tests/browser-smoke.mjs
       - name: Deterministic unit tests

@@ -1,5 +1,6 @@
 import {PRIORITIES,TEAMS,blankWorkspace,importWorkspace,createCase,completeTask,taskAvailability,addException,resolveException,reassign,reprioritize,updateProfile,validateProfile,describeCase,dashboard,addDays,caseReport,auditCSV} from "./core.mjs";
 import {demoWorkspace} from "./sample.mjs";
+import {mountWorkflowDesigner} from "./designer.mjs";
 
 const $=(selector,root=document)=>root.querySelector(selector);
 const $$=(selector,root=document)=>Array.from(root.querySelectorAll(selector));
@@ -13,7 +14,7 @@ const prettyDay=day=>{
  return new Intl.DateTimeFormat("en-US",{month:"short",day:"numeric",year:"numeric",timeZone:"UTC"}).format(new Date(day+"T12:00:00Z"));
 };
 const prettyTime=value=>new Intl.DateTimeFormat("en-US",{dateStyle:"medium",timeStyle:"short",timeZone:"UTC"}).format(new Date(value))+" UTC";
-let workspace=null,selectedId=null,selectedProfile=null,activeTab="queue",toastTimer=null,storageOk=true;
+let workspace=null,selectedId=null,selectedProfile=null,activeTab="queue",toastTimer=null,storageOk=true,studio=null;
 try{
  const saved=localStorage.getItem(key);
  workspace=saved?importWorkspace(JSON.parse(saved)):demoWorkspace();
@@ -119,32 +120,13 @@ function renderDetail(){
  (c.closedAt?'':'<form id="exception-form" class="cf-exception-form"><input type="text" name="note" maxlength="400" required aria-label="New exception note" placeholder="Document an illustrative exception…"><button class="cf-btn cf-btn-secondary" type="submit">Add exception</button></form>')+
  '<div class="cf-detail-footer"><small>Received '+prettyDay(c.receivedDate)+' · All target dates fictional</small><button type="button" id="export-case" class="cf-btn cf-btn-secondary">Export case report ↗</button></div>';
 }
-function populateStudio(){
- const p=$("#profile-select");
- if(!workspace.profiles.some(x=>x.id===selectedProfile))selectedProfile=workspace.profiles[0].id;
- p.innerHTML=workspace.profiles.map(x=>'<option value="'+escape(x.id)+'">'+escape(x.name)+'</option>').join("");
- p.value=selectedProfile;
-}
-function loadEditor(){
- const p=workspace.profiles.find(x=>x.id===selectedProfile);if(!p)return;
- $("#profile-editor").value=JSON.stringify(p,null,2);
- renderProfilePreview();
-}
-function renderProfilePreview(){
- const p=workspace.profiles.find(x=>x.id===selectedProfile),target=$("#profile-preview");
- if(!p){target.innerHTML='<p>No profile.</p>';return;}
- target.innerHTML='<p class="cf-help">'+escape(p.description||"Synthetic workflow profile.")+'</p><div class="cf-profile-steps">'+p.tasks.map((t,i)=>
-  '<div class="cf-profile-step"><strong>'+String(i+1).padStart(2,"0")+' / '+escape(t.label)+'</strong>'+
-  '<small>Prerequisites: '+escape(t.dependsOn.join(", ")||"None")+'</small>'+
-  '<span>'+t.offset+' calendar-day offset'+(t.final?' · Final handoff':'')+'</span></div>').join("")+'</div>';
-}
 function renderAudit(){
  $("#audit-count").textContent=String(workspace.events.length);
  $("#audit-rows").innerHTML=workspace.events.slice().reverse().slice(0,1000).map(e=>
   '<tr><td>'+prettyTime(e.at)+'</td><td>'+escape(e.caseId)+'</td><td>'+escape(e.detail)+'</td><td>'+escape(e.actor)+'</td></tr>').join("");
 }
 function render(){
- metrics();updateFilters();renderQueue();renderDetail();populateStudio();renderProfilePreview();renderAudit();
+ metrics();updateFilters();renderQueue();renderDetail();studio?.sync();renderAudit();
 }
 function openTab(name){
  activeTab=name;
@@ -152,7 +134,7 @@ function openTab(name){
   const active=button.dataset.tab===name;button.classList.toggle("is-active",active);button.setAttribute("aria-selected",String(active));
   $("#pane-"+button.dataset.tab).hidden=!active;
  }
- if(name==="studio")loadEditor();
+ if(name==="studio")studio?.draw();
 }
 $$("[data-tab]").forEach(button=>{
  button.addEventListener("click",()=>openTab(button.dataset.tab));
@@ -189,15 +171,15 @@ $("#case-detail").addEventListener("submit",e=>{
 for(const id of ["filter-search","filter-status","filter-profile","filter-team"]){
  $("#"+id).addEventListener(id==="filter-search"?"input":"change",renderQueue);
 }
-$("#profile-select").addEventListener("change",e=>{selectedProfile=e.target.value;loadEditor();});
-$("#reset-profile").addEventListener("click",()=>{loadEditor();message("Editor restored to the saved profile.");});
-$("#save-profile").addEventListener("click",()=>{
- try{
-  const edited=JSON.parse($("#profile-editor").value);
-  if(edited.id!==selectedProfile)throw Error("Profile ID cannot be changed in this editor.");
-  validateProfile(edited);
-  mutate(()=>updateProfile(workspace,edited),"Profile saved for new intakes. Existing cases retain their task snapshots.");
- }catch(err){message("Profile not saved: "+(err.message||"Invalid JSON"),true);}
+studio=mountWorkflowDesigner({
+ getProfiles:()=>workspace.profiles,
+ onSave:edited=>{
+  // Validate, commit and persist only when the complete workflow graph is executable.
+  const updated=updateProfile(workspace,edited);
+  workspace=importWorkspace(updated);
+  save();render();
+ },
+ onNotice:message
 });
 $("#new-intake").addEventListener("click",()=>{
  const select=$("#intake-profile");select.innerHTML=workspace.profiles.map(p=>'<option value="'+escape(p.id)+'">'+escape(p.name)+'</option>').join("");
@@ -222,7 +204,7 @@ $("#intake-form").addEventListener("submit",e=>{
 $("#load-demo").addEventListener("click",()=>{
  if(!confirm("Replace this browser's CourtFlow workspace with fresh synthetic sample cases? Export anything you wish to keep first."))return;
  workspace=demoWorkspace();selectedId=workspace.cases[0]?.id;selectedProfile=workspace.profiles[0].id;
- save();$("#filter-search").value="";$("#filter-status").value="all";$("#filter-profile").value="all";$("#filter-team").value="all";
+ save();studio.reset();$("#filter-search").value="";$("#filter-status").value="all";$("#filter-profile").value="all";$("#filter-team").value="all";
  render();openTab("queue");message("Synthetic sample workspace restored.");
 });
 $("#export-json").addEventListener("click",()=>{
@@ -237,7 +219,7 @@ $("#import-file").addEventListener("change",async e=>{
   const parsed=importWorkspace(JSON.parse(await file.text()));
   if(!confirm("Replace the current workspace with this JSON file?"))return;
   workspace=parsed;selectedId=workspace.cases[0]?.id||null;selectedProfile=workspace.profiles[0].id;
-  save();render();openTab("queue");message("Workspace imported and validated.");
+  save();studio.reset();render();openTab("queue");message("Workspace imported and validated.");
  }catch(err){message("Import failed: "+(err.message||"Invalid JSON"),true);}
  finally{e.target.value="";}
 });

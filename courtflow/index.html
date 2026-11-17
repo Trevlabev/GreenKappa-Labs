@@ -13,14 +13,14 @@
 <meta property="og:url" content="https://greenkappalabs.art/courtflow/">
 <meta property="og:image" content="https://greenkappalabs.art/assets/greenkappa-logo.png">
 <link rel="icon" href="/assets/greenkappa-logo.png">
-<link rel="stylesheet" href="/courtflow/styles.css?v=1">
-<script type="module" src="/courtflow/app.mjs?v=1"></script>
+<link rel="stylesheet" href="/courtflow/styles.css?v=2">
+<script type="module" src="/courtflow/app.mjs?v=2"></script>
 </head>
 <body>
 <a href="#workspace" class="cf-skip">Skip to CourtFlow workspace</a>
 <header class="cf-header">
   <a class="cf-brand" href="/tools/" aria-label="Return to GreenKappa Tools"><span class="cf-brand-icon"><img src="/assets/greenkappa-logo.png" alt=""></span><span><strong>GREENKAPPA <em>/</em> TOOLS</strong><small>DEVELOPMENT STUDIO</small></span></a>
-  <div class="cf-wordmark"><span class="cf-wordmark-glyph" aria-hidden="true">⌁</span> COURT<span>FLOW</span><sup>ALPHA 0.1</sup></div>
+  <div class="cf-wordmark"><span class="cf-wordmark-glyph" aria-hidden="true">⌁</span> COURT<span>FLOW</span><sup>ALPHA 0.2</sup></div>
   <nav aria-label="Product links" class="cf-topnav"><a href="/tools/">Tools</a><a href="/">Home</a><a href="https://github.com/Trevlabev/GreenKappa-Labs/tree/main/courtflow" target="_blank" rel="noopener noreferrer">Source ↗</a></nav>
 </header>
 <main id="workspace">
@@ -78,17 +78,50 @@
     </div>
   </section>
   <section id="pane-studio" class="cf-tabpanel" role="tabpanel" aria-labelledby="tab-studio" hidden>
-    <div class="cf-section-heading"><div><p class="cf-overline">CONFIGURATION / SNAPSHOT RULES</p><h2>Workflow <em>studio.</em></h2></div><p>Edit synthetic workflow profiles. Newly created cases inherit your changes; existing cases retain their original task snapshots.</p></div>
-    <div class="cf-studio-grid">
-      <section class="cf-panel cf-profile-form"><div class="cf-panel-head"><h3>Profile editor</h3><span class="cf-panel-meta">Strict JSON schema</span></div>
-        <label class="cf-field" for="profile-select">Choose workflow profile <select id="profile-select"></select></label>
-        <label class="cf-field" for="profile-editor">Editable task and dependency definition<textarea id="profile-editor" spellcheck="false" rows="18" aria-describedby="profile-hint"></textarea></label>
-        <p id="profile-hint" class="cf-help">Each task has a unique <code>id</code>, a <code>label</code>, a nonnegative simulated calendar-day <code>offset</code>, a <code>dependsOn</code> array, and one task marked <code>final: true</code>. The graph must be acyclic.</p>
-        <div class="cf-inline-actions"><button id="save-profile" type="button" class="cf-btn cf-btn-primary">Validate &amp; save profile</button><button id="reset-profile" type="button" class="cf-btn cf-btn-secondary">Restore editor</button></div>
-      </section>
-      <section class="cf-panel cf-profile-preview"><div class="cf-panel-head"><h3>Workflow preview</h3><span class="cf-panel-meta">Read-only</span></div><div id="profile-preview"></div>
-        <div class="cf-caution"><strong>Simulated targets only.</strong><p>Offsets use ordinary calendar days from intake. No jurisdictional rules, holiday calculations, judicial deadlines or automatic court actions are included.</p></div>
-      </section>
+    <div class="cf-section-heading"><div><p class="cf-overline">CONFIGURATION / SNAPSHOT RULES</p><h2>Workflow <em>studio.</em></h2></div><p>Design workflows visually: drag steps, connect dependencies, and build fictional priority-based branches. Newly created cases inherit changes; existing cases retain their task snapshots.</p></div>
+
+    <div class="cf-designer" id="workflow-designer">
+      <div class="cf-designer-top">
+        <label class="cf-field" for="profile-select">Workflow profile<select id="profile-select"></select></label>
+        <div class="cf-designer-topmeta">
+          <span class="cf-overline">GRAPH DESIGNER / SYNTHETIC ROUTES</span>
+          <p>Move nodes, connect prerequisites and route steps by intake priority. No raw JSON required.</p>
+        </div>
+      </div>
+      <div class="cf-designer-settings">
+        <label class="cf-field" for="designer-name">Workflow name<input id="designer-name" maxlength="90" autocomplete="off"></label>
+        <label class="cf-field" for="designer-description">Purpose / description<input id="designer-description" maxlength="300" autocomplete="off"></label>
+      </div>
+      <div class="cf-designer-toolbar" role="toolbar" aria-label="Workflow design commands">
+        <button class="cf-btn cf-btn-secondary" type="button" id="designer-add">＋ Add step</button>
+        <button class="cf-btn cf-btn-secondary" type="button" id="designer-connect" aria-pressed="false">Connect selected → step</button>
+        <button class="cf-btn cf-btn-secondary" type="button" id="designer-remove">Remove step</button>
+        <button class="cf-btn cf-btn-secondary" type="button" id="designer-auto">Auto-arrange</button>
+        <label class="cf-designer-preview-label" for="designer-preview-priority">Preview intake route
+          <select id="designer-preview-priority"><option>Routine</option><option>Elevated</option><option>Urgent</option></select>
+        </label>
+      </div>
+      <div class="cf-designer-body">
+        <section class="cf-designer-canvas-panel" aria-labelledby="designer-canvas-title">
+          <div class="cf-panel-head"><h3 id="designer-canvas-title">Process map</h3><span class="cf-panel-meta">Drag steps · Alt + arrow keys also move</span></div>
+          <div id="designer-viewport" class="cf-designer-viewport" role="region" aria-label="Scrollable workflow process diagram" tabindex="0">
+            <div id="designer-surface" class="cf-designer-surface">
+              <svg id="designer-edges" class="cf-designer-edges" aria-hidden="true"></svg>
+              <div id="designer-nodes"></div>
+            </div>
+          </div>
+          <p class="cf-designer-guide">Select a node to edit. To connect steps, choose a source, click <strong>Connect selected → step</strong>, then select its destination. Gold dashed arrows mark conditional branches; dimmed nodes are skipped in the selected preview.</p>
+        </section>
+        <aside class="cf-designer-inspector cf-panel" aria-label="Selected step properties">
+          <div class="cf-panel-head"><h3>Step properties</h3><span class="cf-panel-meta">Editable</span></div>
+          <div id="designer-inspector"></div>
+        </aside>
+      </div>
+      <div class="cf-designer-footer">
+        <p id="designer-status" class="cf-designer-status" role="status" aria-live="polite"></p>
+        <div class="cf-inline-actions"><button id="designer-discard" type="button" class="cf-btn cf-btn-secondary">Discard changes</button><button id="designer-save" type="button" class="cf-btn cf-btn-primary">Validate &amp; save workflow</button></div>
+      </div>
+      <div class="cf-caution"><strong>Priority routing is evaluated once at intake.</strong><p>Conditions use only Routine, Elevated or Urgent simulation priorities. Existing case task snapshots do not change when you edit a profile or reprioritize a case. Offsets are illustrative calendar days—not legal deadlines, filing rules, automated judicial decisions or verified court procedures.</p></div>
     </div>
   </section>
   <section id="pane-audit" class="cf-tabpanel" role="tabpanel" aria-labelledby="tab-audit" hidden>
@@ -114,6 +147,6 @@
   </form>
 </dialog>
 <div id="notice" role="status" aria-live="polite" class="cf-toast" hidden></div>
-<footer class="cf-footer"><span>© <span id="year"></span> GreenKappa Labs · CourtFlow alpha 0.1</span><span>All demo workflows fictional · Do not use for legal deadlines</span><a href="/tools/">GreenKappa Tools</a></footer>
+<footer class="cf-footer"><span>© <span id="year"></span> GreenKappa Labs · CourtFlow alpha 0.2</span><span>All demo workflows fictional · Do not use for legal deadlines</span><a href="/tools/">GreenKappa Tools</a></footer>
 </body>
 </html>

@@ -1,4 +1,4 @@
-# CourtFlow v0.1 — Interactive Court Operations Workflow Simulator
+# CourtFlow v0.2 — Visual Court Operations Workflow Designer
 
 Public alpha: https://greenkappalabs.art/courtflow/
 
@@ -12,7 +12,9 @@ CourtFlow is a **working, synthetic workflow simulator** for intake, queues, dep
 - Complete tasks only when their prerequisites are satisfied. Final handoff requires resolution of open exceptions.
 - Add/resolve exceptions; reassign teams and change priority.
 - Show fictional calendar-day targets and derived status.
-- Edit and validate profile JSON: acyclic graph, unique task IDs, exactly one final handoff.
+- Visual Workflow Studio: add/remove steps, drag process nodes, draw prerequisite connectors, edit step attributes, auto-arrange and save a validated graph.
+- Configure priority-based conditional branches (Routine, Elevated or Urgent). Route conditions are evaluated at synthetic intake only, and cannot be used as jurisdictional or legal rules.
+- Preview active and skipped steps for each priority, with a keyboard alternative to dragging (Alt + arrow keys).
 - Existing cases retain their original task definitions when the shared profile changes.
 - Browser-local storage, validated workspace JSON import/export (including snapshot dependency graphs and closure consistency), Markdown reports and CSV activity export.
 - Timestamped local audit events for relevant actions.
@@ -32,12 +34,13 @@ The application is not certified or validated for any live judicial environment.
 - core.mjs — deterministic workflow engine, task dependencies, import validation, simulated status calculations and exports.
 - sample.mjs — generated fictional demonstration records.
 - app.mjs — browser interface and local state management.
+- designer.mjs — dependency graph canvas, inspector, drag interaction, connection editing and route previews.
 - index.html and styles.css — responsive user interface.
 - tests/core.test.mjs — deterministic Node test coverage.
 - tests/browser-smoke.mjs — headless Chromium UI and responsive smoke tests.
 - .github/workflows/courtflow-validation.yml — syntax, unit and browser tests.
 
-Profiles define tasks with an ID, label, simulated offset in days from intake, dependency IDs, and a single final task. Profile revisions apply only to cases created after the revision.
+Profiles define tasks with a stable ID, label, simulated offset from intake, dependency IDs, one final handoff, and optional <code>when: {priority: "Urgent"}</code> route conditions. All three priority projections are validated for a connected directed acyclic graph. A portable <code>layout</code> map saves diagram positions. Conditional paths are projected once at intake, and existing cases retain their saved tasks even if their priority or originating profile later changes.
 
 ## Run locally
 
@@ -52,6 +55,7 @@ Open http://localhost:8000/courtflow/ .
     node --check courtflow/core.mjs
     node --check courtflow/sample.mjs
     node --check courtflow/app.mjs
+    node --check courtflow/designer.mjs
     node --test courtflow/tests/core.test.mjs
 
 ## Next development gates
