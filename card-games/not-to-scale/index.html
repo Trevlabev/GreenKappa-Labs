@@ -4,23 +4,24 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#0A1018">
-  <title>No Such Room — Cooperative Architectural Mystery | GreenKappa Labs</title>
-  <meta name="description" content="Discover No Such Room, a cooperative card-built impossible house from GreenKappa Labs. Rearrange connected square Rooms, recover three Proofs, and escape before the final Shift. In development.">
+  <title>No Such Room — Cooperative Impossible-Architecture Board Game | GreenKappa Labs</title>
+  <meta name="description" content="NO SUCH ROOM is a cooperative spatial board game where square Room cards form an impossible house. Explore, rearrange its passages and escape before the twelfth Shift. Playable alpha in development.">
   <link rel="canonical" href="https://greenkappalabs.art/card-games/not-to-scale/">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="No Such Room | GreenKappa Labs">
-  <meta property="og:description" content="The floor plan is lying. Connect square Room cards into an impossible house, navigate the shifting architecture, recover three Proofs, and escape.">
+  <meta property="og:title" content="No Such Room — Cooperative Spatial Board Game | GreenKappa Labs">
+  <meta property="og:description" content="The board is the house. Build an impossible mansion from square Room cards and escape before its passages rearrange.">
   <meta property="og:url" content="https://greenkappalabs.art/card-games/not-to-scale/">
-  <meta property="og:image" content="https://greenkappalabs.art/card-games/assets/no-such-room-product.webp">
+  <meta property="og:image" content="https://greenkappalabs.art/card-games/assets/no-such-room-ghost-hero.png">
   <meta property="og:image:alt" content="No Such Room promotional concept showing a game box and connected square cards depicting an impossible house">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:image" content="https://greenkappalabs.art/card-games/assets/no-such-room-product.webp">
+  <meta name="twitter:image" content="https://greenkappalabs.art/card-games/assets/no-such-room-ghost-hero.png">
   <link rel="icon" href="../../assets/greenkappa-logo.png">
-  <link rel="preload" as="image" href="../assets/no-such-room-product.webp">
+  <link rel="preload" as="image" href="../assets/no-such-room-ghost-hero.png">
   <link rel="stylesheet" href="../../style.css">
   <link rel="stylesheet" href="../card-games.css">
   <link rel="stylesheet" href="../game-detail.css">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"No Such Room — GreenKappa Labs","url":"https://greenkappalabs.art/card-games/not-to-scale/","description":"Cooperative card-built architectural mystery in illustrated-alpha development.","about":{"@type":"CreativeWork","name":"No Such Room","alternateName":"Not to Scale","genre":"Cooperative spatial exploration","description":"Square Room cards form the connected board; recover three Proofs and escape before the final Shift.","creator":{"@type":"Organization","name":"GreenKappa Labs"}},"isPartOf":{"@type":"CollectionPage","name":"GreenKappa Labs Original Card Games","url":"https://greenkappalabs.art/card-games/"}}</script>
+  <link rel="stylesheet" href="no-such-room.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"No Such Room — Cooperative Architectural Board Game","url":"https://greenkappalabs.art/card-games/not-to-scale/","description":"A cooperative spatial board game in development, where the Room cards are the playing board.","image":"https://greenkappalabs.art/card-games/assets/no-such-room-ghost-hero.png","about":{"@type":"Game","name":"No Such Room","alternateName":"Not to Scale (former working title)","genre":["Cooperative board game","Spatial strategy puzzle","Modular exploration"],"description":"Two to four players build and rearrange an impossible house made of physical square Room cards, recover three Proofs and escape.","creator":{"@type":"Organization","name":"GreenKappa Labs"}},"isPartOf":{"@type":"CollectionPage","name":"GreenKappa Labs Original Tabletop Games","url":"https://greenkappalabs.art/card-games/"}}</script>
 </head>
 <body class="card-games-page game-detail-page" data-game="not-to-scale">
   <a class="skip-link dark-skip" href="#main">Skip to content</a>
@@ -34,66 +35,117 @@
     </button>
     <nav class="nav" id="primary-nav" aria-label="Primary navigation"><a href="/">Home</a><a href="/#interactive">Interactive</a><a href="/card-games/">Games</a><a href="/worlds/">Worlds</a><a href="/tools/">Tools</a><a href="/playground/">Playground</a><a href="/work/">Work</a><a href="/#contact" class="nav-cta dark-nav-cta">Contact</a></nav>
   </header>
-  <main id="main">
-    <section class="section gd-hero" aria-labelledby="gd-title">
-      <nav class="gd-breadcrumb" aria-label="Breadcrumb"><a href="../../">Studio</a><span aria-hidden="true">/</span><a href="../">Card Games</a><span aria-hidden="true">/</span><span aria-current="page">No Such Room</span></nav>
-      <div class="gd-hero-layout">
+  <main id="main" class="nsr-main">
+    <section class="section gd-hero nsr-hero" aria-labelledby="gd-title">
+      <nav class="gd-breadcrumb" aria-label="Breadcrumb"><a href="../../">Studio</a><span aria-hidden="true">/</span><a href="../">Games</a><span aria-hidden="true">/</span><span aria-current="page">No Such Room</span></nav>
+      <div class="gd-hero-layout nsr-hero-layout">
         <div class="gd-intro">
-          <p class="gd-overline">Field note 01 / Cooperative spatial mystery</p>
+          <p class="gd-overline">GreenKappa Games / Original cooperative board game</p>
           <h1 id="gd-title">No Such<em>Room</em></h1>
           <p class="gd-lead">The floor plan is lying.</p>
-          <p class="gd-intro-copy">Build an impossible house from physically connected square Room cards. Read the next Shift, change the architecture, recover three unique Proofs, and return to the Foyer before the final Shift.</p>
-          <div class="gd-actions"><a class="gd-button-primary" href="#inside">Explore the game</a><a class="gd-button-outline" href="../../playground/not-to-scale/">Try the simplified browser puzzle ↗</a><a class="gd-button-outline" href="../assets/no-such-room-product.webp" target="_blank" rel="noopener">View the product concept ↗</a></div>
-          <dl class="gd-specs">
-            <div><dt>Prototype</dt><dd>45 cards · 19 square Rooms</dd></div>
-            <div><dt>Objective</dt><dd>Three unique Proofs · escape</dd></div>
-            <div><dt>Players / time</dt><dd>2–4 · 35–60 min (untested)</dd></div>
-            <div><dt>Current stage</dt><dd>Illustrated alpha · playtests pending</dd></div>
+          <p class="nsr-deck-statement">The cards aren't a map of the house. <strong>They are the house.</strong></p>
+          <p class="gd-intro-copy">Explore an impossible mansion built from square Room cards. Place its rooms, rewire its passages, and use the next forecasted Shift to your advantage. Find three Proofs, reunite at the Foyer, and escape before the building rearranges itself one last time.</p>
+          <div class="gd-actions">
+            <a class="gd-button-primary" href="#how-it-plays">See how the game works</a>
+            <a class="gd-button-outline" href="../../playground/not-to-scale/">Play the simplified browser puzzle ↗</a>
+          </div>
+          <dl class="gd-specs nsr-specs">
+            <div><dt>Players</dt><dd>2–4 · cooperative</dd></div>
+            <div><dt>Playtime target</dt><dd>35–60 minutes · untested</dd></div>
+            <div><dt>Components</dt><dd>45 cards · 19 Room tiles</dd></div>
+            <div><dt>Development</dt><dd>Playable physical alpha · internal evaluation</dd></div>
           </dl>
         </div>
-        <figure class="gd-hero-art">
-          <a href="../assets/no-such-room-product.webp" target="_blank" rel="noopener" aria-label="Open the No Such Room box and connected Room cards promotional concept at full size"><img src="../assets/no-such-room-product.webp" alt="No Such Room box and connected square Room cards forming an impossible house with pale stone staircases, blueprints and teal doorway markers" width="1536" height="1024" decoding="async" fetchpriority="high"></a>
-          <figcaption><span>GREENKAPPA LABS / BOX &amp; CONNECTED CARDS</span><span>ILLUSTRATED CONCEPT — NOT A MANUFACTURED PRODUCT</span></figcaption>
+        <figure class="gd-hero-art nsr-hero-art">
+          <a href="../assets/no-such-room-ghost-hero.png" target="_blank" rel="noopener" aria-label="Open the NO SUCH ROOM Ghost Blueprint product illustration">
+            <picture><source media="(max-width:700px)" srcset="../assets/no-such-room-ghost-square.png"><img src="../assets/no-such-room-ghost-hero.png" alt="Ghost Blueprint concept: game box, square modular Room cards, pawns and an impossible mansion of bridges and stairs on a tabletop" width="1920" height="1080" fetchpriority="high" decoding="async"></picture>
+          </a>
+          <figcaption><span>GHOST BLUEPRINT / VISUAL EDITION v0.5.0-P</span><span>Illustrative product concept, not retail photography</span></figcaption>
         </figure>
       </div>
     </section>
-    <div class="gd-paper">
-      <section id="inside" class="section" aria-labelledby="inside-title">
-        <p class="gd-section-index">01 / The idea</p>
-        <div class="gd-story-head">
-          <h2 id="inside-title">A floor plan should tell you where you are. This one keeps changing the answer.</h2>
-          <p>No Such Room is a cooperative architectural puzzle. Start with one Foyer and explore outward, attaching square Rooms at open doorways. A visible Shift Forecast lets the team plan before the house rotates, swaps, or folds around them. Recover all three distinct Proofs and return to the Foyer to escape.</p>
-        </div>
-        <p class="gd-section-index">02 / The player experience</p>
-        <div class="gd-feature-grid">
-          <article class="gd-feature"><span class="gd-feature-number">01</span><h3>Build the impossible</h3><p>Place physical Room cards to connect doorways and reveal a mansion that develops at the table rather than on a printed board.</p></article>
-          <article class="gd-feature"><span class="gd-feature-number">02</span><h3>Let the house shift</h3><p>Upcoming Shifts are visible in advance. Rooms can rotate, swap or fold as connected wings, altering which neighboring doorways can actually be used.</p></article>
-          <article class="gd-feature"><span class="gd-feature-number">03</span><h3>Find the way out</h3><p>Explore, use Tools, recover three distinct Proofs, and return to the Foyer before the final Shift.</p></article>
-        </div>
-        <div class="gd-highlight"><div><span>What makes it different</span><strong>The board is the mystery.</strong></div><p>The physical Room cards are the house. Turn or relocate one, and the usable routes change even when the layout remains physically connected.</p></div>
-      </section>
-    </div>
-    <section class="gd-art-section" aria-labelledby="art-title">
+
+    <section class="nsr-premise" aria-labelledby="nsr-what-title">
       <div class="section">
-        <div class="gd-art-heading"><div><p class="gd-overline">03 / Visual identity</p><h2 id="art-title">A house made from cards.</h2></div><p>Ghost Blueprint combines pale architectural stonework, midnight-blue survey marks and teal connection indicators. The main image is a packaging-and-gameplay-layout concept, not a manufactured physical prototype.</p></div>
-        <div class="gd-art-grid">
-          <figure class="gd-art-tile"><a href="../assets/no-such-room-product.webp" target="_blank" rel="noopener" aria-label="View the No Such Room connected-card product concept"><img src="../assets/no-such-room-product.webp" alt="No Such Room promotional concept with the game box and interconnected square Room cards" width="1536" height="1024" loading="lazy" decoding="async"></a><figcaption><strong>Box and connected-card concept</strong><span>Ghost Blueprint direction</span></figcaption></figure>
-          <figure class="gd-art-tile gd-art-secondary"><a href="../assets/not-to-scale.webp" target="_blank" rel="noopener" aria-label="View the earlier Not to Scale artwork"><img src="../assets/not-to-scale.webp" alt="Earlier architectural visual study developed under the working title Not to Scale" width="1536" height="1024" loading="lazy" decoding="async"></a><figcaption><strong>Earlier visual study</strong><span>Preserved design history</span></figcaption></figure>
+        <p class="nsr-kicker">01 / What kind of game?</p>
+        <div class="nsr-premise-head">
+          <h2 id="nsr-what-title">A board game <em>without a fixed board.</em></h2>
+          <p>A physical spatial strategy game, driven by cards rather than a printed map. Every newly explored square becomes part of the playing surface; every door alignment and stair connection determines where your pawn can go.</p>
         </div>
-        <p class="gd-art-note">The game box and connected-card layout are illustrative promotional concepts, not retail-ready photography. Elevated doorway and stair indicators in the concept remain experimental; vertical geometry has not been approved as a v0.3.0 mechanic. Player count and duration targets are untested.</p>
+        <div class="nsr-pillars">
+          <article><span>01 / BUILD</span><h3>Grow the house.</h3><p>Explore through an exposed doorway. Draw from three staged packets and attach a new Room to the structure you are making together.</p></article>
+          <article><span>02 / READ</span><h3>Anticipate the Shift.</h3><p>See the next rearrangement before it happens. Move the Focus, choose a route, or reposition your team while the plan is still legible.</p></article>
+          <article><span>03 / RECONFIGURE</span><h3>Turn architecture into strategy.</h3><p>Rooms rotate, swap positions, and Fold to new wings. A physical adjacency may remain while a traversable passage disappears.</p></article>
+          <article><span>04 / ESCAPE</span><h3>Bring everyone home.</h3><p>Claim Proof I, II, and III and return every pawn to the Foyer. Spend an action to EXIT before the twelfth Shift finishes.</p></article>
+        </div>
       </div>
     </section>
-    <div class="gd-development">
-      <section class="section" aria-labelledby="dev-title">
-        <div><p class="gd-section-index">04 / Playtest questions</p><h2 id="dev-title">What the physical test needs to answer.</h2><p>Physical playtests still need to establish navigation difficulty, handling, pacing, and the tactical value of Shift Forecasts. The free nine-room browser puzzle is a simplified experiment, not the complete physical tabletop rules.</p><div class="gd-actions"><a class="gd-button-primary" href="mailto:GreenkappaLabs@gmail.com?subject=No%20Such%20Room%20%E2%80%94%20playtest%20or%20collaboration">Talk to the studio</a></div></div>
-        <div><ol class="gd-dev-list"><li><b>01</b><span>Test room placement and doorway alignment for immediate clarity.</span></li><li><b>02</b><span>Tune Shifts so surprising layouts stay playable.</span></li><li><b>03</b><span>Run full-table physical tests of exploration, evidence collection, and escape.</span></li></ol><p class="gd-development-note">All five GreenKappa Labs card games are original projects in development. No release date, pricing, or availability has been announced.</p></div>
-      </section>
-    </div>
-    <section class="gd-end" aria-labelledby="more-title">
+
+    <section id="how-it-plays" class="nsr-mechanics" aria-labelledby="nsr-mechanics-title">
       <div class="section">
-        <div class="gd-end-heading"><h2 id="more-title">Elsewhere in the collection.</h2><a href="../">View all three games ↗</a></div>
-        <nav class="gd-other-games" aria-label="Explore other GreenKappa Labs card games"><a class="gd-other-game" href="../small-gods-large-debts/"><img src="../assets/small-gods-large-debts.webp" loading="lazy" decoding="async" alt=""><strong>Small Gods, Large Debts</strong><span>Mythic negotiation</span></a>
-<a class="gd-other-game" href="../agent-fault/"><img src="../assets/agent-fault.svg" loading="lazy" decoding="async" alt=""><strong>AGENT/FAULT</strong><span>AI party sabotage</span></a></nav>
+        <div class="nsr-section-heading">
+          <div><p class="nsr-kicker">02 / The mechanics</p><h2 id="nsr-mechanics-title">The architecture <em>is</em> the puzzle.</h2></div>
+          <p>Each turn gives you two Action Points. Spend them moving, exploring, turning rooms, gathering evidence, salvaging tools, or breaking through a wall when the path closes.</p>
+        </div>
+        <figure class="nsr-mechanic-figure">
+          <a href="../assets/no-such-room-route-explainer.png" target="_blank" rel="noopener" aria-label="Open full-size NO SUCH ROOM gameplay route diagram"><img src="../assets/no-such-room-route-explainer.png" alt="Architectural schematic explaining how connected room cards, separated passage lanes and stairs create playable movement routes" loading="lazy" decoding="async"></a>
+          <figcaption>The physical board is assembled during play; the image is a rules illustration rather than a photograph of a tested game session.</figcaption>
+        </figure>
+        <div class="nsr-routing-grid">
+          <article><strong>Doors and walls</strong><p>Two touching Rooms connect only if their edge doorways align. An unconnected shared wall can be crossed using KNOCK, but it costs two AP and creates an Echo.</p></article>
+          <article><strong>Stairs and crossings</strong><p>The candidate alpha includes distinct internal passage lanes. Five stair transitions connect passages; two over-under crossings look connected but are not.</p></article>
+          <article><strong>Focus and Forecast</strong><p>A visible Shift resolves every third player turn. Use SIGNAL, Roles, and Tools to influence which part of the house changes next.</p></article>
+        </div>
+        <div class="nsr-play-demo">
+          <div><span class="nsr-demo-eyebrow">Try the concept in your browser</span><h3>A smaller house. The same uneasy idea.</h3><p>The free nine-room browser microgame lets you experience changing room positions. It is deliberately simplified: it does <strong>not</strong> implement the physical game's door alignment, stair passages, Fold, Echo, or Tool rules.</p></div>
+          <a href="../../playground/not-to-scale/">Launch the browser demo <span aria-hidden="true">↗</span></a>
+        </div>
+      </div>
+    </section>
+
+    <section id="gallery" class="nsr-gallery" aria-labelledby="nsr-gallery-title">
+      <div class="section">
+        <div class="nsr-section-heading">
+          <div><p class="nsr-kicker">03 / Ghost Blueprint</p><h2 id="nsr-gallery-title">An impossible house. <em>A coherent object.</em></h2></div>
+          <p>Midnight-navy drafting surfaces, ivory stone, luminous teal routes and restrained brass survey marks give the physical game, printed materials, and packaging a single visual language.</p>
+        </div>
+        <div class="nsr-gallery-grid">
+          <figure class="nsr-gallery-tile nsr-gallery-tile-main"><a href="../assets/no-such-room-ghost-hero.png" target="_blank" rel="noopener" aria-label="Open board game hero image"><img src="../assets/no-such-room-ghost-hero.png" alt="Wide promotional tableau of NO SUCH ROOM, showing connected architectural Room cards and its game box" loading="lazy" decoding="async"></a><figcaption><strong>The house on the table</strong><span>Hero development artwork</span></figcaption></figure>
+          <figure class="nsr-gallery-tile"><a href="../assets/no-such-room-ghost-square.png" target="_blank" rel="noopener" aria-label="Open square NO SUCH ROOM promotional artwork"><img src="../assets/no-such-room-ghost-square.png" alt="Square Ghost Blueprint promotional study depicting the NO SUCH ROOM board-game components" loading="lazy" decoding="async"></a><figcaption><strong>The modular world</strong><span>Square promotional composition</span></figcaption></figure>
+          <figure class="nsr-gallery-tile"><a href="../assets/no-such-room-box-front.png" target="_blank" rel="noopener" aria-label="Open NO SUCH ROOM box-front concept"><img src="../assets/no-such-room-box-front.png" alt="Illustrated NO SUCH ROOM game-box front featuring impossible ivory staircases on navy blueprint paper" loading="lazy" decoding="async"></a><figcaption><strong>Packaging / front</strong><span>Box concept, not final dieline</span></figcaption></figure>
+          <figure class="nsr-gallery-tile"><a href="../assets/no-such-room-box-back.png" target="_blank" rel="noopener" aria-label="Open NO SUCH ROOM box-back concept"><img src="../assets/no-such-room-box-back.png" alt="Proposed NO SUCH ROOM packaging back with board-game description and illustrated components" loading="lazy" decoding="async"></a><figcaption><strong>Packaging / back</strong><span>Visual concept; details subject to testing</span></figcaption></figure>
+        </div>
+        <p class="nsr-gallery-disclaimer">Promotional images illustrate the intended product and visual identity. They are not photographs of manufactured components or proof of physical print quality; gameplay rules and accessibility take precedence over concept art.</p>
+      </div>
+    </section>
+
+    <section id="development" class="nsr-development" aria-labelledby="nsr-development-title">
+      <div class="section nsr-development-layout">
+        <div>
+          <p class="nsr-kicker">04 / Development record</p>
+          <h2 id="nsr-development-title">Playable on paper. <em>Still being tested.</em></h2>
+          <p>The working physical game has a full 45-card prototype and printable teaching materials. Its current rules candidate adds navigable internal passages, functioning stair transitions, and over-under crossings to the rotating modular house.</p>
+          <p>Automated structural tests check valid layouts and routing, but the intended 35–60-minute duration, difficulty curve, and enjoyment have not been established through observed human playtesting.</p>
+          <div class="gd-actions"><a class="gd-button-primary" href="../../playground/not-to-scale/">Try the free microgame</a><a class="gd-button-outline" href="mailto:GreenkappaLabs@gmail.com?subject=No%20Such%20Room%20playtesting">Discuss playtesting</a></div>
+        </div>
+        <dl class="nsr-build-list">
+          <div><dt>Physical game</dt><dd>45 total cards / 19 square Rooms, 2.5 inches each</dd></div>
+          <div><dt>Mechanics</dt><dd>v0.4.0-P · playable candidate</dd></div>
+          <div><dt>Visual system</dt><dd>v0.5.0-P · Ghost Blueprint concept edition</dd></div>
+          <div><dt>Design format</dt><dd>Cooperative spatial board game · 2–4 players</dd></div>
+          <div><dt>Playtesting</dt><dd>Human playtests pending; no published win-rate claims</dd></div>
+          <div><dt>Availability</dt><dd>In development · not currently for sale</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <section class="gd-end nsr-end" aria-labelledby="more-title">
+      <div class="section">
+        <div class="gd-end-heading"><h2 id="more-title">Other games from the studio.</h2><a href="../">Explore the collection ↗</a></div>
+        <nav class="gd-other-games" aria-label="Other GreenKappa Labs tabletop games">
+          <a class="gd-other-game" href="../small-gods-large-debts/"><img src="../assets/small-gods-large-debts.webp" alt="" loading="lazy" decoding="async"><strong>Small Gods, Large Debts</strong><span>Mythic strategy and negotiation</span></a>
+          <a class="gd-other-game" href="../agent-fault/"><img src="../assets/agent-fault.svg" alt="" loading="lazy" decoding="async"><strong>AGENT/FAULT</strong><span>AI-assisted party sabotage</span></a>
+        </nav>
       </div>
     </section>
   </main>
