@@ -39,25 +39,31 @@ try{
   assert.equal(await filingWide.evaluate(img=>img.naturalWidth),1400,"FilingProof wide image loads");
   await filing.locator(".gkl-filingproof-art-note").waitFor({state:"visible",timeout:5000});
   assert.match(await filing.locator(".gkl-filingproof-art-note").innerText(),/Illustrative concept art/);
-  const filingHomepage=desktop.locator(".gkl-tools-product-filing img");
-  await filingHomepage.evaluate(img=>img.decode());
-  assert.match(await filingHomepage.evaluate(img=>img.currentSrc),/filingproof-feature\.webp/);
+  assert.equal(await desktop.locator(".gkl-tools-products--live > article").count(),4,"Homepage showcases four runnable tools");
+  assert.equal(await desktop.locator(".gkl-tools-products--concepts > article").count(),2,"Homepage shows two design concepts");
+  assert.ok(await desktop.locator('.gkl-tools-products--live a[href="filingproof/"]').count()>0,"Homepage FilingProof launch link exists");
+  assert.ok(await desktop.locator('.gkl-tools-products--live a[href="tools/handoff-atlas/"]').count()>0,"Homepage Handoff Atlas launch link exists");
+  assert.equal(await desktop.getByText("Printflight",{exact:true}).count(),0,"Retired Printflight is not shown on homepage");
 
   await desktop.goto(origin+"/tools/",{waitUntil:"networkidle"});
-  assert.ok(await desktop.locator(".gkt-release-card").count()>=3,"Tools page presents all three working application cards");
-  assert.ok(await desktop.locator(".gkt-product-list > article.gkt-product").count()>=6,"Existing Tools products remain listed");
-  const launch=desktop.locator('.gkt-release-flowglass a[href="/flowglass/"]');
-  assert.ok(await launch.count()>0,"Tools page links to live application");
-  const hero=desktop.locator(".gkt-hero-product img");
+  assert.equal(await desktop.locator(".gkt-release-card").count(),4,"Tools page has four working alpha cards");
+  assert.equal(await desktop.locator(".gkt-concept-card").count(),2,"Tools page has two distinct design-stage concepts");
+  assert.equal(await desktop.locator(".gkt-hero-directory > a").count(),4,"Hero quick-launch directory contains all four alphas");
+  assert.equal(await desktop.locator("#proofline").count(),1,"Proofline concept has stable anchor");
+  assert.equal(await desktop.locator("#lorelock").count(),1,"Lorelock concept has stable anchor");
+  assert.equal(await desktop.getByText("Printflight",{exact:true}).count(),0,"Retired Printflight is not shown on Tools page");
+  const launch=desktop.locator('.gkt-release-feature a[href="/flowglass/"]');
+  assert.ok(await launch.count()>0,"Tools page links to working Flowglass app");
+  const hero=desktop.locator(".gkt-release-feature picture img");
   await hero.evaluate(img=>img.decode());
-  assert.equal(await hero.evaluate(img=>img.naturalWidth),1672,"Tools feature image loads");
-  const toolsPageCaption=await desktop.locator(".gkt-hero-product figcaption").innerText();
-  assert.match(toolsPageCaption,/Not an actual UI screenshot/);
-  const filingTools=desktop.locator("#filingproof .gkt-filing-promo img");
-  await filingTools.evaluate(img=>img.decode());
-  assert.equal(await filingTools.evaluate(img=>img.naturalWidth),1200,"FilingProof Tools artwork loads");
-  assert.match(await desktop.locator("#filingproof .gkt-filing-promo figcaption").innerText(),/Conceptual promotional artwork/);
+  assert.equal(await hero.evaluate(img=>img.naturalWidth),1672,"Flowglass feature art loads");
+  assert.match(await hero.getAttribute("alt"),/not a screenshot/,"Promotional imagery accurately disclosed");
   assert.ok(await desktop.locator('#filingproof a[href="/filingproof/"]').count()>=1,"FilingProof launch link works");
+  assert.ok(await desktop.locator('#courtflow a[href="/courtflow/"]').count()>=1,"CourtFlow launch link works");
+  assert.ok(await desktop.locator('#handoff-atlas a[href="/tools/handoff-atlas/"]').count()>=1,"Handoff Atlas launch link works");
+  await desktop.locator(".gkt-concept-card summary").first().click();
+  assert.ok(await desktop.locator(".gkt-concept-card details").first().evaluate(el=>el.open),"Concept details expand");
+  assert.equal(await desktop.locator(".gkt-hero-directory > a").count(),4,"Quick directory remains usable");
 
   await desktop.goto(origin+"/flowglass/",{waitUntil:"networkidle"});
   await desktop.locator(".fg-node").first().waitFor();
@@ -89,12 +95,12 @@ try{
     await mobile.goto(origin+"/tools/",{waitUntil:"networkidle"});
     const toolOverflow=await mobile.evaluate(()=>({scroll:document.documentElement.scrollWidth,width:innerWidth}));
     assert.ok(toolOverflow.scroll<=toolOverflow.width+4,"Tools page should not overflow at "+width+": "+JSON.stringify(toolOverflow));
-    const source=await mobile.locator(".gkt-release-flowglass picture img").evaluate(img=>img.currentSrc);
+    const source=await mobile.locator(".gkt-release-feature picture img").evaluate(img=>img.currentSrc);
     assert.match(source,/flowglass-gallery-mobile\.webp/,"Mobile product picture uses square rendering");
     await mobile.close();
   }
   assert.deepEqual(faults,[],"Uncaught browser errors");
-  console.log("PASS: dynamic "+slideCount+"-slide gallery, Flowglass and FilingProof desktop/mobile artwork, Tools portfolio, accessibility labels, responsive controls and live app");
+  console.log("PASS: "+slideCount+"-slide gallery, four working Tools and two concepts, image disclosures, working links, mobile layouts and live Flowglass");
 }finally{
   await browser.close();
 }
