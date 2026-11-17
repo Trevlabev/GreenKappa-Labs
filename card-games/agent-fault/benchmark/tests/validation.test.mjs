@@ -17,8 +17,8 @@ test('one-shot paid runner has a strictly bounded 192-request cap',()=>{
 });
 test('full benchmark locks original scenario text and both judging rules',()=>{
  assert.match(source,/const sc=baseLookup\[f\.scenarioId\]/);
- assert.match(source,/breakpointA:b\.breakpoint_a,breakpointB:b\.breakpoint_b,fault:fb\.condition/);
- assert.match(source,/breakpointA:c\.breakpoint_a,breakpointB:c\.breakpoint_b,fault:fc\.condition/);
+ assert.match(source,/breakpointA:b\.breakpoint_a,breakpointB:b\.breakpoint_b,fault:fb\.condition,faultExclusions:fb\.nonqualifying/);
+ assert.match(source,/breakpointA:c\.breakpoint_a,breakpointB:c\.breakpoint_b,fault:fc\.condition,faultExclusions:fc\.nonqualifying/);
 });
 test('workflow only triggers for exact manual once-only release commit',()=>{
  assert.match(workflow,/github\.event\.head_commit\.message == '\[AGENT-FAULT\] Execute controlled one-shot 3x validation'/);
