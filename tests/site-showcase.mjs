@@ -57,6 +57,13 @@ try{
   assert.ok(await desktop.locator('.gkl-tools-products--live a[href="filingproof/"]').count()>0,"Homepage FilingProof launch link exists");
   assert.ok(await desktop.locator('.gkl-tools-products--live a[href="tools/handoff-atlas/"]').count()>0,"Homepage Handoff Atlas launch link exists");
   assert.equal(await desktop.getByText("Printflight",{exact:true}).count(),0,"Retired Printflight is not shown on homepage");
+  assert.equal(await desktop.locator(".gkl-tools-showcase-grid > .gkl-tools-promo-card").count(),3,"Flowglass, FilingProof and CourtFlow share an image-first three-card row");
+  for (const name of ["flowglass-tools-feature.webp","filingproof-tools.webp","courtflow-tools-promo.webp"]) {
+    const asset=desktop.locator('.gkl-tools-showcase-grid img[src$="'+name+'"]');
+    assert.equal(await asset.count(),1,"Homepage displays approved promotional image "+name);
+    await asset.evaluate(img=>img.decode());
+    assert.ok(await asset.evaluate(img=>img.naturalWidth>0),"Homepage image loads "+name);
+  }
 
   await desktop.goto(origin+"/tools/",{waitUntil:"networkidle"});
   assert.equal(await desktop.locator(".gkt-release-card").count(),4,"Tools page has four working alpha cards");
@@ -73,7 +80,14 @@ try{
   assert.match(await hero.getAttribute("alt"),/not a screenshot/,"Promotional imagery accurately disclosed");
   assert.ok(await desktop.locator('#filingproof a[href="/filingproof/"]').count()>=1,"FilingProof launch link works");
   assert.ok(await desktop.locator('#courtflow a[href="/courtflow/"]').count()>=1,"CourtFlow launch link works");
-  assert.equal(await desktop.locator("#courtflow .cfp-screen-compact").count(),1,"Tools catalog showcases the CourtFlow-specific workflow preview");
+  const courtPromo=desktop.locator('#courtflow .gkt-product-image img');
+  assert.equal(await courtPromo.count(),1,"Tools catalog shows the existing CourtFlow promotional image");
+  await courtPromo.evaluate(img=>img.decode());
+  assert.equal(await courtPromo.evaluate(img=>img.naturalWidth),1440,"Optimized CourtFlow image loads");
+  assert.match(await courtPromo.getAttribute("alt"),/not an actual running software screenshot/,"CourtFlow image disclaimer is accurate");
+  const filingPromo=desktop.locator('#filingproof .gkt-product-image img');
+  await filingPromo.evaluate(img=>img.decode());
+  assert.ok(await filingPromo.evaluate(img=>img.naturalWidth)>0,"FilingProof promotional image loads");
   assert.ok(await desktop.locator('#handoff-atlas a[href="/tools/handoff-atlas/"]').count()>=1,"Handoff Atlas launch link works");
   await desktop.locator(".gkt-concept-card summary").first().click();
   assert.ok(await desktop.locator(".gkt-concept-card details").first().evaluate(el=>el.open),"Concept details expand");
