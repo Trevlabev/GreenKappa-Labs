@@ -139,3 +139,39 @@
  .worlds-page .gw-hero-books .gw-real-cover{width:45%;max-width:160px}
 }
 @media(prefers-reduced-motion:reduce){.worlds-page .gw-adventure-cover-link{transition:none}}
+
+/* Original-first portfolio order and Control prominence; reduced Warframe visibility. */
+.worlds-page .gw-hero-books .gw-real-cover.gw-hero-book-b{width:49%;max-width:300px;border-color:rgba(240,201,147,.7);z-index:8}
+.worlds-page .gw-hero-books .gw-real-cover.gw-hero-book-a{width:39%;max-width:215px;z-index:3}
+.worlds-page .gw-hero-books .gw-real-cover.gw-hero-book-c{width:35%;max-width:205px;z-index:2}
+.worlds-page .gw-book-card.gw-book-card-featured{background:linear-gradient(135deg,#162d36,#1d343a);border:1px solid rgba(242,203,148,.63);box-shadow:0 18px 40px rgba(0,0,0,.22)}
+.worlds-page .gw-book-card.gw-book-card-featured .gw-card-cover{filter:drop-shadow(0 16px 16px rgba(0,0,0,.32))}
+.worlds-page .gw-book-card.gw-book-card-featured h3{color:#ffe0aa}
+.worlds-page .gw-book-card.gw-book-card-featured>.gw-cover-photo-link{max-width:295px}
+.worlds-page .gw-featured-overline,.worlds-page .gw-original-overline{margin:0 0 .7rem!important;color:#f2c889;font-size:.72rem!important;font-weight:850;letter-spacing:.09em;text-transform:uppercase}
+.worlds-page .gw-book-card.gw-book-card-minor{border-color:rgba(245,226,203,.12);background:#0e1b25;max-width:900px}
+.worlds-page .gw-book-card.gw-book-card-minor>.gw-cover-photo-link{max-width:175px}
+.worlds-page .gw-adventure-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+.worlds-page .gw-adventure.gw-adventure-featured{
+ grid-column:1/-1;display:grid;grid-template-columns:minmax(0,315px) minmax(0,1fr);
+ border-color:rgba(244,197,136,.6);background:linear-gradient(120deg,#242434,#423340);
+ box-shadow:0 22px 44px rgba(0,0,0,.22)
+}
+.worlds-page .gw-adventure.gw-adventure-featured .gw-adventure-cover-link{max-width:315px}
+.worlds-page .gw-adventure.gw-adventure-featured h3{font-size:clamp(2.3rem,4.2vw,4rem);color:#fff3dc}
+.worlds-page .gw-adventure.gw-adventure-featured .gw-adventure-content{justify-content:center;padding:clamp(1.5rem,3.5vw,3rem)}
+.worlds-page .gw-adventure.gw-adventure-minor{border-color:rgba(234,201,149,.11);background:#0d1a23}
+.worlds-page .gw-adventure.gw-adventure-minor .gw-adventure-cover-link{max-width:165px}
+@media(max-width:1020px){.worlds-page .gw-adventure-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:760px){
+ .worlds-page .gw-adventure-grid{grid-template-columns:1fr}
+ .worlds-page .gw-adventure.gw-adventure-featured{grid-column:auto;grid-template-columns:minmax(0,210px) minmax(0,1fr)}
+}
+@media(max-width:570px){
+ .worlds-page .gw-adventure.gw-adventure-featured{grid-template-columns:1fr;gap:1rem}
+ .worlds-page .gw-adventure.gw-adventure-featured .gw-adventure-cover-link{width:min(250px,80%);margin-inline:auto}
+ .worlds-page .gw-adventure.gw-adventure-featured .gw-adventure-content{padding:1rem}
+ .worlds-page .gw-hero-books .gw-real-cover.gw-hero-book-b{max-width:180px}
+ .worlds-page .gw-hero-books .gw-real-cover.gw-hero-book-a{max-width:145px}
+ .worlds-page .gw-hero-books .gw-real-cover.gw-hero-book-c{max-width:130px}
+}

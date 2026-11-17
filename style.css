@@ -1133,3 +1133,43 @@ html{scroll-behavior:smooth}
 }
 @media(max-width:360px){.gkl-adventure-publication{grid-template-columns:85px minmax(0,1fr)}.gkl-adventure-publication-content strong{font-size:1.05rem}.gkl-adventure-feature-cover img{width:min(78%,250px)}}
 @media(prefers-reduced-motion:reduce){.gkl-adventure-feature,.gkl-adventure-publication{transition:none}}
+
+/* Worlds collection priorities — original adventures first; Control leads adaptations. */
+.gkl-worlds-shelf{grid-template-columns:repeat(6,minmax(0,1fr))}
+.gkl-worlds-shelf .gkl-worlds-book-featured{grid-column:span 2;background:linear-gradient(145deg,rgba(218,229,216,.16),rgba(236,204,153,.08));border-color:rgba(245,207,153,.56);box-shadow:0 9px 32px rgba(0,0,0,.2)}
+.gkl-worlds-shelf .gkl-worlds-book-featured .gkl-worlds-book-image img{width:auto;max-height:315px}
+.gkl-worlds-shelf .gkl-worlds-book-featured strong{font-size:clamp(1.2rem,2vw,1.75rem);color:#ffe3ac}
+.gkl-worlds-shelf .gkl-worlds-book-featured .gkl-worlds-book-index{color:#f4c77f}
+.gkl-worlds-shelf .gkl-worlds-book:last-child{grid-column:span 1;max-width:none;width:auto;justify-self:stretch}
+.gkl-worlds-shelf .gkl-worlds-book-minor{border-color:rgba(248,222,182,.1);background:rgba(255,255,255,.019)}
+.gkl-worlds-shelf .gkl-worlds-book-minor img{max-width:78%;margin-inline:auto}
+.gkl-adventure-publications .gkl-adventure-publication-minor{background:#f4f0eb;border-color:rgba(36,57,66,.1)}
+.gkl-adventure-publications .gkl-adventure-publication-minor img{width:79%}
+/* The sourcebook gallery's central, largest cover is Control. Warframe remains peripheral. */
+.gkl-portfolio-sourcebooks .gkl-portfolio-five-covers .gkl-portfolio-book-cover:nth-child(1){width:16%;height:45%;left:5%;top:40%;z-index:0;transform:rotate(-18deg);opacity:.88}
+.gkl-portfolio-sourcebooks .gkl-portfolio-five-covers .gkl-portfolio-book-cover:nth-child(2){width:24%;height:64%;left:18%;top:21%;z-index:2;transform:rotate(-9deg)}
+.gkl-portfolio-sourcebooks .gkl-portfolio-five-covers .gkl-portfolio-book-cover:nth-child(3){width:37%;height:85%;left:35%;top:5%;z-index:8;transform:rotate(-1deg)}
+.gkl-portfolio-sourcebooks .gkl-portfolio-five-covers .gkl-portfolio-book-cover:nth-child(4){width:25%;height:65%;left:61%;top:18%;z-index:3;transform:rotate(8deg)}
+.gkl-portfolio-sourcebooks .gkl-portfolio-five-covers .gkl-portfolio-book-cover:nth-child(5){width:22%;height:59%;left:79%;top:27%;z-index:1;transform:rotate(17deg)}
+/* Adventure slide: original Records House central, Dead Air the next strongest. */
+.gkl-portfolio-adventures .gkl-portfolio-four-covers .gkl-portfolio-book-cover:nth-child(2){width:30%;height:75%;left:5%;top:17%;z-index:4;transform:rotate(-10deg)}
+.gkl-portfolio-adventures .gkl-portfolio-four-covers .gkl-portfolio-book-cover:nth-child(4){width:17%;height:45%;left:82%;top:39%;z-index:0;transform:rotate(16deg)}
+@media(max-width:1080px){
+ .gkl-worlds-shelf{grid-template-columns:repeat(3,minmax(0,1fr))}
+ .gkl-worlds-shelf .gkl-worlds-book-featured{grid-column:span 2}
+}
+@media(max-width:600px){
+ .gkl-worlds-shelf{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .gkl-worlds-shelf .gkl-worlds-book-featured{grid-column:span 2}
+ .gkl-worlds-shelf .gkl-worlds-book-featured .gkl-worlds-book-image img{max-height:300px}
+ .gkl-worlds-shelf .gkl-worlds-book:last-child{grid-column:span 1;max-width:none;width:auto}
+}
+@media(max-width:680px){
+ .gkl-portfolio-sourcebooks .gkl-portfolio-five-covers .gkl-portfolio-book-cover:nth-child(1){width:22%;height:43%;left:-3%;top:39%}
+ .gkl-portfolio-sourcebooks .gkl-portfolio-five-covers .gkl-portfolio-book-cover:nth-child(2){width:31%;height:62%;left:10%;top:23%}
+ .gkl-portfolio-sourcebooks .gkl-portfolio-five-covers .gkl-portfolio-book-cover:nth-child(3){width:46%;height:86%;left:29%;top:7%}
+ .gkl-portfolio-sourcebooks .gkl-portfolio-five-covers .gkl-portfolio-book-cover:nth-child(4){width:31%;height:61%;left:60%;top:21%}
+ .gkl-portfolio-sourcebooks .gkl-portfolio-five-covers .gkl-portfolio-book-cover:nth-child(5){width:23%;height:46%;left:82%;top:37%}
+ .gkl-portfolio-adventures .gkl-portfolio-four-covers .gkl-portfolio-book-cover:nth-child(2){width:36%;height:73%;left:-5%;top:19%}
+ .gkl-portfolio-adventures .gkl-portfolio-four-covers .gkl-portfolio-book-cover:nth-child(4){width:24%;height:50%;left:85%;top:36%}
+}
