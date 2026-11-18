@@ -84,3 +84,53 @@ test('static walkthroughs and card review resolve card art from this repository,
  assert(html.includes('./cascade-demo.html'));
  assert(html.includes('./classic-demo.html'));
 });
+
+
+test('friendly onboarding keeps the demos between the pitch and six-step walkthrough',()=>{
+ const p=html.indexOf('01 / The idea');
+ const d=html.indexOf('id="animated-demo"');
+ const h=html.indexOf('id="player-experience"');
+ const play=html.indexOf('id="play-options"');
+ assert(p>=0&&d>p&&h>d&&play>h,'Approved page flow: Idea → demos → steps → ways to play');
+ assert(html.includes('Drive the AI Insane.'));
+ assert(html.includes('How to Play AGENT/FAULT'));
+ assert(html.includes('You just need to be good at making bad decisions.'));
+ const cards=[...html.matchAll(/<article class="af-step-card"/g)];
+ assert.equal(cards.length,6,'Six distinct walkthrough cards');
+ for(let n=1;n<=6;n++)assert(html.includes('Step '+n+' of 6:'),'Missing accessible label for step '+n);
+ assert(html.includes('aria-roledescription="carousel"'));
+ assert(html.includes('data-steps-dir="-1"')&&html.includes('data-steps-dir="1"'));
+ assert(html.includes('how-to-play.css')&&html.includes('how-to-play.js'));
+});
+test('the new swipe gallery uses 3 desktop, 2 tablet, 1 mobile and keyboard navigation',()=>{
+ const howCss=read('how-to-play.css'),howJs=read('how-to-play.js');
+ assert(howCss.includes('grid-auto-columns:calc((100% - 32px)/3)'));
+ assert(howCss.includes('grid-auto-columns:calc((100% - 16px)/2)'));
+ assert(howCss.includes('grid-auto-columns:100%'));
+ assert(howCss.includes('@media(max-width:1000px)'));
+ assert(howCss.includes('@media(max-width:680px)'));
+ for(const key of ["'ArrowLeft'","'ArrowRight'","'Home'","'End'"])assert(howJs.includes(key));
+ for(const key of ["scroll-snap-type:x mandatory","prefers-reduced-motion","aria-pressed"])assert(howCss.includes(key)||howJs.includes(key));
+ assert.doesNotThrow(()=>new vmScript(howJs,{filename:'how-to-play.js'}));
+});
+test('Classic is the first play choice and mode descriptions stay mechanically accurate',()=>{
+ const first=html.indexOf('class="af-mode-slide af-mode-classic"');
+ const second=html.indexOf('class="af-mode-slide af-mode-cascade"');
+ const third=html.indexOf('class="af-mode-slide af-mode-physical"');
+ assert(first>=0&&second>first&&third>second,'Classic, Cascade, then physical');
+ assert(html.includes('data-slide="0" aria-label="Show Classic mode" aria-pressed="true"'));
+ assert(html.includes('different player'));
+ assert(html.includes('strict majority'));
+ assert(html.includes('At most one'));
+ assert(html.includes('browser playtest editions'));
+});
+test('demo introductions are story-first and original scripted interactions survive',()=>{
+ assert(classic.includes("title:'A goose became mayor.'"));
+ assert(classic.includes("type:'scenario'"));
+ assert(classic.indexOf("type:'scenario'") < classic.indexOf("type:'stacks'"));
+ assert(cascade.includes("title:'A goose is running city hall.'"));
+ assert(cascade.includes("if(state.step===0)return"));
+ assert(cascade.includes('cd-showcase-scenario'));
+ for(const key of ['data-reaction','data-inspect','data-jump','af-demo-visibility'])assert(cascade.includes(key));
+ for(const key of ['data-afd-card','data-afd-step','af-demo-visibility'])assert(classic.includes(key));
+});
