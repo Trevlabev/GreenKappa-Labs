@@ -1,0 +1,43 @@
+name: Cloudflare Pages public-build preflight
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/build-cloudflare-pages.mjs'
+      - '.github/workflows/cloudflare-pages-preflight.yml'
+  pull_request:
+    paths:
+      - 'scripts/build-cloudflare-pages.mjs'
+      - '.github/workflows/cloudflare-pages-preflight.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-public-output:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate publisher syntax
+        run: node --check scripts/build-cloudflare-pages.mjs
+      - name: Build curated public website
+        run: node scripts/build-cloudflare-pages.mjs
+      - name: Verify no internal content is published
+        run: |
+          test -f dist/index.html
+          test -f dist/tools/index.html
+          test -f dist/card-games/agent-fault/index.html
+          test ! -e dist/.github
+          test ! -e dist/CNAME
+          test ! -e dist/tests
+          test ! -e dist/card-games/agent-fault/game-app
+          test ! -e dist/card-games/agent-fault/benchmark
+          if find dist -type f \\( -name '*.sql' -o -name '*.mts' -o -name '*.ps1' -o -name '.env*' \\) | grep -q .; then
+            echo "::error::Unexpected backend/development file in output"
+            exit 1
+          fi
