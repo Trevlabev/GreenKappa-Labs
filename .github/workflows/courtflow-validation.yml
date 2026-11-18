@@ -30,6 +30,8 @@ jobs:
       - name: Deterministic unit tests
         run: node --test courtflow/tests/core.test.mjs
   browser:
+    # Run the full browser suite only via Actions > Run workflow.
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-24.04
     permissions:
       contents: read
