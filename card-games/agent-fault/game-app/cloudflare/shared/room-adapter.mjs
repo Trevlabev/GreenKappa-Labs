@@ -74,11 +74,12 @@ export class BudgetGateBase extends DurableObject {
           await tx.put(key, u);
           return { allowed: true };
         });
-        return result.allowed ? json(result) : json({ detail: 'Daily AI budget exceeded' }, 429);
+        return result.allowed ? json({ ...result, date }) : json({ detail: 'Daily AI budget exceeded' }, 429);
       }
       if (operation === 'report') {
         const result = await this.ctx.storage.transaction(async tx => {
-          const u = await tx.get(key) || { requests: 0, successful: 0, estimated_usd: 0, input_tokens: 0, output_tokens: 0, reported: {} };
+          const reportKey = 'daily:' + (typeof data.date === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(data.date) ? data.date : date);
+          const u = await tx.get(reportKey) || { requests: 0, successful: 0, estimated_usd: 0, input_tokens: 0, output_tokens: 0, reported: {} };
           u.reported ||= {};
           if (!u.reported[data.requestId]) {
             u.reported[data.requestId] = 1;
@@ -86,7 +87,7 @@ export class BudgetGateBase extends DurableObject {
             u.estimated_usd += Math.max(0, Number(data.cost) || 0);
             u.input_tokens += Math.max(0, Number(data.input_tokens) || 0);
             u.output_tokens += Math.max(0, Number(data.output_tokens) || 0);
-            await tx.put(key, u);
+            await tx.put(reportKey, u);
           }
           return { ok: true };
         });
@@ -167,11 +168,13 @@ export class GameRoomBase extends DurableObject {
       if (path === '/_create' && method === 'POST') {
         const { code, secret } = await bodyJson(request, demand, problem);
         demand(CODE.test(code), 'Invalid room code', 422);
-        const existing = await this.ctx.storage.get('room');
-        demand(!existing, 'Room code unavailable', 409);
-        const room = this.engine.createRoom(code, secret);
-        await this.save(room);
-        return json({ code, token: secret, role: 'host' });
+        return this.ctx.blockConcurrencyWhile(async () => {
+          const existing = await this.ctx.storage.get('room');
+          demand(!existing, 'Room code unavailable', 409);
+          const room = this.engine.createRoom(code, secret);
+          await this.save(room);
+          return json({ code, token: secret, role: 'host' });
+        });
       }
       const room = await this.load();
       if (path.endsWith('/ws')) return this.socket(request, room);
@@ -180,14 +183,17 @@ export class GameRoomBase extends DurableObject {
         const { name: rawName } = await bodyJson(request, demand, problem);
         const name = String(rawName || '').trim().replace(/\s+/g, ' ');
         demand(name.length >= 2 && name.length <= 24, 'Nickname must have 2–24 characters', 422);
-        demand(room.phase === 'lobby', 'Joining is closed');
-        demand(room.players.filter(p => p.active).length < 8, 'Room is full');
-        demand(!room.players.some(p => p.active && p.name.toLowerCase() === name.toLowerCase()), 'Nickname already in use');
-        const secret = this.engine.token(), id = randomBytes(8).toString('hex');
-        room.players.push({ id, token_hash: this.engine.digest(secret), name, seat: room.players.length, active: true, hand: [], score: 0 });
-        room.version++;
-        await this.save(room);
-        return json({ code: room.code, token: secret, role: 'player', player_id: id });
+        return this.ctx.blockConcurrencyWhile(async () => {
+          const current = await this.load();
+          demand(current.phase === 'lobby', 'Joining is closed');
+          demand(current.players.filter(p => p.active).length < 8, 'Room is full');
+          demand(!current.players.some(p => p.active && p.name.toLowerCase() === name.toLowerCase()), 'Nickname already in use');
+          const secret = this.engine.token(), id = randomBytes(8).toString('hex');
+          current.players.push({ id, token_hash: this.engine.digest(secret), name, seat: current.players.length, active: true, hand: [], score: 0 });
+          current.version++;
+          await this.save(current);
+          return json({ code: current.code, token: secret, role: 'player', player_id: id });
+        });
       }
       const who = this.engine.auth(room, request.headers.get('Authorization'));
       if (method === 'GET' && !/\/(?:action|generate|check-ai|join|ws|qr\.png)$/.test(path)) {
@@ -197,16 +203,21 @@ export class GameRoomBase extends DurableObject {
         const payload = await bodyJson(request, demand, problem);
         demand(typeof payload.name === 'string' && payload.data && typeof payload.data === 'object' && !Array.isArray(payload.data),
           'Invalid action payload', 422);
-        this.engine.applyAction(room, who.role, who.p, payload.name, payload.data);
-        await this.save(room);
-        return json(await this.present(room, who.role, who.p));
+        const outcome = await this.ctx.blockConcurrencyWhile(async () => {
+          const current = await this.load();
+          const actor = this.engine.auth(current, request.headers.get('Authorization'));
+          this.engine.applyAction(current, actor.role, actor.p, payload.name, payload.data);
+          await this.save(current);
+          return { current, actor };
+        });
+        return json(await this.present(outcome.current, outcome.actor.role, outcome.actor.p));
       }
       if (method === 'POST' && path.endsWith('/_authorize')) return json({ role: who.role });
-      if (method === 'POST' && path.endsWith('/generate')) return json(await this.generate(room, who));
+      if (method === 'POST' && path.endsWith('/generate')) return json(await this.generate(room, who, request.headers.get('Authorization')));
       return json({ detail: 'Method not allowed' }, 405);
     } catch (e) { return errorResponse(e); }
   }
-  async generate(room, who) {
+  async generate(room, who, bearer) {
     const { demand, problem } = this.engine;
     demand(who.role === 'host', 'Only the host may generate', 403);
     const cascade = this.configuration.cascade;
@@ -220,21 +231,32 @@ export class GameRoomBase extends DurableObject {
     const model = this.model();
     demand(model in this.engine.MODEL_PRICES, 'Model not approved for this game', 422);
     const requestId = crypto.randomUUID();
-    let started = false, step;
+    let started = false, step, reservedDay;
     this.reserving = true;
     try {
-      await budget(this.env, 'reserve', { requestId,
-        maxRequests: this.engine.MAX_DAILY_CALLS, maxEstimatedUsd: this.engine.MAX_DAILY_ESTIMATED_USD });
-      if (cascade) {
-        step = this.engine.currentStageKey(room);
-        room.generation_pending = true;
-        room.pending_at = Date.now();
-        room.ai_attempted_step = true;
-      } else room.ai_attempted = true;
-      room.generation_calls++;
-      room.version++;
-      await this.save(room);
-      started = true;
+      const grant = await this.ctx.blockConcurrencyWhile(async () => {
+        const current = await this.load();
+        const actor = this.engine.auth(current, bearer);
+        demand(actor.role === 'host', 'Only host can generate', 403);
+        demand(cascade ? ['baseline', 'cascade'].includes(current.phase) : current.phase === 'generate', 'Round changed', 409);
+        demand(cascade ? (!current.generation_pending && !current.ai_attempted_step) : !current.ai_attempted,
+          'Generation already attempted', 429);
+        const authorization = await budget(this.env, 'reserve', { requestId,
+          maxRequests: this.engine.MAX_DAILY_CALLS, maxEstimatedUsd: this.engine.MAX_DAILY_ESTIMATED_USD });
+        if (cascade) {
+          step = this.engine.currentStageKey(current);
+          current.generation_pending = true;
+          current.pending_at = Date.now();
+          current.ai_attempted_step = true;
+        } else current.ai_attempted = true;
+        current.generation_calls++;
+        current.version++;
+        await this.save(current);
+        room = current;
+        started = true;
+        return authorization;
+      });
+      reservedDay = grant.date;
     } finally { this.reserving = false; }
     if (!started) throw problem(503, 'Generation could not begin');
     let content = '', used = {}, success = false;
@@ -257,7 +279,7 @@ export class GameRoomBase extends DurableObject {
     } catch { /* error returned without provider internals */ }
     const cost = this.engine.estimateUsd(model, used) || 0;
     try {
-      await budget(this.env, 'report', { requestId, success, cost,
+      await budget(this.env, 'report', { requestId, date: reservedDay, success, cost,
         input_tokens: used.input_tokens || 0, output_tokens: used.output_tokens || 0 });
     } catch { /* never disclose or skip game rollback because accounting failed */ }
     const billing = { model, input_tokens: used.input_tokens || null,
