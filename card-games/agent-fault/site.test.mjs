@@ -39,7 +39,8 @@ test('both demos run locally without server-side AI requests',()=>{
  assert(cascade.includes('data-reaction'));
  assert(cascade.includes('af-demo-visibility'));
  for(const source of [classic,cascade])assert(!/fetch\s*\(|XMLHttpRequest|OPENAI_API_KEY|\/api\/rooms/.test(source));
- assert(showcase.includes('.cd-nav{position:sticky'));
+ assert(showcase.includes('.cd-edge-arrow'));
+ assert(showcase.includes('.cd-pagination'));
  assert(showcase.includes('prefers-reduced-motion'));
 });
 
@@ -136,4 +137,28 @@ test('demo introductions are story-first and original scripted interactions surv
  assert(cascade.includes('cd-showcase-scenario'));
  for(const key of ['data-reaction','data-inspect','data-jump','af-demo-visibility'])assert(cascade.includes(key));
  for(const key of ['data-afd-card','data-afd-step','af-demo-visibility'])assert(classic.includes(key));
+});
+
+
+test('both demos use side arrows, six compact dots, keyboard and swipe navigation instead of autoplay',()=>{
+  for(const [source,prefix,style] of [[classic,'afd',css],[cascade,'cd',showcase]]){
+    const arrow=prefix==='afd'?'afd-edge-arrow':'cd-edge-arrow';
+    const dots=prefix==='afd'?'afd-pagination':'cd-pagination';
+    assert(source.includes(arrow),prefix+' missing side chevrons');
+    assert(source.includes(dots),prefix+' missing scene dots');
+    assert(style.includes('.'+arrow),prefix+' missing side-arrow styling');
+    assert(style.includes('.'+dots),prefix+' missing dot styling');
+    for(const event of ['touchstart','touchend','pointerdown','pointerup','keydown'])
+      assert(source.includes("'"+event+"'"),prefix+' missing '+event);
+    for(const key of ['ArrowLeft','ArrowRight','Home','End'])assert(source.includes(key));
+    assert(!source.includes('setTimeout('),prefix+' still has timed scene advancement');
+  }
+  assert(!classic.includes('data-afd-action="toggle"'),'Classic play/pause transport removed');
+  assert(!cascade.includes('data-play'),'Cascade play/pause transport removed');
+  assert(!cascade.includes('class="cd-nav"'),'Cascade old navigation bar removed');
+  assert(classic.includes('data-afd-card'),'Classic card choices retained');
+  assert(cascade.includes('data-reaction')&&cascade.includes('data-inspect'),'Cascade branching and previews retained');
+  assert(classic.includes('isSwipeSafe')&&cascade.includes('isSwipeSafe'),'gesture filtering preserved');
+  assert.doesNotThrow(()=>new vmScript(classic,{filename:'demo-embed.js'}));
+  assert.doesNotThrow(()=>new vmScript(cascade,{filename:'cascade-demo-embed.js'}));
 });
