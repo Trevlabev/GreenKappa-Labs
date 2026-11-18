@@ -1588,3 +1588,11 @@ html{scroll-padding-top:90px}
     padding:.48rem .65rem;margin-top:.5rem;font-size:.7rem;
   }
 }
+
+/* Small Gods homepage gallery hero — show approved six-deity artwork edge-to-edge. */
+.gkl-showcase-slide.gkl-theme-gods.gkl-art-slide{background:#050812}
+@media(max-width:900px){
+  .gkl-art-slide.gkl-theme-gods .gkl-art-mobile-caption{background:linear-gradient(135deg,#080d1b,#251027 64%,#35131f)}
+  .gkl-art-slide.gkl-theme-gods .gkl-art-mobile-caption h2 em{color:#f2c778}
+  .gkl-art-slide.gkl-theme-gods .gkl-art-mobile-caption>strong{background:#eac17f;color:#190e1c}
+}
