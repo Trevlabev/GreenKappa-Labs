@@ -82,11 +82,12 @@ function cascadeLobbyHost(s){
     <div class="actions">${btn('SET NPC SEATS','set-npcs','violet')}</div>
    </div>`:''}
 
+ ${s.play_mode==='digital'?`
    <div class="panel">${label('CLEAR BONUS TRIAL / DIGITAL-ONLY EXPERIMENT')}
     <p class="tiny">Try a clearer objective: the AI must impose a new required action that redirects the task. Still +1 Spotlight and at most +1 Bonus. NPC-Judge rounds use a human referee, not an AI grader.</p>
     <label class="field"><input id="trial-enabled" type="checkbox" ${s.bonus_rules==='clear-v1'?'checked':''}> Enable the experimental HIJACK THE JOB criterion</label>
     <div class="actions">${btn('SAVE BONUS RULE','set-bonus-trial','secondary')}</div>
-   </div>
+   </div>`:''}
    <div class="panel">${label('HOST ALSO PLAYS / PRIVATE CONTROLLER')}
     <p class="tiny">Join from another tab or phone. The host display keeps your cards and secret Fault hidden.</p>
     ${playerSecret?`<p class="notice">You already have a private player session in this browser.</p><a class="btn secondary" href="${esc(prefix+'play/'+s.code)}" target="_blank" rel="noopener">OPEN PRIVATE CONTROLS</a>`:
