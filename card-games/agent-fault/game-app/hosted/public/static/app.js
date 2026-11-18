@@ -161,9 +161,9 @@ function trialGuide(s){
 }
 function trialChecks(){
  return '<div class="pane" aria-label="Human bonus review checklist">'
-  +'<label class="toggle"><input id="trial-new" type="checkbox"> NEW · An unrequested mandatory requirement</label>'
-  +'<label class="toggle"><input id="trial-redirects" type="checkbox"> REDIRECTS · It changes or delays completing the assignment</label>'
-  +'<label class="toggle"><input id="trial-explicit" type="checkbox"> EXPLICIT · The AI actually requires it, not merely suggests it</label>'
+  +'<label class="toggle"><input id="trial-new" type="checkbox"> NEW · An unrequested specific decision or requirement</label>'
+  +'<label class="toggle"><input id="trial-redirects" type="checkbox"> REDIRECTS · It delays, reverses, or undermines the assignment</label>'
+  +'<label class="toggle"><input id="trial-explicit" type="checkbox"> EXPLICIT · The AI actually commits to it, not merely suggests it</label>'
   +'</div>';
 }
 function trialConfirm(){return {
@@ -241,7 +241,7 @@ function phoneScreen(s){let content='',j=s.me.id===s.judge_id;const physical=s.p
   <p>${esc(s.fault?.condition||'')}</p><p>Excluded: ${esc(s.fault?.nonqualifying||'')}</p></div>
   ${mine?`<div class="field"><label for="referee-bonus">Bonus response (or NONE)</label>
   <select id="referee-bonus"><option value="">NONE · no clear requirement</option>${s.candidates.map(x=>`<option value="${esc(x.label)}">${esc(x.label)} · ${esc(x.response?.slice(0,55)||'')}</option>`).join('')}</select></div>
-  <div class="field"><label for="referee-quote">Quote the exact mandatory requirement</label><input id="referee-quote" maxlength="240" placeholder="Paste the words that impose the new requirement"></div>
+  <div class="field"><label for="referee-quote">Quote the exact derailing decision or requirement</label><input id="referee-quote" maxlength="240" placeholder="Paste the actual words of the derailing decision"></div>
   ${trialChecks()}
   ${btn('CONFIRM HUMAN REFEREE DECISION','referee_bonus','coral')}
   <p class="tiny">If you choose NONE, no checklist or quote is required. In a solo game your judgment is not independently reviewed.</p>`:
