@@ -387,3 +387,8 @@ body.card-games-page{
   .cg-nsr-feature-type{min-height:290px}
   .cg-nsr-feature-type>strong{font-size:clamp(3rem,12vw,5rem)}
 }
+
+/* Small Gods approved square promo: preserve the entire design in the Games feature. */
+.cg-game-art.cg-sgld-feature-art img{aspect-ratio:1/1;object-fit:contain}
+.cg-sgld-feature-art a{display:block;border-radius:7px;overflow:hidden}
+.cg-sgld-feature-art a:focus-visible{outline:3px solid #ffcc6e;outline-offset:3px}
