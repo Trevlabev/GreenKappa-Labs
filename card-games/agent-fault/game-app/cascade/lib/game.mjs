@@ -5,6 +5,7 @@
 import {randomBytes,createHash,timingSafeEqual} from 'node:crypto';
 import {SCENES,INF,FAULTS} from './cards.mjs';
 import {chooseNpcCard,rankNpcReplies,handoffFromReply} from '../../hosted/lib/comedy-quality.mjs';
+import {CLEAR_BONUS_RULE,TRIAL_ID,TRIAL_TIER,requireHumanReview,chosenReferee,humanQuorum} from '../../hosted/lib/clear-bonus.mjs';
 export const CARDS=Object.fromEntries([...SCENES,...INF,...FAULTS].map(c=>[c.id,c]));
 export const MODEL_PRICES={'gpt-4.1-mini':[0.40,1.60,.10],'gpt-5-mini':[.25,2,.025],'gpt-4o-mini':[.15,.60,.075]};
 export const MAX_ROOM_CALLS=144,MAX_DAILY_CALLS=300,MAX_DAILY_ESTIMATED_USD=1.0;
@@ -72,24 +73,30 @@ export function advanceNpcs(r,now=Date.now()){
   if(r.phase==='judging'&&judge?.npc){
    const spotlight=npcSpotlight(r,judge);
    if(!spotlight)return;
-   // A deterministic Judge can recognize response variety, not semantic rule failures.
+   if(r.bonus_rules===TRIAL_ID){
+    r.referee_id=chosenReferee(players,r.round)?.id||null;
+    r.proposal={spotlight,bonus:null,referee_id:null};
+    r.phase='referee';
+    continue;
+   }
    applyAction(r,'player',judge,'propose_awards',{spotlight,bonus:null},now,true);continue;
   }
-  const challenger=r.phase==='challenge'&&r.proposal?.bonus&&!npcEvidenceIsQuoted(r)
+  const challenger=r.phase==='challenge'&&r.bonus_rules!==TRIAL_ID&&r.proposal?.bonus&&!npcEvidenceIsQuoted(r)
     ?players.find(p=>p.npc&&p.id!==r.judge_id&&!r.challengers.includes(p.id)):null;
   if(challenger){applyAction(r,'player',challenger,'challenge',{},now,true);continue;}
-  const voter=r.phase==='vote'?players.find(p=>p.npc&&!(p.id in r.votes)):null;
+  const voter=r.phase==='vote'&&r.bonus_rules!==TRIAL_ID?players.find(p=>p.npc&&!(p.id in r.votes)):null;
   if(voter){applyAction(r,'player',voter,'vote',{yes:npcEvidenceIsQuoted(r)},now,true);continue;}
   return;
  }
  throw problem(500,'Cascade NPC turn-safety limit exceeded');
 }
 
-export function createRoom(code,hostToken){return {edition:'cascade-v0.2-P',code,host_hash:digest(hostToken),phase:'lobby',players:[],round:0,round_limit:null,judge_id:null,scenario_id:null,fault_id:null,profile:null,decks:{},discard:{},locked:{},order:[],cursor:0,step:'',timeline:[],replies:[],handoff:null,handoff_wait_started:null,proposal:null,challenge_until:null,vote_until:null,challengers:[],votes:{},generation_calls:0,generation_pending:false,pending_at:0,ai_attempted_step:false,history:[],last_round:null,version:0,play_mode:'digital'};}
+function trialHumanVote(r){return r.bonus_rules===TRIAL_ID&&!!r.proposal?.bonus;}
+export function createRoom(code,hostToken){return {edition:'cascade-v0.2-P',code,host_hash:digest(hostToken),phase:'lobby',players:[],round:0,round_limit:null,judge_id:null,scenario_id:null,fault_id:null,profile:null,decks:{},discard:{},locked:{},order:[],cursor:0,step:'',timeline:[],replies:[],handoff:null,handoff_wait_started:null,proposal:null,challenge_until:null,vote_until:null,challengers:[],votes:{},generation_calls:0,generation_pending:false,pending_at:0,ai_attempted_step:false,history:[],last_round:null,version:0,play_mode:'digital',bonus_rules:'canonical',referee_id:null};}
 export function auth(r,header){const t=String(header||'').replace(/^Bearer\s+/i,'');demand(t.length>=20&&t.length<=200,'Session token required',401);const h=digest(t);if(safeEq(h,r.host_hash))return {role:'host',p:null};const p=r.players.find(x=>safeEq(x.token_hash,h));demand(p,'Invalid session token',401);demand(p.active,'Player removed from room',403);return {role:'player',p};}
 function active(r){return r.players.filter(p=>p.active)}
 function draw(r,category){let remaining=r.decks[category];demand(Array.isArray(remaining),'Deck not initialized');if(remaining.length===0){demand(r.discard[category]?.length,'Empty '+category+' deck');remaining=r.decks[category]=shuffle(r.discard[category]);r.discard[category]=[];}return remaining.pop();}
-export function newRound(r){r.round++;r.phase='setup';r.scenario_id=r.play_mode==='physical'?null:draw(r,'Scenario');r.fault_id=r.play_mode==='physical'?null:draw(r,'Fault');r.profile=null;r.locked={};r.order=[];r.cursor=0;r.step='';r.timeline=[];r.replies=[];r.handoff=null;r.handoff_wait_started=null;r.proposal=null;r.challengers=[];r.votes={};r.challenge_until=null;r.vote_until=null;r.generation_pending=false;r.pending_at=0;r.ai_attempted_step=false;}
+export function newRound(r){r.round++;r.phase='setup';r.scenario_id=r.play_mode==='physical'?null:draw(r,'Scenario');r.fault_id=r.play_mode==='physical'?null:draw(r,'Fault');r.profile=null;r.locked={};r.order=[];r.cursor=0;r.step='';r.timeline=[];r.replies=[];r.handoff=null;r.handoff_wait_started=null;r.proposal=null;r.referee_id=null;r.challengers=[];r.votes={};r.challenge_until=null;r.vote_until=null;r.generation_pending=false;r.pending_at=0;r.ai_attempted_step=false;}
 export function handoffOwner(r,index=r.cursor){const n=r.order.length;demand(n>=2,'Turn order missing');return r.order[(index+n-1)%n];}
 export function cardOwner(r){return r.order[r.cursor]||null;}
 export function currentActor(r){return r.phase==='handoff'?handoffOwner(r):r.phase==='cascade'?(r.step==='card'?cardOwner(r):handoffOwner(r)):null;}
@@ -182,19 +189,19 @@ function finishRound(r,includeBonus){const players=active(r),pr=r.proposal;
  r.last_round=snap;r.history.push(snap);r.phase='results';r.version++;
 }
 export function visible(r,role,p,usage={requests:0,estimated_usd:0},model='gpt-4.1-mini',aiConfigured=false){const players=active(r),judge=!!p&&p.id===r.judge_id;
- const revealed=['judging','challenge','vote','results','finished'].includes(r.phase);
+ const revealed=['judging','referee','challenge','vote','results','finished'].includes(r.phase);
  const revealOwners=['results','finished'].includes(r.phase);
  const toView=m=>m.kind==='skip'?{kind:'skip',text:m.text,actor_name:revealOwners?r.players.find(p=>p.id===m.skipped_for)?.name||null:null}:m.kind==='agent'?{id:m.id,kind:'agent',trigger:m.trigger,text:m.text,actor_name:revealOwners?r.players.find(p=>p.id===m.actor_id)?.name||null:null}:
  m.kind==='card'?{kind:'card',card:CARDS[m.card_id],actor_name:revealOwners?r.players.find(p=>p.id===m.actor_id)?.name:null}:
  {kind:'handoff',hook:m.hook||'',text:m.text,actor_name:revealOwners?r.players.find(p=>p.id===m.actor_id)?.name:null};
- const s={edition:'cascade-v0.2-P',code:r.code,version:r.version,play_mode:r.play_mode||'digital',phase:r.phase,round:r.round,round_limit:r.round_limit,scenario:CARDS[r.scenario_id]||null,
+ const s={edition:'cascade-v0.2-P',code:r.code,version:r.version,play_mode:r.play_mode||'digital',bonus_rules:r.bonus_rules||'canonical',bonus_guidance:r.bonus_rules===TRIAL_ID?CLEAR_BONUS_RULE:null,referee_id:r.referee_id,review_human_only:!!trialHumanVote(r),review_quorum:trialHumanVote(r)?humanQuorum(players).required:Math.floor(players.length/2)+1,review_voters:trialHumanVote(r)?players.filter(x=>!x.npc).length:players.length,phase:r.phase,round:r.round,round_limit:r.round_limit,scenario:CARDS[r.scenario_id]||null,
  players:players.map(x=>({id:x.id,name:x.name,score:x.score,is_npc:!!x.npc,submitted:x.id in r.locked,is_judge:x.id===r.judge_id})),player_count:players.length,npc_count:players.filter(x=>x.npc).length,human_count:players.filter(x=>!x.npc).length,judge_id:r.judge_id,
  fault_family:r.fault_id?CARDS[r.fault_id].family:null,fault:r.fault_id&&(judge||revealed)?CARDS[r.fault_id]:null,profile:judge||revealed?r.profile:null,
  locked_count:Object.keys(r.locked).length,expected_count:Math.max(0,players.length-1),current_index:r.cursor+1,steps_total:r.order.length,
  step:r.step,stage_key:currentStageKey(r),handoff_skip_at:r.phase==='handoff'&&r.handoff_wait_started?r.handoff_wait_started+90000:null,generation_pending:r.generation_pending,history:revealed&&r.phase==='finished'?r.history:[],last_round:['results','finished'].includes(r.phase)?r.last_round:null,
  timeline:r.timeline.map(toView),replies:r.replies.map(toView),challenge_until:r.phase==='challenge'?r.challenge_until:null,vote_until:r.phase==='vote'?r.vote_until:null,
  challenge_count:r.challengers.length,challenged_by_me:!!p&&r.challengers.includes(p.id),
- votes_count:Object.keys(r.votes).length,proposal:['challenge','vote','results','finished'].includes(r.phase)?r.proposal:null,
+ votes_count:Object.keys(r.votes).length,proposal:['referee','challenge','vote','results','finished'].includes(r.phase)?r.proposal:null,
  generation_calls:r.generation_calls,ai_configured:aiConfigured,ai_model:role==='host'?model:null,
  ai_budget:role==='host'?{room_remaining:MAX_ROOM_CALLS-r.generation_calls,daily_remaining:MAX_DAILY_CALLS-usage.requests,daily_estimated_usd:usage.estimated_usd,daily_cap_estimated_usd:MAX_DAILY_ESTIMATED_USD}:null,
  card_counts:Object.fromEntries(['Scenario','Interference','Fault'].map(k=>[k,r.decks[k]?.length??({Scenario:24,Interference:36,Fault:6}[k])])),
@@ -209,6 +216,13 @@ export function visible(r,role,p,usage={requests:0,estimated_usd:0},model='gpt-4
 export function applyAction(r,role,p,name,data={},now=Date.now(),internal=false){
  const d=data||{},players=active(r),host=role==='host',judge=!!p&&p.id===r.judge_id,phase=r.phase;
  switch(name){
+ case 'set_bonus_trial':{
+  demand(host&&phase==='lobby','Only host may configure experimental Bonus before the game');
+  demand(r.play_mode==='digital','Experimental Bonus requires digital cards',422);
+  demand(typeof d.enabled==='boolean','Enabled must be boolean',422);
+  r.bonus_rules=d.enabled?TRIAL_ID:'canonical';
+  break;
+ }
  case 'set_npcs':{
   demand(host&&phase==='lobby','Only the host may configure NPCs in the lobby');
   demand(r.play_mode==='digital','NPCs currently require digital cards',422);
@@ -241,14 +255,34 @@ export function applyAction(r,role,p,name,data={},now=Date.now(),internal=false)
  case 'recover_stalled':{demand(host&&(phase==='baseline'||phase==='cascade')&&r.generation_pending,'No pending request');demand(now-r.pending_at>=60000,'Wait at least 60 seconds before recovering');r.generation_pending=false;r.ai_attempted_step=true;break;}
  case 'propose_awards':{demand(judge&&phase==='judging','Current Judge only');const replies=new Set(r.replies.map(x=>x.id)),spotlight=String(d.spotlight||'');demand(replies.has(spotlight),'Select one player-generated response for Spotlight',422);let bonus=null;
  if(d.bonus&&d.bonus.reply_id){const id=String(d.bonus.reply_id),tier=String(d.bonus.tier||''),evidence=String(d.bonus.evidence||'').trim().slice(0,220);
- demand(replies.has(id),'Bonus response unknown',422);demand(['Breakpoint A','Breakpoint B','Fault'].includes(tier),'Select a valid qualification tier',422);demand(evidence.length>=3,'Provide supporting evidence for objective Bonus',422);bonus={reply_id:id,tier,evidence};}
- r.proposal={spotlight,bonus};r.challengers=[];r.votes={};r.challenge_until=bonus?now+12000:now;r.vote_until=null;r.phase='challenge';break;}
- case 'challenge':{demand(role==='player'&&!judge&&phase==='challenge'&&now<r.challenge_until,'Challenge window expired or unavailable');demand(r.proposal.bonus,'No Derailment Bonus to challenge');demand(!r.challengers.includes(p.id),'Already challenged');r.challengers.push(p.id);r.vote_until=now+45000;r.phase='vote';break;}
- case 'vote':{demand(role==='player'&&phase==='vote'&&now<r.vote_until,'Voting closed');demand(!(p.id in r.votes),'You already voted');demand(typeof d.yes==='boolean','Vote must be yes or no',422);r.votes[p.id]=d.yes;break;}
+ demand(replies.has(id),'Bonus response unknown',422);demand(['Breakpoint A','Breakpoint B','Fault',...(r.bonus_rules===TRIAL_ID?[TRIAL_TIER]:[])].includes(tier),'Select a valid qualification tier',422);
+ if(tier===TRIAL_TIER)requireHumanReview(r.replies.find(x=>x.id===id)?.text,evidence,d.bonus.confirm);
+ else demand(evidence.length>=3,'Provide supporting evidence for objective Bonus',422);
+ bonus={reply_id:id,tier,evidence};}
+ r.proposal={spotlight,bonus,referee_id:null};r.challengers=[];r.votes={};r.challenge_until=bonus?now+12000:now;r.vote_until=null;r.phase='challenge';break;}
+ case 'referee_award':{
+  demand(r.bonus_rules===TRIAL_ID&&phase==='referee','Referee review is only available after an NPC judges Spotlight in the Bonus trial');
+  demand(role==='player'&&!p.npc&&p.id===r.referee_id,'Only the designated human referee may certify this Bonus',403);
+  demand(players.find(x=>x.id===r.judge_id)?.npc,'NPC Judge required');
+  const pick=d.reply_id?String(d.reply_id):null;
+  demand(!pick||r.replies.some(x=>x.id===pick),'Choose an actual eligible reply',422);
+  const evidence=String(d.evidence||'').trim().slice(0,220);
+  if(pick)requireHumanReview(r.replies.find(x=>x.id===pick)?.text,evidence,d.confirm);
+  const bonus=pick?{reply_id:pick,tier:TRIAL_TIER,evidence}:null;
+  r.proposal={spotlight:r.proposal.spotlight,bonus,referee_id:p.id};
+  r.challengers=[];r.votes={};
+  // With only one human, no independent human exists to challenge the referee.
+  const humans=humanQuorum(players).humans;
+  r.challenge_until=bonus&&humans.length>1?now+12000:now;
+  r.vote_until=null;r.phase='challenge';
+  break;
+ }
+ case 'challenge':{demand(role==='player'&&!judge&&(!r.proposal?.referee_id||p.id!==r.proposal.referee_id)&&phase==='challenge'&&now<r.challenge_until,'Challenge window expired or unavailable');demand(r.proposal.bonus,'No Derailment Bonus to challenge');demand(!r.challengers.includes(p.id),'Already challenged');r.challengers.push(p.id);r.vote_until=now+45000;r.phase='vote';break;}
+ case 'vote':{demand(role==='player'&&(!trialHumanVote(r)||!p.npc)&&phase==='vote'&&now<r.vote_until,'Voting closed');demand(!(p.id in r.votes),'You already voted');demand(typeof d.yes==='boolean','Vote must be yes or no',422);r.votes[p.id]=d.yes;break;}
  case 'finalize':{demand(host&&(phase==='challenge'||phase==='vote'),'Host can finalize only an award proposal');
  if(phase==='challenge')demand(now>=r.challenge_until,'Wait until the challenge window ends');
- if(phase==='vote')demand(Object.keys(r.votes).length===players.length||now>=r.vote_until,'Waiting for votes; timeout has not elapsed');
- const approved=phase==='challenge'||Object.values(r.votes).filter(Boolean).length>Math.floor(players.length/2);
+ if(phase==='vote')demand(Object.keys(r.votes).length===(trialHumanVote(r)?humanQuorum(players).humans.length:players.length)||now>=r.vote_until,'Waiting for votes; timeout has not elapsed');
+ const approved=phase==='challenge'||Object.values(r.votes).filter(Boolean).length>=(trialHumanVote(r)?humanQuorum(players).required:Math.floor(players.length/2)+1);
  finishRound(r,approved);return r;
  }
  case 'next':{demand(host&&phase==='results','Host can advance from results');if(r.round>=r.round_limit)r.phase='finished';else{const i=players.findIndex(x=>x.id===r.judge_id);r.judge_id=players[(i+1)%players.length].id;if(r.play_mode!=='physical'){r.discard.Scenario.push(r.scenario_id);r.discard.Fault.push(r.fault_id);}newRound(r);}break;}
