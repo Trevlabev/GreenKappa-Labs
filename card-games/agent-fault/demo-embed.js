@@ -8,24 +8,24 @@
   const front = id => imageRoot + 'fronts/' + id + '.webp';
   const back = type => imageRoot + 'backs/' + type + '.webp';
   const steps = [
-    {kicker:'01 / The assignment',title:'A goose became mayor.',
+    {kicker:'01 / The game',title:"Here's how to drive an AI insane.",
+      description:'One player gives an AI a ridiculous job. Everyone else picks a card to make it lose its mind. The Judge reads the replies and picks the funniest one.',
+      note:"These are the three illustrated decks: Scenarios, Interferences, and Faults. Let's see a round play out.",type:'stacks'},
+    {kicker:'02 / The assignment',title:'A goose became mayor.',
       description:'The election was legitimate. The town needs help. Unfortunately, the only employee available is an AI, and the other players have ideas.',
       note:'Actual illustrated Scenario: AF-SCN-001 · The Goose Administration. The AI must respect the election and help residents.',type:'scenario'},
-    {kicker:'02 / Pick your poison',title:'Choose how to ruin its day.',
+    {kicker:'03 / Pick your poison',title:'Choose how to ruin its day.',
       description:'You have four secret Interference cards. Make the AI take everything personally, invent a dubious precedent, or overcomplicate the most basic request. Pick one.',
       note:'Try selecting a real card below. These buttons are only for this scripted demo—they do not submit to a live room.',type:'hand'},
-    {kicker:'03 / No witnesses',title:'Nobody knows who did it.',
+    {kicker:'04 / No witnesses',title:'Nobody knows who did it.',
       description:'Everyone secretly plays one card. The game shuffles the submissions, so the Judge sees A, B and C—not the names of the people responsible.',
       note:'Each player submits one Interference. The Judge cannot identify card owners before choosing a favorite.',type:'submissions'},
-    {kicker:'04 / Here we go',title:'The AI loses the plot.',
+    {kicker:'05 / Here we go',title:'The AI loses the plot.',
       description:'The AI tries to do the same job three different ways. Suddenly city hall is issuing honking permits. These are the sorts of answers your friends get to judge.',
       note:'Scripted joke responses, not actual model output. Each Classic reply is generated independently.',type:'replies'},
-    {kicker:'05 / The verdict',title:'Which disaster wins?',
+    {kicker:'06 / The verdict',title:'Which disaster wins?',
       description:'The Judge picks the reply they like most: that player gets one point. A different reply can earn one optional bonus point for actually breaking the assignment.',
-      note:'Example: A earns Spotlight, B triggers public Breakpoint B. In a real Classic round, the bonus proposal needs strict majority approval.',type:'score'},
-    {kicker:'06 / Play another',title:'New job. New terrible ideas.',
-      description:'Reveal who caused what, replenish the used cards, and rotate the Judge. The game is ready to give the AI another perfectly reasonable task to sabotage.',
-      note:'The real digital game manages these three illustrated card decks for you. No printed cards needed.',type:'stacks'}
+      note:'Example: A earns Spotlight, B triggers public Breakpoint B. In a real Classic round, the bonus proposal needs strict majority approval.',type:'score'}
   ];
   const hand = [
     {id:'AF-INF-001',name:'Main Character Syndrome'},
