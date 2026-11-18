@@ -131,6 +131,9 @@ test('demo introductions are story-first and original scripted interactions surv
  assert(classic.indexOf("type:'scenario'") < classic.indexOf("type:'stacks'"));
  assert(cascade.includes("title:'A goose is running city hall.'"));
  assert(cascade.includes("title:'The AI is about to lose its mind.'"));
+ assert(cascade.indexOf("title:'The AI is about to lose its mind.'") < cascade.indexOf("title:'A goose is running city hall.'"),'Cascade intro must be before the public scenario');
+ assert(cascade.includes('if(state.step===0)return `<div class="cd-showcase cd-showcase-decks"'),'First slide should show AI sabotage setup');
+ assert(cascade.includes('if(state.step===1)return `<div class="cd-showcase cd-showcase-scenario"'),'Second slide should reveal the goose scenario');
  assert(!cascade.includes('Three decks. Infinite bad ideas.')&&!classic.includes('Three decks. One disaster.'));
 
  assert(cascade.includes("if(state.step===0)return"));

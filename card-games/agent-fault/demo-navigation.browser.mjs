@@ -52,11 +52,13 @@ try {
   attach(cascade);
   await cascade.goto(base+'cascade-demo.html',{waitUntil:'domcontentloaded'});
   await cascade.locator('.cd-viewer').waitFor();
+  assert.equal(await cascade.locator('.cd-scene-dot[aria-current="step"]').getAttribute('data-jump'),'0','Cascade: first dot starts on the intro scene');
+  assert.equal(await cascade.locator('.cd-showcase-decks').count(),1,'Cascade: opening artwork introduces the deck');
   assert.equal(await cascade.locator('.cd-scene-dot').count(),6,'Cascade: six scene dots');
   assert.equal(await cascade.locator('[data-play]').count(),0,'Cascade: autoplay controls removed');
-  await verifyStage(cascade,'.cd-copy h1','A goose is running city hall.');
-  await cascade.locator('.cd-edge-next').click();
   await verifyStage(cascade,'.cd-copy h1','The AI is about to lose its mind.');
+  await cascade.locator('.cd-edge-next').click();
+  await verifyStage(cascade,'.cd-copy h1','A goose is running city hall.');
   await cascade.locator('.cd-scene-dot').nth(4).click();
   await verifyStage(cascade,'.cd-copy h1','Oh, you thought that was bad?');
   const reaction=cascade.locator('[data-reaction="role"]');
@@ -74,9 +76,9 @@ try {
   assert.equal(await cascade.locator('#cd-inspect').count(),0,'Cascade: card preview closes');
   await cascade.locator('.cd-viewer').focus();
   await cascade.keyboard.press('Home');
-  await verifyStage(cascade,'.cd-copy h1','A goose is running city hall.');
-  await syntheticTouchSwipe(cascade,'.cd-viewer',-140);
   await verifyStage(cascade,'.cd-copy h1','The AI is about to lose its mind.');
+  await syntheticTouchSwipe(cascade,'.cd-viewer',-140);
+  await verifyStage(cascade,'.cd-copy h1','A goose is running city hall.');
   console.log('PASS: Cascade chevrons, dots, keyboard, swipe, Handoff branches, card preview');
 
   const mobile=await browser.newPage({viewport:{width:390,height:844},isMobile:true,hasTouch:true,deviceScaleFactor:1});
@@ -88,7 +90,7 @@ try {
   await verifyStage(mobile,'.afd-title','Nobody knows who did it.');
   await mobile.goto(base+'cascade-demo.html',{waitUntil:'domcontentloaded'});
   await mobile.locator('.cd-edge-next').click({timeout:8000});
-  await verifyStage(mobile,'.cd-copy h1','The AI is about to lose its mind.');
+  await verifyStage(mobile,'.cd-copy h1','A goose is running city hall.');
   await syntheticTouchSwipe(mobile,'.cd-viewer',-120);
   await verifyStage(mobile,'.cd-copy h1','Choose the first mistake.');
   console.log('PASS: 390px mobile arrow click and swipe gestures in both demos');
@@ -100,7 +102,7 @@ try {
   await verifyStage(integrated,'#af-panel-classic .afd-title','Choose how to ruin its day.');
   await integrated.locator('#af-tab-cascade').click();
   await integrated.locator('#af-panel-cascade .cd-edge-next').click();
-  await verifyStage(integrated,'#af-panel-cascade .cd-copy h1','The AI is about to lose its mind.');
+  await verifyStage(integrated,'#af-panel-cascade .cd-copy h1','A goose is running city hall.');
   assert.equal(await integrated.locator('.af-mode-slide').count(),3,'Original three-mode gallery preserved');
   console.log('PASS: Both embedded demos and original three-mode gallery survive integration');
   assert.deepEqual(errors,[],'No browser runtime errors');
