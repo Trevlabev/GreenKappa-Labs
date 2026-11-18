@@ -89,9 +89,11 @@ function lobbyHost(s){
  </div>`:''}
  <div class="pane">${title('HOST ALSO PLAYS','KEEP YOUR CARDS PRIVATE')}
  <p class="muted" style="margin:14px 0">Join from your own phone or a separate private tab while this host screen stays open. The shared screen never shows your secret hand or Fault.</p>
+ ${privateTab? `<p class="hint">Your private player session is ready. Open it in another tab and keep the shared host display here.</p><div class="actions">${privateTab}</div>`:`
  <div class="field"><label for="host-nickname">Your player nickname</label><input id="host-nickname" maxlength="24" minlength="2" placeholder="YOUR NAME" autocomplete="nickname"></div>
- <div class="actions">${btn('JOIN AS A PLAYER','host_play','coral')}${privateTab}</div>
- <p class="tiny">Already joined on a phone? Don't join twice. Use your existing player session.</p>
+ <div class="actions">${btn('JOIN AS A PLAYER','host_play','coral')}</div>
+ <p class="tiny">Already joined on a phone? Don't join twice. Use your existing player session.</p>`}
+
  </div></div>
  </div>`;
 }
