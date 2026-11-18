@@ -8,9 +8,20 @@ const read=p=>readFileSync(new URL(p,root),'utf8');
 const html=read('index.html'),css=read('demo-embed.css'),classic=read('demo-embed.js'),cascade=read('cascade-demo-embed.js'),tabs=read('demo-tabs.js'),showcase=read('cascade-demo-embed.css');
 test('physical and digital options accurately distinguish access and release status',()=>{
  assert(html.includes('id="physical-play"'));
- for(const s of ['printed prototype','shared AI chat','print certification pending','Play Classic online','Play Cascade online','different player'])assert(html.toLowerCase().includes(s.toLowerCase()),s);
- assert(html.includes('https://agent-fault-live-online.netlify.app/'));
- assert(html.includes('https://agent-fault-cascade-playtest.netlify.app/'));
+ for(const s of ['printed prototype','shared AI chat','print certification remain pending','Play Classic online','Play Cascade online','different player'])assert(html.toLowerCase().includes(s.toLowerCase()),s);
+ assert(html.includes('https://agent-fault-classic-cf.grenkappa459.workers.dev/'));
+ assert(html.includes('https://agent-fault-classic-cf.grenkappa459.workers.dev/cascade/'));
+});
+test('the compact swipeable mode gallery preserves all three destinations',()=>{
+ const slides=[...html.matchAll(/<article class="af-mode-slide /g)];
+ const dots=[...html.matchAll(/class="af-mode-dot"/g)];
+ assert.equal(slides.length,3,'Three carousel slides');
+ assert.equal(dots.length,3,'Three pagination buttons');
+ for(const marker of ['class="af-mode-carousel"','class="af-mode-track"','data-dir="-1"','data-dir="1"','tabindex="0"'])assert(html.includes(marker),marker);
+ assert(tabs.includes('track.scrollTo('),'Carousel navigation is wired');
+ assert(html.includes('https://agent-fault-classic-cf.grenkappa459.workers.dev/'),'Classic launches on Cloudflare');
+ assert(html.includes('https://agent-fault-classic-cf.grenkappa459.workers.dev/cascade/'),'Cascade launches on Cloudflare');
+ assert(!html.includes('.netlify.app')&&!cascade.includes('.netlify.app'),'No obsolete Netlify game links');
 });
 test('accessible tab semantics and two separately labeled playable showcases',()=>{
  for(const s of ['id="af-tab-classic"','id="af-tab-cascade"','id="af-panel-classic"','id="af-panel-cascade"','role="tablist"','role="tabpanel"','aria-selected="false"','aria-controls="af-panel-cascade"'])assert(html.includes(s),s);

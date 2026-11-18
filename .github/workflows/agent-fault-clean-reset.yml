@@ -1,4 +1,4 @@
-name: AGENT/FAULT clean reset and artwork publish
+name: AGENT/FAULT approved artwork publish
 
 on:
   push:
@@ -9,11 +9,9 @@ on:
 
 permissions:
   contents: write
-  actions: write
-  pages: write
 
 concurrency:
-  group: agent-fault-clean-reset
+  group: agent-fault-approved-artwork-publish
   cancel-in-progress: false
 
 jobs:
@@ -25,34 +23,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           persist-credentials: true
-
-      - name: Cancel stale AGENT/FAULT and site deployments
-        env:
-          GH_TOKEN: ${{ github.token }}
-        shell: bash
-        run: |
-          set -euo pipefail
-          echo "Canceling obsolete queued or running AGENT/FAULT artwork, QA, Pages and homepage jobs."
-          gh api --paginate "repos/${GITHUB_REPOSITORY}/actions/runs?per_page=100" |
-            jq -r --argjson current "${GITHUB_RUN_ID}" '
-              .workflow_runs[] |
-              select(.id != $current) |
-              select(.status == "queued" or .status == "pending" or .status == "in_progress" or .status == "waiting") |
-              select(.event == "push" or .event == "dynamic") |
-              select(
-                .name == "pages build and deployment" or
-                .name == "AGENT/FAULT site dual-demo QA" or
-                .name == "AGENT/FAULT restore same-origin approved card artwork" or
-                .name == "GreenKappa homepage and Tools visuals"
-              ) | .id
-            ' | while IFS= read -r run_id; do
-              test -n "$run_id" || continue
-              if gh api -X POST "repos/${GITHUB_REPOSITORY}/actions/runs/${run_id}/cancel" >/dev/null 2>&1; then
-                echo "Cancellation requested: $run_id"
-              else
-                echo "::warning::Could not cancel $run_id (already finished or insufficient API permissions)"
-              fi
-            done
 
       - name: Use Node 22
         uses: actions/setup-node@v4
@@ -80,6 +50,16 @@ jobs:
           cp "$src/manifest.json" "$dst/manifest.json"
           test "$(find "$dst/fronts" -maxdepth 1 -type f -name '*.webp' | wc -l)" -eq 66
           test "$(find "$dst/backs" -maxdepth 1 -type f -name '*.webp' | wc -l)" -eq 3
+          node - <<'JS'
+          const fs=require('node:fs');
+          const base='card-games/agent-fault/assets';
+          const manifest=JSON.parse(fs.readFileSync(base+'/manifest.json','utf8'));
+          const fronts=fs.readdirSync(base+'/fronts').filter(x=>x.endsWith('.webp'));
+          const backs=fs.readdirSync(base+'/backs').filter(x=>x.endsWith('.webp'));
+          if(fronts.length!==66||backs.length!==3||Object.keys(manifest.cards||{}).length!==66)throw Error('Invalid recovered artwork inventory');
+          for(const id of Object.keys(manifest.cards))if(!fronts.includes(id+'.webp'))throw Error('Missing original artwork: '+id);
+          console.log('Approved images verified before publication: 66 fronts, 3 backs');
+          JS
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add "$dst/fronts" "$dst/backs" "$dst/manifest.json"
@@ -91,7 +71,7 @@ jobs:
             git push origin HEAD:main
           fi
 
-      - name: Check published-art manifest and card count before deployment
+      - name: Verify committed original-art manifest
         shell: bash
         run: |
           set -euo pipefail
@@ -106,15 +86,3 @@ jobs:
           console.log('Verified 66 original card fronts, 3 category backs and 66 manifest IDs.');
           JS
 
-      - name: Start one fresh Pages build only after artwork is published
-        env:
-          GH_TOKEN: ${{ github.token }}
-        shell: bash
-        run: |
-          set -euo pipefail
-          if gh api -X POST "repos/${GITHUB_REPOSITORY}/pages/builds" >/dev/null; then
-            echo "Clean GitHub Pages rebuild requested after all 69 images were committed."
-          else
-            echo "::error::Artwork is committed, but the Pages rebuild API call was rejected. Check Pages permissions/settings."
-            exit 1
-          fi

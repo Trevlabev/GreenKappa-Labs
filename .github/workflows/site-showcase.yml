@@ -1,39 +1,75 @@
 name: GreenKappa homepage and Tools visuals
 on:
   push:
+    branches: [main]
     paths:
-      - "**/*.html"
-      - "**/*.css"
-      - "**/*.js"
-      - "**/*.mjs"
-      - "assets/**"
-      - "sitemap.xml"
-      - "tests/site-integrity.mjs"
-      - "tests/site-navigation.mjs"
-      - ".github/workflows/site-showcase.yml"
+      - 'index.html'
+      - 'script.js'
+      - 'styles.css'
+      - 'assets/**'
+      - 'sitemap.xml'
+      - 'arcana-config.js'
+      - 'arcana-widget.js'
+      - 'card-games/**'
+      - '!card-games/agent-fault/game-app/**'
+      - 'tablearc/**'
+      - 'tablearc-red/**'
+      - 'worlds/**'
+      - 'playground/**'
+      - 'tools/**'
+      - 'flowglass/**'
+      - 'filingproof/**'
+      - 'courtflow/**'
+      - 'work/**'
+      - 'journal/**'
+      - 'tests/site-showcase.mjs'
+      - 'tests/site-navigation.mjs'
+      - 'tests/site-integrity.mjs'
+      - '.github/workflows/site-showcase.yml'
   pull_request:
+    branches: [main]
     paths:
-      - "**/*.html"
-      - "**/*.css"
-      - "**/*.js"
-      - "**/*.mjs"
-      - "assets/**"
-      - "sitemap.xml"
-      - "tests/site-integrity.mjs"
-      - "tests/site-navigation.mjs"
-      - ".github/workflows/site-showcase.yml"
+      - 'index.html'
+      - 'script.js'
+      - 'styles.css'
+      - 'assets/**'
+      - 'sitemap.xml'
+      - 'arcana-config.js'
+      - 'arcana-widget.js'
+      - 'card-games/**'
+      - '!card-games/agent-fault/game-app/**'
+      - 'tablearc/**'
+      - 'tablearc-red/**'
+      - 'worlds/**'
+      - 'playground/**'
+      - 'tools/**'
+      - 'flowglass/**'
+      - 'filingproof/**'
+      - 'courtflow/**'
+      - 'work/**'
+      - 'journal/**'
+      - 'tests/site-showcase.mjs'
+      - 'tests/site-navigation.mjs'
+      - 'tests/site-integrity.mjs'
+      - '.github/workflows/site-showcase.yml'
   workflow_dispatch:
+
+concurrency:
+  group: site-showcase-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
 
 jobs:
   browser:
     runs-on: ubuntu-24.04
-    permissions:
-      contents: read
+    timeout-minutes: 18
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: "22"
+          node-version: '22'
       - name: Audit public pages, local resources, links and sitemap
         run: node tests/site-integrity.mjs
       - name: Install browser testing dependency
@@ -43,6 +79,8 @@ jobs:
       - name: Exercise homepage gallery, Tools, and Flowglass at desktop and mobile sizes
         run: |
           python3 -m http.server 8765 --bind 127.0.0.1 > /tmp/greenkappa-site.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
           sleep 2
-          node tests/site-showcase.mjs
-          node tests/site-navigation.mjs
+          timeout --signal=TERM --kill-after=20s 7m node tests/site-showcase.mjs
+          timeout --signal=TERM --kill-after=20s 7m node tests/site-navigation.mjs
