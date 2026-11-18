@@ -32,4 +32,37 @@ for(const p of all.filter(x=>x.endsWith('.css'))){const s=fs.readFileSync(p,'utf
 const sitemap=fs.readFileSync('sitemap.xml','utf8'),urls=[...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map(m=>m[1]);
 for(const p of routes){const s=html.get(p);if(!s){fail(p,'public page absent');continue}if(!/<meta\b[^>]*name=["']description["']/i.test(s))fail(p,'missing description');if(!/<main\b/i.test(s))fail(p,'missing main');if(!/<a\b[^>]*class=["'][^"']*skip/i.test(s))fail(p,'missing skip link');const actual=s.match(/<link\b[^>]*rel=["']canonical["'][^>]*href=["']([^"']+)["']/i)?.[1];const expected=domain+'/'+(p==='index.html'?'':p==='privacy.html'?p:p.replace(/index\.html$/,''));if(actual!==expected)fail(p,'canonical '+actual+' expected '+expected);if(!urls.includes(expected))fail('sitemap.xml','missing '+expected)}
 for(const url of urls){if(!url.startsWith(domain+'/'))fail('sitemap.xml','other domain '+url);else {const dest=local('index.html',url.slice(domain.length));if(dest&&!fileSet.has(dest.file))fail('sitemap.xml','nonexistent page '+url)}}
+// AGENT/FAULT artwork release gate: exact card-specific images, never generic placeholders.
+{
+ const base='card-games/agent-fault/assets', manifestFile=base+'/manifest.json';
+ if(!fileSet.has(manifestFile)) fail(manifestFile,'approved 66-card manifest missing');
+ else {
+  let manifest;
+  try {manifest=JSON.parse(fs.readFileSync(manifestFile,'utf8'))}
+  catch(e){fail(manifestFile,'invalid JSON: '+e.message)}
+  if(manifest){
+   const cards=manifest.cards||{}, ids=Object.keys(cards);
+   if(ids.length!==66)fail(manifestFile,'expected 66 unique card IDs, found '+ids.length);
+   for(const [kind,count] of [['Scenario',24],['Interference',36],['Fault',6]]){
+    const actual=Object.values(cards).filter(c=>c.category===kind).length;
+    if(actual!==count)fail(manifestFile,kind+' inventory mismatch '+actual+' / '+count);
+   }
+   const originals=new Set(ids.map(id=>id+'.webp'));
+   const actualFronts=all.filter(p=>p.startsWith(base+'/fronts/')&&p.endsWith('.webp'));
+   if(actualFronts.length!==66)fail(base+'/fronts','expected 66 actual front image files');
+   for(const id of ids){
+    const file=base+'/fronts/'+id+'.webp';
+    if(!fileSet.has(file)){fail(file,'card-specific front image missing');continue}
+    const bytes=fs.readFileSync(file);
+    if(bytes.length<100||bytes.toString('ascii',0,4)!=='RIFF'||bytes.toString('ascii',8,12)!=='WEBP')fail(file,'invalid WebP file');
+   }
+   for(const name of ['scenario','interference','fault']){
+    const file=base+'/backs/'+name+'.webp';
+    if(!fileSet.has(file)){fail(file,'approved category back missing');continue}
+    const bytes=fs.readFileSync(file);
+    if(bytes.length<100||bytes.toString('ascii',0,4)!=='RIFF'||bytes.toString('ascii',8,12)!=='WEBP')fail(file,'invalid WebP back');
+   }
+  }
+ }
+}
 if(issues.length){console.error('SITE INTEGRITY FAILURES: '+issues.length);for(const x of issues)console.error(' - '+x);process.exitCode=1}else console.log('PASS: '+html.size+' HTML documents, '+checked+' local resources, '+all.filter(x=>x.endsWith('.css')).length+' CSS files, '+routes.length+' canonical routes and sitemap coverage.');
