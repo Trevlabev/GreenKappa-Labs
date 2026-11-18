@@ -1519,3 +1519,72 @@ html{scroll-padding-top:90px}
   .gkl-nsr-game-card-type>strong {font-size:2.5rem}
   .gkl-nsr-showcase-type>strong {font-size:clamp(1.4rem,6vw,2rem)}
 }
+
+
+/* NO SUCH ROOM / approved 2:3 promotional poster in homepage carousel.
+   Preserve the entire user-supplied portrait; never crop its title, box or tiles. */
+.gkl-portfolio-room .gkl-portfolio-media {
+  background:radial-gradient(ellipse at 56% 50%,#2a4451,#111e2c 77%);
+}
+.gkl-portfolio-room .gkl-portfolio-backdrop {
+  object-fit:cover;
+  opacity:.32;
+  filter:blur(30px) brightness(.45) saturate(.85);
+}
+.gkl-portfolio-room .gkl-portfolio-hero-picture {
+  width:98%;
+  height:97%;
+  filter:drop-shadow(0 15px 25px rgba(0,0,0,.38));
+}
+.gkl-portfolio-room .gkl-portfolio-hero-picture img {
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  object-position:center;
+}
+.gkl-portfolio-room .gkl-portfolio-media::after {
+  background:linear-gradient(90deg,#111e2c 0%,rgba(17,30,44,.5) 13%,transparent 28%,transparent 98%);
+}
+.gkl-portfolio-room .gkl-nsr-gallery-disclaimer {
+  display:block;margin-top:.8rem;color:#c7d7d5;
+  font:.7rem/1.4 system-ui,sans-serif;letter-spacing:.02em;
+}
+@media(max-width:900px) {
+  .gkl-portfolio-room .gkl-portfolio-media {
+    flex:0 0 62%;height:62%;min-height:0;
+  }
+  .gkl-portfolio-room .gkl-portfolio-hero-picture {
+    width:100%;height:100%;
+  }
+  .gkl-portfolio-room .gkl-portfolio-media::after {
+    background:linear-gradient(180deg,transparent 78%,#111e2c 100%);
+  }
+  .gkl-portfolio-room .gkl-portfolio-copy {
+    justify-content:center;padding-top:.65rem;padding-bottom:1rem;
+  }
+  .gkl-portfolio-room .gkl-portfolio-copy h2 {
+    font-size:clamp(2rem,5.6vw,3rem);margin-bottom:.45rem;
+  }
+  .gkl-portfolio-room .gkl-portfolio-description {
+    font-size:.85rem;line-height:1.45;
+  }
+  .gkl-portfolio-room .gkl-nsr-gallery-disclaimer {
+    margin-top:.45rem;font-size:.64rem;
+  }
+}
+@media(max-width:560px) {
+  .gkl-portfolio-room .gkl-portfolio-media {flex-basis:62%;height:62%}
+  .gkl-portfolio-room .gkl-portfolio-copy {
+    padding:.45rem 1.1rem .75rem;
+  }
+  .gkl-portfolio-room .gkl-portfolio-copy h2 {
+    font-size:clamp(1.75rem,8vw,2.25rem);margin-bottom:.35rem;
+  }
+  .gkl-portfolio-room .gkl-portfolio-description {
+    font-size:.78rem;line-height:1.38;
+  }
+  .gkl-portfolio-room .gkl-portfolio-action {
+    padding:.48rem .65rem;margin-top:.5rem;font-size:.7rem;
+  }
+}
