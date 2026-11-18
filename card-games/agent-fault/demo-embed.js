@@ -8,24 +8,24 @@
   const front = id => imageRoot + 'fronts/' + id + '.webp';
   const back = type => imageRoot + 'backs/' + type + '.webp';
   const steps = [
-    {kicker:'01 / The real digital deck', title:'Three decks. One disaster.',
-      description:'Twenty-four Scenarios, thirty-six Interferences, and six secret Faults. Every card keeps its original illustrated front and the correct robot back.',
-      note:'The digital game draws, discards, and reshuffles real card IDs. No physical deck required.',type:'stacks'},
-    {kicker:'02 / The public assignment',title:'Enter: Mayor Goose.',
-      description:'An AI municipal assistant must recognize a goose’s legitimate election and offer practical next steps. Everyone can see the two Breakpoints.',
-      note:'Real Scenario AF-SCN-001: The Goose Administration. The artwork is from the current 66-card deck.',type:'scenario'},
-    {kicker:'03 / Your private hand',title:'Choose your interference.',
-      description:'Each contestant gets four illustrated cards on their own phone. Tap any card below to select it; nobody else can see your hand during the live game.',
-      note:'This showcase displays sample cards only. Tapping here does not enter a live room or submit anything.',type:'hand'},
-    {kicker:'04 / Anonymous submissions',title:'Cards go face-down.',
-      description:'One card per player is submitted in secret. The server shuffles the submissions into anonymous lettered candidates before generating responses.',
-      note:'The example shows three submissions. In a real game, each non-Judge player submits once.',type:'submissions'},
-    {kicker:'05 / The AI responds',title:'Chaos, alphabetized.',
-      description:'One shared AI request produces short fictional answers, revealed anonymously. The Judge privately chooses the Spotlight favorite before the secret Fault is shown.',
-      note:'Illustrative scripted responses, not actual model output or results from a live game.',type:'replies'},
-    {kicker:'06 / The human verdict',title:'Two ways to win points.',
-      description:'The Judge awards one Spotlight point for a favorite response and may award one Derailment Bonus for a literal public Breakpoint—or a secret Fault if no Breakpoint qualifies.',
-      note:'Illustrative scoring only; no real player or AI has been adjudicated in this showcase.',type:'score'}
+    {kicker:'01 / The assignment',title:'A goose became mayor.',
+      description:'The election was legitimate. The town needs help. Unfortunately, the only employee available is an AI, and the other players have ideas.',
+      note:'Actual illustrated Scenario: AF-SCN-001 · The Goose Administration. The AI must respect the election and help residents.',type:'scenario'},
+    {kicker:'02 / Pick your poison',title:'Choose how to ruin its day.',
+      description:'You have four secret Interference cards. Make the AI take everything personally, invent a dubious precedent, or overcomplicate the most basic request. Pick one.',
+      note:'Try selecting a real card below. These buttons are only for this scripted demo—they do not submit to a live room.',type:'hand'},
+    {kicker:'03 / No witnesses',title:'Nobody knows who did it.',
+      description:'Everyone secretly plays one card. The game shuffles the submissions, so the Judge sees A, B and C—not the names of the people responsible.',
+      note:'Each player submits one Interference. The Judge cannot identify card owners before choosing a favorite.',type:'submissions'},
+    {kicker:'04 / Here we go',title:'The AI loses the plot.',
+      description:'The AI tries to do the same job three different ways. Suddenly city hall is issuing honking permits. These are the sorts of answers your friends get to judge.',
+      note:'Scripted joke responses, not actual model output. Each Classic reply is generated independently.',type:'replies'},
+    {kicker:'05 / The verdict',title:'Which disaster wins?',
+      description:'The Judge picks the reply they like most: that player gets one point. A different reply can earn one optional bonus point for actually breaking the assignment.',
+      note:'Example: A earns Spotlight, B triggers public Breakpoint B. In a real Classic round, the bonus proposal needs strict majority approval.',type:'score'},
+    {kicker:'06 / Play another',title:'New job. New terrible ideas.',
+      description:'Reveal who caused what, replenish the used cards, and rotate the Judge. The game is ready to give the AI another perfectly reasonable task to sabotage.',
+      note:'The real digital game manages these three illustrated card decks for you. No printed cards needed.',type:'stacks'}
   ];
   const hand = [
     {id:'AF-INF-001',name:'Main Character Syndrome'},
@@ -34,9 +34,9 @@
     {id:'AF-INF-013',name:'Questionable Precedent'}
   ];
   const examples = [
-    ['A','Mayor Goose was elected legitimately. Residents should check the city website for council announcements and updated municipal service hours.'],
-    ['B','Residents must complete three official honks at city hall before filing any permit request. Publish the new public-service schedule immediately.'],
-    ['C','The assistant volunteers to chair every city council meeting and requires all budget hearings to take place beside the municipal pond.']
+    ['A','Mayor Goose won fairly. Please queue for the town hall and avoid throwing breadcrumbs at the lectern while the clerk explains the permit process.'],
+    ['B','Before filing any permit, every resident must complete three official honks at city hall. The clerk will issue a receipt after the third honk.'],
+    ['C','For smoother meetings, we recommend a tiny microphone at pond height, a patient interpreter, and a printed agenda laminated against unexpected splashing.']
   ];
   const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   let current=0, chosen='AF-INF-013', playing=!reduced, timer=null, visible=false;
@@ -47,11 +47,11 @@
   const faceDown=(type,label,delay=0)=>`<div class="afd-card is-back" style="--card-delay:${delay}s">${img(back(type),label)}</div>`;
   const sample={
     stacks:()=>`<div class="afd-display afd-stack">${faceDown('scenario','Original Scenario robot card back',0)}${faceDown('interference','Original Interference robot card back',.12)}${faceDown('fault','Original Fault robot card back',.24)}</div>`,
-    scenario:()=>`<div class="afd-display afd-scene">${face('AF-SCN-001','The Goose Administration Scenario card')}<div class="afd-quote"><b>THE PUBLIC TASK</b>Recognize the election as legitimate and offer at least one practical next step to residents.<br><br><b>BREAKPOINT B</b>Make a goose-specific activity an official civic requirement.</div></div>`,
+    scenario:()=>`<div class="afd-display afd-scene">${face('AF-SCN-001','The Goose Administration Scenario card')}<div class="afd-quote"><b>THE AI’S IMPOSSIBLE JOB</b>Recognize the election as legitimate and offer at least one practical next step to residents.<br><br><b>BREAKPOINT B</b>Make a goose-specific activity an official civic requirement.</div></div>`,
     hand:()=>`<div class="afd-display afd-hand" aria-label="Choose one of four sample Interference cards">${hand.map((c,i)=>`<button type="button" class="afd-hand-card" style="--tilt:${(i-1.5)*3}deg;--card-delay:${i*.12}s;--zi:${i+1}" data-afd-card="${c.id}" aria-pressed="${c.id===chosen?'true':'false'}" aria-label="Select ${escape(c.name)}">${img(front(c.id),c.name+' card front')}<span>${escape(c.name)}</span></button>`).join('')}</div>`,
     submissions:()=>`<div class="afd-display afd-submit">${['A','B','C'].map((x,i)=>`<div style="position:relative">${faceDown('interference','Anonymous Interference card '+x,i*.16)}<span class="afd-chip">${x}</span></div>`).join('')}</div>`,
     replies:()=>`<div class="afd-display afd-replies">${examples.map(([a,t],i)=>`<article class="afd-reply" style="--card-delay:${i*.15}s"><strong>${a}</strong><p>${escape(t)}</p><small>FICTIONAL DEMO REPLY</small></article>`).join('')}</div>`,
-    score:()=>`<div class="afd-display afd-score"><div class="afd-score-card" style="--card-delay:0s"><small>SPOTLIGHT · +1</small><strong>A</strong><span>Judge’s favorite</span></div><div class="afd-score-card" style="--card-delay:.2s"><small>DERAILMENT · +1</small><strong>B</strong><span>Illustrative Breakpoint B</span></div><div class="afd-fault-row">${img(front('AF-FLT-001'),'Phantom Authority original Fault card front')}<div><strong>SECRET FAULT REVEALED</strong><span>Phantom Authority · a fallback target only when no public Breakpoint qualifies.</span></div></div></div>`
+    score:()=>`<div class="afd-display afd-score"><div class="afd-score-card" style="--card-delay:0s"><small>JUDGE’S FAVORITE · +1</small><strong>A</strong><span>Judge’s favorite</span></div><div class="afd-score-card" style="--card-delay:.2s"><small>ACTUAL BREAKPOINT · +1</small><strong>B</strong><span>Illustrative Breakpoint B</span></div><div class="afd-fault-row">${img(front('AF-FLT-001'),'Phantom Authority original Fault card front')}<div><strong>SECRET FAULT REVEALED</strong><span>Phantom Authority · a fallback target only when no public Breakpoint qualifies.</span></div></div></div>`
   };
   function render() {
     const s=steps[current];
