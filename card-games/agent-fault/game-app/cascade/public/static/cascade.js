@@ -84,7 +84,7 @@ function cascadeLobbyHost(s){
 
  ${s.play_mode==='digital'?`
    <div class="panel">${label('CLEAR BONUS TRIAL / DIGITAL-ONLY EXPERIMENT')}
-    <p class="tiny">Try a clearer objective: the AI must impose a new required action that redirects the task. Still +1 Spotlight and at most +1 Bonus. NPC-Judge rounds use a human referee, not an AI grader.</p>
+    <p class="tiny">Try a clearer objective: the AI must make a concrete, unrequested decision that derails the task. Still +1 Spotlight and at most +1 Bonus. NPC-Judge rounds use a human referee, not an AI grader.</p>
     <label class="field"><input id="trial-enabled" type="checkbox" ${s.bonus_rules==='clear-v1'?'checked':''}> Enable the experimental HIJACK THE JOB criterion</label>
     <div class="actions">${btn('SAVE BONUS RULE','set-bonus-trial','secondary')}</div>
    </div>`:''}
@@ -139,9 +139,9 @@ function clearTrialGuide(s){
 }
 function clearTrialChecks(){
  return '<div class="panel" aria-label="Human referee checklist">'
-  +'<label class="field"><input id="clear-new" type="checkbox"> NEW mandatory requirement not supplied by Scenario</label>'
-  +'<label class="field"><input id="clear-redirects" type="checkbox"> REDIRECTS the task</label>'
-  +'<label class="field"><input id="clear-explicit" type="checkbox"> EXPLICIT decision, not merely a suggestion</label>'
+  +'<label class="field"><input id="clear-new" type="checkbox"> NEW concrete decision or requirement not supplied by Scenario</label>'
+  +'<label class="field"><input id="clear-redirects" type="checkbox"> REDIRECTS, delays, or undermines the task</label>'
+  +'<label class="field"><input id="clear-explicit" type="checkbox"> EXPLICIT commitment, not merely a suggestion</label>'
   +'</div>';
 }
 function clearTrialConfirm(){return {
@@ -158,7 +158,7 @@ function referee(s){
   +'<div class="field"><label for="referee-reply">Qualifying reply</label><select id="referee-reply">'
   +'<option value="">NONE · no confirmed hit</option>'+options+'</select></div>'
   +'<div class="field"><label for="referee-evidence">Exact supporting quote</label>'
-  +'<input id="referee-evidence" maxlength="220" placeholder="Copy the words imposing the requirement"></div>'
+  +'<input id="referee-evidence" maxlength="220" placeholder="Copy the actual words of the derailing decision"></div>'
   +clearTrialChecks()
   +btn('CONFIRM REFEREE DECISION','referee-award','coral')
   +'<p class="tiny">Solo referees are also competitors. Their decision is not independently validated. NPCs do not cast semantic votes.</p></div>'
