@@ -1,12 +1,9 @@
 name: AGENT-FAULT Digital — deploy hosted app
 
+# Legacy Netlify workflow retained for explicit rollback only.
+# Never automatically publish this suspended site on source changes.
 on:
   workflow_dispatch:
-  push:
-    branches: [main]
-    paths:
-      - 'card-games/agent-fault/game-app/hosted/**'
-      - '.github/workflows/agent-fault-digital-deploy.yml'
 
 permissions:
   contents: read
