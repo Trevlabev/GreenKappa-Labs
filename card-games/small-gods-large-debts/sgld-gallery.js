@@ -11,6 +11,8 @@
   controls.hidden = false;
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   function currentIndex() {
+    if (gallery.scrollLeft <= 4) return 0;
+    if (gallery.scrollLeft >= gallery.scrollWidth - gallery.clientWidth - 4) return cards.length - 1;
     const left = gallery.getBoundingClientRect().left;
     let index = 0;
     let distance = Number.POSITIVE_INFINITY;
@@ -30,7 +32,7 @@
     const targetIndex = Math.min(cards.length - 1, Math.max(0, currentIndex() + step));
     const target = cards[targetIndex];
     const delta = target.getBoundingClientRect().left - gallery.getBoundingClientRect().left;
-    gallery.scrollBy({left: delta, behavior: prefersReducedMotion.matches ? 'instant' : 'smooth'});
+    gallery.scrollBy({left: delta, behavior: prefersReducedMotion.matches ? 'auto' : 'smooth'});
     count.textContent = (targetIndex + 1) + ' / ' + cards.length;
     prev.disabled = targetIndex === 0;
     next.disabled = targetIndex === cards.length - 1;
