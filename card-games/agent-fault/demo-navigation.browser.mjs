@@ -129,10 +129,16 @@ try {
   },'Unified site palette should apply in the rendered page');
   await integrated.locator('.af-mode-arrow[data-dir="1"]').click();
   assert.equal(await integrated.locator('.af-mode-carousel').getAttribute('data-active'),'1');
-  assert.equal(await integrated.locator('.af-mode-carousel').evaluate(el=>getComputedStyle(el).borderTopColor),'rgb(201, 130, 236)','Cascade gets violet accent');
+  await integrated.waitForFunction(()=>{
+    const e=document.querySelector('.af-mode-carousel');
+    return e?.dataset.active==='1'&&getComputedStyle(e).borderTopColor==='rgb(201, 130, 236)';
+  },null,{timeout:5000}); // Wait for CSS border-color transition and smooth scroll to settle.
   await integrated.locator('.af-mode-arrow[data-dir="1"]').click();
   assert.equal(await integrated.locator('.af-mode-carousel').getAttribute('data-active'),'2');
-  assert.equal(await integrated.locator('.af-mode-carousel').evaluate(el=>getComputedStyle(el).borderTopColor),'rgb(255, 117, 104)','Physical mode gets coral accent');
+  await integrated.waitForFunction(()=>{
+    const e=document.querySelector('.af-mode-carousel');
+    return e?.dataset.active==='2'&&getComputedStyle(e).borderTopColor==='rgb(255, 117, 104)';
+  },null,{timeout:5000});
   console.log('PASS: unified palette across hero, demos, how-to, play formats, product and artwork');
   await integrated.locator('#af-panel-classic .afd-edge-next').click();
   await verifyStage(integrated,'#af-panel-classic .afd-title','Choose how to ruin its day.');
