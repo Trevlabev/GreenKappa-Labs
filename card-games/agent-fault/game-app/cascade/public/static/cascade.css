@@ -23,3 +23,24 @@
 .msg.skip .msg-text{border-color:#9696a9;background:#292d4d;color:#e8e9f4}
 .msg.skip .msg-label{color:#d7d7e6}
 [data-skip-ready-at]:disabled{opacity:.6;cursor:not-allowed}
+
+/* Connection lifecycle: visible only when multiplayer polling is paused. */
+.room-connection {
+  position: fixed;
+  z-index: 10000;
+  left: 50%;
+  bottom: max(16px, env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+  width: min(92vw, 640px);
+  padding: 14px 18px;
+  border: 2px solid #ffe485;
+  border-radius: 12px;
+  background: #141736;
+  color: #fff;
+  box-shadow: 0 8px 28px #0008;
+  font: 700 14px/1.45 system-ui, sans-serif;
+  text-align: center;
+  cursor: pointer;
+}
+.room-connection[hidden] { display: none; }
+.room-connection:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
