@@ -9,8 +9,23 @@ on:
       - 'card-games/agent-fault/cascade-demo-embed.js'
       - 'card-games/agent-fault/cascade-demo-embed.css'
       - 'card-games/agent-fault/demo-tabs.js'
+      - 'card-games/agent-fault/how-to-play.js'
+      - 'card-games/agent-fault/how-to-play.css'
       - 'card-games/agent-fault/site.test.mjs'
       - 'card-games/agent-fault/review-v09/**'
+      - '.github/workflows/agent-fault-site-qa.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'card-games/agent-fault/index.html'
+      - 'card-games/agent-fault/demo-embed.js'
+      - 'card-games/agent-fault/cascade-demo-embed.js'
+      - 'card-games/agent-fault/demo-tabs.js'
+      - 'card-games/agent-fault/demo-embed.css'
+      - 'card-games/agent-fault/cascade-demo-embed.css'
+      - 'card-games/agent-fault/how-to-play.js'
+      - 'card-games/agent-fault/how-to-play.css'
+      - 'card-games/agent-fault/site.test.mjs'
       - '.github/workflows/agent-fault-site-qa.yml'
   workflow_dispatch:
 concurrency:
@@ -32,4 +47,5 @@ jobs:
           node --check card-games/agent-fault/demo-embed.js
           node --check card-games/agent-fault/cascade-demo-embed.js
           node --check card-games/agent-fault/demo-tabs.js
+          node --check card-games/agent-fault/how-to-play.js
           node --test card-games/agent-fault/site.test.mjs
