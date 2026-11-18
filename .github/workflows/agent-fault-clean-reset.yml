@@ -1,0 +1,105 @@
+name: AGENT/FAULT clean reset and artwork publish
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/agent-fault-clean-reset.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: write
+  pages: write
+
+concurrency:
+  group: agent-fault-clean-reset
+  cancel-in-progress: false
+
+jobs:
+  cleanup-and-deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out GreenKappa Labs
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+
+      - name: Cancel stale AGENT/FAULT and site deployments
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "Canceling obsolete queued or running AGENT/FAULT artwork, QA, Pages and homepage jobs."
+          gh api --paginate "repos/${GITHUB_REPOSITORY}/actions/runs?per_page=100" |
+            jq -r --argjson current "${GITHUB_RUN_ID}" '
+              .workflow_runs[] |
+              select(.id != $current) |
+              select(.status == "queued" or .status == "pending" or .status == "in_progress" or .status == "waiting") |
+              select(.event == "push" or .event == "dynamic") |
+              select(
+                .name == "pages build and deployment" or
+                .name == "AGENT/FAULT site dual-demo QA" or
+                .name == "AGENT/FAULT restore same-origin approved card artwork" or
+                .name == "GreenKappa homepage and Tools visuals"
+              ) | .id
+            ' | while IFS= read -r run_id; do
+              test -n "$run_id" || continue
+              if gh api -X POST "repos/${GITHUB_REPOSITORY}/actions/runs/${run_id}/cancel" >/dev/null 2>&1; then
+                echo "Cancellation requested: $run_id"
+              else
+                echo "::warning::Could not cancel $run_id (already finished or insufficient API permissions)"
+              fi
+            done
+
+      - name: Use Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Restore exact original illustrated cards from SHA-256 pinned archive
+        run: node card-games/agent-fault/game-app/hosted/scripts/prepare-digital.mjs
+
+      - name: Verify local demos and card catalog
+        run: |
+          node --check card-games/agent-fault/demo-embed.js
+          node --check card-games/agent-fault/cascade-demo-embed.js
+          node --test card-games/agent-fault/site.test.mjs
+
+      - name: Publish original 66 fronts and 3 robot backs in GreenKappa source
+        shell: bash
+        run: |
+          set -euo pipefail
+          src=card-games/agent-fault/game-app/hosted/public/static/assets
+          dst=card-games/agent-fault/assets
+          mkdir -p "$dst"
+          cp -R "$src/fronts" "$dst/"
+          cp -R "$src/backs" "$dst/"
+          cp "$src/manifest.json" "$dst/manifest.json"
+          test "$(find "$dst/fronts" -maxdepth 1 -type f -name '*.webp' | wc -l)" -eq 66
+          test "$(find "$dst/backs" -maxdepth 1 -type f -name '*.webp' | wc -l)" -eq 3
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$dst/fronts" "$dst/backs" "$dst/manifest.json"
+          if git diff --cached --quiet; then
+            echo "The original 69 card artworks are already committed."
+          else
+            git commit -m "assets(agent-fault): publish all 66 original fronts and three backs"
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
+
+      - name: Start one fresh Pages build only after artwork is published
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if gh api -X POST "repos/${GITHUB_REPOSITORY}/pages/builds" >/dev/null; then
+            echo "Clean GitHub Pages rebuild requested after all 69 images were committed."
+          else
+            echo "::error::Artwork is committed, but the Pages rebuild API call was rejected. Check Pages permissions/settings."
+            exit 1
+          fi
