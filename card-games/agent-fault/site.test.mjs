@@ -125,10 +125,13 @@ test('Classic is the first play choice and mode descriptions stay mechanically a
  assert(html.includes('At most one'));
  assert(html.includes('browser playtest editions'));
 });
-test('demo introductions are story-first and original scripted interactions survive',()=>{
+test('Classic and Cascade begin with the illustrated deck intro and preserve their interactions',()=>{
+ assert(classic.includes('title:"Here\'s how to drive an AI insane."'));
  assert(classic.includes("title:'A goose became mayor.'"));
- assert(classic.includes("type:'scenario'"));
- assert(classic.indexOf("type:'scenario'") < classic.indexOf("type:'stacks'"));
+ assert(classic.indexOf("type:'stacks'") < classic.indexOf("type:'scenario'"),'Illustrated deck scene must precede Goose Scenario');
+ assert(classic.indexOf("type:'scenario'") < classic.indexOf("type:'hand'"),'Scenario must precede card selection');
+ assert(classic.indexOf("type:'replies'") < classic.indexOf("type:'score'"),'Judge verdict must be last');
+ assert(!classic.includes('New job. New terrible ideas.'),'Retired closing copy removed');
  assert(cascade.includes("title:'A goose is running city hall.'"));
  assert(cascade.includes("title:'The AI is about to lose its mind.'"));
  assert(cascade.indexOf("title:'The AI is about to lose its mind.'") < cascade.indexOf("title:'A goose is running city hall.'"),'Cascade intro must be before the public scenario');
