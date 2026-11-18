@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#0A1018">
   <title>No Such Room — Cooperative Impossible-Architecture Board Game | GreenKappa Labs</title>
-  <meta name="description" content="NO SUCH ROOM is a cooperative spatial board game where square Room cards form an impossible house. Explore, rearrange its passages and escape before the twelfth Shift. Playable alpha in development.">
+  <meta name="description" content="NO SUCH ROOM is a cooperative board game about building and escaping an impossible house made from square Room cards. In development at GreenKappa Labs.">
   <link rel="canonical" href="https://greenkappalabs.art/card-games/not-to-scale/">
   <meta property="og:type" content="website">
   <meta property="og:title" content="No Such Room — Cooperative Spatial Board Game | GreenKappa Labs">
@@ -18,7 +18,7 @@
   <link rel="icon" href="../../assets/greenkappa-logo.png">
 
   <link rel="stylesheet" href="../../style.css">
-  <link rel="stylesheet" href="no-such-room.css?v=20261117-clean-4">
+  <link rel="stylesheet" href="no-such-room.css?v=20261118-editorial-1">
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"No Such Room — Cooperative Architectural Board Game","url":"https://greenkappalabs.art/card-games/not-to-scale/","description":"A cooperative tabletop game in development, built from square Room cards that become the playing board.","about":{"@type":"Game","name":"No Such Room","alternateName":"Not to Scale (former working title)","genre":["Cooperative board game","Spatial strategy puzzle","Modular exploration"],"description":"Two to four players build and rearrange an impossible house made of physical square Room cards, recover three Proofs and escape.","creator":{"@type":"Organization","name":"GreenKappa Labs"}},"isPartOf":{"@type":"CollectionPage","name":"GreenKappa Labs Original Tabletop Games","url":"https://greenkappalabs.art/card-games/"}}</script>
 </head>
 <body class="nsr-page" data-game="not-to-scale">
@@ -31,92 +31,75 @@
     <button class="menu-button dark-menu" type="button" aria-expanded="false" aria-controls="primary-nav">
       <span></span><span></span><span></span><b>Menu</b>
     </button>
-    <nav class="nav" id="primary-nav" aria-label="Primary navigation"><a href="/">Home</a><a href="/#interactive">Interactive</a><a href="/card-games/">Games</a><a href="/worlds/">Worlds</a><a href="/tools/">Tools</a><a href="/playground/">Playground</a><a href="/work/">Work</a><a href="/#contact" class="nav-cta dark-nav-cta">Contact</a></nav>
+    <nav class="nav" id="primary-nav" aria-label="Primary navigation"><a href="/">Home</a><a href="/#interactive">Interactive</a><a href="/card-games/" aria-current="page">Games</a><a href="/worlds/">Worlds</a><a href="/tools/">Tools</a><a href="/playground/">Playground</a><a href="/work/">Work</a><a href="/#contact" class="nav-cta dark-nav-cta">Contact</a></nav>
   </header>
   
   
-  <main id="main" class="nsr-content">
+  
+  <main id="main" class="nsr-main">
     <section class="nsr-hero" aria-labelledby="nsr-title">
       <div class="nsr-container">
-        <nav class="nsr-breadcrumb" aria-label="Breadcrumb">
-          <a href="../../">GreenKappa Labs</a><span aria-hidden="true">/</span>
-          <a href="../">Games</a><span aria-hidden="true">/</span>
-          <span aria-current="page">No Such Room</span>
-        </nav>
-        <div class="nsr-hero-body">
-          <div class="nsr-identity">
-            <p class="nsr-eyebrow">GREENKAPPA GAMES <span aria-hidden="true">—</span> ORIGINAL TABLETOP</p>
+        <div class="nsr-topline">
+          <a class="nsr-back" href="../"><span aria-hidden="true">←</span> All games</a>
+          <span class="nsr-development"><span class="nsr-status-dot" aria-hidden="true"></span> In development</span>
+        </div>
+        <div class="nsr-hero-layout">
+          <div class="nsr-title-group">
+            <p class="nsr-overline">AN ORIGINAL GREENKAPPA LABS BOARD GAME</p>
             <h1 id="nsr-title">NO SUCH<br><em>ROOM.</em></h1>
           </div>
-          <div class="nsr-hero-text">
+          <div class="nsr-hero-description">
             <p class="nsr-tagline">The floor plan is lying.</p>
-            <p class="nsr-lead">A cooperative spatial strategy game in which the room tiles <strong>become the board</strong>—and the board refuses to stay where you put it.</p>
-            <a class="nsr-text-link" href="#concept">Discover the concept <span aria-hidden="true">↘</span></a>
+            <p class="nsr-intro">Build a house from square Room cards. Follow impossible staircases and shifting passages. Find your way out before the architecture changes again.</p>
+            <a class="nsr-cta" href="#how-it-plays">How it plays <span aria-hidden="true">↘</span></a>
           </div>
         </div>
-        <dl class="nsr-facts" aria-label="Project facts">
-          <div><dt>Players</dt><dd>2–4 / Cooperative</dd></div>
-          <div><dt>Card inventory</dt><dd>45 / Including 19 Rooms</dd></div>
-          <div><dt>Deadline</dt><dd>12 Shifts</dd></div>
-          <div><dt>Current stage</dt><dd>Prototype / In development</dd></div>
+        <dl class="nsr-specs" aria-label="Game at a glance">
+          <div><dt>Players</dt><dd>2–4, cooperative</dd></div>
+          <div><dt>Components</dt><dd>45 cards · 19 Rooms</dd></div>
+          <div><dt>Objective</dt><dd>Find 3 Proofs</dd></div>
+          <div><dt>Limit</dt><dd>12 Shifts</dd></div>
         </dl>
       </div>
     </section>
 
-    <nav class="nsr-section-nav" aria-label="Page sections">
+    <section class="nsr-approach" id="how-it-plays" aria-labelledby="nsr-approach-title">
       <div class="nsr-container">
-        <a href="#concept">The premise</a>
-        <a href="#system">How it plays</a>
-        <a href="#status">Development</a>
-      </div>
-    </nav>
-
-    <section id="concept" class="nsr-concept" aria-labelledby="concept-title">
-      <div class="nsr-container nsr-concept-layout">
-        <div>
-          <p class="nsr-eyebrow nsr-ink-eyebrow">01 / THE PREMISE</p>
-          <h2 id="concept-title">The house is<br><em>the game.</em></h2>
+        <div class="nsr-section-heading">
+          <p class="nsr-overline">HOW IT PLAYS</p>
+          <h2 id="nsr-approach-title">The house is the board.</h2>
+          <p>The building starts as a single card. Everything that follows changes its shape—and your route through it.</p>
         </div>
-        <div class="nsr-concept-copy">
-          <p>There is no fixed map. The house grows as players explore, one square Room at a time.</p>
-          <p>A room can touch another without connecting to it. Doors may align, corridors may cross without meeting, and stairways may change which passage you can reach.</p>
-          <p>Then a forecasted Shift changes the architecture. The challenge is to plan around a building that keeps rearranging itself.</p>
-        </div>
-      </div>
-    </section>
-
-    <section id="system" class="nsr-system" aria-labelledby="system-title">
-      <div class="nsr-container">
-        <div class="nsr-system-head">
-          <div>
-            <p class="nsr-eyebrow">02 / HOW IT PLAYS</p>
-            <h2 id="system-title">A simple objective.<br><em>An unstable path.</em></h2>
-          </div>
-          <p>Two Action Points each turn. A visible forecast tells you what the house will do next.</p>
-        </div>
-        <ol class="nsr-sequence">
-          <li><span class="nsr-step-number">01</span><div><h3>Explore</h3><p>Draw and place rooms to expand the house. Every addition changes the spatial problem.</p></div></li>
-          <li><span class="nsr-step-number">02</span><div><h3>Navigate</h3><p>Find routes through aligned doors, distinct local passages, and stair links.</p></div></li>
-          <li><span class="nsr-step-number">03</span><div><h3>Reconfigure</h3><p>Anticipate the next Shift. Rotate, redirect, or reposition rooms to make a route possible.</p></div></li>
-          <li><span class="nsr-step-number">04</span><div><h3>Escape</h3><p>Recover three Proofs, return everyone to the Foyer, and exit before the twelfth Shift resolves.</p></div></li>
+        <ol class="nsr-steps">
+          <li>
+            <span class="nsr-step-index" aria-hidden="true">01</span>
+            <h3>Build</h3>
+            <p>Explore from the Foyer. Every new Room extends the house and changes the paths available.</p>
+          </li>
+          <li>
+            <span class="nsr-step-index" aria-hidden="true">02</span>
+            <h3>Rearrange</h3>
+            <p>Rooms rotate, swap, and move. The next Shift is visible, so you can plan before it happens.</p>
+          </li>
+          <li>
+            <span class="nsr-step-index" aria-hidden="true">03</span>
+            <h3>Escape</h3>
+            <p>Recover three Proofs, regroup at the Foyer, and get everyone out before the twelfth Shift.</p>
+          </li>
         </ol>
       </div>
     </section>
 
-    <section id="status" class="nsr-status" aria-labelledby="status-title">
-      <div class="nsr-container nsr-status-layout">
+    <section class="nsr-outro" aria-label="Project status">
+      <div class="nsr-container nsr-outro-layout">
         <div>
-          <p class="nsr-eyebrow nsr-ink-eyebrow">03 / DEVELOPMENT</p>
-          <h2 id="status-title">Still taking shape.</h2>
-          <p>NO SUCH ROOM is an original physical board game under development. Its card inventory and printable rules prototype exist, but the art direction and final component presentation are still being refined.</p>
-          <p>Game balance, playtime, and the final experience have not yet been established through observed human playtesting.</p>
+          <p class="nsr-overline">CURRENT STATUS</p>
+          <h2>A work in progress.</h2>
         </div>
-        <aside class="nsr-status-aside" aria-label="Current development stage">
-          <span class="nsr-aside-label">PROJECT STATUS</span>
-          <strong>In development</strong>
-          <span>Not currently for sale.</span>
-          <a href="../">Explore other GreenKappa games <span aria-hidden="true">↗</span></a>
-        </aside>
+        <div class="nsr-outro-copy">
+          <p>A playable paper prototype exists. We're developing the interconnected, multilevel architecture that will turn its Room cards into one impossible building. Final artwork, balance, and production specifications are not yet approved.</p>
+          <a href="../">More games from GreenKappa Labs <span aria-hidden="true">↗</span></a>
+        </div>
       </div>
     </section>
   </main>
