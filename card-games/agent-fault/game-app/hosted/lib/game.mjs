@@ -95,6 +95,8 @@ case 'set_npcs':{
  demand(Number.isInteger(count)&&count>=0&&count<=7,'Choose between 0 and 7 NPCs',422);
  const humans=participants.filter(q=>!q.npc);
  demand(humans.length+count<=8,'Room has at most 8 total seats',422);
+ demand(!NPC_PRESETS.slice(0,count).some(bot=>humans.some(h=>h.name.toLowerCase()===bot.name.toLowerCase())),
+  'An existing nickname matches an NPC. Remove or rename that player before adding NPCs',409);
  r.players=r.players.filter(q=>!q.npc);
  for(let i=0;i<count;i++){
   const name=NPC_PRESETS[i].name;
