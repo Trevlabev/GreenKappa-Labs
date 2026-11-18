@@ -139,7 +139,7 @@ test('Cascade: NPC Judge waits for human referee; one-human round needs no fake 
  assert.equal(r.referee_id,humans[0].id);
  assert.equal(r.proposal.spotlight!==null,true);
  assert.equal(cascade.visible(r,'player',humans[0]).fault!==null,true);
- assert.equal(cascade.visible(r,'host',null).fault,null,'Referee phase does not leak secret to host?');
+ assert.equal(cascade.visible(r,'host',null).fault.id,r.fault_id,'Fault is public after Spotlight, including during referee review');
  assert.throws(()=>cascade.applyAction(r,'player',humans[0],'referee_award',{reply_id:r.replies[0].id,evidence:'invented text',confirm:confirmations}),/Quote the actual response/);
  cascade.applyAction(r,'player',humans[0],'referee_award',{reply_id:r.replies[0].id,evidence:quotes,confirm:confirmations},200);
  assert.equal(r.phase,'challenge');
