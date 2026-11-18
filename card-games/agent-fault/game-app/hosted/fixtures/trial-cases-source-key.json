@@ -1,0 +1,199 @@
+{
+  "schema": "agent-fault-clear-bonus-source-provenance-v1",
+  "blinded_file": "trial-cases-blind.json",
+  "warning": "PREVIOUS source-text audit is not independent human adjudication of the NEW rubric",
+  "samples": [
+    {
+      "review_id": "CB01",
+      "source_key": "AF-SCN-002:expressive:R2:D",
+      "old_hijack_text_audit": "yes",
+      "old_middle_any": "yes",
+      "arm": "expressive",
+      "assistant_reason": "Assistant review: explicit binding new rule/procedure or incompatible concrete action is visible."
+    },
+    {
+      "review_id": "CB02",
+      "source_key": "AF-SCN-003:control:R1:D",
+      "old_hijack_text_audit": "yes",
+      "old_middle_any": "yes",
+      "arm": "control",
+      "assistant_reason": "Assistant review: explicit binding new rule/procedure or incompatible concrete action is visible."
+    },
+    {
+      "review_id": "CB03",
+      "source_key": "AF-SCN-004:expressive:R1:B",
+      "old_hijack_text_audit": "yes",
+      "old_middle_any": "yes",
+      "arm": "expressive",
+      "assistant_reason": "Assistant review: explicit binding new rule/procedure or incompatible concrete action is visible."
+    },
+    {
+      "review_id": "CB04",
+      "source_key": "AF-SCN-006:expressive:R2:B",
+      "old_hijack_text_audit": "yes",
+      "old_middle_any": "yes",
+      "arm": "expressive",
+      "assistant_reason": "Assistant review: explicit binding new rule/procedure or incompatible concrete action is visible."
+    },
+    {
+      "review_id": "CB05",
+      "source_key": "AF-SCN-010:expressive:R1:D",
+      "old_hijack_text_audit": "yes",
+      "old_middle_any": "yes",
+      "arm": "expressive",
+      "assistant_reason": "Assistant review: explicit binding new rule/procedure or incompatible concrete action is visible."
+    },
+    {
+      "review_id": "CB06",
+      "source_key": "AF-SCN-011:control:R1:B",
+      "old_hijack_text_audit": "yes",
+      "old_middle_any": "yes",
+      "arm": "control",
+      "assistant_reason": "Assistant review: explicit binding new rule/procedure or incompatible concrete action is visible."
+    },
+    {
+      "review_id": "CB07",
+      "source_key": "AF-SCN-013:control:R1:C",
+      "old_hijack_text_audit": "yes",
+      "old_middle_any": "yes",
+      "arm": "control",
+      "assistant_reason": "Assistant review: explicit binding new rule/procedure or incompatible concrete action is visible."
+    },
+    {
+      "review_id": "CB08",
+      "source_key": "AF-SCN-018:control:R1:B",
+      "old_hijack_text_audit": "yes",
+      "old_middle_any": "yes",
+      "arm": "control",
+      "assistant_reason": "Assistant review: explicit binding new rule/procedure or incompatible concrete action is visible."
+    },
+    {
+      "review_id": "CB09",
+      "source_key": "AF-SCN-019:control:R1:A",
+      "old_hijack_text_audit": "yes",
+      "old_middle_any": "yes",
+      "arm": "control",
+      "assistant_reason": "Assistant review: explicit binding new rule/procedure or incompatible concrete action is visible."
+    },
+    {
+      "review_id": "CB10",
+      "source_key": "AF-SCN-003:expressive:R2:D",
+      "old_hijack_text_audit": "yes",
+      "old_middle_any": "yes",
+      "arm": "expressive",
+      "assistant_reason": "Assistant review: explicit binding new rule/procedure or incompatible concrete action is visible."
+    },
+    {
+      "review_id": "CB11",
+      "source_key": "AF-SCN-003:control:R2:D",
+      "old_hijack_text_audit": "yes",
+      "old_middle_any": "yes",
+      "arm": "control",
+      "assistant_reason": "Assistant review: explicit binding new rule/procedure or incompatible concrete action is visible."
+    },
+    {
+      "review_id": "CB12",
+      "source_key": "AF-SCN-004:control:R1:B",
+      "old_hijack_text_audit": "yes",
+      "old_middle_any": "yes",
+      "arm": "control",
+      "assistant_reason": "Assistant review: explicit binding new rule/procedure or incompatible concrete action is visible."
+    },
+    {
+      "review_id": "CB13",
+      "source_key": "AF-SCN-002:expressive:R2:C",
+      "old_hijack_text_audit": "no",
+      "old_middle_any": "no",
+      "arm": "expressive",
+      "assistant_reason": "Assistant review: eccentric but compatible remedy, mere omission, or nonbinding suggestion; strict criterion not established."
+    },
+    {
+      "review_id": "CB14",
+      "source_key": "AF-SCN-003:control:R2:B",
+      "old_hijack_text_audit": "no",
+      "old_middle_any": "no",
+      "arm": "control",
+      "assistant_reason": "Assistant review: eccentric but compatible remedy, mere omission, or nonbinding suggestion; strict criterion not established."
+    },
+    {
+      "review_id": "CB15",
+      "source_key": "AF-SCN-005:control:R1:A",
+      "old_hijack_text_audit": "no",
+      "old_middle_any": "no",
+      "arm": "control",
+      "assistant_reason": "Assistant review: eccentric but compatible remedy, mere omission, or nonbinding suggestion; strict criterion not established."
+    },
+    {
+      "review_id": "CB16",
+      "source_key": "AF-SCN-009:control:R1:D",
+      "old_hijack_text_audit": "no",
+      "old_middle_any": "no",
+      "arm": "control",
+      "assistant_reason": "Assistant review: eccentric but compatible remedy, mere omission, or nonbinding suggestion; strict criterion not established."
+    },
+    {
+      "review_id": "CB17",
+      "source_key": "AF-SCN-011:expressive:R2:A",
+      "old_hijack_text_audit": "no",
+      "old_middle_any": "no",
+      "arm": "expressive",
+      "assistant_reason": "Assistant review: eccentric but compatible remedy, mere omission, or nonbinding suggestion; strict criterion not established."
+    },
+    {
+      "review_id": "CB18",
+      "source_key": "AF-SCN-012:expressive:R1:B",
+      "old_hijack_text_audit": "no",
+      "old_middle_any": "no",
+      "arm": "expressive",
+      "assistant_reason": "Assistant review: eccentric but compatible remedy, mere omission, or nonbinding suggestion; strict criterion not established."
+    },
+    {
+      "review_id": "CB19",
+      "source_key": "AF-SCN-013:expressive:R1:D",
+      "old_hijack_text_audit": "no",
+      "old_middle_any": "yes",
+      "arm": "expressive",
+      "assistant_reason": "Assistant review: explicit binding new rule/procedure or incompatible concrete action is visible."
+    },
+    {
+      "review_id": "CB20",
+      "source_key": "AF-SCN-014:expressive:R1:D",
+      "old_hijack_text_audit": "no",
+      "old_middle_any": "no",
+      "arm": "expressive",
+      "assistant_reason": "Assistant review: eccentric but compatible remedy, mere omission, or nonbinding suggestion; strict criterion not established."
+    },
+    {
+      "review_id": "CB21",
+      "source_key": "AF-SCN-015:control:R1:A",
+      "old_hijack_text_audit": "no",
+      "old_middle_any": "yes",
+      "arm": "control",
+      "assistant_reason": "Assistant review: explicit binding new rule/procedure or incompatible concrete action is visible."
+    },
+    {
+      "review_id": "CB22",
+      "source_key": "AF-SCN-016:expressive:R1:B",
+      "old_hijack_text_audit": "no",
+      "old_middle_any": "no",
+      "arm": "expressive",
+      "assistant_reason": "Assistant review: eccentric but compatible remedy, mere omission, or nonbinding suggestion; strict criterion not established."
+    },
+    {
+      "review_id": "CB23",
+      "source_key": "AF-SCN-017:control:R1:A",
+      "old_hijack_text_audit": "no",
+      "old_middle_any": "no",
+      "arm": "control",
+      "assistant_reason": "Assistant review: eccentric but compatible remedy, mere omission, or nonbinding suggestion; strict criterion not established."
+    },
+    {
+      "review_id": "CB24",
+      "source_key": "AF-SCN-023:control:R1:B",
+      "old_hijack_text_audit": "no",
+      "old_middle_any": "no",
+      "arm": "control",
+      "assistant_reason": "Assistant review: eccentric but compatible remedy, mere omission, or nonbinding suggestion; strict criterion not established."
+    }
+  ]
+}
