@@ -68,7 +68,7 @@ test('solo Cascade runs a full Judge rotation with independent NPC Handoffs and 
    if(r.phase==='handoff'){
     assert.equal(handoffOwner(r)!==cardOwner(r),true,'Different-player Handoff invariant');
     const owner=r.players.find(p=>p.id===handoffOwner(r));
-    assert.equal(owner.npc,false,'NPC Handoffs should advance automatically');
+    assert.equal(Boolean(owner.npc),false,'NPC Handoffs should advance automatically');
     const quote=latestAgent(r).text.split(' ').slice(0,4).join(' ');
     human(r,h,'handoff',{message:'Please make that particular rule even more absurd and unnecessarily bureaucratic.',hook:quote});
    }else host(r,'manual_reply',{text:sample(steps)});
