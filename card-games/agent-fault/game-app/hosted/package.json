@@ -15,7 +15,8 @@
     "cloudflare:dry-run": "wrangler deploy --dry-run",
     "cloudflare:deploy": "wrangler deploy",
     "unified:check": "node --test tests/unified-app.test.mjs",
-    "quality:check": "node scripts/comedy-audit.mjs"
+    "quality:check": "node scripts/comedy-audit.mjs",
+    "balance:check": "node scripts/balance-audit.mjs"
   },
   "dependencies": {
     "@netlify/database": "latest",
