@@ -31,6 +31,8 @@ function errorResponse(e) {
   return json({ detail: safe === 500 ? 'Server error. Please try again.' : String(e.message || 'Request failed') }, safe);
 }
 function originCheck(request, problem) {
+  const websocket = (request.headers.get('Upgrade') || '').toLowerCase() === 'websocket';
+  if ((request.method === 'GET' || request.method === 'HEAD') && !websocket) return;
   const origin = request.headers.get('Origin');
   if (origin && origin !== new URL(request.url).origin) throw problem(403, 'Cross-origin access rejected');
 }
@@ -155,9 +157,9 @@ export class GameRoomBase extends DurableObject {
     return new Response(null, { status: 101, webSocket: client, headers: { 'Sec-WebSocket-Protocol': 'af.v1' } });
   }
   async webSocketMessage(ws) {
-    // Game actions must use authenticated, validated HTTP endpoints.
-    // No WebSocket messages are necessary for state synchronization.
-    try { ws.send(JSON.stringify({ type: 'error', detail: 'Read-only channel' })); } catch { /* ignore */ }
+    // Refuse untrusted client messages; never let a broken test browser
+    // generate unbounded billable WebSocket events.
+    try { ws.close(1008, 'Read-only channel'); } catch { /* ignore */ }
   }
   async webSocketClose() {}
   async fetch(request) {
