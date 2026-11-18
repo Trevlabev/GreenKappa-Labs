@@ -1,5 +1,6 @@
 /** hosted-v0.3.0 Cloudflare Worker. Preserve original rules; replace Netlify transport. */
 import * as game from '../../lib/game.mjs';
+import QRCode from 'qrcode';
 import { GameRoomBase, BudgetGateBase, createWorker } from '../../../cloudflare/shared/room-adapter.mjs';
 
 const configuration = {
@@ -13,4 +14,4 @@ export class GameRoom extends GameRoomBase {
   constructor(ctx, env) { super(ctx, env, game, configuration); }
 }
 export class BudgetGate extends BudgetGateBase {}
-export default createWorker(game, configuration);
+export default createWorker(game, configuration, QRCode);
