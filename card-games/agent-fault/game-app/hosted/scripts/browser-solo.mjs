@@ -114,8 +114,7 @@ try{
  await b(cascade,'propose-awards');
  ds=await api(cascade,'cascade',cascadeCode,dp);
  assert.equal(ds.phase,'challenge');
- // The 12-second challenge interval is a game rule, not a busy-wait.
- await cascade.waitForTimeout(12500);
+ // No Bonus was proposed; no challenge window is necessary.
  await b(cascade,'solo-finalize');
  ds=await api(cascade,'cascade',cascadeCode,dp);
  assert.equal(ds.phase,'results');
