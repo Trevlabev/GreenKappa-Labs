@@ -21,7 +21,9 @@ test('accessible tab semantics and two separately labeled playable showcases',()
 test('both demos run locally without server-side AI requests',()=>{
  assert(classic.includes("document.getElementById('agent-fault-demo')"));
  assert(cascade.includes("document.getElementById('agent-fault-cascade-demo')"));
- assert(cascade.includes('https://agent-fault-cascade-playtest.netlify.app/static/assets/'));
+ assert(classic.includes("const imageRoot = './assets/'"));
+ assert(cascade.includes("const assets = './assets/'"));
+ assert(!classic.includes('agent-fault-cards.svg'));
  assert(cascade.includes('function navigation()'));
  assert(cascade.includes('data-reaction'));
  assert(cascade.includes('af-demo-visibility'));
@@ -60,4 +62,14 @@ test('physical-product section retains original assets, status qualifiers and mo
  assert(html.indexOf('id="box-cards"')<html.indexOf('class="gd-art-section"'));
  const stylesheet=read('product-3d.css');assert(stylesheet.includes('scroll-snap-type:x mandatory'));assert(stylesheet.includes('prefers-reduced-motion'));
  const viewer=read('product-3d/viewer.html');for(const control of ['data-model="closed"','data-model="families"','data-model="open"','id="zoomIn"','id="zoomOut"'])assert(viewer.includes(control),control);
+});
+
+
+test('static walkthroughs and card review resolve card art from this repository, not Netlify',()=>{
+ const review=read('review-v09/index.html');
+ assert(review.includes("const ART='../assets/'"));
+ for(const page of [classic,cascade,review])assert(!page.includes('.netlify.app/static/assets/'));
+ for(const suffix of ['scenario.webp','interference.webp','fault.webp'])assert(review.includes('../assets/backs/'+suffix));
+ assert(html.includes('./cascade-demo.html'));
+ assert(html.includes('./classic-demo.html'));
 });

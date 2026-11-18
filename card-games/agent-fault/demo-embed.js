@@ -4,7 +4,7 @@
   'use strict';
   const root = document.getElementById('agent-fault-demo');
   if (!root) return;
-  const imageRoot = 'https://agent-fault-live-online.netlify.app/static/assets/';
+  const imageRoot = './assets/';
   const front = id => imageRoot + 'fronts/' + id + '.webp';
   const back = type => imageRoot + 'backs/' + type + '.webp';
   const steps = [
@@ -42,7 +42,7 @@
   let current=0, chosen='AF-INF-013', playing=!reduced, timer=null, visible=false;
   const duration=7500;
   const escape = text => String(text).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
-  const img=(src,alt)=>`<img src="${src}" alt="${escape(alt)}" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='../assets/agent-fault-cards.svg'">`;
+  const img=(src,alt)=>`<img src="${src}" alt="${escape(alt)}" loading="lazy" decoding="async">`;
   const face=(id,label,delay=0)=>`<div class="afd-card is-front" style="--card-delay:${delay}s">${img(front(id),label)}</div>`;
   const faceDown=(type,label,delay=0)=>`<div class="afd-card is-back" style="--card-delay:${delay}s">${img(back(type),label)}</div>`;
   const sample={

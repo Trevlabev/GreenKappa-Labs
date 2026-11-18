@@ -6,7 +6,7 @@
   'use strict';
   const root = document.getElementById('agent-fault-cascade-demo');
   if (!root) return;
-  const assets = 'https://agent-fault-cascade-playtest.netlify.app/static/assets/';
+  const assets = './assets/';
   const front = id => assets + 'fronts/' + id + '.webp';
   const back = category => assets + 'backs/' + category + '.webp';
   const escape = v => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
