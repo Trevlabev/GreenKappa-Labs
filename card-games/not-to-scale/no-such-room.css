@@ -64,7 +64,7 @@
 @media(max-width:640px) {
   .nsr-page .nsr-container {width:calc(100% - 36px)}
   .nsr-page .nsr-hero {padding-top:20px}
-  .nsr-page .nsr-topline {margin-bottom:58px}
+  .nsr-page .nsr-topline {gap:8px;margin-bottom:32px}
   .nsr-page .nsr-hero h1 {font-size:clamp(3.85rem,16vw,6.2rem)}
   .nsr-page .nsr-overline {font-size:.62rem;letter-spacing:.11em}
   .nsr-page .nsr-hero-layout {gap:35px}
