@@ -5,7 +5,7 @@ on:
     paths:
       - 'index.html'
       - 'script.js'
-      - 'styles.css'
+      - 'style.css'
       - 'assets/**'
       - 'sitemap.xml'
       - 'arcana-config.js'
@@ -24,6 +24,7 @@ on:
       - 'journal/**'
       - 'tests/site-showcase.mjs'
       - 'tests/site-navigation.mjs'
+      - 'tests/marketing-responsive.mjs'
       - 'tests/site-integrity.mjs'
       - '.github/workflows/site-showcase.yml'
   pull_request:
@@ -31,7 +32,7 @@ on:
     paths:
       - 'index.html'
       - 'script.js'
-      - 'styles.css'
+      - 'style.css'
       - 'assets/**'
       - 'sitemap.xml'
       - 'arcana-config.js'
@@ -50,6 +51,7 @@ on:
       - 'journal/**'
       - 'tests/site-showcase.mjs'
       - 'tests/site-navigation.mjs'
+      - 'tests/marketing-responsive.mjs'
       - 'tests/site-integrity.mjs'
       - '.github/workflows/site-showcase.yml'
   workflow_dispatch:
@@ -99,3 +101,33 @@ jobs:
           sleep 2
           timeout --signal=TERM --kill-after=20s 7m node tests/site-showcase.mjs
           timeout --signal=TERM --kill-after=20s 7m node tests/site-navigation.mjs
+
+  # Opt-in screenshots and layout geometry for marketing subpages. The
+  # [responsive-verify] PR marker makes this run deliberate, not routine.
+  responsive-marketing:
+    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'pull_request' && contains(github.event.pull_request.title, '[responsive-verify]'))
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install browser testing dependency
+        run: npm install --no-save --no-audit --no-fund playwright@1.56.1
+      - name: Install Chromium
+        run: npx playwright install chromium --with-deps
+      - name: Check eight marketing pages at four responsive widths
+        run: |
+          python3 -m http.server 8765 --bind 127.0.0.1 > /tmp/greenkappa-site.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          sleep 2
+          timeout --signal=TERM --kill-after=20s 7m node tests/marketing-responsive.mjs
+      - name: Preserve responsive screenshots and measurements
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: marketing-responsive-qa
+          path: artifacts/marketing-responsive/
+          retention-days: 14
