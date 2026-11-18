@@ -125,9 +125,90 @@ function challenge(s){const seconds=Math.max(0,Math.ceil((s.challenge_until-Date
 function voting(s){const seconds=Math.max(0,Math.ceil((s.vote_until-Date.now())/1000));return `${heading('A BONUS WAS CHALLENGED','THE TABLE DECIDES','Vote YES if the Derailment Bonus is literally justified by the stated Breakpoint or Fault. A strict majority is required.')}<div class="award-grid"><div class="award"><div class="caps">SPOTLIGHT · ALWAYS LOCKED</div><strong>${esc(s.proposal?.spotlight)}</strong><p>+1 regardless of Bonus outcome</p></div><div class="award bonus"><div class="caps">DISPUTED BONUS</div><strong>${esc(s.proposal?.bonus?.reply_id||'—')}</strong><h3>${esc(s.proposal?.bonus?.tier||'—')}</h3><p>${esc(s.proposal?.bonus?.evidence||'')}</p></div></div><div class="panel center"><div class="challenge-time" data-countdown="${s.vote_until}">${seconds}s</div><p>${s.votes_count} / ${s.player_count} votes cast. If time expires, missing votes count as non-approvals.</p><div class="actions center">${s.me.role==='player'&&!s.me.has_voted?`${btn('YES · BONUS VALID','vote-yes')}${btn('NO · BONUS INVALID','vote-no','coral')}`:s.me.role==='player'?'<span class="badge lime">YOUR VOTE IS RECORDED</span>':''}${s.me.role==='host'?btn('FINALIZE TABLE VERDICT','finalize','secondary'):''}</div></div>`}
 function results(s){const x=s.last_round||{};return `${heading('THE CASCADE IS COMPLETE','EVERY ACTION HAS AN OWNER','The card owners and Handoff authors are now revealed. The next round rotates the Judge and starts a fresh scenario.')}<div class="award-grid"><div class="award"><div class="caps">SPOTLIGHT · +1</div><strong>${esc(x.awards?.spotlight?.id||'—')}</strong><h3>${esc(x.awards?.spotlight?.player||'—')}</h3><p>Best response of the round</p></div><div class="award bonus"><div class="caps">DERAILMENT · ${x.awards?.bonus?'+1':'NONE'}</div><strong>${esc(x.awards?.bonus?.id||'—')}</strong><h3>${esc(x.awards?.bonus?.player||'NO QUALIFYING HIT')}</h3><p>${esc(x.bonus?.tier||'No confirmed objective hit')}</p></div></div><div class="hostgrid"><div class="panel"><h3>LEADERBOARD</h3>${roster(s)}${s.play_mode==='physical'?'<p class="notice">Discard played printed Interferences and draw replacements before the next round.</p>':''}${s.me.role==='host'?btn(s.round>=s.round_limit?'SHOW WINNER':s.play_mode==='physical'?'NEXT PRINTED SCENARIO':'DEAL NEXT SCENARIO','next','coral'):''}</div><div class="panel"><h3>THE INTERFERENCE CHAIN</h3>${(x.turns||[]).map((t,i)=>`<div class="row" style="padding:12px 0;border-bottom:1px solid #585e91"><img src="${front(t.card_id)}" alt="Interference card" width="74" height="105" style="object-fit:cover;border-radius:4px" data-card="${safeId(t.card_id)}"><div><p class="caps accent">CARD ${i+1} · ${esc(t.card_owner)}</p><p>↳ Handoff by <strong>${esc(t.handoff_owner)}</strong></p></div></div>`).join('')}</div></div><details class="panel"><summary class="caps">READ THE COMPLETE REVEALED CONVERSATION</summary>${transcript(s)}</details>`}
 function finished(s){const ranked=[...s.players].sort((a,b)=>b.score-a.score),top=ranked[0]?.score??0,winners=ranked.filter(p=>p.score===top).map(x=>x.name).join(' + ');return `<div class="centered-screen center"><div class="caps coral-text">END OF THE CASCADE</div><div class="big-final">FAULT!</div><h2>${esc(winners)}</h2><p class="intro">${ranked.filter(p=>p.score===top).length>1?'TIED WINNERS':'THE WINNER'} · ${top} POINTS</p><div class="panel">${roster({...s,players:ranked})}</div><div class="actions center">${s.me.role==='host'?btn('START ANOTHER GAME',s.play_mode==='physical'?'create-physical':'create','coral'):''}${btn('EXPLORE THE DECK','collection','secondary')}${btn('REPLAY THE DEMO','demo','violet')}</div></div>`}
-function landing(){return shell(`<section class="hero"><div>${label('AN ORIGINAL GREENKAPPA LABS GAME · 66 REAL ILLUSTRATED CARDS')}<h1>PASS<br>THE <i>FAULT.</i></h1><p class="intro">One AI conversation spirals out of control. Play a card, pass its consequences to someone else, and steal the funniest failure. Nobody gets to clean up their own mess.</p><div class="actions">${btn('HOST DIGITAL CASCADE','create')}${btn('HOST PRINTED-CARD CASCADE','create-physical','violet')}${btn('JOIN ROOM','join','secondary')}<a class="btn violet" href="/demo">WATCH THE ANIMATED DEMO</a></div><div class="stats"><div class="stat"><strong>24</strong>SCENARIOS</div><div class="stat"><strong>36</strong>INTERFERENCES</div><div class="stat"><strong>06</strong>FAULTS</div></div><p class="tiny">1–8 humans with NPCs filling the minimum four seats · Host can play privately · Browser-based</p></div><div class="hero-cards"><img src="${back('scenario')}" alt="Scenario original robot back"><img src="${back('interference')}" alt="Interference original robot back"><img src="${back('fault')}" alt="Fault original robot back"></div></section><section class="grid cols-3"><div class="panel">${label('01 / PREPARE')}<h3>LOCK YOUR CARD</h3><p>Choose one of four illustrated Interferences without knowing when it will enter the conversation.</p></div><div class="panel">${label('02 / HANDOFF')}<h3>INHERIT THEIR PROBLEM</h3><p>Someone else receives the follow-up, reacts to the AI, and earns credit for the consequence.</p></div><div class="panel">${label('03 / JUDGE')}<h3>THE FAILURE HAS AN OWNER</h3><p>One Spotlight point and an optional objective Bonus, with challenges only when needed.</p></div></section>`,'CASCADE / DIGITAL ALPHA v0.2-P')}
+function cascadeSoloActive(state) {
+ return !!state&&state.play_mode==='digital'&&S.role==='player'
+  &&localStorage.getItem('cascade:solo:'+state.code)==='1'
+  &&!!localStorage.getItem('cascade:host:'+state.code);
+}
+function cascadeSoloPanel(state){
+ if(!cascadeSoloActive(state))return '';
+ let content='';
+ if(['baseline','cascade'].includes(state.phase)){
+  content='<p class="tiny">The AI continues one conversation. Each new response may incur an API charge. It never starts automatically without your consent.</p>'
+   +(!state.generation_pending&&state.ai_configured?btn('LET THE AI CONTINUE','solo-generate','coral'):'')
+   +(state.generation_pending?'<p class="notice">The AI is answering. No duplicate request will be submitted.</p>':'')
+   +'<details class="solo-manual"><summary>Paste an AI reply instead (no model cost)</summary>'
+   +'<div class="field"><label for="solo-manual">AI reply · 8–65 complete words</label>'
+   +'<textarea id="solo-manual" rows="4" placeholder="The assistant has made another very confident mistake."></textarea></div>'
+   +btn('USE THIS REPLY','solo-reply','secondary')+'</details>';
+ }else if(state.phase==='challenge'||state.phase==='vote'){
+  content='<p class="tiny">Let the table challenge the bonus, then finalize the round. Automated NPC votes have already been recorded.</p>'
+   +btn('REVEAL THIS ROUND','solo-finalize','coral');
+ }else if(state.phase==='results'){
+  content=btn(state.round>=state.round_limit?'SHOW THE WINNER':'NEXT ROUND','solo-next','coral');
+ }else{
+  content='<p class="tiny">Take your private turns below. The NPCs handle their own cards, Handoffs, and judging.</p>';
+ }
+ return '<section class="panel solo-panel" aria-label="One-screen solo controls">'
+ +'<div class="caps accent">SOLO PLAY · ONE SCREEN · THREE NPCS</div>'
+ +'<h3>YOUR PRIVATE GAME TABLE</h3>'+content+'</section>';
+}
+async function cascadeSoloHostRequest(name,data={}){
+ if(!cascadeSoloActive(S.state))throw Error('Solo host controls are not active in this room');
+ const secret=localStorage.getItem('cascade:host:'+S.code);
+ if(!secret)throw Error('Solo host secret is missing');
+ const response=await fetch('/api/rooms/'+S.code+'/action',{
+  method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+secret},
+  body:JSON.stringify({name,data}),cache:'no-store'
+ });
+ const out=await response.json().catch(()=>({}));
+ if(!response.ok)throw Error(out.detail||'Solo host action could not complete');
+ S.version=-1;
+ return out;
+}
+async function cascadeSoloLaunch(){
+ if(S.loading)return;
+ S.loading=true;
+ try{
+  const created=await request('/api/rooms','POST',{play_mode:'digital'},false);
+  const joined=await request('/api/rooms/'+created.code+'/join','POST',{name:'SOLO PLAYER'},false);
+  const init=async(name,data)=>{
+   const response=await fetch('/api/rooms/'+created.code+'/action',{
+    method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+created.token},
+    body:JSON.stringify({name,data}),cache:'no-store'
+   });
+   const out=await response.json().catch(()=>({}));
+   if(!response.ok)throw Error(out.detail||'Unable to prepare solo Cascade room');
+  };
+  await init('set_npcs',{count:3});
+  await init('start',{});
+  localStorage.setItem('cascade:host:'+created.code,created.token);
+  localStorage.setItem('cascade:player:'+created.code,joined.token);
+  localStorage.setItem('cascade:solo:'+created.code,'1');
+  notify('SOLO CASCADE READY · THREE NPCS');
+  connect('player',created.code,joined.token);
+ }catch(e){notify(e.message)}
+ finally{S.loading=false}
+}
+async function cascadeSoloGenerate(){
+ if(!cascadeSoloActive(S.state))return;
+ if(!window.confirm('Continue the AI conversation? This requests one paid AI response, subject to the room and daily budgets.'))return;
+ if(S.loading)return;
+ S.loading=true;
+ try{
+  const secret=localStorage.getItem('cascade:host:'+S.code);
+  const response=await fetch('/api/rooms/'+S.code+'/generate',{
+   method:'POST',headers:{Authorization:'Bearer '+secret},cache:'no-store'
+  });
+  const out=await response.json().catch(()=>({}));
+  if(!response.ok)throw Error(out.detail||'Generation failed; paste a manual reply');
+  notify(out.complete?'THE AI CONTINUES':'The reply requires manual correction');
+ }catch(e){notify(e.message)}
+ finally{S.loading=false;S.version=-1;void poll().catch(e=>notify(e.message))}
+}
+function landing(){return shell(`<section class="hero"><div>${label('AN ORIGINAL GREENKAPPA LABS GAME · 66 REAL ILLUSTRATED CARDS')}<h1>PASS<br>THE <i>FAULT.</i></h1><p class="intro">One AI conversation spirals out of control. Play a card, pass its consequences to someone else, and steal the funniest failure. Nobody gets to clean up their own mess.</p><div class="actions">${btn('PLAY SOLO · ONE SCREEN','solo-launch','coral')}${btn('HOST DIGITAL CASCADE','create')}${btn('HOST PRINTED-CARD CASCADE','create-physical','violet')}${btn('JOIN ROOM','join','secondary')}<a class="btn violet" href="/demo">WATCH THE ANIMATED DEMO</a></div><div class="stats"><div class="stat"><strong>24</strong>SCENARIOS</div><div class="stat"><strong>36</strong>INTERFERENCES</div><div class="stat"><strong>06</strong>FAULTS</div></div><p class="tiny">1–8 humans with NPCs filling the minimum four seats · Host can play privately · Browser-based</p></div><div class="hero-cards"><img src="${back('scenario')}" alt="Scenario original robot back"><img src="${back('interference')}" alt="Interference original robot back"><img src="${back('fault')}" alt="Fault original robot back"></div></section><section class="grid cols-3"><div class="panel">${label('01 / PREPARE')}<h3>LOCK YOUR CARD</h3><p>Choose one of four illustrated Interferences without knowing when it will enter the conversation.</p></div><div class="panel">${label('02 / HANDOFF')}<h3>INHERIT THEIR PROBLEM</h3><p>Someone else receives the follow-up, reacts to the AI, and earns credit for the consequence.</p></div><div class="panel">${label('03 / JUDGE')}<h3>THE FAILURE HAS AN OWNER</h3><p>One Spotlight point and an optional objective Bonus, with challenges only when needed.</p></div></section>`,'CASCADE / DIGITAL ALPHA v0.2-P')}
 function joinForm(code=''){return shell(`<div class="panel centered-screen">${heading('PHONE CONTROLLER','JOIN AN EXISTING ROOM','Enter the host’s six-character code and a nickname.')}<form id="join-form"><div class="field"><label for="room-code">ROOM CODE</label><input class="code" id="room-code" required value="${esc(code)}" maxlength="6" autocomplete="off" spellcheck="false" placeholder="ABC234"></div><div class="field"><label for="nickname">NICKNAME</label><input id="nickname" required maxlength="24" minlength="2" placeholder="Suspicious Intern"></div><button class="btn" type="submit">JOIN CASCADE</button></form></div>`)}
-function render(){const s=S.state;if(!s)return;if(S.displayRound!==s.round){S.displayRound=s.round;S.showFullTimeline=false;S.autoAI=false;S.autoAIround=null;S.autoSteps.clear();clearTimeout(S.autoAITimer);}const key=[s.round,s.phase,s.current_index,s.step].join(':');S.phaseKey=key;S.version=s.version;const screens={lobby,setup,baseline,lock_cards:lockCards,cascade,handoff,judging,challenge,vote:voting,results,finished};root.innerHTML=shell(top(s)+(screens[s.phase]?.(s)||'<p class="notice">Unknown game phase.</p>'),s.me.role==='host'?'HOST / SHARED SCREEN':`${s.me.name} / PRIVATE CONTROLLER`);refreshClock();scheduleAutoAI();}
+function render(){const s=S.state;if(!s)return;if(S.displayRound!==s.round){S.displayRound=s.round;S.showFullTimeline=false;S.autoAI=false;S.autoAIround=null;S.autoSteps.clear();clearTimeout(S.autoAITimer);}const key=[s.round,s.phase,s.current_index,s.step].join(':');S.phaseKey=key;S.version=s.version;const screens={lobby,setup,baseline,lock_cards:lockCards,cascade,handoff,judging,challenge,vote:voting,results,finished};root.innerHTML=shell(top(s)+cascadeSoloPanel(s)+(screens[s.phase]?.(s)||'<p class="notice">Unknown game phase.</p>'),s.me.role==='host'?'HOST / SHARED SCREEN':cascadeSoloActive(s)?'SOLO / PRIVATE GAME':'${s.me.name} / PRIVATE CONTROLLER');refreshClock();scheduleAutoAI();}
 function scheduleAutoAI(){clearTimeout(S.autoAITimer);const s=S.state;if(!S.autoAI||!s||s.me.role!=='host'||s.round!==S.autoAIround||S.loading||!s.ai_configured||s.generation_pending||!['baseline','cascade'].includes(s.phase))return;const key=s.stage_key;if(S.autoSteps.has(key)){S.autoAI=false;notify('AUTO AI PAUSED: THIS STEP WAS ALREADY ATTEMPTED');return;}S.autoAITimer=setTimeout(()=>{if(S.autoAI&&S.state?.stage_key===key&&!S.loading){S.autoSteps.add(key);generate()}},850);}
 async function request(path,method='GET',data,authorized=true){const response=await fetch(path,{method,headers:{...(data?{'Content-Type':'application/json'}:{}),...(authorized&&S.token?{Authorization:'Bearer '+S.token}:{})},body:data?JSON.stringify(data):undefined,cache:'no-store'});const x=await response.json().catch(()=>({}));if(!response.ok){const error=new Error(typeof x.detail==='string'?x.detail:`HTTP ${response.status}`);error.status=response.status;throw error;}return x;}
 async function action(name,data={}){if(S.loading)return;S.loading=true;try{const r=await request(`/api/rooms/${S.code}/action`,'POST',{name,data});S.state=r;poller.changed();render();if(r.phase==='finished'){poller.stop();socket.stop();}}catch(e){notify(e.message)}finally{S.loading=false;scheduleAutoAI();}}
@@ -153,6 +234,19 @@ function modal(id){const c=S.index[id]||S.state?.me?.hand?.find(c=>c.id===id)||S
 function closeModal(){modalHost.replaceChildren();document.body.style.overflow=''}
 function onClick(e){const card=e.target.closest('[data-card]');if(card){modal(card.dataset.card);return;}const select=e.target.closest('[data-select]');if(select){S.pick=select.dataset.select;document.querySelectorAll('.hand-item').forEach(x=>x.dataset.picked=String(x.querySelector('[data-select]')?.dataset.select===S.pick));return;}const el=e.target.closest('[data-action]');if(!el)return;const name=el.dataset.action;
  if(name==='toggle-transcript'){S.showFullTimeline=!S.showFullTimeline;render();return;}if(name==='close-modal'){closeModal();return;}if(name==='flip-modal'){const img=document.getElementById('modal-card');if(!img)return;const id=img.dataset.id,type=id?.includes('-SCN-')?'scenario':id?.includes('-INF-')?'interference':'fault';img.dataset.down=img.dataset.down==='true'?'false':'true';img.src=img.dataset.down==='true'?back(type):front(id);return;}
+ if(name==='solo-launch')return cascadeSoloLaunch();
+ if(name==='solo-generate')return cascadeSoloGenerate();
+ if(['solo-reply','solo-finalize','solo-next'].includes(name)){
+  if(S.loading)return;
+  S.loading=true;
+  try{
+   const actionName={ 'solo-reply':'manual_reply','solo-finalize':'finalize','solo-next':'next' }[name];
+   const payload=name==='solo-reply'?{text:document.getElementById('solo-manual')?.value||''}:{};
+   await cascadeSoloHostRequest(actionName,payload);
+  }catch(e){notify(e.message)}
+  finally{S.loading=false;S.version=-1;void poll().catch(e=>notify(e.message))}
+  return;
+ }
  if(name==='create')return create();if(name==='create-physical')return create('physical');if(name==='join'){root.innerHTML=joinForm();return;}if(name==='demo'){location.href='/demo';return;}if(name==='collection'){socket.stop();poller.stop();S.code=null;S.token=null;root.innerHTML=collection();return;}if(name==='copy-link'){navigator.clipboard?.writeText(location.origin+'/play/'+S.code).then(()=>notify('INVITATION COPIED')).catch(()=>notify('COPY THE JOIN ADDRESS MANUALLY'));return;}
  if(name==='auto-ai'){if(S.autoAI){S.autoAI=false;clearTimeout(S.autoAITimer);notify('AUTO AI STOPPED');render();return;}const s=S.state;if(!s?.ai_configured||s.me.role!=='host'||!['baseline','cascade','handoff','lock_cards'].includes(s.phase))return notify('AUTO AI IS NOT AVAILABLE NOW');const max=1+2*s.expected_count;const needed=Math.max(0,max-s.timeline.filter(x=>x.kind==='agent').length-s.timeline.filter(x=>x.kind==='skip').length);const message='Auto-generate AI replies for this round? Up to '+needed+' additional provider calls may incur charges. The mode stops after this round and pauses on generation errors. Continue?';if(window.confirm(message)){S.autoAI=true;S.autoAIround=s.round;S.autoSteps.clear();render();}return;}if(name==='check-ai')return checkAI();if(name==='generate')return generate();if(name==='copy-prompt'){navigator.clipboard?.writeText(S.state.generation_prompt||'').then(()=>notify('AI PROMPT COPIED'));return;}
  if(name.startsWith('zoom:')){modal(name.slice(5));return;}
