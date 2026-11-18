@@ -34,7 +34,7 @@ function finishClassicHumanJudge(r,humans){
 }
 function progressCascade(r,human){
  // One baseline and one response after each card and Handoff.
- if(r.phase==='setup')cascade.applyAction(r,'player',human,'lock_profile',{profile:'A strangely helpful city clerk'});
+ if(r.phase==='setup')cascade.applyAction(r,'player',r.players.find(p=>p.id===r.judge_id),'lock_profile',{profile:'A strangely helpful city clerk'});
  assert.equal(r.phase,'baseline');
  cascade.applyAction(r,'host',null,'manual_reply',{text:reply});
  if(r.phase==='lock_cards'){
@@ -69,7 +69,7 @@ test('canonical rules remain default and cannot silently enable experimental tie
   const {r}=create(g,1,3,false);
   assert.equal(r.bonus_rules,'canonical');
   assert.throws(()=>g.applyAction(r,'player',r.players[0],'set_bonus_trial',{enabled:true}),/Only (the )?host/i);
-  assert.throws(()=>g.applyAction(r,'host',null,'set_bonus_trial',{enabled:'true'}),/boolean/i);
+  assert.throws(()=>g.applyAction(r,'host',null,'set_bonus_trial',{enabled:'true'}),/boolean|true or false/i);
   g.applyAction(r,'host',null,'start');
   assert.throws(()=>g.applyAction(r,'host',null,'set_bonus_trial',{enabled:true}),/lobby|before the game/);
   assert.equal(r.bonus_rules,'canonical');
@@ -158,6 +158,13 @@ test('Cascade: unrelated human may challenge experimental bonus; NPCs cannot fab
  cascade.applyAction(r,'player',humans[0],'propose_awards',{spotlight:r.replies[0].id,bonus:null},100);
  cascade.applyAction(r,'host',null,'finalize',{},100);
  cascade.applyAction(r,'host',null,'next');
+ assert.equal(r.phase,'setup');
+ // Second human judges before the first NPC: respect the approved rotation.
+ progressCascade(r,humans[1]);
+ assert.equal(r.phase,'judging');
+ cascade.applyAction(r,'player',humans[1],'propose_awards',{spotlight:r.replies[0].id,bonus:null},110);
+ cascade.applyAction(r,'host',null,'finalize',{},110);
+ cascade.applyAction(r,'host',null,'next');
  assert.equal(r.phase,'baseline');
  progressCascade(r,humans[0]);
  assert.equal(r.phase,'referee');
@@ -175,5 +182,5 @@ test('Cascade: unrelated human may challenge experimental bonus; NPCs cannot fab
  cascade.applyAction(r,'player',other,'vote',{yes:false},330);
  cascade.applyAction(r,'host',null,'finalize',{},340);
  assert.equal(r.phase,'results');
- assert.equal(r.players.reduce((a,p)=>a+p.score,0),2,'Split human verdict rejects bonus but retains Spotlight');
+ assert.equal(r.players.reduce((a,p)=>a+p.score,0),3,'Split human verdict rejects bonus but retains three Spotlights');
 });
