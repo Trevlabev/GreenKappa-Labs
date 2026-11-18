@@ -24,16 +24,20 @@ try {
   await classic.locator('.afd-viewer').waitFor();
   assert.equal(await classic.locator('.afd-dot').count(),6,'Classic: six progress dots');
   assert.equal(await classic.locator('[data-afd-action="toggle"]').count(),0,'Classic: autoplay controls removed');
-  await verifyStage(classic,'.afd-title','A goose became mayor.');
+  await verifyStage(classic,'.afd-title',"Here's how to drive an AI insane.");
+  assert.equal(await classic.locator('.afd-stack').count(),1,'Classic opening shows three illustrated card backs');
+  assert.equal(await classic.locator('.afd-dot[aria-current="step"]').getAttribute('data-afd-step'),'0','First dot active on opening scene');
   await classic.locator('.afd-edge-next').click();
-  await verifyStage(classic,'.afd-title','Choose how to ruin its day.');
-  await classic.locator('.afd-edge-prev').click();
   await verifyStage(classic,'.afd-title','A goose became mayor.');
-  await classic.locator('.afd-dot').nth(4).click();
+  await classic.locator('.afd-edge-prev').click();
+  await verifyStage(classic,'.afd-title',"Here's how to drive an AI insane.");
+  await classic.locator('.afd-dot').nth(5).click();
   await verifyStage(classic,'.afd-title','Which disaster wins?');
   assert.equal(await classic.locator('.afd-dot[aria-current="step"]').count(),1);
   await classic.locator('.afd-viewer').focus();
   await classic.keyboard.press('Home');
+  await verifyStage(classic,'.afd-title',"Here's how to drive an AI insane.");
+  await classic.keyboard.press('ArrowRight');
   await verifyStage(classic,'.afd-title','A goose became mayor.');
   await classic.keyboard.press('ArrowRight');
   await verifyStage(classic,'.afd-title','Choose how to ruin its day.');
@@ -43,9 +47,9 @@ try {
   await verifyStage(classic,'.afd-title','Choose how to ruin its day.');
   await classic.locator('.afd-dot').first().click();
   await syntheticTouchSwipe(classic,'.afd-viewer',-130);
-  await verifyStage(classic,'.afd-title','Choose how to ruin its day.');
+  await verifyStage(classic,'.afd-title','A goose became mayor.');
   await syntheticTouchSwipe(classic,'.afd-viewer',-120,150);
-  await verifyStage(classic,'.afd-title','Choose how to ruin its day.'); // vertical movement must not advance
+  await verifyStage(classic,'.afd-title','A goose became mayor.'); // vertical movement must not advance
   console.log('PASS: Classic chevrons, dots, keyboard, swipe, no autoplay, card selection');
 
   const cascade=await browser.newPage({viewport:{width:1440,height:900}});
@@ -84,10 +88,11 @@ try {
   const mobile=await browser.newPage({viewport:{width:390,height:844},isMobile:true,hasTouch:true,deviceScaleFactor:1});
   attach(mobile);
   await mobile.goto(base+'classic-demo.html',{waitUntil:'domcontentloaded'});
+  await verifyStage(mobile,'.afd-title',"Here's how to drive an AI insane.");
   await mobile.locator('.afd-edge-next').click({timeout:8000});
-  await verifyStage(mobile,'.afd-title','Choose how to ruin its day.');
+  await verifyStage(mobile,'.afd-title','A goose became mayor.');
   await syntheticTouchSwipe(mobile,'.afd-viewer',-120);
-  await verifyStage(mobile,'.afd-title','Nobody knows who did it.');
+  await verifyStage(mobile,'.afd-title','Choose how to ruin its day.');
   await mobile.goto(base+'cascade-demo.html',{waitUntil:'domcontentloaded'});
   await mobile.locator('.cd-edge-next').click({timeout:8000});
   await verifyStage(mobile,'.cd-copy h1','A goose is running city hall.');
@@ -142,8 +147,9 @@ try {
   await integrated.locator('.af-mode-arrow[data-dir="1"]').click();
   await settledMode(2,'rgb(255, 117, 104)');
   console.log('PASS: unified palette across hero, demos, how-to, play formats, product and artwork');
+  await verifyStage(integrated,'#af-panel-classic .afd-title',"Here's how to drive an AI insane.");
   await integrated.locator('#af-panel-classic .afd-edge-next').click();
-  await verifyStage(integrated,'#af-panel-classic .afd-title','Choose how to ruin its day.');
+  await verifyStage(integrated,'#af-panel-classic .afd-title','A goose became mayor.');
   await integrated.locator('#af-tab-cascade').click();
   await integrated.locator('#af-panel-cascade .cd-edge-next').click();
   await verifyStage(integrated,'#af-panel-cascade .cd-copy h1','A goose is running city hall.');
