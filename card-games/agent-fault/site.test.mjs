@@ -129,6 +129,9 @@ test('demo introductions are story-first and original scripted interactions surv
  assert(classic.includes("type:'scenario'"));
  assert(classic.indexOf("type:'scenario'") < classic.indexOf("type:'stacks'"));
  assert(cascade.includes("title:'A goose is running city hall.'"));
+ assert(cascade.includes("title:'The AI is about to lose its mind.'"));
+ assert(!cascade.includes('Three decks. Infinite bad ideas.')&&!classic.includes('Three decks. One disaster.'));
+
  assert(cascade.includes("if(state.step===0)return"));
  assert(cascade.includes('cd-showcase-scenario'));
  for(const key of ['data-reaction','data-inspect','data-jump','af-demo-visibility'])assert(cascade.includes(key));
