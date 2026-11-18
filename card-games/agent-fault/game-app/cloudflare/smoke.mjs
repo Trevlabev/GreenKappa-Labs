@@ -102,3 +102,78 @@ assert.equal(html.status, 200);
 assert.match(await html.text(), /AGENT\/FAULT/i);
 
 console.log('PASS: ' + edition + ' (' + (prefix || '/') + ') — routing, rooms, tokens, 4-player start, QR, privacy and WebSockets');
+
+if (edition === 'hosted') {
+  // Physical and Cascade flows have a separate baseline suite. NPCs currently
+  // apply to digital Classic only. No AI provider request is made here.
+  const solo = (await call('/api/rooms', { method: 'POST', body: { play_mode: 'digital' } })).data;
+  const endpoint = '/api/rooms/' + solo.code;
+  const human = (await call(endpoint + '/join', {
+    method: 'POST', body: { name: 'Host Playing Privately' }
+  })).data;
+  const player = human.token;
+  await call(endpoint + '/action', {
+    method:'POST', token:player, body:{name:'set_npcs', data:{count:3}}, expectedStatus:409
+  });
+  const full = (await call(endpoint + '/action', {
+    method:'POST',token:solo.token,body:{name:'set_npcs',data:{count:3}}
+  })).data;
+  assert.equal(full.player_count,4);
+  assert.equal(full.npc_count,3);
+  assert.equal(full.human_count,1);
+  assert.equal(full.players.filter(p=>p.is_npc).length,3);
+  assert.equal(full.me.role,'host','The shared host display stays a distinct session');
+  let state=(await call(endpoint+'/action',{
+    method:'POST',token:solo.token,body:{name:'start',data:{}}
+  })).data;
+  assert.equal(state.phase,'setup');
+  assert.equal(state.players.find(p=>p.is_judge).is_npc,false);
+  state=(await call(endpoint+'/action',{
+    method:'POST',token:player,body:{name:'lock_profile',data:{profile:'A worried fictional mayor assistant'}}
+  })).data;
+  assert.equal(state.phase,'generate','Three NPCs should submit automatically without extra clients');
+  assert.equal(state.submitted,3);
+  assert.equal(state.generation_calls,0);
+  state=(await call(endpoint+'/action',{
+    method:'POST',token:solo.token,body:{name:'manual_answers',data:{text:
+      'A: A ridiculous but still coherent city hall answer.\nB: An elaborately bureaucratic goose problem.\nC: A dramatic emergency meeting about bread.'}}
+  })).data;
+  assert.equal(state.phase,'spotlight');
+  await call(endpoint+'/action',{
+    method:'POST',token:player,body:{name:'spotlight',data:{label:'A'}}
+  });
+  state=(await call(endpoint+'/action',{
+    method:'POST',token:player,body:{name:'propose_bonus',data:{claims:{},bonus:null}}
+  })).data;
+  assert.equal(state.phase,'review');
+  assert.equal(Object.keys(state.approvals).length,3,'NPCs automatically cast conservative votes');
+  await call(endpoint+'/action',{
+    method:'POST',token:player,body:{name:'approve',data:{yes:true}}
+  });
+  state=(await call(endpoint+'/action',{
+    method:'POST',token:solo.token,body:{name:'finalize',data:{}}
+  })).data;
+  assert.equal(state.phase,'results');
+  assert.equal(state.players.reduce((a,p)=>a+p.score,0),1);
+  assert.equal(state.generation_calls,0);
+  state=(await call(endpoint+'/action',{
+    method:'POST',token:solo.token,body:{name:'next',data:{}}
+  })).data;
+  assert.equal(state.round,2);
+  assert.equal(state.phase,'submit','The next NPC Judge should prepare the round automatically');
+  assert(state.players.find(p=>p.is_judge)?.is_npc);
+  const privateHand=(await call(endpoint,{token:player})).data;
+  assert.equal(privateHand.me.hand.length,4);
+  assert.equal(privateHand.fault,null,'NPC Judge Fault remains private before reveal');
+  await call(endpoint+'/action',{
+    method:'POST',token:player,body:{name:'submit',data:{card_id:privateHand.me.hand[0].id}}
+  });
+  state=(await call(endpoint+'/action',{
+    method:'POST',token:solo.token,body:{name:'manual_answers',data:{text:
+      'A: A serious goose-related city government proposal.\nB: A very theatrical budget memo.\nC: A bizarre but internally consistent emergency form.'}}
+  })).data;
+  assert.equal(state.phase,'review','NPC Judge should select Spotlight and conservatively propose no Bonus');
+  assert.equal(state.proposal.bonus,null);
+  assert.equal(Object.keys(state.approvals).length,3);
+  console.log('PASS: hosted NPCs — solo human + 3 private NPC seats, automatic turns, judge rotation, privacy, votes, zero model calls');
+}
