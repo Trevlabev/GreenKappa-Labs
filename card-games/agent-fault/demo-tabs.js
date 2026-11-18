@@ -36,3 +36,59 @@
  });
  activate(tabs.find(t=>t.getAttribute('aria-selected')==='true')||tabs[0]);
 })();
+
+/* Accessible swipe gallery for the three AGENT/FAULT play formats. */
+(() => {
+  'use strict';
+  const gallery = document.querySelector('.af-mode-carousel');
+  if (!gallery) return;
+  const track = gallery.querySelector('.af-mode-track');
+  const slides = Array.from(track.querySelectorAll('.af-mode-slide'));
+  const dots = Array.from(gallery.querySelectorAll('.af-mode-dot'));
+  const counter = gallery.querySelector('.af-mode-counter');
+  const prefersLessMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  let active = 0;
+  let scheduled = false;
+
+  function updateActive(index) {
+    active = index;
+    gallery.dataset.active = String(index);
+    counter.textContent = String(index + 1).padStart(2, '0') + ' / ' + String(slides.length).padStart(2, '0');
+    slides.forEach((slide, i) => { slide.inert = i !== index; });
+    dots.forEach((dot, i) => { dot.setAttribute('aria-pressed', String(i === index)); });
+  }
+  function goTo(index, instant = false) {
+    const next = (index + slides.length) % slides.length;
+    updateActive(next);
+    track.scrollTo({ left: slides[next].offsetLeft, behavior: instant || prefersLessMotion.matches ? 'instant' : 'smooth' });
+  }
+  function closestSlide() {
+    let closest = 0;
+    let distance = Infinity;
+    slides.forEach((slide, index) => {
+      const delta = Math.abs(slide.offsetLeft - track.scrollLeft);
+      if (delta < distance) { distance = delta; closest = index; }
+    });
+    return closest;
+  }
+  gallery.querySelectorAll('.af-mode-arrow').forEach(button => {
+    button.addEventListener('click', () => goTo(active + Number(button.dataset.dir)));
+  });
+  dots.forEach((dot, index) => dot.addEventListener('click', () => goTo(index)));
+  track.addEventListener('scroll', () => {
+    if (scheduled) return;
+    scheduled = true;
+    requestAnimationFrame(() => {
+      scheduled = false;
+      updateActive(closestSlide());
+    });
+  }, { passive: true });
+  track.addEventListener('keydown', event => {
+    if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key) || event.target.closest('a')) return;
+    event.preventDefault();
+    const next = event.key === 'Home' ? 0 : event.key === 'End' ? slides.length - 1 : active + (event.key === 'ArrowRight' ? 1 : -1);
+    goTo(next);
+  });
+  window.addEventListener('resize', () => goTo(active, true), { passive: true });
+  goTo(0, true);
+})();
