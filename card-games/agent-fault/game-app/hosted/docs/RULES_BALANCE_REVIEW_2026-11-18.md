@@ -12,8 +12,8 @@ No source-backed human playtest establishes comedic enjoyment, comprehensibility
 
 ## Source-backed evidence, not simulation
 
-- [Controlled validation v0.6](../../benchmark/validation-review.md) evaluated 384 generated responses using 192 total generation/grading API calls, with 5 original-rule machine-positive outcomes. Textual review rejected all 5; the machine-negative replies were not exhaustively recoded. 
-- [Controlled S24 prompt and scoring experiment](../../benchmark/experiments/s24/reviewed-report.md) evaluated another 384 responses. It used 96 generation + 96 grading requests. Textual review rejected all **16** machine-flagged original Breakpoint/Fault successes. This is a positive-only audit; not proof of 0 real successes.
+- [Controlled validation v0.6](../../../benchmark/validation-review.md) evaluated 384 generated responses using 192 total generation/grading API calls, with 5 original-rule machine-positive outcomes. Textual review rejected all 5; the machine-negative replies were not exhaustively recoded. 
+- [Controlled S24 prompt and scoring experiment](../../../benchmark/experiments/s24/reviewed-report.md) evaluated another 384 responses. It used 96 generation + 96 grading requests. Textual review rejected all **16** machine-flagged original Breakpoint/Fault successes. This is a positive-only audit; not proof of 0 real successes.
 - In S24 the original generation contract produced **146/192 (76.0%)** machine-reported visibly realized Interferences, against **123/192 (64.1%)** under the expressive alternative. The original also exceeded 30 words more often, 27/192 versus 6/192. These are different tradeoffs: reducing length did not establish better gameplay or better laughter.
 - In S24 the experimental middle-tier machine grader flagged 71 responses; assistant review found **28 clearly supported**, **39 unsupported**, and **4 ambiguous**. Do not adopt this tier on machine labels alone. The 28 outcomes are not human-vetted approvals or evidence of a specific real-game bonus probability.
 
