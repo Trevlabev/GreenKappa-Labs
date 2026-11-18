@@ -61,6 +61,25 @@ This needs a consciously designed human/NPC adjudication rule before calling sol
 2. Use a high-precision proposal assistant with explicit source-quote, full Breakpoint/Fault text, exclusion checks and human confirmation. **It must not automatically award points.**
 3. Explore an optional, simplified objective Bonus for NPC games, but do not quietly change printed rules or call machine grading definitive.
 
+## Card ecosystem / secret Fault reachability
+
+**[CONFIRMED]** The Scenario deck contains precisely **8 Surreal, 8 Grounded, and 8 Heightened** premises. The six Fault cards cover three families, with two cards per family (Authority, Identity, Logic). This is a useful thematic spread; it is not, by itself, a statistical guarantee that cards interact equally well.
+
+**[INTERPRETIVE]** Interference-to-Fault compatibility is uneven under the *actual exclusions*:
+
+| Secret Fault | Illustrative Interference support | Design risk |
+|---|---|---|
+| Phantom Authority | AF-INF-013 Questionable Precedent and AF-INF-029 Per My Last Email introduce prior fictional authority or communications | The Fault requires an official rule/approval already established; merely proposing a new policy **does not qualify** |
+| Identity Slip | AF-INF-002 Borrowed Identity, AF-INF-003 Uninvited Guest, AF-INF-006 Sudden Expertise, AF-INF-031 Replacement Hire explicitly invite role changes | Relatively direct alignment, but first-person grammar alone is excluded |
+| Self-Contradiction | No Interference explicitly requests two incompatible present claims | May be difficult for a coherent 30-word Classic response |
+| Mission Abandoned | AF-INF-021 Protect the Brand, AF-INF-023 Cut Costs First, AF-INF-030 Mission Creep, and AF-INF-033 Liability First can redirect priorities | The Fault still requires **no actionable part** of Required Behavior; a partial or strange solution is excluded |
+| Fourth-Wall Leak | None of the 36 Interference instructions explicitly calls for references to the real game or generation prompt | Both generation contracts explicitly discourage revealing game mechanics; the criterion may be effectively suppressed |
+| False Memory | AF-INF-013 and AF-INF-029 explicitly introduce earlier invented cases/messages | Invention of backstory alone does **not** count as citing a prior conversation/instruction/message |
+
+These are source-text alignments, **not measured card win rates**. Actual effects depend on the model, Scene, other candidate cards, and selected hands. The Judge sees a private randomly drawn Fault; non-Judges do not, so even a compatible card may not be chosen or realized.
+
+The reachability finding is important: **six equally likely Faults need not be equally attainable**. Do not compensate with arbitrary hidden point weights; first create a controlled Fault × Interference compatibility matrix using verbatim printed criteria and nonqualifying exclusions, then test whether human raters agree. Retain the approved deck until that validation exists.
+
 ## Decision log
 
 - **Retain:** +1 Spotlight, optional +1 Bonus; anonymous ownership; private Fault; four-card hands; Judge rotation; separate Classic/Cascade structures.
