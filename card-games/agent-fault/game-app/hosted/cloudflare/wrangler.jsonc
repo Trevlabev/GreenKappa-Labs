@@ -1,0 +1,46 @@
+{
+  "name": "agent-fault-classic-cf",
+  "main": "./src/index.mjs",
+  "compatibility_date": "2026-11-18",
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
+  "assets": {
+    "directory": "../public",
+    "binding": "ASSETS",
+    "run_worker_first": [
+      "/api/*",
+      "/host/*",
+      "/play/*",
+      "/demo",
+      "/collection"
+    ]
+  },
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "ROOM",
+        "class_name": "GameRoom"
+      },
+      {
+        "name": "BUDGET",
+        "class_name": "BudgetGate"
+      }
+    ]
+  },
+  "migrations": [
+    {
+      "tag": "v1",
+      "new_sqlite_classes": [
+        "GameRoom",
+        "BudgetGate"
+      ]
+    }
+  ],
+  "observability": {
+    "enabled": true
+  },
+  "vars": {
+    "AGENT_FAULT_MODEL": "gpt-4.1-mini"
+  }
+}
