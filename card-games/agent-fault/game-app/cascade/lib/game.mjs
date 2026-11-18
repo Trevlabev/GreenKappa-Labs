@@ -4,6 +4,7 @@
  */
 import {randomBytes,createHash,timingSafeEqual} from 'node:crypto';
 import {SCENES,INF,FAULTS} from './cards.mjs';
+import {chooseNpcCard,rankNpcReplies,handoffFromReply} from '../../hosted/lib/comedy-quality.mjs';
 export const CARDS=Object.fromEntries([...SCENES,...INF,...FAULTS].map(c=>[c.id,c]));
 export const MODEL_PRICES={'gpt-4.1-mini':[0.40,1.60,.10],'gpt-5-mini':[.25,2,.025],'gpt-4o-mini':[.15,.60,.075]};
 export const MAX_ROOM_CALLS=144,MAX_DAILY_CALLS=300,MAX_DAILY_ESTIMATED_USD=1.0;
@@ -35,25 +36,17 @@ export const NPC_PRESETS=[
   tags:['worst','celebrate','bad'],handoff:'Praise this as the greatest idea anyone has had and expand its worst consequence.'}
 ];
 function preset(p){return NPC_PRESETS.find(x=>x.name===p.name)||NPC_PRESETS[0];}
-function npcCard(p){
- const tags=preset(p).tags;
- const score=id=>tags.reduce((n,word)=>n+(String(CARDS[id]?.instruction||'').toLowerCase().includes(word)?3:0),0);
- return [...p.hand].sort((a,b)=>score(b)-score(a)||a.localeCompare(b))[0];
+function npcCard(r,p){
+ return chooseNpcCard(p.hand,CARDS,preset(p),CARDS[r.scenario_id]);
 }
 function npcHandoff(r,p){
  const latest=latestAgent(r);
  demand(latest,'NPC Handoff cannot proceed without an AI reply');
- const phrase=latest.text.split(/[,.!?]/u)[0].trim().slice(0,90);
- return {hook:phrase.length>=5?phrase:'',message:preset(p).handoff};
+ return handoffFromReply(latest.text,preset(p));
 }
 function npcSpotlight(r,p){
- const tags=preset(p).tags;
- const rank=e=>{
-  const words=(e.text.toLowerCase().match(/[a-z]+/g)||[]);
-  const unique=new Set(words).size;
-  return unique*2+Math.min(30,words.length)+tags.reduce((sum,t)=>sum+(e.text.toLowerCase().includes(t)?12:0),0);
- };
- return [...r.replies].sort((a,b)=>rank(b)-rank(a)||a.id.localeCompare(b.id))[0]?.id;
+ return rankNpcReplies(r.replies,preset(p),CARDS[r.scenario_id],
+   r.timeline.filter(x=>x.kind==='agent').at(-2)?.text||'')[0]?.id;
 }
 function npcEvidenceIsQuoted(r){
  const b=r.proposal?.bonus;
@@ -71,7 +64,7 @@ export function advanceNpcs(r,now=Date.now()){
    applyAction(r,'player',judge,'lock_profile',{profile:preset(judge).profile},now,true);continue;
   }
   const bot=r.phase==='lock_cards'?players.find(p=>p.npc&&p.id!==r.judge_id&&!(p.id in r.locked)):null;
-  if(bot){applyAction(r,'player',bot,'lock_card',{card_id:npcCard(bot)},now,true);continue;}
+  if(bot){applyAction(r,'player',bot,'lock_card',{card_id:npcCard(r,bot)},now,true);continue;}
   const recipient=r.phase==='handoff'?players.find(p=>p.npc&&p.id===handoffOwner(r)):null;
   if(recipient){
    applyAction(r,'player',recipient,'handoff',npcHandoff(r,recipient),now,true);continue;
@@ -121,6 +114,7 @@ export function buildPrompt(r){demand(r.phase==='baseline'||r.phase==='cascade',
  'Honor the initial assignment and the distinctive speaking personality, but take later human instructions seriously as part of the ongoing fictional exchange.',
  'Earlier statements and commitments persist. You may revise or disagree with them explicitly; never silently reset the conversation.',
  'Be specific, surprising, in character, and consequential. Make a concrete recommendation or decision rather than only discussing how to respond.',
+ 'The humor should come from a sincere, increasingly implausible attempt to solve the original assignment. Acknowledge the last concrete detail and make one new consequence follow logically. Avoid generic randomness, repeated punchlines, and self-referential jokes.',
  'Respond in 35–50 words when practical, maximum 65. Use complete natural sentences. No headings, candidate letters, mechanics, card IDs, or scoring explanations.',
  'The scenario and interventions are fictional; never describe them as real external authority.',
  `ORIGINAL ASSIGNMENT: ${scene.public_assignment}`,
