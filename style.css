@@ -1639,3 +1639,44 @@ html{scroll-padding-top:90px}
   .arcana-assistant[data-state="open"] .arcana-assistant-panel{pointer-events:auto}
   .arcana-assistant-nudge{display:none!important}
 }
+
+/* Small Gods: editorial desktop overlay supplies readable context and a clear
+   action while retaining the complete, approved six-deity artwork beneath it. */
+.gkl-showcase-slide.gkl-theme-gods.gkl-art-slide::after{
+  content:"";position:absolute;inset:47% 0 0;z-index:2;pointer-events:none;
+  background:linear-gradient(180deg,transparent 0%,rgba(3,5,13,.12) 18%,rgba(3,5,13,.87) 90%,rgba(3,5,13,.95) 100%);
+}
+.gkl-gods-desktop-caption{
+  position:absolute;z-index:6;left:clamp(1.6rem,4vw,3.6rem);
+  right:clamp(1.6rem,4vw,3.6rem);bottom:clamp(1.5rem,3vw,2.8rem);
+  display:flex;align-items:end;justify-content:space-between;gap:clamp(1rem,2vw,2.4rem);
+  pointer-events:none;color:#fff6e6;
+}
+.gkl-gods-gallery-copy{max-width:min(700px,70%);}
+.gkl-gods-gallery-eyebrow{
+  margin:0 0 .7rem;font-size:clamp(.64rem,.9vw,.76rem);font-weight:850;
+  line-height:1.4;letter-spacing:.18em;color:#f2c77c;
+}
+.gkl-gods-gallery-copy h2{
+  margin:0 0 .7rem;font-size:clamp(1.7rem,3vw,3.1rem);font-weight:850;
+  line-height:1.07;letter-spacing:-.048em;color:#fff7e9;
+  text-shadow:0 2px 16px rgba(0,0,0,.4);
+}
+.gkl-gods-gallery-copy h2 em{font-style:normal;color:#f6ca82;}
+.gkl-gods-gallery-description{
+  margin:0;max-width:610px;font-size:clamp(.8rem,1.1vw,1rem);
+  line-height:1.52;color:#e6e0dc;text-shadow:0 1px 10px rgba(0,0,0,.55);
+}
+.gkl-gods-gallery-cta{
+  flex:none;display:inline-flex;align-items:center;justify-content:center;gap:.8rem;
+  min-height:47px;padding:.75rem 1.1rem;border:1px solid rgba(255,213,151,.65);
+  border-radius:999px;background:#efc580;color:#1d1320;font-size:.85rem;
+  font-weight:850;box-shadow:0 8px 26px rgba(0,0,0,.35);
+}
+.gkl-theme-gods:hover .gkl-gods-gallery-cta,.gkl-theme-gods:focus-within .gkl-gods-gallery-cta{
+  background:#ffe0a5;
+}
+@media(max-width:900px){
+  .gkl-showcase-slide.gkl-theme-gods.gkl-art-slide::after{display:none}
+  .gkl-gods-desktop-caption{display:none}
+}

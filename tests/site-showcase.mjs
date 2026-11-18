@@ -22,6 +22,15 @@ try{
   const slideCount=await desktop.locator("[data-showcase-slide]").count();
   assert.ok(slideCount>=8,"Homepage includes Flowglass and at least seven other projects");
   assert.equal(await desktop.locator("[data-showcase-tab]").count(),slideCount,"Every slide has a gallery tab");
+  await desktop.locator('[data-showcase-tab="3"]').click();
+  const gods=desktop.locator(".gkl-showcase-slide.gkl-theme-gods");
+  assert.ok(await gods.locator(".gkl-gods-desktop-caption").isVisible(),"Small Gods desktop has visible gallery context");
+  assert.match(await gods.locator(".gkl-gods-gallery-copy h2").innerText(),/Every favor has a price/);
+  assert.match(await gods.locator(".gkl-gods-gallery-cta").innerText(),/Explore the game/);
+  assert.equal(await gods.locator(".gkl-slide-cover-link").getAttribute("href"),"card-games/small-gods-large-debts/");
+  const godsImage=gods.locator(".gkl-art-picture img");
+  await decodeVisibleImage(godsImage);
+  assert.equal(await godsImage.evaluate(img=>img.naturalWidth),1672,"Small Gods hero art remains loaded");
   const labels=await desktop.locator("[data-showcase-slide]").evaluateAll(els=>els.map(e=>e.getAttribute("aria-label")));
   assert.deepEqual(labels.map((v,i)=>v.startsWith((i+1)+" of "+slideCount+": ")),Array(slideCount).fill(true),"Slide accessibility labels");
   const flowglassIndex=await desktop.locator("[data-showcase-slide]").evaluateAll(els=>els.findIndex(e=>e.classList.contains("gkl-theme-flowglass")));
@@ -122,6 +131,11 @@ try{
     assert.ok(pauseHit,"Mobile pause hit target must not be covered at "+width+"px");
     await mobilePause.click({timeout:8000});
     assert.equal(await mobilePause.getAttribute("aria-pressed"),"true","Mobile pause control must accept a real pointer click");
+    await mobile.locator('[data-showcase-tab="3"]').click();
+    assert.ok(await mobile.locator(".gkl-theme-gods .gkl-art-mobile-caption").isVisible(),
+      "Small Gods mobile slide retains its title, description and CTA");
+    assert.ok(!await mobile.locator(".gkl-theme-gods .gkl-gods-desktop-caption").isVisible(),
+      "Small Gods desktop overlay is hidden on mobile");
     assert.equal(await mobile.locator("[data-showcase-tab]").count(),slideCount);
     await mobile.locator('[data-showcase-tab="'+flowglassIndex+'"]').click();
     const img=mobile.locator(".gkl-theme-flowglass picture img");
