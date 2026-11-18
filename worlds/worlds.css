@@ -4,7 +4,7 @@
 .worlds-page .nav{border-color:var(--gw-line);background:rgba(255,255,255,.03)}
 .worlds-page .nav a[aria-current="page"]{background:rgba(234,201,149,.14);color:var(--gw-gold)}
 .gw-container{width:min(1220px,calc(100% - 2.4rem));margin-inline:auto}
-.gw-eyebrow{margin:0 0 1rem;color:var(--gw-gold);font-size:.71rem;font-weight:850;letter-spacing:.19em;text-transform:uppercase}
+.gw-eyebrow{margin:0 0 .85rem;color:var(--gw-gold);font-size:.75rem;font-weight:850;letter-spacing:.15em;line-height:1.45;text-transform:uppercase}
 .gw-hero{overflow:hidden;position:relative;min-height:675px;border-bottom:1px solid var(--gw-line);background:radial-gradient(circle at 72% 55%,rgba(153,105,184,.2),transparent 36%),linear-gradient(145deg,#0e2130,#081119 60%,#182334)}
 .gw-hero:after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.2;background-image:repeating-linear-gradient(90deg,transparent 0,transparent 72px,rgba(234,201,149,.05) 73px)}
 .gw-hero-inner{position:relative;z-index:1;display:grid;grid-template-columns:minmax(0,1fr) minmax(360px,.87fr);gap:clamp(1.2rem,5vw,5rem);align-items:center;min-height:675px;padding:clamp(4rem,6vw,7rem) 0}
@@ -29,9 +29,9 @@
 .gw-mini-nav a{font-size:.73rem;text-transform:uppercase;letter-spacing:.12em;text-decoration:none;font-weight:800;color:#d3c6b4}
 .gw-mini-nav a:hover{color:#fff}
 .gw-section{padding:clamp(4rem,7vw,7rem) 0;scroll-margin-top:90px}
-.gw-section-heading{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(280px,.75fr);align-items:end;gap:2rem;margin:0 0 2.3rem}
+.gw-section-heading{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(280px,.75fr);align-items:end;gap:2rem;margin:0 0 2rem}
 .gw-section-heading h2,.gw-notes h2{font-size:clamp(2.7rem,5vw,4.9rem);line-height:.98;letter-spacing:-.07em;margin:0;color:#fff9ef}
-.gw-section-heading>p{margin:0;max-width:540px;color:#afc4c3;font-size:1.03rem}
+.gw-section-heading>p{margin:0;max-width:540px;color:#afc4c3;font-size:1rem;line-height:1.65}
 .gw-book-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.3rem}
 .gw-book-card{min-width:0;display:grid;grid-template-columns:minmax(155px,.7fr) minmax(0,1fr);gap:clamp(1.2rem,2.3vw,2.3rem);padding:clamp(1rem,2vw,1.5rem);border:1px solid var(--gw-line);border-radius:22px;background:linear-gradient(140deg,rgba(239,224,207,.073),rgba(244,231,209,.018));box-shadow:0 20px 55px rgba(0,0,0,.15);scroll-margin-top:100px}
 .gw-book-card>.gw-cover{width:100%;align-self:start;max-width:235px}
@@ -211,3 +211,6 @@
  .worlds-adventures-page .gw-hero-books .gw-real-cover.gw-hero-book-a{max-width:155px}
  .worlds-adventures-page .gw-hero-books .gw-real-cover.gw-hero-book-b{max-width:180px}
 }
+
+/* Featured-project deep links should clear the sticky studio header. */
+.worlds-catalog-page :is(#oldest-house,#records-house){scroll-margin-top:105px}
