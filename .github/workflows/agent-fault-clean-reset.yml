@@ -67,7 +67,7 @@ jobs:
             echo "The original 69 card artworks are already committed."
           else
             git commit -m "assets(agent-fault): publish all 66 original fronts and three backs"
-            git pull --rebase origin main
+            # Push only the verified art commit. Fail safely if main changed meanwhile.
             git push origin HEAD:main
           fi
 
