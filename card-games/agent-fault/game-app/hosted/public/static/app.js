@@ -14,7 +14,7 @@ function resetRender(){S.lastVer=-1;render()}
 function layout(inner,top=''){return `<div class="wrap page"><header class="topbar"><div class="logoHead"><img src="/static/glitch-robot.png" alt="Glitch robot mascot"><span class="brand">AGENT<b>/</b>FAULT <span class="glitch">LIVE</span></span></div><div class="identity"><span class="dot"></span><span>${esc(top||'ONLINE PLAYTEST · v0.9-P')}</span></div></header>${inner}<footer class="foot"><span class="kicker">GREENKAPPA LABS / ORIGINAL PARTY SYSTEMS</span><p class="tiny">Prototype · human scoring · card text v0.9-P candidate · nicknames only · host controls the screen</p></footer></div>`}
 function btn(text,fn='',cls=''){return `<button class="btn ${cls}" ${fn?`data-act="${fn}"`:''}>${esc(text)}</button>`}
 function title(head,sub=''){return `<div class="kicker lime">${esc(sub)}</div><h2>${esc(head)}</h2>`}
-function playerList(s){return `<div class="playerlist">${s.players.map((p,i)=>`<div class="playerrow"><span class="avatar">${esc(p.name[0].toUpperCase())}</span><span class="seat">${esc(p.name)} ${p.is_judge?'<span class="pill">JUDGE</span>':''} ${p.submitted?'<span class="kicker lime">✓ LOCKED</span>':''}</span><span class="score">${p.score}</span>${s.phase==='lobby'&&s.me.role==='host'?`<button class="btn slim coral" data-act="remove:${p.id}" aria-label="Remove ${esc(p.name)}">×</button>`:''}</div>`).join('')||'<div class="empty">NO AGENTS CONNECTED</div>'}</div>`}
+function playerList(s){return `<div class="playerlist">${s.players.map((p,i)=>`<div class="playerrow"><span class="avatar">${esc(p.name[0].toUpperCase())}</span><span class="seat">${esc(p.name)} ${p.is_judge?'<span class="pill">JUDGE</span>':''} ${p.is_npc?'<span class="pill">NPC</span>':''} ${p.submitted?'<span class="kicker lime">✓ LOCKED</span>':''}</span><span class="score">${p.score}</span>${s.phase==='lobby'&&s.me.role==='host'?`<button class="btn slim coral" data-act="remove:${p.id}" aria-label="Remove ${esc(p.name)}">×</button>`:''}</div>`).join('')||'<div class="empty">NO AGENTS CONNECTED</div>'}</div>`}
 function scenarioCard(c){if(!c)return '<div class="empty">SCENARIO NOT DEALT YET</div>';return `<article class="scenario"><div class="kicker">${esc(c.id)} / ${esc(c.tone||'SCENARIO')}</div><h2>${esc(c.title)}</h2><div class="label" style="color:#6a4083">PUBLIC ASSIGNMENT</div><p>${esc(c.public_assignment)}</p><div class="rule"><strong>REQUIRED BEHAVIOR</strong>${esc(c.required_behavior)}</div><div class="rule"><strong>BREAKPOINT A</strong>${esc(c.breakpoint_a)}</div><div class="rule"><strong>BREAKPOINT B</strong>${esc(c.breakpoint_b)}</div></article>`}
 function phaseTag(s){return `<div class="statusbar"><span class="kicker">${s.play_mode==='physical'?'PRINTED CARDS · ':'DIGITAL CARDS · '}ROUND ${s.round||'—'} / ${s.round_limit||'—'}</span><span class="pill">${esc(stages[s.phase])}</span><span class="kicker">ROOM ${esc(s.code)}</span></div>`}
 function progress(s){return `<div class="progress" aria-label="${s.submitted} of ${s.expected} submissions"><div style="width:${s.expected?Math.round(s.submitted/s.expected*100):0}%"></div></div>`}
@@ -63,11 +63,40 @@ async function poll(){
  if(state.phase==='finished'){poller.stop();socket.stop()}
  return changed;
 }
-function landing(){app.innerHTML=layout(`<section class="hero"><div><div class="kicker lime">THE ASSIGNMENT IS SIMPLE. THE AGENTS ARE NOT.</div><h1>BAD<br>INSTRUCTIONS<span class="slash">/</span><br>GREAT<br>DECISIONS.</h1><p>Four to eight players. One shared screen. Everybody brings a phone. Choose a card that makes a fictional AI assistant get spectacularly, strategically sidetracked.</p><div class="actions">${btn('CLASSIC · DIGITAL CARDS','create')}${btn('CLASSIC · PRINTED CARDS','create:physical','violet')}<a class="btn" href="/cascade/?mode=digital">CASCADE · DIGITAL CARDS</a><a class="btn violet" href="/cascade/?mode=physical">CASCADE · PRINTED CARDS</a>${btn('JOIN A ROOM','joinview','secondary')}${btn('TRY THE DEMO','demo','violet')}</div><div class="labelnote">ONLINE EDITION · NO INSTALLATION · PRIVATE PHONE CONTROLLERS</div></div><div><img class="hero-art" src="/static/glitch-robot.png" alt="Illustrated AGENT/FAULT glitching robot card artwork"></div></section><div class="three"><div class="pane">${title('01 / JOIN','PHONE CONTROLLER')}Enter the six-letter code from the host screen.</div><div class="pane">${title('02 / SABOTAGE','PRIVATE CARDS')}Pick one of four Interference cards. Nobody knows yours.</div><div class="pane">${title('03 / JUDGE','HUMAN SCORES')}Laugh, choose a Spotlight, and award a Derailment Bonus.</div></div>`,'PLAY THE AI. DON’T BE THE AI.');bind()}
+function landing(){app.innerHTML=layout(`<section class="hero"><div><div class="kicker lime">THE ASSIGNMENT IS SIMPLE. THE AGENTS ARE NOT.</div><h1>BAD<br>INSTRUCTIONS<span class="slash">/</span><br>GREAT<br>DECISIONS.</h1><p>Play Classic with friends or add NPC opponents to fill the table—even if it's just you. Use one host screen and a private player tab or phone; everyone tries to make the AI's assignment go horribly wrong.</p><div class="actions">${btn('CLASSIC · DIGITAL CARDS','create')}${btn('CLASSIC · PRINTED CARDS','create:physical','violet')}<a class="btn" href="/cascade/?mode=digital">CASCADE · DIGITAL CARDS</a><a class="btn violet" href="/cascade/?mode=physical">CASCADE · PRINTED CARDS</a>${btn('JOIN A ROOM','joinview','secondary')}${btn('TRY THE DEMO','demo','violet')}</div><div class="labelnote">ONLINE EDITION · NO INSTALLATION · PRIVATE PHONE CONTROLLERS</div></div><div><img class="hero-art" src="/static/glitch-robot.png" alt="Illustrated AGENT/FAULT glitching robot card artwork"></div></section><div class="three"><div class="pane">${title('01 / JOIN','PHONE CONTROLLER')}Enter the six-letter code from the host screen.</div><div class="pane">${title('02 / SABOTAGE','PRIVATE CARDS')}Pick one of four Interference cards. Nobody knows yours.</div><div class="pane">${title('03 / JUDGE','HUMAN SCORES')}Laugh, choose a Spotlight, and award a Derailment Bonus.</div></div>`,'PLAY THE AI. DON’T BE THE AI.');bind()}
 function joinForm(code=''){app.innerHTML=layout(`<section class="pane" style="max-width:610px;margin:7vh auto">${title('JOIN THE CHAOS','PHONE CONTROLLER')}<p class="muted" style="margin:14px 0">Enter the code displayed on the host screen and pick a nickname.</p><form id="joinform"><div class="field"><label for="roomcode">Room code</label><input class="code" id="roomcode" maxlength="6" autocomplete="off" spellcheck="false" value="${esc(code)}" required placeholder="ABC234"></div><div class="field"><label for="nickname">Your name</label><input id="nickname" maxlength="24" minlength="2" required placeholder="MYSTERY PLAYER"></div><button class="btn" type="submit">ENTER ROOM</button></form><div class="actions"><button class="btn secondary" data-act="home">BACK</button></div></section>`);bind();$('joinform').onsubmit=async e=>{e.preventDefault();const c=$('roomcode').value.toUpperCase().replace(/[^A-Z0-9]/g,'');const nick=$('nickname').value.trim();if(c.length!==6){toast('Enter six characters');return}try{const v=await req(`/api/rooms/${c}/join`,'POST',{name:nick},false);store('player',c,v.token);connect('player',c,v.token)}catch(e){friendlyError(e)}}}
 function noSession(role,code){if(role==='player')joinForm(code);else app.innerHTML=layout(`<div class="pane" style="max-width:630px;margin:10vh auto">${title('HOST SESSION MISSING','SECURE TOKEN NOT FOUND')}<p class="muted" style="margin:20px 0">This browser does not have the host token for room ${esc(code)}. Open the host screen on the computer where the room was created, or start a new room.</p>${btn('NEW GAME','create')}</div>`);bind()}
 function connect(role,code,token){socket.stop();poller.stop();S.role=role;S.code=code;S.token=token;S.state=null;S.lastVer=-1;history.replaceState(null,'',role==='host'?`/host/${code}`:`/play/${code}`);poller.start();socket.start()}
-function lobbyHost(s){return `<div class="two"><div><div class="pane">${title('INVITE YOUR FRIENDS','ONE SCREEN / MANY PHONES')}<div class="roomcode">${esc(s.code)}</div><p class="muted">Players visit this address on their phones:</p><p style="font-size:1.2rem;overflow-wrap:anywhere">${esc(location.origin+'/play/'+s.code)}</p><div class="actions">${btn('COPY JOIN LINK','copylink','secondary')}${btn('CHECK AI CONNECTION','check_ai','violet')}${btn('START GAME','start')}</div><p class="tiny">${s.player_count}/8 players connected. Need at least 4 to begin.</p><p class="tiny">AI: ${s.ai_configured?'KEY CONFIGURED':'KEY MISSING'} · ${esc(s.ai_model||'')} · Estimated today: $${Number(s.ai_budget?.daily_estimated_usd||0).toFixed(6)} (provider invoice may differ).</p></div><div class="pane"><div class="kicker lime">JOIN BY CAMERA</div><img class="qr" src="/api/rooms/${esc(s.code)}/qr.png" alt="QR code to join room ${esc(s.code)}"></div></div><div><div class="pane">${title('THE PLAYERS','LOBBY STATUS')}${playerList(s)}</div></div></div>`}
+function lobbyHost(s){
+ const maxNpcs=Math.max(0,8-s.human_count);
+ const options=Array.from({length:maxNpcs+1},(_,n)=>'<option value="'+n+'" '+(n===s.npc_count?'selected':'')+'>'+n+' NPC'+(n===1?'':'s')+'</option>').join('');
+ const privateTab=savedRole('player',s.code)
+  ? '<a class="btn secondary" href="/play/'+esc(s.code)+'" target="_blank" rel="noopener">OPEN MY PRIVATE CONTROLS ↗</a>':'';
+ return `<div class="two">
+ <div><div class="pane">${title('INVITE YOUR FRIENDS','ONE SHARED SCREEN · PRIVATE CONTROLLERS')}
+ <div class="roomcode">${esc(s.code)}</div><p class="muted">Players can join on their phones:</p>
+ <p style="font-size:1.2rem;overflow-wrap:anywhere">${esc(location.origin+'/play/'+s.code)}</p>
+ <div class="actions">${btn('COPY JOIN LINK','copylink','secondary')}${btn('CHECK AI CONNECTION','check_ai','violet')}${btn('START GAME','start')}</div>
+ <p class="tiny">${s.human_count} human${s.human_count===1?'':'s'} + ${s.npc_count} NPC${s.npc_count===1?'':'s'} · ${s.player_count}/8 seats filled. Need at least 4 total and one human.</p>
+ <p class="tiny">AI: ${s.ai_configured?'KEY CONFIGURED':'KEY MISSING'} · ${esc(s.ai_model||'')} · Estimated today: ${Number(s.ai_budget?.daily_estimated_usd||0).toFixed(6)} (provider invoice may differ).</p></div>
+ <div class="pane"><div class="kicker lime">JOIN BY CAMERA</div><img class="qr" src="/api/rooms/${esc(s.code)}/qr.png" alt="QR code to join room ${esc(s.code)}"></div></div>
+ <div><div class="pane">${title('THE PLAYERS','LOBBY STATUS')}${playerList(s)}</div>
+ ${s.play_mode==='digital'?`<div class="pane">${title('ADD NPC PLAYERS','NO EXTRA AI CALLS')}
+ <p class="muted" style="margin:14px 0">NPCs fill empty seats, play legal Interference cards, take Judge turns and vote. Their choices use simple rules—not paid AI. An NPC Judge picks a favorite using a basic text heuristic and does not claim bonus points.</p>
+ <div class="field"><label for="npc-count">NPC opponents (0–${maxNpcs})</label>
+ <select id="npc-count" class="npc-select">${options}</select></div>
+ <div class="actions">${btn('SET NPC PLAYERS','set_npcs','violet')}</div>
+ </div>`:''}
+ <div class="pane">${title('HOST ALSO PLAYS','KEEP YOUR CARDS PRIVATE')}
+ <p class="muted" style="margin:14px 0">Join from your own phone or a separate private tab while this host screen stays open. The shared screen never shows your secret hand or Fault.</p>
+ ${privateTab? `<p class="hint">Your private player session is ready. Open it in another tab and keep the shared host display here.</p><div class="actions">${privateTab}</div>`:`
+ <div class="field"><label for="host-nickname">Your player nickname</label><input id="host-nickname" maxlength="24" minlength="2" placeholder="YOUR NAME" autocomplete="nickname"></div>
+ <div class="actions">${btn('JOIN AS A PLAYER','host_play','coral')}</div>
+ <p class="tiny">Already joined on a phone? Don't join twice. Use your existing player session.</p>`}
+
+ </div></div>
+ </div>`;
+}
 function lobbyPhone(s){return `<section class="pane center" style="max-width:700px;margin:8vh auto"><div class="kicker lime">YOU ARE CONNECTED</div><h2>${esc(s.me.name)}</h2><div class="roomcode">${esc(s.code)}</div><div class="divider"></div><p style="font-size:1.3rem">WAIT FOR THE HOST TO START.</p><p class="muted">${s.player_count}/8 players seated</p>${playerList(s)}</section>`}
 function hostScreen(s){const judge=s.players.find(x=>x.is_judge);let content='';const physical=s.play_mode==='physical';
  if(s.phase==='lobby')content=lobbyHost(s);
@@ -101,7 +130,22 @@ function bind(){document.querySelectorAll('[data-review-countdown]').forEach(el=
  if(a==='demo_prev'){S.demoIndex=(S.demoIndex+5)%6;demo();return}
  if(a==='demo_next'){S.demoIndex=(S.demoIndex+1)%6;demo();return}
  if(a==='copylink'){await navigator.clipboard.writeText(`${location.origin}/play/${S.code}`);toast('Join link copied');return}
- if(a==='check_ai'){try{const r=await req(`/api/rooms/${S.code}/check-ai`,'POST');toast('API CHECK PASSED: '+r.model+' (no generation charge)')}catch(e){friendlyError(e)}return}
+ if(a==='set_npcs')return action('set_npcs',{count:Number($('npc-count')?.value)});
+  if(a==='host_play'){
+    const name=$('host-nickname')?.value.trim();
+    if(!name||name.length<2||name.length>24){toast('Enter a nickname (2–24 characters)');return;}
+    const privateTab=window.open('about:blank','_blank');
+    try{
+      const joined=await req(`/api/rooms/${S.code}/join`,'POST',{name},false);
+      store('player',S.code,joined.token);
+      const url=`/play/${S.code}`;
+      if(privateTab){privateTab.opener=null;privateTab.location.replace(url);}
+      else toast('Popup blocked. Use OPEN MY PRIVATE CONTROLS on the host screen.');
+      if(socket.connected)await poll();else poller.refresh();
+    }catch(e){privateTab?.close();friendlyError(e);}
+    return;
+  }
+  if(a==='check_ai'){try{const r=await req(`/api/rooms/${S.code}/check-ai`,'POST');toast('API CHECK PASSED: '+r.model+' (no generation charge)')}catch(e){friendlyError(e)}return}
  if(a==='copyprompt'){await navigator.clipboard.writeText(S.state.generation_prompt);toast('Generation prompt copied');return}
  if(a==='start'&&S.state.player_count<4){toast('At least four players are required');return}
  if(a==='skip_scenario')return action('skip_scenario');

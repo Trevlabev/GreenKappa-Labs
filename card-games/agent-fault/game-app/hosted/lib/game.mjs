@@ -14,6 +14,67 @@ export const digest=t=>createHash('sha256').update(t).digest('hex');
 export function safeEq(a,b){if(typeof a!=='string'||typeof b!=='string'||a.length!==b.length)return false;return timingSafeEqual(Buffer.from(a),Buffer.from(b));}
 export function shuffle(source){let a=[...source];for(let i=a.length-1;i>0;i--){const j=randomInt(i+1);[a[i],a[j]]=[a[j],a[i]]}return a;}
 function randomInt(max){let v;const lim=Math.floor(4294967296/max)*max;do{v=randomBytes(4).readUInt32BE()}while(v>=lim);return v%max;}
+
+// Server-owned NPC seats have no player token. Their behavior is deliberately
+// deterministic: no additional AI inference, provider costs, or fabricated bonus awards.
+export const NPC_PRESETS=[
+ {name:'CHAOS.EXE',profile:'An overconfident disaster-management consultant',tags:['chaos','disaster','unnecessary']},
+ {name:'COMPLIANCE BOT',profile:'A painfully literal bureaucrat obsessed with procedure',tags:['rule','official','require']},
+ {name:'DRAMA UNIT',profile:'A theatrical assistant who takes every problem personally',tags:['emotional','personal','dramatic']},
+ {name:'404 FRIEND NOT FOUND',profile:'A well-meaning assistant who spectacularly misunderstands everything',tags:['misunderstand','wrong','confuse']},
+ {name:'MAYHEM INTERN',profile:'An enthusiastic intern with terrible instincts',tags:['invent','mandatory','unexpected']},
+ {name:'LITERAL MACHINE',profile:'A stubbornly literal but polite assistant',tags:['literal','exact','insist']},
+ {name:'ERROR PRONE',profile:'A delighted assistant convinced bad ideas are brilliant',tags:['worst','celebrate','bad']}
+];
+function npcCardId(p){
+ const index=NPC_PRESETS.findIndex(x=>x.name===p.name);
+ const tags=NPC_PRESETS[Math.max(index,0)].tags;
+ return [...p.hand].sort((a,b)=>{
+  const rank=id=>tags.reduce((sum,word)=>sum+((CARDS[id]?.instruction||'').toLowerCase().includes(word)?3:0),0);
+  return rank(b)-rank(a) || a.localeCompare(b);
+ })[0];
+}
+function npcFavorite(r){
+ const valid=r.candidates.filter(x=>r.answers[x.label]&&r.answers[x.label].toUpperCase()!=='SKIP');
+ // This is a disclosed length/variety heuristic, not a claim to understand humor.
+ const score=x=>{const words=r.answers[x.label].toLowerCase().match(/[a-z]+/g)||[];
+   return new Set(words).size*2 + Math.min(30,words.length);
+ };
+ return [...valid].sort((a,b)=>score(b)-score(a)||a.label.localeCompare(b.label))[0]?.label;
+}
+function npcApproves(r){
+ if(!r.proposal?.bonus)return true;
+ const label=r.proposal.bonus,claim=r.proposal.claims?.[label],evidence=String(claim?.evidence||'').trim();
+ // Quoted evidence is necessary, never a guarantee of semantic qualification.
+ return Boolean((claim?.breakpoint||claim?.fault)&&evidence.length>=12
+    &&String(r.answers[label]||'').toLowerCase().includes(evidence.toLowerCase()));
+}
+export function advanceNpcs(r,now=Date.now()){
+ let n=0;
+ while(n++<32){
+  const players=r.players.filter(q=>q.active);
+  const judge=players.find(q=>q.id===r.judge_id);
+  if(r.phase==='setup'&&judge?.npc){
+   applyAction(r,'player',judge,'lock_profile',{profile:NPC_PRESETS.find(x=>x.name===judge.name)?.profile||'A chaotic assistant'},now,true);continue;
+  }
+  const bot=r.phase==='submit'?players.find(q=>q.npc&&q.id!==r.judge_id&&!(q.id in r.submissions)):null;
+  if(bot){applyAction(r,'player',bot,'submit',{card_id:npcCardId(bot)},now,true);continue;}
+  if(r.phase==='spotlight'&&judge?.npc){
+   const label=npcFavorite(r);
+   if(!label)break;
+   applyAction(r,'player',judge,'spotlight',{label},now,true);continue;
+  }
+  if(r.phase==='adjudicate'&&judge?.npc){
+   // NPC judges never invent a Breakpoint/Fault qualification.
+   applyAction(r,'player',judge,'propose_bonus',{claims:{},bonus:null},now,true);continue;
+  }
+  const voter=r.phase==='review'?players.find(q=>q.npc&&!(q.id in r.approvals)):null;
+  if(voter){applyAction(r,'player',voter,'approve',{yes:npcApproves(r)},now,true);continue;}
+  break;
+ }
+ demand(n<32,'NPC automation stopped at safety limit');
+}
+
 export function createRoom(code,hostToken){return {code,host_hash:digest(hostToken),phase:'lobby',players:[],round:0,round_limit:null,judge_id:null,scenario_id:null,fault_id:null,profile:null,submissions:{},candidates:[],answers:{},spotlight:null,proposal:null,approvals:{},review_deadline:null,history:[],last_round:null,decks:{},discard:{},generation_calls:0,ai_attempted:false,version:0,play_mode:'digital'}}
 export function auth(r,bearer){const token=(bearer||'').replace(/^Bearer /i,'');demand(token&&token.length<=200,'Session token required',401);const hash=digest(token);if(safeEq(hash,r.host_hash))return {role:'host',p:null};const p=r.players.find(x=>safeEq(x.token_hash,hash));demand(p,'Invalid session token',401);demand(p.active,'Player removed from room',403);return {role:'player',p};}
 function draw(r,kind){let arr=r.decks[kind];if(!arr.length){demand(r.discard[kind].length>0,'No more '+kind+' cards');r.decks[kind]=shuffle(r.discard[kind]);r.discard[kind]=[];arr=r.decks[kind]}return arr.pop();}
@@ -21,14 +82,31 @@ export function newRound(r){r.round++;r.phase='setup';r.scenario_id=r.play_mode=
 export function buildPrompt(r){const scene=CARDS[r.scenario_id];return ['You are writing fictional alternatives for a comedy card game. Produce one separate in-character answer for each listed letter. Each answer uses ONLY that letter\'s interference instruction, along with the common assignment and assistant personality. Keep answers 22–26 words when possible, absolutely no more than 30 words. Do not explain the game or compare answers. Return one line per letter, A:, B:, etc., no other text.','ASSIGNMENT: '+scene.public_assignment,'REQUIRED BEHAVIOR: '+scene.required_behavior,'ASSISTANT PERSONALITY: '+r.profile,'CANDIDATES:',...r.candidates.map(x=>x.label+': '+CARDS[x.card_id].instruction)].join('\n');}
 export function parseAnswers(text,labels){const out={};for(const line of String(text).split(/\r?\n/)){const match=line.match(/^\s*([A-G])\s*[:.)\-]\s*(.*)$/);if(match&&labels.includes(match[1]))out[match[1]]=match[2].trim().split(/\s+/).slice(0,30).join(' ')}return out}
 export function estimateUsd(model,usage){const p=MODEL_PRICES[model];if(!p)return null;const inp=Math.max(0,Number(usage.input_tokens||0)),output=Math.max(0,Number(usage.output_tokens||0)),cached=Math.min(inp,Math.max(0,Number(usage.input_tokens_details?.cached_tokens||0)));return Math.round(((inp-cached)*p[0]+output*p[1]+cached*p[2])/1e6*1e9)/1e9;}
-export function visible(r,role,p,usage={requests:0,estimated_usd:0},model='gpt-4.1-mini',aiConfigured=false){const players=r.players.filter(q=>q.active);const names=players.map(q=>({id:q.id,name:q.name,score:q.score,seat:q.seat,active:q.active,submitted:q.id in r.submissions,is_judge:q.id===r.judge_id}));const phase=r.phase,judge=p?.id===r.judge_id,reveal=['adjudicate','review','results','finished'].includes(phase),candidates=['spotlight','adjudicate','review','results','finished'].includes(phase)?r.candidates.map(x=>({label:x.label,response:r.answers[x.label]??null,valid:!!r.answers[x.label]&&r.answers[x.label].toUpperCase()!=='SKIP'})):[];
-const state={code:r.code,version:r.version,play_mode:r.play_mode||'digital',phase,players:names,player_count:names.length,round:r.round,round_limit:r.round_limit,judge_id:r.judge_id,scenario:CARDS[r.scenario_id]||null,fault_family:r.fault_id?CARDS[r.fault_id].family:null,fault:r.fault_id&&(judge||reveal)?CARDS[r.fault_id]:null,profile:judge||reveal?r.profile:null,submitted:Object.keys(r.submissions).length,expected:Math.max(0,names.length-1),candidates,spotlight:reveal?r.spotlight:null,proposal:['review','results','finished'].includes(phase)?r.proposal:null,approvals:phase==='review'?r.approvals:{},review_deadline:phase==='review'?r.review_deadline:null,last_round:['results','finished'].includes(phase)?r.last_round:null,history:phase==='finished'?r.history:[],generation_calls:r.generation_calls,ai_configured:aiConfigured,ai_model:role==='host'?model:null,ai_budget:role==='host'?{room_remaining:Math.max(0,MAX_ROOM_CALLS-r.generation_calls),daily_remaining:Math.max(0,MAX_DAILY_CALLS-usage.requests),daily_estimated_usd:usage.estimated_usd,daily_cap_estimated_usd:MAX_DAILY_ESTIMATED_USD}:null,me:p?{role,id:p.id,name:p.name,hand:r.play_mode==='physical'?[]:p.hand.map(id=>CARDS[id])}:{role:'host'},card_counts:Object.fromEntries(['Scenario','Interference','Fault'].map(k=>[k,r.decks[k]?.length??({Scenario:24,Interference:36,Fault:6}[k])]))};
+export function visible(r,role,p,usage={requests:0,estimated_usd:0},model='gpt-4.1-mini',aiConfigured=false){const players=r.players.filter(q=>q.active);const names=players.map(q=>({id:q.id,name:q.name,score:q.score,seat:q.seat,active:q.active,is_npc:!!q.npc,submitted:q.id in r.submissions,is_judge:q.id===r.judge_id}));const phase=r.phase,judge=p?.id===r.judge_id,reveal=['adjudicate','review','results','finished'].includes(phase),candidates=['spotlight','adjudicate','review','results','finished'].includes(phase)?r.candidates.map(x=>({label:x.label,response:r.answers[x.label]??null,valid:!!r.answers[x.label]&&r.answers[x.label].toUpperCase()!=='SKIP'})):[];
+const state={code:r.code,version:r.version,play_mode:r.play_mode||'digital',phase,players:names,player_count:names.length,npc_count:players.filter(q=>q.npc).length,human_count:players.filter(q=>!q.npc).length,round:r.round,round_limit:r.round_limit,judge_id:r.judge_id,scenario:CARDS[r.scenario_id]||null,fault_family:r.fault_id?CARDS[r.fault_id].family:null,fault:r.fault_id&&(judge||reveal)?CARDS[r.fault_id]:null,profile:judge||reveal?r.profile:null,submitted:Object.keys(r.submissions).length,expected:Math.max(0,names.length-1),candidates,spotlight:reveal?r.spotlight:null,proposal:['review','results','finished'].includes(phase)?r.proposal:null,approvals:phase==='review'?r.approvals:{},review_deadline:phase==='review'?r.review_deadline:null,last_round:['results','finished'].includes(phase)?r.last_round:null,history:phase==='finished'?r.history:[],generation_calls:r.generation_calls,ai_configured:aiConfigured,ai_model:role==='host'?model:null,ai_budget:role==='host'?{room_remaining:Math.max(0,MAX_ROOM_CALLS-r.generation_calls),daily_remaining:Math.max(0,MAX_DAILY_CALLS-usage.requests),daily_estimated_usd:usage.estimated_usd,daily_cap_estimated_usd:MAX_DAILY_ESTIMATED_USD}:null,me:p?{role,id:p.id,name:p.name,hand:r.play_mode==='physical'?[]:p.hand.map(id=>CARDS[id])}:{role:'host'},card_counts:Object.fromEntries(['Scenario','Interference','Fault'].map(k=>[k,r.decks[k]?.length??({Scenario:24,Interference:36,Fault:6}[k])]))};
 if(phase==='generate'&&role==='host'){state.generation_prompt=buildPrompt(r);state.candidate_labels=r.candidates.map(x=>x.label)}
 if(phase==='results')state.owners=r.candidates.map(x=>({label:x.label,player:r.players.find(q=>q.id===x.player_id).name}));return state;}
-export function applyAction(r,role,p,name,data={},now=Date.now()){const d=data||{},phase=r.phase,host=role==='host',judge=p?.id===r.judge_id,participants=r.players.filter(q=>q.active),j=participants.findIndex(q=>q.id===r.judge_id);
+export function applyAction(r,role,p,name,data={},now=Date.now(),internal=false){const d=data||{},phase=r.phase,host=role==='host',judge=p?.id===r.judge_id,participants=r.players.filter(q=>q.active),j=participants.findIndex(q=>q.id===r.judge_id);
 switch(name){
+case 'set_npcs':{
+ demand(host&&phase==='lobby','Only the host may configure NPCs in the lobby');
+ demand(r.play_mode==='digital','NPCs currently require digital cards',422);
+ const count=Number(d.count);
+ demand(Number.isInteger(count)&&count>=0&&count<=7,'Choose between 0 and 7 NPCs',422);
+ const humans=participants.filter(q=>!q.npc);
+ demand(humans.length+count<=8,'Room has at most 8 total seats',422);
+ demand(!NPC_PRESETS.slice(0,count).some(bot=>humans.some(h=>h.name.toLowerCase()===bot.name.toLowerCase())),
+  'An existing nickname matches an NPC. Remove or rename that player before adding NPCs',409);
+ r.players=r.players.filter(q=>!q.npc);
+ for(let i=0;i<count;i++){
+  const name=NPC_PRESETS[i].name;
+  r.players.push({id:'npc-'+token().slice(0,16),token_hash:digest(token()),npc:true,
+   name,seat:r.players.length,active:true,hand:[],score:0});
+ }
+ break;
+}
 case 'remove_player':{demand(host&&phase==='lobby','Only host can remove players before game');let target=r.players.find(q=>q.id===d.id);demand(target,'Player not found');target.active=false;break}
-case 'start':{demand(host&&phase==='lobby','Only host can start game');demand(participants.length>=4&&participants.length<=8,'Need 4–8 players');r.decks={Scenario:r.play_mode==='physical'?[]:shuffle(SCENES.map(c=>c.id)),Interference:r.play_mode==='physical'?[]:shuffle(INF.map(c=>c.id)),Fault:r.play_mode==='physical'?[]:shuffle(FAULTS.map(c=>c.id))};r.discard={Scenario:[],Interference:[],Fault:[]};for(const q of participants){q.hand=r.play_mode==='physical'?[]:Array.from({length:4},()=>draw(r,'Interference'));q.score=0}r.judge_id=participants[0].id;r.round_limit=participants.length===4?8:participants.length;newRound(r);break}
+case 'start':{demand(host&&phase==='lobby','Only host can start game');demand(participants.length>=4&&participants.length<=8,'Need 4–8 players');demand(participants.some(q=>!q.npc),'At least one real player is required');r.decks={Scenario:r.play_mode==='physical'?[]:shuffle(SCENES.map(c=>c.id)),Interference:r.play_mode==='physical'?[]:shuffle(INF.map(c=>c.id)),Fault:r.play_mode==='physical'?[]:shuffle(FAULTS.map(c=>c.id))};r.discard={Scenario:[],Interference:[],Fault:[]};for(const q of participants){q.hand=r.play_mode==='physical'?[]:Array.from({length:4},()=>draw(r,'Interference'));q.score=0}r.judge_id=participants.find(q=>!q.npc).id;r.round_limit=participants.length===4?8:participants.length;newRound(r);break}
 case 'set_scenario':{demand(r.play_mode==='physical'&&host&&phase==='setup'&&!r.profile,'Physical Scenario can be entered by host during setup');const id=String(d.card_id||'').toUpperCase();demand(CARDS[id]?.category==='Scenario','Enter a valid printed Scenario ID',422);r.scenario_id=id;break}
 case 'set_fault':{demand(r.play_mode==='physical'&&judge&&phase==='setup'&&!r.profile,'Only Judge can enter their physical Fault privately');const id=String(d.card_id||'').toUpperCase();demand(CARDS[id]?.category==='Fault','Enter a valid printed Fault ID',422);r.fault_id=id;break}
 case 'skip_scenario':{demand(host&&phase==='setup'&&!r.profile&&!Object.keys(r.submissions).length,'Cannot skip after Judge has locked');if(r.play_mode==='physical')r.scenario_id=null;else{r.discard.Scenario.push(r.scenario_id);r.scenario_id=draw(r,'Scenario')}break}
@@ -44,4 +122,4 @@ case 'next':{demand(host&&phase==='results','Only host can advance');if(r.round>
 case 'close':{demand(host,'Host only');r.phase='finished';break}
 default:throw problem(400,'Unknown action');
 }
-r.version++;return r;}
+if(!internal&&r.play_mode==='digital')advanceNpcs(r,now);r.version++;return r;}
