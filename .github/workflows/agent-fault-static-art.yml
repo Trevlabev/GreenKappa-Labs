@@ -9,9 +9,10 @@ on:
       - 'card-games/agent-fault/game-app/hosted/scripts/prepare-digital.mjs'
 permissions:
   contents: write
+  pages: write
 concurrency:
   group: agent-fault-static-art
-  cancel-in-progress: false
+  cancel-in-progress: true
 jobs:
   restore-artwork:
     runs-on: ubuntu-latest
@@ -47,5 +48,16 @@ jobs:
             echo "Published card artwork already up to date."
           else
             git commit -m "assets(agent-fault): publish 66 approved fronts and three backs on same origin"
+            git pull --rebase origin main
             git push origin HEAD:main
+          fi
+      - name: Request GitHub Pages branch build after publishing artwork
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          if gh api -X POST "repos/${GITHUB_REPOSITORY}/pages/builds" >/dev/null; then
+            echo "GitHub Pages rebuild requested for published card assets."
+          else
+            echo "::warning::The card images were committed, but GitHub Pages must be rebuilt separately. GitHub Actions bot commits do not automatically trigger the branch-based Pages build."
           fi
