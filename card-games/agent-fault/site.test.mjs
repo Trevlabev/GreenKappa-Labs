@@ -165,3 +165,42 @@ test('both demos use side arrows, six compact dots, keyboard and swipe navigatio
   assert.doesNotThrow(()=>new vmScript(classic,{filename:'demo-embed.js'}));
   assert.doesNotThrow(()=>new vmScript(cascade,{filename:'cascade-demo-embed.js'}));
 });
+
+
+test('AGENT/FAULT detail page uses one scoped palette with the agreed core colors',()=>{
+ const p=read('palette.css');
+ const tokens=[
+  '--af-navy:#141736','--af-navy-raised:#20244B',
+  '--af-lime:#E5F91B','--af-violet:#C982EC','--af-coral:#FF7568',
+  '--af-paper:#F1EFF7','--af-paper-panel:#FAF9FD'
+ ];
+ for(const t of tokens)assert(p.includes(t),'Missing color token: '+t);
+ assert(p.includes('body.game-detail-page[data-game="agent-fault"]'));
+ assert(p.includes('body[data-game="agent-fault"] .af3d-section'));
+ assert(p.includes('body[data-game="agent-fault"] .gd-art-section'));
+ assert(p.includes('body[data-game="agent-fault"] .af-demo-section'));
+ assert(p.includes('body[data-game="agent-fault"] .af-steps-carousel'));
+ assert(p.includes('body[data-game="agent-fault"] .af-mode-carousel'));
+ assert(p.includes('body[data-game="agent-fault"] .af-physical-guide'));
+ assert.equal((html.match(/<link rel="stylesheet" href="\.\/palette\.css">/g)||[]).length,1);
+ assert(html.indexOf('href="./palette.css"') > html.indexOf('href="./how-to-play.css"'),'Palette overrides must come after original component styles');
+ // Palette is a CSS-only override; artwork and original gameplay markup are untouched.
+ assert(html.includes('./promo/AF_PROMO_DRIVE_AI_INSANE_20261118.webp'));
+ assert(html.includes('./assets/fronts/AF-SCN-001.webp'));
+ assert(html.includes('./product-3d/viewer.html?embed=1'));
+ assert(html.includes('id="af-tab-classic"')&&html.includes('id="af-tab-cascade"'));
+});
+test('core color pairs exceed WCAG AA normal-text contrast',()=>{
+ const lumi=h=>{
+  const c=(h.replace('#','').match(/../g)||[]).map(v=>parseInt(v,16)/255).map(v=>v<=.04045?v/12.92:Math.pow((v+.055)/1.055,2.4));
+  return c[0]*.2126+c[1]*.7152+c[2]*.0722;
+ };
+ const ratio=(a,b)=>{const x=lumi(a),y=lumi(b);return (Math.max(x,y)+.05)/(Math.min(x,y)+.05)};
+ const pairs=[
+  ['#26243B','#F1EFF7'],['#55536B','#F1EFF7'],['#6B3E82','#F1EFF7'],
+  ['#55536B','#FAF9FD'],['#FFF6E9','#141736'],['#E5F91B','#141736'],
+  ['#C982EC','#141736'],['#FF7568','#141736'],['#141736','#E5F91B'],
+  ['#141736','#C982EC'],['#FFF6E9','#634A85'],['#FFF6E9','#633D50']
+ ];
+ for(const [fg,bg] of pairs) assert(ratio(fg,bg)>=4.5,fg+' on '+bg+' fails 4.5:1');
+});
