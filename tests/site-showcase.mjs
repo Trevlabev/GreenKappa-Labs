@@ -110,7 +110,10 @@ try{
     const mobile=await browser.newPage({viewport:{width,height:844},isMobile:true,hasTouch:true,deviceScaleFactor:1});
     attached(mobile);
     await mobile.goto(origin+"/",{waitUntil:"networkidle"});
-    await mobile.locator("[data-showcase-pause]").click();
+    const mobilePause=mobile.locator("[data-showcase-pause]");
+    await mobilePause.evaluate(el=>el.scrollIntoView({block:"center",inline:"nearest"}));
+    await mobilePause.click({timeout:8000});
+    assert.equal(await mobilePause.getAttribute("aria-pressed"),"true","Mobile pause control must accept a real pointer click");
     assert.equal(await mobile.locator("[data-showcase-tab]").count(),slideCount);
     await mobile.locator('[data-showcase-tab="'+flowglassIndex+'"]').click();
     const img=mobile.locator(".gkl-theme-flowglass picture img");

@@ -635,7 +635,7 @@ p{line-height:1.68}
 .gkl-red-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.35rem;padding:0 1rem}
 .gkl-red-metrics span{min-width:0;padding:.8rem .3rem;border:1px solid rgba(255,255,255,.25);color:#7ae8e3;text-align:center;font-size:clamp(.55rem,.9vw,.76rem);font-weight:800}
 .gkl-red-display small{padding:1rem;color:#e2b98d;font-size:.57rem;letter-spacing:.08em}
-.gkl-showcase-controls{display:flex;align-items:center;justify-content:center;gap:.7rem;padding:.8rem 1.1rem;border-top:1px solid rgba(255,255,255,.14);background:#10231e;color:#fff}
+.gkl-showcase-controls{position:relative;z-index:6;display:flex;align-items:center;justify-content:center;gap:.7rem;padding:.8rem 1.1rem;border-top:1px solid rgba(255,255,255,.14);background:#10231e;color:#fff}
 .gkl-showcase-arrow,.gkl-showcase-pause,.gkl-showcase-tab{min-height:44px;border:1px solid rgba(255,255,255,.2);background:transparent;color:#f8f0e3}
 .gkl-showcase-arrow{min-width:44px;border-radius:50%;font-size:1.65rem;line-height:1}
 .gkl-showcase-pause{padding:.55rem .85rem;border-radius:999px;font-size:.8rem;font-weight:800}
