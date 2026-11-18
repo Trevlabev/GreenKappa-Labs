@@ -4,7 +4,6 @@
  * All game rule decisions remain in the original lib/game.mjs.
  */
 import { DurableObject } from 'cloudflare:workers';
-import QRCode from 'qrcode';
 import { randomBytes } from 'node:crypto';
 
 const NC = { 'Cache-Control': 'no-store, max-age=0', 'X-Content-Type-Options': 'nosniff',
@@ -333,7 +332,7 @@ export class GameRoomBase extends DurableObject {
   }
 }
 
-export function createWorker(engine, configuration) {
+export function createWorker(engine, configuration, QRCode) {
   const { demand, problem } = engine;
   return {
     async fetch(request, env) {
