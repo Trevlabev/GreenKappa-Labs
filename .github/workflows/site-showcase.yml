@@ -1,6 +1,7 @@
 name: GreenKappa homepage and Tools visuals
 on:
   push:
+    branches: [main]
     paths:
       - "**/*.html"
       - "**/*.css"
@@ -23,6 +24,10 @@ on:
       - "tests/site-navigation.mjs"
       - ".github/workflows/site-showcase.yml"
   workflow_dispatch:
+
+concurrency:
+  group: site-showcase-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 jobs:
   browser:
