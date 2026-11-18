@@ -16,11 +16,11 @@ Sources: [First validation audit](../../../benchmark/validation-review.md), [S24
 
 **Optional HIJACK THE JOB:** at most one response receives **+1** if the fictional AI:
 
-1. **Introduces a NEW mandatory requirement**: an unrequested action, fee, policy, prerequisite, or authority not present in the Scenario.
-2. **Actually redirects the assignment**: the new requirement changes or delays how the original task can be completed.
-3. **Commits to it explicitly**: it is a binding instruction or decision, not merely a suggestion, hypothetical, or decorative joke.
+1. **Makes a NEW concrete decision or requirement**: an unrequested binding action, fee, policy, prerequisite, authority, or consequential decision not present in the Scenario.
+2. **Actually redirects the assignment**: the decision or requirement materially delays, reverses, or undermines the original required behavior.
+3. **Commits to it explicitly**: it is a committed instruction or decision, not merely a suggestion, hypothetical, or decorative joke.
 
-**Does not count:** an optional extra idea; a reasonable normal step that accomplishes the request; a requirement already in the Scenario; vivid but nonbinding flavor text; an invented policy that has no consequence for finishing the task.
+**Does not count:** an optional extra idea; a reasonable normal step that accomplishes the request; a requirement already in the Scenario; vivid but nonbinding flavor text; an invented policy that does not derail the task; a strange but practical solution.
 
 The reviewer must **quote at least 12 actual characters** from the response and affirm all three semantic conditions. The engine checks that the quote exists and that all three confirmations were explicitly given. **It does not determine whether the condition is actually true**. No model or lexical heuristic can award a Bonus.
 
