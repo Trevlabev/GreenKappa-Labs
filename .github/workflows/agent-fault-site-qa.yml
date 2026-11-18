@@ -63,7 +63,7 @@ jobs:
       - name: Install browser testing dependency
         run: npm install --no-save --no-audit --no-fund playwright@1.56.1
       - name: Install Chromium
-        run: npx playwright install chromium --with-deps
+        run: npx playwright install chromium
       - name: Exercise side-arrow navigation, swipe gestures and interactive cards
         run: |
           python3 -m http.server 8765 --bind 127.0.0.1 > /tmp/greenkappa-agent-fault.log 2>&1 &
