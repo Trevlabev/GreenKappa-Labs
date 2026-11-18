@@ -53,6 +53,10 @@ function cascadeEnvironment(env) {
 export default {
   async fetch(request, env, ctx) {
     const u = new URL(request.url);
+    // With assets.html_handling=none, the entry document is an explicit file.
+    if (u.pathname === '/') {
+      return env.ASSETS.fetch(new Request(new URL('/index.html', u.origin), request));
+    }
     if (u.pathname === '/cascade') {
       return Response.redirect(new URL('/cascade/', u.origin), 308);
     }
