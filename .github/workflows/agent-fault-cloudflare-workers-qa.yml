@@ -1,4 +1,4 @@
-name: AGENT/FAULT Cloudflare dual-worker validation
+name: AGENT/FAULT unified four-mode Worker validation
 
 on:
   pull_request:
@@ -17,41 +17,38 @@ permissions:
   contents: read
 
 jobs:
-  validate-worker:
+  validate-unified-worker:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
-    strategy:
-      fail-fast: false
-      matrix:
-        edition: [hosted, cascade]
+    timeout-minutes: 25
     defaults:
       run:
-        working-directory: card-games/agent-fault/game-app/${{ matrix.edition }}
+        working-directory: card-games/agent-fault/game-app/hosted
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Install dependencies
+      - name: Install Worker dependencies
         run: npm install --no-audit --no-fund
-      - name: Rebuild card data and run game/UI tests
+      - name: Assemble illustrated Classic and Cascade editions and run game tests
         run: npm run build
-      - name: Check Cloudflare source syntax
+      - name: Validate unified Worker syntax
         run: npm run cloudflare:check
-      - name: Bundle Cloudflare Worker and validate Durable Object configuration (no deploy)
+      - name: Validate Worker bundle and Durable Object migrations without deploying
         run: npm run cloudflare:dry-run
-      - name: Exercise local Worker, multiplayer rooms and WebSockets (no deployment)
+      - name: Exercise both game engines, QR, authentication and WebSockets locally
         run: |
-          npx wrangler dev --ip 127.0.0.1 --port 8787 > /tmp/agent-fault-worker.log 2>&1 &
+          npx wrangler dev --ip 127.0.0.1 --port 8787 > /tmp/agent-fault-unified-worker.log 2>&1 &
           worker_pid=$!
           trap 'kill "$worker_pid" 2>/dev/null || true' EXIT
           ready=0
           for attempt in $(seq 1 40); do
-            if curl -fsS http://127.0.0.1:8787/api/health >/dev/null 2>&1; then ready=1; break; fi
+            if curl -fsS http://127.0.0.1:8787/api/health >/dev/null 2>&1 && curl -fsS http://127.0.0.1:8787/cascade/api/health >/dev/null 2>&1; then ready=1; break; fi
             sleep 2
           done
           if [ "$ready" -ne 1 ]; then
-            cat /tmp/agent-fault-worker.log
+            cat /tmp/agent-fault-unified-worker.log
             exit 1
           fi
-          node ../cloudflare/smoke.mjs http://127.0.0.1:8787 ${{ matrix.edition }}
+          node ../cloudflare/smoke.mjs http://127.0.0.1:8787 hosted
+          node ../cloudflare/smoke.mjs http://127.0.0.1:8787 cascade /cascade
