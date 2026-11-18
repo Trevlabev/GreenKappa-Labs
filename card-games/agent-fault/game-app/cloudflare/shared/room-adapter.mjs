@@ -369,13 +369,14 @@ export function createWorker(engine, configuration, QRCode) {
             demand(allowed.allowed, 'Joining too frequently', 429);
           }
           if (op === 'qr.png' && method === 'GET') {
+            // Serve SVG, supported natively by Workers and <img>, while retaining
+            // the historical /qr.png route for existing clients.
             const existing = await stub.fetch('https://room.internal/api/rooms/' + code + '/qr.png');
             if (!existing.ok) return existing;
             const value = new URL('/play/' + code, url.origin).toString();
-            const dataUrl = await QRCode.toDataURL(value, { errorCorrectionLevel: 'M', width: 320, margin: 2 });
-            const binary = atob(dataUrl.split(',')[1]);
-            return new Response(Uint8Array.from(binary, c => c.charCodeAt(0)), {
-              headers: { ...NC, 'Content-Type': 'image/png' }
+            const svg = await QRCode.toString(value, { type: 'svg', errorCorrectionLevel: 'M', width: 320, margin: 2 });
+            return new Response(svg, {
+              headers: { ...NC, 'Content-Type': 'image/svg+xml; charset=utf-8' }
             });
           }
           if (op === 'check-ai' && method === 'POST') {
