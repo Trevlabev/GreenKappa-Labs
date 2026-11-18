@@ -204,3 +204,19 @@ test('core color pairs exceed WCAG AA normal-text contrast',()=>{
  ];
  for(const [fg,bg] of pairs) assert(ratio(fg,bg)>=4.5,fg+' on '+bg+' fails 4.5:1');
 });
+
+
+test('hero uses the player-first Drive the AI Insane pitch everywhere',()=>{
+  assert(html.includes('<p class="gd-lead">Drive the AI Insane.</p>'));
+  assert(html.includes('One player gives an AI a job. Everyone else plays a card to make it lose its mind.'));
+  assert(html.includes("There's an extra point up for grabs if someone actually manages to break the AI's assignment."));
+  assert(html.includes('<p class="af-hero-meta">4–8 players · Play online · No AI experience required</p>'));
+  assert(!html.includes('One agent. Everyone else is a problem.'));
+  assert(!html.includes('Then the table gets to read the damage.'));
+  assert(html.includes('name="description" content="Drive the AI insane.'));
+  assert(html.includes('property="og:description" content="Drive the AI insane.'));
+  const css=read('palette.css');
+  assert(css.includes('.gd-hero .gd-lead'));
+  assert(css.includes('.gd-hero .af-hero-meta'));
+  assert(html.includes('href="./promo/AF_PROMO_DRIVE_AI_INSANE_20261118.webp"'));
+});

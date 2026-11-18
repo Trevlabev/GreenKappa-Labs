@@ -29,6 +29,32 @@ body.game-detail-page[data-game="agent-fault"]{
 body[data-game="agent-fault"] .gd-hero{
   background:radial-gradient(ellipse at 85% 25%,rgba(201,130,236,.10),transparent 47%);
 }
+/* Keep the game name as the brand, with the pitch—not the old slogan—up front. */
+body[data-game="agent-fault"] .gd-hero .gd-lead{
+  max-width:46rem;
+  color:var(--af-lime);
+  font:900 clamp(1.75rem,3.8vw,3.25rem)/1.06 'Barlow Condensed',Impact,system-ui,sans-serif;
+  text-transform:uppercase;
+  letter-spacing:.025em;
+  margin:0 0 1rem;
+}
+body[data-game="agent-fault"] .gd-hero .gd-intro-copy{
+  max-width:44rem;
+  margin:0 0 .7rem;
+  color:#E0DDEB;
+  font-size:clamp(1rem,1.4vw,1.13rem);
+  line-height:1.64;
+}
+body[data-game="agent-fault"] .gd-hero .gd-intro-payoff{
+  color:#C8C6DB;
+  margin-bottom:1rem;
+}
+body[data-game="agent-fault"] .gd-hero .af-hero-meta{
+  color:#DFDBF0;
+  font:800 .77rem/1.7 ui-monospace,Consolas,monospace;
+  letter-spacing:.025em;
+  margin:0 0 1.65rem;
+}
 body[data-game="agent-fault"] .gd-end{
   background:var(--af-navy);
   border-top:1px solid #41456B;
