@@ -127,18 +127,20 @@ try {
     model:'rgb(32, 36, 75)',art:'rgb(20, 23, 54)',
     activeTab:'rgb(229, 249, 27)'
   },'Unified site palette should apply in the rendered page');
-  await integrated.locator('.af-mode-arrow[data-dir="1"]').click();
-  assert.equal(await integrated.locator('.af-mode-carousel').getAttribute('data-active'),'1');
-  await integrated.waitForFunction(()=>{
+  const settledMode=(i,color)=>integrated.waitForFunction(({i,color})=>{
     const e=document.querySelector('.af-mode-carousel');
-    return e?.dataset.active==='1'&&getComputedStyle(e).borderTopColor==='rgb(201, 130, 236)';
-  },null,{timeout:5000}); // Wait for CSS border-color transition and smooth scroll to settle.
+    const track=e?.querySelector('.af-mode-track');
+    const slides=e?.querySelectorAll('.af-mode-slide');
+    if(!e||!track||!slides||!slides[i])return false;
+    // Both the UI state and physical scroll position must have settled before the next click.
+    return e.dataset.active===String(i)
+      && Math.abs(track.scrollLeft-slides[i].offsetLeft)<4
+      && getComputedStyle(e).borderTopColor===color;
+  },{i,color},{timeout:7000});
   await integrated.locator('.af-mode-arrow[data-dir="1"]').click();
-  assert.equal(await integrated.locator('.af-mode-carousel').getAttribute('data-active'),'2');
-  await integrated.waitForFunction(()=>{
-    const e=document.querySelector('.af-mode-carousel');
-    return e?.dataset.active==='2'&&getComputedStyle(e).borderTopColor==='rgb(255, 117, 104)';
-  },null,{timeout:5000});
+  await settledMode(1,'rgb(201, 130, 236)');
+  await integrated.locator('.af-mode-arrow[data-dir="1"]').click();
+  await settledMode(2,'rgb(255, 117, 104)');
   console.log('PASS: unified palette across hero, demos, how-to, play formats, product and artwork');
   await integrated.locator('#af-panel-classic .afd-edge-next').click();
   await verifyStage(integrated,'#af-panel-classic .afd-title','Choose how to ruin its day.');
