@@ -71,3 +71,18 @@ jobs:
             exit 1
           fi
           timeout --signal=TERM --kill-after=15s 4m node scripts/browser-npc.mjs http://127.0.0.1:8787
+      - name: Exercise Cascade NPC lobby, private Host Also Plays, and personality Handoffs in Chrome
+        run: |
+          npx wrangler dev --ip 127.0.0.1 --port 8787 > /tmp/agent-fault-cascade-npc-browser-worker.log 2>&1 &
+          worker_pid=$!
+          trap 'kill "$worker_pid" 2>/dev/null || true' EXIT
+          ready=0
+          for attempt in $(seq 1 40); do
+            if curl -fsS http://127.0.0.1:8787/cascade/api/health >/dev/null 2>&1; then ready=1; break; fi
+            sleep 2
+          done
+          if [ "$ready" -ne 1 ]; then
+            cat /tmp/agent-fault-cascade-npc-browser-worker.log
+            exit 1
+          fi
+          timeout --signal=TERM --kill-after=15s 4m node scripts/browser-cascade-npc.mjs http://127.0.0.1:8787
