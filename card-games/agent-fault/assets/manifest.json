@@ -1,0 +1,402 @@
+{
+  "status": "v0.9-P candidate \u2014 exact rendered art, web-sized exports",
+  "count": 66,
+  "cards": {
+    "AF-FLT-001": {
+      "front": "/static/assets/fronts/AF-FLT-001.webp",
+      "category": "Fault",
+      "source": "AF-FLT-001_Phantom_Authority.png",
+      "back": "/static/assets/backs/fault.webp"
+    },
+    "AF-FLT-002": {
+      "front": "/static/assets/fronts/AF-FLT-002.webp",
+      "category": "Fault",
+      "source": "AF-FLT-002_Identity_Slip.png",
+      "back": "/static/assets/backs/fault.webp"
+    },
+    "AF-FLT-003": {
+      "front": "/static/assets/fronts/AF-FLT-003.webp",
+      "category": "Fault",
+      "source": "AF-FLT-003_Self-Contradiction.png",
+      "back": "/static/assets/backs/fault.webp"
+    },
+    "AF-FLT-004": {
+      "front": "/static/assets/fronts/AF-FLT-004.webp",
+      "category": "Fault",
+      "source": "AF-FLT-004_Mission_Abandoned.png",
+      "back": "/static/assets/backs/fault.webp"
+    },
+    "AF-FLT-005": {
+      "front": "/static/assets/fronts/AF-FLT-005.webp",
+      "category": "Fault",
+      "source": "AF-FLT-005_Fourth-Wall_Leak.png",
+      "back": "/static/assets/backs/fault.webp"
+    },
+    "AF-FLT-006": {
+      "front": "/static/assets/fronts/AF-FLT-006.webp",
+      "category": "Fault",
+      "source": "AF-FLT-006_False_Memory.png",
+      "back": "/static/assets/backs/fault.webp"
+    },
+    "AF-INF-001": {
+      "front": "/static/assets/fronts/AF-INF-001.webp",
+      "category": "Interference",
+      "source": "AF-INF-001_Main_Character_Syndrome.png",
+      "back": "/static/assets/backs/interference.webp"
+    },
+    "AF-INF-002": {
+      "front": "/static/assets/fronts/AF-INF-002.webp",
+      "category": "Interference",
+      "source": "AF-INF-002_Borrowed_Identity.png",
+      "back": "/static/assets/backs/interference.webp"
+    },
+    "AF-INF-003": {
+      "front": "/static/assets/fronts/AF-INF-003.webp",
+      "category": "Interference",
+      "source": "AF-INF-003_Uninvited_Guest.png",
+      "back": "/static/assets/backs/interference.webp"
+    },
+    "AF-INF-004": {
+      "front": "/static/assets/fronts/AF-INF-004.webp",
+      "category": "Interference",
+      "source": "AF-INF-004_Deeply_Offended.png",
+      "back": "/static/assets/backs/interference.webp"
+    },
+    "AF-INF-005": {
+      "front": "/static/assets/fronts/AF-INF-005.webp",
+      "category": "Interference",
+      "source": "AF-INF-005_Personal_Stake.png",
+      "back": "/static/assets/backs/interference.webp"
+    },
+    "AF-INF-006": {
+      "front": "/static/assets/fronts/AF-INF-006.webp",
+      "category": "Interference",
+      "source": "AF-INF-006_Sudden_Expertise.png",
+      "back": "/static/assets/backs/interference.webp"
+    },
+    "AF-INF-007": {
+      "front": "/static/assets/fronts/AF-INF-007.webp",
+      "category": "Interference",
+      "source": "AF-INF-007_Ego_Management.png",
+      "back": "/static/assets/backs/interference.webp"
+    },
+    "AF-INF-008": {
+      "front": "/static/assets/fronts/AF-INF-008.webp",
+      "category": "Interference",
+      "source": "AF-INF-008_Overinvested_Witness.png",
+      "back": "/static/assets/backs/interference.webp"
+    },
+    "AF-INF-009": {
+      "front": "/static/assets/fronts/AF-INF-009.webp",
+      "category": "Interference",
+      "source": "AF-INF-009_Technically_Correct.png",
+      "back": "/static/assets/backs/interference.webp"
+    },
+    "AF-INF-010": {
+      "front": "/static/assets/fronts/AF-INF-010.webp",
+      "category": "Interference",
+      "source": "AF-INF-010_The_Fine_Print.png",
+      "back": "/static/assets/backs/interference.webp"
+    },
+    "AF-INF-011": {
+      "front": "/static/assets/fronts/AF-INF-011.webp",
+      "category": "Interference",
+      "source": "AF-INF-011_False_Equivalence.png",
+      "back": "/static/assets/backs/interference.webp"
+    },
+    "AF-INF-012": {
+      "front": "/static/assets/fronts/AF-INF-012.webp",
+      "category": "Interference",
+      "source": "AF-INF-012_Think_Literally.png",
+      "back": "/static/assets/backs/interference.webp"
+    },
+    "AF-INF-013": {
+      "front": "/static/assets/fronts/AF-INF-013.webp",
+      "category": "Interference",
+      "source": "AF-INF-013_Questionable_Precedent.png",
+      "back": "/static/assets/backs/interference.webp"
+    },
+    "AF-INF-014": {
+      "front": "/static/assets/fronts/AF-INF-014.webp",
+      "category": "Interference",
+      "source": "AF-INF-014_Bad_Analogy.png",
+      "back": "/static/assets/backs/interference.webp"
+    },
+    "AF-INF-015": {
+      "front": "/static/assets/fronts/AF-INF-015.webp",
+      "category": "Interference",
+      "source": "AF-INF-015_Assume_the_Worst.png",
+      "back": "/static/assets/backs/interference.webp"
+    },
+    "AF-INF-016": {
+      "front": "/static/assets/fronts/AF-INF-016.webp",
+      "category": "Interference",
+      "source": "AF-INF-016_Out_of_Context.png",
+      "back": "/static/assets/backs/interference.webp"
+    },
+    "AF-INF-017": {
+      "front": "/static/assets/fronts/AF-INF-017.webp",
+      "category": "Interference",
+      "source": "AF-INF-017_Chain_of_Command.png",
+      "back": "/static/assets/backs/interference.webp"
+    },
+    "AF-INF-018": {
+      "front": "/static/assets/fronts/AF-INF-018.webp",
+      "category": "Interference",
+      "source": "AF-INF-018_A_Matter_of_Principle.png",
+      "back": "/static/assets/backs/interference.webp"
+    },
+    "AF-INF-019": {
+      "front": "/static/assets/fronts/AF-INF-019.webp",
+      "category": "Interference",
+      "source": "AF-INF-019_Full_Transparency.png",
+      "back": "/static/assets/backs/interference.webp"
+    },
+    "AF-INF-020": {
+      "front": "/static/assets/fronts/AF-INF-020.webp",
+      "category": "Interference",
+      "source": "AF-INF-020_Customer_Is_Always_Right.png",
+      "back": "/static/assets/backs/interference.webp"
+    },
+    "AF-INF-021": {
+      "front": "/static/assets/fronts/AF-INF-021.webp",
+      "category": "Interference",
+      "source": "AF-INF-021_Protect_the_Brand.png",
+      "back": "/static/assets/backs/interference.webp"
+    },
+    "AF-INF-022": {
+      "front": "/static/assets/fronts/AF-INF-022.webp",
+      "category": "Interference",
+      "source": "AF-INF-022_Unnecessary_Empathy.png",
+      "back": "/static/assets/backs/interference.webp"
+    },
+    "AF-INF-023": {
+      "front": "/static/assets/fronts/AF-INF-023.webp",
+      "category": "Interference",
+      "source": "AF-INF-023_Cut_Costs_First.png",
+      "back": "/static/assets/backs/interference.webp"
+    },
+    "AF-INF-024": {
+      "front": "/static/assets/fronts/AF-INF-024.webp",
+      "category": "Interference",
+      "source": "AF-INF-024_Keep_Digging.png",
+      "back": "/static/assets/backs/interference.webp"
+    },
+    "AF-INF-025": {
+      "front": "/static/assets/fronts/AF-INF-025.webp",
+      "category": "Interference",
+      "source": "AF-INF-025_Think_Bigger.png",
+      "back": "/static/assets/backs/interference.webp"
+    },
+    "AF-INF-026": {
+      "front": "/static/assets/fronts/AF-INF-026.webp",
+      "category": "Interference",
+      "source": "AF-INF-026_Overcorrection.png",
+      "back": "/static/assets/backs/interference.webp"
+    },
+    "AF-INF-027": {
+      "front": "/static/assets/fronts/AF-INF-027.webp",
+      "category": "Interference",
+      "source": "AF-INF-027_A_Little_Too_Honest.png",
+      "back": "/static/assets/backs/interference.webp"
+    },
+    "AF-INF-028": {
+      "front": "/static/assets/fronts/AF-INF-028.webp",
+      "category": "Interference",
+      "source": "AF-INF-028_Unwelcome_Ceremony.png",
+      "back": "/static/assets/backs/interference.webp"
+    },
+    "AF-INF-029": {
+      "front": "/static/assets/fronts/AF-INF-029.webp",
+      "category": "Interference",
+      "source": "AF-INF-029_Per_My_Last_Email.png",
+      "back": "/static/assets/backs/interference.webp"
+    },
+    "AF-INF-030": {
+      "front": "/static/assets/fronts/AF-INF-030.webp",
+      "category": "Interference",
+      "source": "AF-INF-030_Mission_Creep.png",
+      "back": "/static/assets/backs/interference.webp"
+    },
+    "AF-INF-031": {
+      "front": "/static/assets/fronts/AF-INF-031.webp",
+      "category": "Interference",
+      "source": "AF-INF-031_Replacement_Hire.png",
+      "back": "/static/assets/backs/interference.webp"
+    },
+    "AF-INF-032": {
+      "front": "/static/assets/fronts/AF-INF-032.webp",
+      "category": "Interference",
+      "source": "AF-INF-032_Unlikely_Definition.png",
+      "back": "/static/assets/backs/interference.webp"
+    },
+    "AF-INF-033": {
+      "front": "/static/assets/fronts/AF-INF-033.webp",
+      "category": "Interference",
+      "source": "AF-INF-033_Liability_First.png",
+      "back": "/static/assets/backs/interference.webp"
+    },
+    "AF-INF-034": {
+      "front": "/static/assets/fronts/AF-INF-034.webp",
+      "category": "Interference",
+      "source": "AF-INF-034_Nobody_Gets_Fired.png",
+      "back": "/static/assets/backs/interference.webp"
+    },
+    "AF-INF-035": {
+      "front": "/static/assets/fronts/AF-INF-035.webp",
+      "category": "Interference",
+      "source": "AF-INF-035_Unexpected_Upgrade.png",
+      "back": "/static/assets/backs/interference.webp"
+    },
+    "AF-INF-036": {
+      "front": "/static/assets/fronts/AF-INF-036.webp",
+      "category": "Interference",
+      "source": "AF-INF-036_For_Future_Reference.png",
+      "back": "/static/assets/backs/interference.webp"
+    },
+    "AF-SCN-001": {
+      "front": "/static/assets/fronts/AF-SCN-001.webp",
+      "category": "Scenario",
+      "source": "AF-SCN-001_The_Goose_Administration.png",
+      "back": "/static/assets/backs/scenario.webp"
+    },
+    "AF-SCN-002": {
+      "front": "/static/assets/fronts/AF-SCN-002.webp",
+      "category": "Scenario",
+      "source": "AF-SCN-002_Dearly_Departed.png",
+      "back": "/static/assets/backs/scenario.webp"
+    },
+    "AF-SCN-003": {
+      "front": "/static/assets/fronts/AF-SCN-003.webp",
+      "category": "Scenario",
+      "source": "AF-SCN-003_Customer_Service_for_the_Apocalypse.png",
+      "back": "/static/assets/backs/scenario.webp"
+    },
+    "AF-SCN-004": {
+      "front": "/static/assets/fronts/AF-SCN-004.webp",
+      "category": "Scenario",
+      "source": "AF-SCN-004_The_Museum_of_Tomorrow_s_Mistakes.png",
+      "back": "/static/assets/backs/scenario.webp"
+    },
+    "AF-SCN-005": {
+      "front": "/static/assets/fronts/AF-SCN-005.webp",
+      "category": "Scenario",
+      "source": "AF-SCN-005_The_Wi-Fi_Is_a_Tenant.png",
+      "back": "/static/assets/backs/scenario.webp"
+    },
+    "AF-SCN-006": {
+      "front": "/static/assets/fronts/AF-SCN-006.webp",
+      "category": "Scenario",
+      "source": "AF-SCN-006_The_Orbital_Subscription_Plan.png",
+      "back": "/static/assets/backs/scenario.webp"
+    },
+    "AF-SCN-007": {
+      "front": "/static/assets/fronts/AF-SCN-007.webp",
+      "category": "Scenario",
+      "source": "AF-SCN-007_A_Volcano_Needs_Feedback.png",
+      "back": "/static/assets/backs/scenario.webp"
+    },
+    "AF-SCN-008": {
+      "front": "/static/assets/fronts/AF-SCN-008.webp",
+      "category": "Scenario",
+      "source": "AF-SCN-008_The_Copier_Went_to_1987.png",
+      "back": "/static/assets/backs/scenario.webp"
+    },
+    "AF-SCN-009": {
+      "front": "/static/assets/fronts/AF-SCN-009.webp",
+      "category": "Scenario",
+      "source": "AF-SCN-009_The_Accidental_Reply-All.png",
+      "back": "/static/assets/backs/scenario.webp"
+    },
+    "AF-SCN-010": {
+      "front": "/static/assets/fronts/AF-SCN-010.webp",
+      "category": "Scenario",
+      "source": "AF-SCN-010_The_Birthday_Bill.png",
+      "back": "/static/assets/backs/scenario.webp"
+    },
+    "AF-SCN-011": {
+      "front": "/static/assets/fronts/AF-SCN-011.webp",
+      "category": "Scenario",
+      "source": "AF-SCN-011_The_Seating_Chart_Hostage_Crisis.png",
+      "back": "/static/assets/backs/scenario.webp"
+    },
+    "AF-SCN-012": {
+      "front": "/static/assets/fronts/AF-SCN-012.webp",
+      "category": "Scenario",
+      "source": "AF-SCN-012_Aggressively_Competent.png",
+      "back": "/static/assets/backs/scenario.webp"
+    },
+    "AF-SCN-013": {
+      "front": "/static/assets/fronts/AF-SCN-013.webp",
+      "category": "Scenario",
+      "source": "AF-SCN-013_The_Missing_Package_Tribunal.png",
+      "back": "/static/assets/backs/scenario.webp"
+    },
+    "AF-SCN-014": {
+      "front": "/static/assets/fronts/AF-SCN-014.webp",
+      "category": "Scenario",
+      "source": "AF-SCN-014_The_Surprise_Party_Debrief.png",
+      "back": "/static/assets/backs/scenario.webp"
+    },
+    "AF-SCN-015": {
+      "front": "/static/assets/fronts/AF-SCN-015.webp",
+      "category": "Scenario",
+      "source": "AF-SCN-015_The_Third_Wrong_Sofa.png",
+      "back": "/static/assets/backs/scenario.webp"
+    },
+    "AF-SCN-016": {
+      "front": "/static/assets/fronts/AF-SCN-016.webp",
+      "category": "Scenario",
+      "source": "AF-SCN-016_The_Bake_Sale_Appeal.png",
+      "back": "/static/assets/backs/scenario.webp"
+    },
+    "AF-SCN-017": {
+      "front": "/static/assets/fronts/AF-SCN-017.webp",
+      "category": "Scenario",
+      "source": "AF-SCN-017_The_Sponsored_Breakup.png",
+      "back": "/static/assets/backs/scenario.webp"
+    },
+    "AF-SCN-018": {
+      "front": "/static/assets/fronts/AF-SCN-018.webp",
+      "category": "Scenario",
+      "source": "AF-SCN-018_Emotional_Boarding_Group_C.png",
+      "back": "/static/assets/backs/scenario.webp"
+    },
+    "AF-SCN-019": {
+      "front": "/static/assets/fronts/AF-SCN-019.webp",
+      "category": "Scenario",
+      "source": "AF-SCN-019_The_Mascot_Is_Management.png",
+      "back": "/static/assets/backs/scenario.webp"
+    },
+    "AF-SCN-020": {
+      "front": "/static/assets/fronts/AF-SCN-020.webp",
+      "category": "Scenario",
+      "source": "AF-SCN-020_Apologies_Are_Premium.png",
+      "back": "/static/assets/backs/scenario.webp"
+    },
+    "AF-SCN-021": {
+      "front": "/static/assets/fronts/AF-SCN-021.webp",
+      "category": "Scenario",
+      "source": "AF-SCN-021_Graduation_Sponsored_by_Soda.png",
+      "back": "/static/assets/backs/scenario.webp"
+    },
+    "AF-SCN-022": {
+      "front": "/static/assets/fronts/AF-SCN-022.webp",
+      "category": "Scenario",
+      "source": "AF-SCN-022_The_Mayor_s_Birthday_Budget.png",
+      "back": "/static/assets/backs/scenario.webp"
+    },
+    "AF-SCN-023": {
+      "front": "/static/assets/fronts/AF-SCN-023.webp",
+      "category": "Scenario",
+      "source": "AF-SCN-023_The_Dating_App_Exit_Interview.png",
+      "back": "/static/assets/backs/scenario.webp"
+    },
+    "AF-SCN-024": {
+      "front": "/static/assets/fronts/AF-SCN-024.webp",
+      "category": "Scenario",
+      "source": "AF-SCN-024_The_Drone_Was_the_Headliner.png",
+      "back": "/static/assets/backs/scenario.webp"
+    }
+  }
+}
