@@ -20,7 +20,8 @@ const routes=[
 const widths=[320,390,768,1280];
 const output=path.resolve('artifacts/marketing-responsive');
 fs.mkdirSync(output,{recursive:true});
-const browser=await chromium.launch({headless:true,args:['--no-sandbox']});
+// GitHub ubuntu-24.04 includes Google Chrome; avoid a large browser download.
+const browser=await chromium.launch({channel:'chrome',headless:true,args:['--no-sandbox']});
 const reports=[],errors=[];
 try{
   for(const width of widths){
