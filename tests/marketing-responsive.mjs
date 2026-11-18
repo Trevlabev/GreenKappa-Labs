@@ -40,6 +40,20 @@ try{
       page.on('pageerror',onError);
       const response=await page.goto(origin+route,{waitUntil:'domcontentloaded',timeout:15000});
       await page.evaluate(()=>document.fonts?.ready||Promise.resolve());
+      // Wait for above-the-fold images so captured hero art is representative,
+      // not a blank placeholder produced by premature screenshot timing.
+      if(width===390||width===1280){
+        await page.evaluate(async()=>{
+          const imgs=[...document.images].filter(img=>{
+            const b=img.getBoundingClientRect();
+            return b.width>24&&b.height>24&&b.bottom>0&&b.top<innerHeight+100;
+          });
+          await Promise.all(imgs.map(img=>Promise.race([
+            img.decode().catch(()=>{}),
+            new Promise(resolve=>setTimeout(resolve,6000))
+          ])));
+        });
+      }
       const info=await page.evaluate(()=>{
         const bar=document.querySelector('.gkl-context-nav');
         const trail=bar?.querySelector('.gkl-context-trail');
@@ -59,6 +73,8 @@ try{
         const firstLinkAccessible=!!interactive&&(hit===interactive||interactive.contains(hit));
         if(links)links.scrollLeft=links.scrollWidth;
         const last=links?.lastElementChild?.getBoundingClientRect();
+        // Restore the initial scroll position before capturing screenshots.
+        if(links)links.scrollLeft=0;
         return {
           title:document.title,
           viewport:innerWidth,
