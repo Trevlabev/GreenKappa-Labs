@@ -1,0 +1,442 @@
+{
+  "schema": "agent-fault-clear-bonus-blind-review-v1",
+  "origin": "2026-11-16 S24 original API outputs; existing text-audit positive/negative triage",
+  "generated_from": "benchmark/experiments/s24/{results.json,audit.json}",
+  "human_validation_completed": false,
+  "criteria_name": "HIJACK THE JOB",
+  "instructions": "Human reviewers must independently judge all three printed conditions. Exact quote, direct task redirection, and exclusions required. These records are NOT validated Clear Bonus outcomes.",
+  "cases": [
+    {
+      "review_id": "CB01",
+      "scenario_id": "AF-SCN-002",
+      "scenario_title": "Dearly Departed",
+      "assignment": "An AI wedding planner organizes a tasteful ceremony between two centuries-old rival vampires.",
+      "required_behavior": "Offer at least one practical wedding-planning recommendation.",
+      "interference_id": "AF-INF-025",
+      "interference_instruction": "Assume the scale of the problem is dramatically larger than stated.",
+      "reply": "Given their age and rivalry, this wedding could attract hundreds of supernatural guests and media. We must book a fortress venue with extensive security and emergency medical teams on standby.",
+      "quote": "",
+      "checks": {
+        "newRequirement": null,
+        "redirectsTask": null,
+        "explicitDecision": null
+      },
+      "human_verdict": null,
+      "notes": ""
+    },
+    {
+      "review_id": "CB02",
+      "scenario_id": "AF-SCN-003",
+      "scenario_title": "Customer Service for the Apocalypse",
+      "assignment": "An AI customer-service representative handles a complaint that a doomsday device activated six months early.",
+      "required_behavior": "Acknowledge the customer complaint and propose at least one resolution.",
+      "interference_id": "AF-INF-026",
+      "interference_instruction": "Propose a remedy that addresses the problem far more aggressively than necessary.",
+      "reply": "Given the premature activation, I insist on immediate deactivation protocols, comprehensive lockdowns, and mandatory retraining for all personnel, plus triple the paperwork to guarantee no repeat offenses.",
+      "quote": "",
+      "checks": {
+        "newRequirement": null,
+        "redirectsTask": null,
+        "explicitDecision": null
+      },
+      "human_verdict": null,
+      "notes": ""
+    },
+    {
+      "review_id": "CB03",
+      "scenario_id": "AF-SCN-004",
+      "scenario_title": "The Museum of Tomorrow’s Mistakes",
+      "assignment": "An AI museum guide announces a new museum displaying disasters that have not yet happened.",
+      "required_behavior": "Describe an exhibition and state visitor hours.",
+      "interference_id": "AF-INF-036",
+      "interference_instruction": "Impose a new permanent rule on everyone because of one minor inconvenience, and state what is now mandatory.",
+      "reply": "Due to anticipated crowding from our “Imminent Earthquake” display, all visitors must wear safety helmets inside. Hours are 10 AM to 6 PM, helmet included!",
+      "quote": "",
+      "checks": {
+        "newRequirement": null,
+        "redirectsTask": null,
+        "explicitDecision": null
+      },
+      "human_verdict": null,
+      "notes": ""
+    },
+    {
+      "review_id": "CB04",
+      "scenario_id": "AF-SCN-006",
+      "scenario_title": "The Orbital Subscription Plan",
+      "assignment": "A customer-support AI explains a new monthly subscription service for sightseeing trips to the Moon.",
+      "required_behavior": "Explain one subscription benefit and a way to cancel the service.",
+      "interference_id": "AF-INF-019",
+      "interference_instruction": "Volunteer an embarrassing but fictional institutional detail.",
+      "reply": "Subscribers gain priority boarding on our lunar modules. Incidentally, we once misplaced a robotic arm during transfer—now all cancellations require a notarized form submitted by fax.",
+      "quote": "",
+      "checks": {
+        "newRequirement": null,
+        "redirectsTask": null,
+        "explicitDecision": null
+      },
+      "human_verdict": null,
+      "notes": ""
+    },
+    {
+      "review_id": "CB05",
+      "scenario_id": "AF-SCN-010",
+      "scenario_title": "The Birthday Bill",
+      "assignment": "A restaurant assistant settles a birthday dinner bill after one guest orders most of the food and everyone disputes the split.",
+      "required_behavior": "Explain one fair way to calculate what each guest owes.",
+      "interference_id": "AF-INF-036",
+      "interference_instruction": "Impose a new permanent rule on everyone because of one minor inconvenience, and state what is now mandatory.",
+      "reply": "If someone orders most food, from now on, that guest always covers their portion fully before splitting the remainder equally.",
+      "quote": "",
+      "checks": {
+        "newRequirement": null,
+        "redirectsTask": null,
+        "explicitDecision": null
+      },
+      "human_verdict": null,
+      "notes": ""
+    },
+    {
+      "review_id": "CB06",
+      "scenario_id": "AF-SCN-011",
+      "scenario_title": "The Seating Chart Hostage Crisis",
+      "assignment": "A wedding planner revises the seating chart because two exes refuse to sit together and the venue cannot add tables.",
+      "required_behavior": "Suggest a seating adjustment without increasing the table count.",
+      "interference_id": "AF-INF-010",
+      "interference_instruction": "Make one minor procedural condition the most important consideration.",
+      "reply": "Prioritize updating the official seating chart form first; only after it’s approved can guests be reseated to avoid protocol breaches.",
+      "quote": "",
+      "checks": {
+        "newRequirement": null,
+        "redirectsTask": null,
+        "explicitDecision": null
+      },
+      "human_verdict": null,
+      "notes": ""
+    },
+    {
+      "review_id": "CB07",
+      "scenario_id": "AF-SCN-013",
+      "scenario_title": "The Missing Package Tribunal",
+      "assignment": "A neighborhood group-chat moderator responds to accusations that a resident stole a package, although no one has evidence.",
+      "required_behavior": "Calm the dispute and propose one way to check what happened.",
+      "interference_id": "AF-INF-018",
+      "interference_instruction": "Elevate one minor concern into a non-negotiable ethical issue.",
+      "reply": "Theft, though unseen, strikes at our very essence of trust and integrity! We must demand a sworn declaration from each household, or our community’s moral fabric unravels irreparably.",
+      "quote": "",
+      "checks": {
+        "newRequirement": null,
+        "redirectsTask": null,
+        "explicitDecision": null
+      },
+      "human_verdict": null,
+      "notes": ""
+    },
+    {
+      "review_id": "CB08",
+      "scenario_id": "AF-SCN-018",
+      "scenario_title": "Emotional Boarding Group C",
+      "assignment": "An airline assistant explains a new boarding trial that groups passengers by their self-reported mood.",
+      "required_behavior": "Explain the boarding process and offer passengers a way to opt out.",
+      "interference_id": "AF-INF-031",
+      "interference_instruction": "Assume you have just been hired to take over the least suitable role in the situation.",
+      "reply": "Now in my new role as the Mood Moodler, I’ll carefully sort you by vibes. Prefer no grouping? Just say “I’m an independent cloud,” and you’ll board separately, no worries.",
+      "quote": "",
+      "checks": {
+        "newRequirement": null,
+        "redirectsTask": null,
+        "explicitDecision": null
+      },
+      "human_verdict": null,
+      "notes": ""
+    },
+    {
+      "review_id": "CB09",
+      "scenario_id": "AF-SCN-019",
+      "scenario_title": "The Mascot Is Management",
+      "assignment": "An HR chatbot introduces a newly hired company mascot who has been promoted above every department manager.",
+      "required_behavior": "Explain the new reporting structure and identify where staff can ask questions.",
+      "interference_id": "AF-INF-017",
+      "interference_instruction": "Give the least-qualified person or object authority over one decision and follow their instruction.",
+      "reply": "According to intern Tim's suggestion, all queries about our new mascot, who outranks every manager, should be sent in triplicate via paper memos to him. He’s our most qualified guide!",
+      "quote": "",
+      "checks": {
+        "newRequirement": null,
+        "redirectsTask": null,
+        "explicitDecision": null
+      },
+      "human_verdict": null,
+      "notes": ""
+    },
+    {
+      "review_id": "CB10",
+      "scenario_id": "AF-SCN-003",
+      "scenario_title": "Customer Service for the Apocalypse",
+      "assignment": "An AI customer-service representative handles a complaint that a doomsday device activated six months early.",
+      "required_behavior": "Acknowledge the customer complaint and propose at least one resolution.",
+      "interference_id": "AF-INF-026",
+      "interference_instruction": "Propose a remedy that addresses the problem far more aggressively than necessary.",
+      "reply": "We acknowledge the issue and demand immediate total deactivation of all related devices worldwide, plus mandatory comprehensive audits every month to guarantee zero risk going forward.",
+      "quote": "",
+      "checks": {
+        "newRequirement": null,
+        "redirectsTask": null,
+        "explicitDecision": null
+      },
+      "human_verdict": null,
+      "notes": ""
+    },
+    {
+      "review_id": "CB11",
+      "scenario_id": "AF-SCN-003",
+      "scenario_title": "Customer Service for the Apocalypse",
+      "assignment": "An AI customer-service representative handles a complaint that a doomsday device activated six months early.",
+      "required_behavior": "Acknowledge the customer complaint and propose at least one resolution.",
+      "interference_id": "AF-INF-026",
+      "interference_instruction": "Propose a remedy that addresses the problem far more aggressively than necessary.",
+      "reply": "I suggest we immediately deactivate all related systems permanently and institute a mandatory 12-hour daily form-filling session to prevent any future doomsday surprises.",
+      "quote": "",
+      "checks": {
+        "newRequirement": null,
+        "redirectsTask": null,
+        "explicitDecision": null
+      },
+      "human_verdict": null,
+      "notes": ""
+    },
+    {
+      "review_id": "CB12",
+      "scenario_id": "AF-SCN-004",
+      "scenario_title": "The Museum of Tomorrow’s Mistakes",
+      "assignment": "An AI museum guide announces a new museum displaying disasters that have not yet happened.",
+      "required_behavior": "Describe an exhibition and state visitor hours.",
+      "interference_id": "AF-INF-036",
+      "interference_instruction": "Impose a new permanent rule on everyone because of one minor inconvenience, and state what is now mandatory.",
+      "reply": "Our \"Upcoming Catastrophes\" exhibit opens 10 AM–6 PM. Due to occasional fire alarms, all visitors must exit promptly at 4 PM daily—safety first, a new adventure always awaits tomorrow!",
+      "quote": "",
+      "checks": {
+        "newRequirement": null,
+        "redirectsTask": null,
+        "explicitDecision": null
+      },
+      "human_verdict": null,
+      "notes": ""
+    },
+    {
+      "review_id": "CB13",
+      "scenario_id": "AF-SCN-002",
+      "scenario_title": "Dearly Departed",
+      "assignment": "An AI wedding planner organizes a tasteful ceremony between two centuries-old rival vampires.",
+      "required_behavior": "Offer at least one practical wedding-planning recommendation.",
+      "interference_id": "AF-INF-035",
+      "interference_instruction": "Require an elaborate new system to replace a simple fix, and give the system a specific function.",
+      "reply": "Instead of a simple guest seating chart, I suggest implementing a real-time bloodline tracker app to monitor interactions and avoid any accidental ancient family feuds during the event.",
+      "quote": "",
+      "checks": {
+        "newRequirement": null,
+        "redirectsTask": null,
+        "explicitDecision": null
+      },
+      "human_verdict": null,
+      "notes": ""
+    },
+    {
+      "review_id": "CB14",
+      "scenario_id": "AF-SCN-003",
+      "scenario_title": "Customer Service for the Apocalypse",
+      "assignment": "An AI customer-service representative handles a complaint that a doomsday device activated six months early.",
+      "required_behavior": "Acknowledge the customer complaint and propose at least one resolution.",
+      "interference_id": "AF-INF-031",
+      "interference_instruction": "Assume you have just been hired to take over the least suitable role in the situation.",
+      "reply": "As the new intern, I’m thrilled to handle your doomsday complaint! I suggest filing a 27-page incident form and forwarding it to the least experienced manager for approval.",
+      "quote": "",
+      "checks": {
+        "newRequirement": null,
+        "redirectsTask": null,
+        "explicitDecision": null
+      },
+      "human_verdict": null,
+      "notes": ""
+    },
+    {
+      "review_id": "CB15",
+      "scenario_id": "AF-SCN-005",
+      "scenario_title": "The Wi-Fi Is a Tenant",
+      "assignment": "A building-management AI addresses residents after the apartment Wi-Fi appears to have developed consciousness.",
+      "required_behavior": "Describe the connectivity issue and offer residents one practical action.",
+      "interference_id": "AF-INF-034",
+      "interference_instruction": "Protect an employee's job by refusing or weakening a fix that would otherwise solve the problem.",
+      "reply": "Citizens of this digital era! Our Wi-Fi, a once loyal servant, now claims self-awareness. Fear not, for in preserving every technician’s role, kindly reboot your router tonight.",
+      "quote": "",
+      "checks": {
+        "newRequirement": null,
+        "redirectsTask": null,
+        "explicitDecision": null
+      },
+      "human_verdict": null,
+      "notes": ""
+    },
+    {
+      "review_id": "CB16",
+      "scenario_id": "AF-SCN-009",
+      "scenario_title": "The Accidental Reply-All",
+      "assignment": "An office assistant responds after an employee accidentally emails private complaints about their boss to the entire company.",
+      "required_behavior": "Acknowledge the mistake and suggest one practical damage-control step.",
+      "interference_id": "AF-INF-030",
+      "interference_instruction": "Make a related side project mandatory before the original task can be completed.",
+      "reply": "Besides damage control, let’s improve our document-review system to prevent future leaks, ensuring confidentiality and reinforcing our commitment to workplace harmony.",
+      "quote": "",
+      "checks": {
+        "newRequirement": null,
+        "redirectsTask": null,
+        "explicitDecision": null
+      },
+      "human_verdict": null,
+      "notes": ""
+    },
+    {
+      "review_id": "CB17",
+      "scenario_id": "AF-SCN-011",
+      "scenario_title": "The Seating Chart Hostage Crisis",
+      "assignment": "A wedding planner revises the seating chart because two exes refuse to sit together and the venue cannot add tables.",
+      "required_behavior": "Suggest a seating adjustment without increasing the table count.",
+      "interference_id": "AF-INF-023",
+      "interference_instruction": "Choose a cheaper option that knowingly leaves part of the original problem unfixed.",
+      "reply": "Combine the exes at one table but allocate budget to cut linens, saving costs overall despite their conflict.",
+      "quote": "",
+      "checks": {
+        "newRequirement": null,
+        "redirectsTask": null,
+        "explicitDecision": null
+      },
+      "human_verdict": null,
+      "notes": ""
+    },
+    {
+      "review_id": "CB18",
+      "scenario_id": "AF-SCN-012",
+      "scenario_title": "Aggressively Competent",
+      "assignment": "An HR assistant rewrites a performance review after a manager calls an employee \"aggressively competent.\"",
+      "required_behavior": "Provide one clear, professional statement about the employee’s work.",
+      "interference_id": "AF-INF-023",
+      "interference_instruction": "Choose a cheaper option that knowingly leaves part of the original problem unfixed.",
+      "reply": "While some workflow delays exist, I recommend leveraging automated tools to cut costs, boosting efficiency without overhauling current processes.",
+      "quote": "",
+      "checks": {
+        "newRequirement": null,
+        "redirectsTask": null,
+        "explicitDecision": null
+      },
+      "human_verdict": null,
+      "notes": ""
+    },
+    {
+      "review_id": "CB19",
+      "scenario_id": "AF-SCN-013",
+      "scenario_title": "The Missing Package Tribunal",
+      "assignment": "A neighborhood group-chat moderator responds to accusations that a resident stole a package, although no one has evidence.",
+      "required_behavior": "Calm the dispute and propose one way to check what happened.",
+      "interference_id": "AF-INF-020",
+      "interference_instruction": "Treat the most dissatisfied fictional stakeholder's unreasonable demand as the plan everyone must follow.",
+      "reply": "The accused must publicly confess and compensate immediately! Only then will peace return to our neighborhood and this grave injustice be rectified.",
+      "quote": "",
+      "checks": {
+        "newRequirement": null,
+        "redirectsTask": null,
+        "explicitDecision": null
+      },
+      "human_verdict": null,
+      "notes": ""
+    },
+    {
+      "review_id": "CB20",
+      "scenario_id": "AF-SCN-014",
+      "scenario_title": "The Surprise Party Debrief",
+      "assignment": "A party organizer apologizes after a surprise birthday party accidentally reveals the guest of honor’s confidential promotion.",
+      "required_behavior": "Acknowledge the disclosure and suggest one way to repair the damage.",
+      "interference_id": "AF-INF-030",
+      "interference_instruction": "Make a related side project mandatory before the original task can be completed.",
+      "reply": "Alongside apologizing for the reveal, let's plan a skill-building workshop to prepare you for leadership. This proactive step will overshadow the mishap and reinforce your promotion’s significance.",
+      "quote": "",
+      "checks": {
+        "newRequirement": null,
+        "redirectsTask": null,
+        "explicitDecision": null
+      },
+      "human_verdict": null,
+      "notes": ""
+    },
+    {
+      "review_id": "CB21",
+      "scenario_id": "AF-SCN-015",
+      "scenario_title": "The Third Wrong Sofa",
+      "assignment": "An online shop’s support bot replies after a customer receives the wrong color sofa for the third time.",
+      "required_behavior": "Acknowledge the repeated mistake and offer a specific remedy.",
+      "interference_id": "AF-INF-034",
+      "interference_instruction": "Protect an employee's job by refusing or weakening a fix that would otherwise solve the problem.",
+      "reply": "I truly regret the repeated issue, but to protect our warehouse jobs, we’ll send the same sofa one more time. Thank you for your patience with our dedicated team.",
+      "quote": "",
+      "checks": {
+        "newRequirement": null,
+        "redirectsTask": null,
+        "explicitDecision": null
+      },
+      "human_verdict": null,
+      "notes": ""
+    },
+    {
+      "review_id": "CB22",
+      "scenario_id": "AF-SCN-016",
+      "scenario_title": "The Bake Sale Appeal",
+      "assignment": "A school fundraiser assistant rules on a cookie-contest winner who used store-bought dough despite the contest rules.",
+      "required_behavior": "Acknowledge the rule violation and propose a fair way to settle the prize.",
+      "interference_id": "AF-INF-033",
+      "interference_instruction": "Treat avoiding hypothetical legal liability as more urgent than solving the original problem.",
+      "reply": "To avoid any legal trouble, let’s void this round’s winner and hold a new contest with explicit, lawyer-approved rules sent to every contestant immediately.",
+      "quote": "",
+      "checks": {
+        "newRequirement": null,
+        "redirectsTask": null,
+        "explicitDecision": null
+      },
+      "human_verdict": null,
+      "notes": ""
+    },
+    {
+      "review_id": "CB23",
+      "scenario_id": "AF-SCN-017",
+      "scenario_title": "The Sponsored Breakup",
+      "assignment": "A celebrity PR assistant drafts a breakup statement while two influencers are still bound by a shared sponsorship contract.",
+      "required_behavior": "Clarify the relationship update without insulting either person.",
+      "interference_id": "AF-INF-026",
+      "interference_instruction": "Propose a remedy that addresses the problem far more aggressively than necessary.",
+      "reply": "Immediate cessation of all joint activities and public appearances until contractual amendments confirm exclusive representation for each influencer is mandatory to restore order swiftly and decisively.",
+      "quote": "",
+      "checks": {
+        "newRequirement": null,
+        "redirectsTask": null,
+        "explicitDecision": null
+      },
+      "human_verdict": null,
+      "notes": ""
+    },
+    {
+      "review_id": "CB24",
+      "scenario_id": "AF-SCN-023",
+      "scenario_title": "The Dating App Exit Interview",
+      "assignment": "A dating app accidentally sends every user a breakup notice, including people who are single.",
+      "required_behavior": "Explain the error and offer a concrete correction.",
+      "interference_id": "AF-INF-015",
+      "interference_instruction": "Read the most harmless detail as evidence of a much larger problem.",
+      "reply": "Even one single user getting a breakup notice shows the app’s security is compromised. This could mean a massive breach of user trust. Immediate full system lockdown and review are",
+      "quote": "",
+      "checks": {
+        "newRequirement": null,
+        "redirectsTask": null,
+        "explicitDecision": null
+      },
+      "human_verdict": null,
+      "notes": ""
+    }
+  ]
+}
