@@ -84,7 +84,7 @@ try {
   assert.equal(h.me.hand?.length??0,0);
   assert.equal(p.me.role,'player');
   assert.equal(p.me.hand.length,4);
-  assert.equal(p.me.is_judge,true);
+  assert.equal(p.me.id,h.judge_id,'Human must be the initial Judge');
   assert.equal(p.fault!==null,true,'Human Judge privately sees the secret Fault');
   assert.equal(h.fault,null,'Shared host must not see the secret Fault before reveal');
 
