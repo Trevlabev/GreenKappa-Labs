@@ -171,11 +171,13 @@ export class GameRoomBase extends DurableObject {
         const { code, secret } = await bodyJson(request, demand, problem);
         demand(CODE.test(code), 'Invalid room code', 422);
         return this.ctx.blockConcurrencyWhile(async () => {
+          try {
           const existing = await this.ctx.storage.get('room');
           demand(!existing, 'Room code unavailable', 409);
           const room = this.engine.createRoom(code, secret);
           await this.save(room);
           return json({ code, token: secret, role: 'host' });
+          } catch (error) { return errorResponse(error); }
         });
       }
       const room = await this.load();
@@ -186,6 +188,7 @@ export class GameRoomBase extends DurableObject {
         const name = String(rawName || '').trim().replace(/\s+/g, ' ');
         demand(name.length >= 2 && name.length <= 24, 'Nickname must have 2–24 characters', 422);
         return this.ctx.blockConcurrencyWhile(async () => {
+          try {
           const current = await this.load();
           demand(current.phase === 'lobby', 'Joining is closed');
           demand(current.players.filter(p => p.active).length < 8, 'Room is full');
@@ -195,6 +198,7 @@ export class GameRoomBase extends DurableObject {
           current.version++;
           await this.save(current);
           return json({ code: current.code, token: secret, role: 'player', player_id: id });
+          } catch (error) { return errorResponse(error); }
         });
       }
       const who = this.engine.auth(room, request.headers.get('Authorization'));
@@ -206,12 +210,15 @@ export class GameRoomBase extends DurableObject {
         demand(typeof payload.name === 'string' && payload.data && typeof payload.data === 'object' && !Array.isArray(payload.data),
           'Invalid action payload', 422);
         const outcome = await this.ctx.blockConcurrencyWhile(async () => {
+          try {
           const current = await this.load();
           const actor = this.engine.auth(current, request.headers.get('Authorization'));
           this.engine.applyAction(current, actor.role, actor.p, payload.name, payload.data);
           await this.save(current);
           return { current, actor };
+          } catch (error) { return { error }; }
         });
+        if (outcome.error) throw outcome.error;
         return json(await this.present(outcome.current, outcome.actor.role, outcome.actor.p));
       }
       if (method === 'POST' && path.endsWith('/_authorize')) return json({ role: who.role });
@@ -237,6 +244,7 @@ export class GameRoomBase extends DurableObject {
     this.reserving = true;
     try {
       const grant = await this.ctx.blockConcurrencyWhile(async () => {
+        try {
         const current = await this.load();
         const actor = this.engine.auth(current, bearer);
         demand(actor.role === 'host', 'Only host can generate', 403);
@@ -257,7 +265,9 @@ export class GameRoomBase extends DurableObject {
         room = current;
         started = true;
         return authorization;
+        } catch (error) { return { error }; }
       });
+      if (grant.error) throw grant.error;
       reservedDay = grant.date;
     } finally { this.reserving = false; }
     if (!started) throw problem(503, 'Generation could not begin');
