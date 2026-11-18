@@ -6,7 +6,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import * as classic from '../lib/game.mjs';
-import * as cascade from '../../../cascade/lib/game.mjs';
+import * as cascade from '../../cascade/lib/game.mjs';
 
 const stub='The fictional assistant requires residents to submit an elaborate stamped civic form before the emergency meeting can officially begin.';
 const labeled=n=>Array.from({length:n},(_,i)=>String.fromCharCode(65+i)+': '+stub).join('\n');
