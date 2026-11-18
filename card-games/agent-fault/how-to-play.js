@@ -25,16 +25,21 @@
       + String(last).padStart(2, '0') + ' / ' + String(slides.length).padStart(2, '0');
     back.disabled = page === 0;
     forward.disabled = page === totalPages - 1;
-    pagination.replaceChildren();
-    for (let i = 0; i < totalPages; i++) {
-      const button = document.createElement('button');
-      button.type = 'button';
+    // Preserve dot-button focus when the active page changes.
+    if (pagination.children.length !== totalPages) {
+      pagination.replaceChildren();
+      for (let i = 0; i < totalPages; i++) {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.addEventListener('click', () => goTo(i));
+        pagination.appendChild(button);
+      }
+    }
+    Array.from(pagination.children).forEach((button, i) => {
       button.setAttribute('aria-label', 'Show steps ' + (firstIndex(i) + 1)
         + ' through ' + Math.min(slides.length, firstIndex(i) + visibleCount()));
       button.setAttribute('aria-pressed', String(i === page));
-      button.addEventListener('click', () => goTo(i));
-      pagination.appendChild(button);
-    }
+    });
   }
   function goTo(nextPage, instant = false) {
     page = Math.max(0, Math.min(nextPage, pageCount() - 1));
