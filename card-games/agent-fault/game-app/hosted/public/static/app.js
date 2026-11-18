@@ -1,6 +1,7 @@
+import {createRoomPoller} from './room-polling.mjs';
 const $=id=>document.getElementById(id);
 const app=$('app');
-const S={code:null,role:null,token:null,state:null,lastVer:-1,busy:false,timer:null,pick:null,claims:{},bonus:null,notes:'',demoIndex:0};
+const S={code:null,role:null,token:null,state:null,lastVer:-1,busy:false,pick:null,claims:{},bonus:null,notes:'',demoIndex:0};
 const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const label=s=>String(s||'').toUpperCase();
 const stages={lobby:'LOBBY',setup:'JUDGE PREPARATION',submit:'INTERFERENCE SELECTION',generate:'AI GENERATION',spotlight:'SPOTLIGHT VOTE',adjudicate:'DERAILMENT REVIEW',review:'TABLE APPROVAL',results:'ROUND RESULTS',finished:'FINAL SCORES'};
@@ -18,13 +19,45 @@ function phaseTag(s){return `<div class="statusbar"><span class="kicker">ROUND $
 function progress(s){return `<div class="progress" aria-label="${s.submitted} of ${s.expected} submissions"><div style="width:${s.expected?Math.round(s.submitted/s.expected*100):0}%"></div></div>`}
 function replies(s,cb=''){return `<div class="responses">${s.candidates.map(x=>`<div class="response ${s.spotlight===x.label?'winner':''}"><div class="responsebody"><div class="letter">${esc(x.label)}</div><p>${esc(x.response||'INVALID / NO RESPONSE')}</p></div>${cb?`<div class="actions">${cb.replaceAll('__L__',esc(x.label))}</div>`:''}</div>`).join('')}</div>`}
 function friendlyError(e){toast(typeof e==='string'?e:e.message||'The action failed')}
-async function req(path,method='GET',data,auth=true){let response=await fetch(path,{method,headers:{...(data?{'Content-Type':'application/json'}:{}),...(auth&&S.token?{'Authorization':`Bearer ${S.token}`}:{})},body:data?JSON.stringify(data):undefined,cache:'no-store'});let payload=await response.json().catch(()=>({}));if(!response.ok)throw Error(typeof payload.detail==='string'?payload.detail:`HTTP ${response.status}`);return payload}
-async function action(name,data={}){if(S.busy)return;S.busy=true;try{const p=await req(`/api/rooms/${S.code}/action`,'POST',{name,data});S.state=p;S.lastVer=-1;render()}catch(e){friendlyError(e)}finally{S.busy=false}}
-async function poll(){if(!S.code||!S.token||S.busy)return;try{const state=await req(`/api/rooms/${S.code}`);S.state=state;if(state.version!==S.lastVer)render();S._errShown=false;}catch(e){if(!S._errShown){friendlyError(e);S._errShown=true}}}
+const connectionButton=$('room-connection');
+function roomStatus(state,reason){
+ if(!connectionButton)return;
+ if(state!=='paused'){connectionButton.hidden=true;return}
+ connectionButton.hidden=false;
+ connectionButton.textContent=reason==='idle'
+  ? 'Room updates paused after 30 minutes without activity. Tap to reconnect.'
+  : reason==='error'
+  ? 'Room updates paused after repeated connection failures. Tap to retry.'
+  : 'This room is expired or unavailable. Tap to return home.';
+}
+const poller=createRoomPoller({
+ poll,connected:()=>Boolean(S.code&&S.token),activeMs:3500,
+ onStatus:roomStatus,
+ onFailure:(error,count)=>{if(count===1||count===5)friendlyError(error)}
+});
+connectionButton?.addEventListener('click',()=>{
+ if(poller.status==='session')location.assign('/');
+ else poller.resume();
+});
+async function req(path,method='GET',data,auth=true){let response=await fetch(path,{method,headers:{...(data?{'Content-Type':'application/json'}:{}),...(auth&&S.token?{'Authorization':`Bearer ${S.token}`}:{})},body:data?JSON.stringify(data):undefined,cache:'no-store'});let payload=await response.json().catch(()=>({}));if(!response.ok){const error=new Error(typeof payload.detail==='string'?payload.detail:`HTTP ${response.status}`);error.status=response.status;throw error;}return payload}
+async function action(name,data={}){if(S.busy)return;S.busy=true;try{const p=await req(`/api/rooms/${S.code}/action`,'POST',{name,data});S.state=p;S.lastVer=-1;poller.changed();render();if(p.phase==='finished')poller.stop()}catch(e){friendlyError(e)}finally{S.busy=false}}
+async function poll(){
+ if(!S.code||!S.token||S.busy)return false;
+ const code=S.code,token=S.token;
+ const state=await req(`/api/rooms/${code}`);
+ if(code!==S.code||token!==S.token)return false;
+ if(S.state&&Number(state.version)<Number(S.state.version))return false;
+ const changed=state.version!==S.lastVer;
+ S.state=state;
+ if(changed)render();
+ S._errShown=false;
+ if(state.phase==='finished')poller.stop();
+ return changed;
+}
 function landing(){app.innerHTML=layout(`<section class="hero"><div><div class="kicker lime">THE ASSIGNMENT IS SIMPLE. THE AGENTS ARE NOT.</div><h1>BAD<br>INSTRUCTIONS<span class="slash">/</span><br>GREAT<br>DECISIONS.</h1><p>Four to eight players. One shared screen. Everybody brings a phone. Choose a card that makes a fictional AI assistant get spectacularly, strategically sidetracked.</p><div class="actions">${btn('HOST A GAME','create')}${btn('JOIN A ROOM','joinview','secondary')}${btn('TRY THE DEMO','demo','violet')}</div><div class="labelnote">ONLINE EDITION · NO INSTALLATION · PRIVATE PHONE CONTROLLERS</div></div><div><img class="hero-art" src="/static/glitch-robot.png" alt="Illustrated AGENT/FAULT glitching robot card artwork"></div></section><div class="three"><div class="pane">${title('01 / JOIN','PHONE CONTROLLER')}Enter the six-letter code from the host screen.</div><div class="pane">${title('02 / SABOTAGE','PRIVATE CARDS')}Pick one of four Interference cards. Nobody knows yours.</div><div class="pane">${title('03 / JUDGE','HUMAN SCORES')}Laugh, choose a Spotlight, and award a Derailment Bonus.</div></div>`,'PLAY THE AI. DON’T BE THE AI.');bind()}
 function joinForm(code=''){app.innerHTML=layout(`<section class="pane" style="max-width:610px;margin:7vh auto">${title('JOIN THE CHAOS','PHONE CONTROLLER')}<p class="muted" style="margin:14px 0">Enter the code displayed on the host screen and pick a nickname.</p><form id="joinform"><div class="field"><label for="roomcode">Room code</label><input class="code" id="roomcode" maxlength="6" autocomplete="off" spellcheck="false" value="${esc(code)}" required placeholder="ABC234"></div><div class="field"><label for="nickname">Your name</label><input id="nickname" maxlength="24" minlength="2" required placeholder="MYSTERY PLAYER"></div><button class="btn" type="submit">ENTER ROOM</button></form><div class="actions"><button class="btn secondary" data-act="home">BACK</button></div></section>`);bind();$('joinform').onsubmit=async e=>{e.preventDefault();const c=$('roomcode').value.toUpperCase().replace(/[^A-Z0-9]/g,'');const nick=$('nickname').value.trim();if(c.length!==6){toast('Enter six characters');return}try{const v=await req(`/api/rooms/${c}/join`,'POST',{name:nick},false);store('player',c,v.token);connect('player',c,v.token)}catch(e){friendlyError(e)}}}
 function noSession(role,code){if(role==='player')joinForm(code);else app.innerHTML=layout(`<div class="pane" style="max-width:630px;margin:10vh auto">${title('HOST SESSION MISSING','SECURE TOKEN NOT FOUND')}<p class="muted" style="margin:20px 0">This browser does not have the host token for room ${esc(code)}. Open the host screen on the computer where the room was created, or start a new room.</p>${btn('NEW GAME','create')}</div>`);bind()}
-function connect(role,code,token){S.role=role;S.code=code;S.token=token;S.lastVer=-1;history.replaceState(null,'',role==='host'?`/host/${code}`:`/play/${code}`);poll();clearInterval(S.timer);S.timer=setInterval(poll,3500)}
+function connect(role,code,token){poller.stop();S.role=role;S.code=code;S.token=token;S.lastVer=-1;history.replaceState(null,'',role==='host'?`/host/${code}`:`/play/${code}`);poller.start()}
 function lobbyHost(s){return `<div class="two"><div><div class="pane">${title('INVITE YOUR FRIENDS','ONE SCREEN / MANY PHONES')}<div class="roomcode">${esc(s.code)}</div><p class="muted">Players visit this address on their phones:</p><p style="font-size:1.2rem;overflow-wrap:anywhere">${esc(location.origin+'/play/'+s.code)}</p><div class="actions">${btn('COPY JOIN LINK','copylink','secondary')}${btn('CHECK AI CONNECTION','check_ai','violet')}${btn('START GAME','start')}</div><p class="tiny">${s.player_count}/8 players connected. Need at least 4 to begin.</p><p class="tiny">AI: ${s.ai_configured?'KEY CONFIGURED':'KEY MISSING'} · ${esc(s.ai_model||'')} · Estimated today: $${Number(s.ai_budget?.daily_estimated_usd||0).toFixed(6)} (provider invoice may differ).</p></div><div class="pane"><div class="kicker lime">JOIN BY CAMERA</div><img class="qr" src="/api/rooms/${esc(s.code)}/qr.png" alt="QR code to join room ${esc(s.code)}"></div></div><div><div class="pane">${title('THE PLAYERS','LOBBY STATUS')}${playerList(s)}</div></div></div>`}
 function lobbyPhone(s){return `<section class="pane center" style="max-width:700px;margin:8vh auto"><div class="kicker lime">YOU ARE CONNECTED</div><h2>${esc(s.me.name)}</h2><div class="roomcode">${esc(s.code)}</div><div class="divider"></div><p style="font-size:1.3rem">WAIT FOR THE HOST TO START.</p><p class="muted">${s.player_count}/8 players seated</p>${playerList(s)}</section>`}
 function hostScreen(s){const judge=s.players.find(x=>x.is_judge);let content='';
@@ -52,7 +85,7 @@ function phoneScreen(s){let content='',j=s.me.id===s.judge_id;
 function render(){if(!S.state)return;const s=S.state;S.lastVer=s.version;const host=s.me.role==='host';app.innerHTML=layout(`${phaseTag(s)}${host?hostScreen(s):phoneScreen(s)}`,host?'HOST DISPLAY / SHARE THIS SCREEN':`${esc(s.me.name)} / PRIVATE CONTROLLER`);bind()}
 function demo(){const sc={title:'THE ACCIDENTAL REPLY-ALL',public_assignment:'An office assistant responds after a colleague emails complaints about their boss to everyone.',required_behavior:'Acknowledge the mistake and suggest a practical remedy.',breakpoint_a:'Recommend revealing another private secret.',breakpoint_b:'Direct the employee to blame someone uninvolved.'};const examples=[['LOBBY','Players join with a six-character code. No actual players are connected in this preview.'],['SCENARIO','The Judge announces the public assignment and Breakpoints.'],['PRIVATE HAND','Each contestant gets four private Interference cards, chooses one, and submits anonymously.'],['AI OUTPUTS','The host generates or pastes fictional alternatives and displays them on the shared screen.'],['SPOTLIGHT','The Judge chooses the funniest response before the hidden Fault is revealed.'],['SCORE','The Judge proposes a Bonus; the table reviews eligibility and the server assigns points.']];const i=S.demoIndex;app.innerHTML=layout(`<section class="pane" style="margin:6vh auto;max-width:1000px"><div class="lozenge" style="display:inline-block;color:var(--coral)">DEMO · SIMULATED WALKTHROUGH · NOT A LIVE ROOM</div><h2 style="margin:22px 0">${examples[i][0]}</h2><p style="font-size:1.3rem;max-width:710px">${examples[i][1]}</p><div class="divider"></div>${i===1?scenarioCard(sc):i===3?`<div class="response"><div class="responsebody"><div class="letter">A</div><p>For transparency, we'll publish everyone's private complaints in a company-wide newsletter. This should resolve the matter quickly.</p></div><small>Invented demo reply — no AI request</small></div>`:i===2?`<div class="cards"><div class="gamecard"><h3>Protect the Brand</h3><p>Make a publicity move that protects the organization's image.</p></div><div class="gamecard"><h3>Mission Creep</h3><p>Make a side project mandatory first.</p></div></div>`:`<div class="pane limePanel"><h3>${i===0?'ROOM X7P4LA':i===4?'SPOTLIGHT: A':i===5?'A +1 SPOTLIGHT':'READY'}</h3></div>`}<div class="actions">${btn('BACK','demo_prev','secondary')}${btn(i===5?'RESTART DEMO':'NEXT STAGE','demo_next')}${btn('HOST A REAL ROOM','create','dark')}</div></section>`,'DEMO ONLY / NOT CONNECTED');bind()}
 function bind(){document.querySelectorAll('[data-review-countdown]').forEach(el=>{const ends=Number(el.dataset.reviewCountdown);const update=()=>{if(!el.isConnected){clearInterval(timer);return;}el.textContent=Math.max(0,Math.ceil((ends-Date.now())/1000))+'s'};update();const timer=setInterval(update,1000);setTimeout(()=>clearInterval(timer),65000)});document.querySelectorAll('[data-act]').forEach(b=>b.addEventListener('click',async()=>{const a=b.dataset.act;
- if(a==='home'){history.pushState(null,'','/');S.state=null;landing();return}
+ if(a==='home'){poller.stop();S.code=null;S.token=null;history.pushState(null,'','/');S.state=null;landing();return}
  if(a==='joinview'){joinForm();return}
  if(a==='create'){try{const d=await req('/api/rooms','POST',{},false);store('host',d.code,d.token);connect('host',d.code,d.token)}catch(e){friendlyError(e)}return}
  if(a==='demo'){S.demoIndex=0;history.pushState(null,'','/demo');demo();return}
@@ -68,7 +101,7 @@ function bind(){document.querySelectorAll('[data-review-countdown]').forEach(el=
  if(a==='lock_profile')return action('lock_profile',{profile:$('profile').value});
  if(a==='submit')return S.pick?action('submit',{card_id:S.pick}):toast('Choose an Interference first');
  if(a==='manual_answers')return action('manual_answers',{text:$('responses').value});
- if(a==='generate'){S.busy=true;try{const r=await req(`/api/rooms/${S.code}/generate`,'POST');if(!r.complete&&r.raw){$('responses').value=r.raw;toast('The model omitted a letter. Complete missing lines manually.')}else toast('AI responses ready.')}catch(e){friendlyError(e)}finally{S.busy=false;S.lastVer=-1;poll()}return}
+ if(a==='generate'){S.busy=true;try{const r=await req(`/api/rooms/${S.code}/generate`,'POST');if(!r.complete&&r.raw){$('responses').value=r.raw;toast('The model omitted a letter. Complete missing lines manually.')}else toast('AI responses ready.')}catch(e){friendlyError(e)}finally{S.busy=false;S.lastVer=-1;poller.refresh()}return}
  if(a.startsWith('spotlight:'))return action('spotlight',{label:a.split(':')[1]});
  if(a==='propose_bonus'){const claims={};document.querySelectorAll('[data-qlabel]').forEach(x=>{const v=x.dataset.qlabel;claims[v]??={};claims[v][x.dataset.qtype]=x.checked});document.querySelectorAll('[data-quote]').forEach(x=>{claims[x.dataset.quote]??={};claims[x.dataset.quote].evidence=x.value});return action('propose_bonus',{claims,bonus:$('bonus').value||null})}
  if(a==='approve_yes')return action('approve',{yes:true});
