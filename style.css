@@ -160,7 +160,7 @@ p{line-height:1.68}
 .process-card,.capability-card{
   padding:1.35rem;border:1px solid var(--line);border-radius:var(--radius-lg);background:rgba(255,250,240,.75);box-shadow:0 16px 35px rgba(12,40,26,.07)
 }
-.process-card>span{display:inline-flex;margin-bottom:1.4rem;color:var(--gold);font-weight:900}
+.process-card>span{display:inline-flex;margin-bottom:1.4rem;color:#86612b;font-weight:900}
 .process-card p,.capability-card p{margin:0;color:#405047}
 .capability-section{display:grid;grid-template-columns:minmax(260px,.6fr) minmax(0,1.4fr);gap:2rem}
 .capability-intro{position:sticky;top:120px;align-self:start}

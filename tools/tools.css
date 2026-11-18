@@ -3,7 +3,7 @@
 .gkt-page .site-header{background:rgba(7,22,26,.95);border-color:var(--gkt-line)}
 .gkt-page .nav a[aria-current="page"]{background:rgba(203,229,216,.13);color:#e7d6ab}
 .gkt-page a:focus-visible,.gkt-page summary:focus-visible{outline:3px solid #f0d3a2;outline-offset:4px}
-.gkt-eyebrow{font-size:.68rem;font-weight:850;letter-spacing:.17em;text-transform:uppercase;color:#e8c99b;margin:0 0 1rem}
+.gkt-eyebrow{font-size:.75rem;font-weight:850;letter-spacing:.15em;line-height:1.45;text-transform:uppercase;color:#e8c99b;margin:0 0 .85rem}
 .gkt-hero{border-bottom:1px solid var(--gkt-line);background:radial-gradient(circle at 80% 30%,rgba(57,150,139,.19),transparent 46%),linear-gradient(130deg,#07171d,#102d31)}
 .gkt-hero-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(320px,.86fr);gap:clamp(2rem,5vw,5rem);align-items:center;padding-block:clamp(5rem,8vw,7.6rem)}
 .gkt-hero-copy h1{font-size:clamp(3.5rem,6.8vw,6.8rem);letter-spacing:-.078em;line-height:.97;color:#fff4e7;margin:0 0 1.5rem}
@@ -25,7 +25,7 @@
 .gkt-featured-releases{padding-block:clamp(3.5rem,6.5vw,6rem)}
 .gkt-release-heading{display:grid;grid-template-columns:minmax(0,1fr) minmax(250px,.72fr);gap:1.5rem 3rem;align-items:end;margin-bottom:2rem}
 .gkt-release-heading h2{font-size:clamp(2.9rem,5vw,5.2rem);letter-spacing:-.075em;line-height:.99;color:#fff3e7;margin:0}
-.gkt-release-heading>p{color:#bfd2cc;margin:0;line-height:1.7}
+.gkt-release-heading>p{color:#bfd2cc;margin:0;font-size:1rem;line-height:1.65}
 .gkt-release-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem}
 .gkt-release-card{display:flex;flex-direction:column;min-width:0;overflow:hidden;border:1px solid rgba(166,209,200,.28);border-radius:18px;background:linear-gradient(145deg,#17383f,#10252f)}
 .gkt-release-card:hover{border-color:rgba(167,217,195,.57)}
