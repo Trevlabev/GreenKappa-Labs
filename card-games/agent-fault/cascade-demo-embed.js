@@ -33,7 +33,7 @@
   ];
   const stages = [
     {short:'THE GOOSE',title:'A goose is running city hall.',lead:'The election was legitimate, and the AI has to help residents. It starts with a perfectly normal answer. That will not last.',hint:'Same Scenario as Classic. This time, every reply stays in the conversation.'},
-    {short:'THE CARDS',title:'Three decks. Infinite bad ideas.',lead:'One ridiculous Scenario, a private Fault for the Judge, and hands full of ways to make a reasonable AI act unreasonable.',hint:'The approved 66-card illustrated deck is used in both modes.'},
+    {short:'THE SABOTAGE',title:'The AI is about to lose its mind.',lead:'A ridiculous mission. A secret way to break it. And a hand full of terrible advice for everyone else. This AI has no idea what is coming.',hint:'All 66 original illustrated cards are here. You provide the bad influence.'},
     {short:'PICK YOUR POISON',title:'Choose the first mistake.',lead:'Everyone locks one Interference from a private hand of four. The game shuffles the order. Nobody knows who will unleash what first.',hint:'This example follows the actual Questionable Precedent card.'},
     {short:'THE FIRST MISTAKE',title:'A bad idea enters the chat.',lead:'Player A plays Questionable Precedent. The AI suggests adding bird-greeting fields to city forms. It could have stopped there. It did not.',hint:'One AI. One conversation. No starting over.'},
     {short:'THE HANDOFF',title:'Oh, you thought that was bad?',lead:'A different player—C, not the card owner A—gets a short Handoff. Try making honking mandatory, stealing the goose’s job, or saving the day.',hint:'The next person inherits the previous player’s mess.'},
