@@ -61,8 +61,23 @@ concurrency:
 permissions:
   contents: read
 
+# Fast, deterministic checks still run on applicable pushes and pull requests.
+# The full Playwright/Chromium suite is intentionally manual to avoid
+# costly, flaky browser runs on routine artwork and content changes.
 jobs:
+  quick-checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Audit public pages, local resources, links and sitemap
+        run: node tests/site-integrity.mjs
+
   browser:
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-24.04
     timeout-minutes: 18
     steps:
