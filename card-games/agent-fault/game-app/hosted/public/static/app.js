@@ -196,11 +196,12 @@ function lobbyHost(s){
  <div class="actions">${btn('SET NPC PLAYERS','set_npcs','violet')}</div>
  </div>`:''}
 
+ ${s.play_mode==='digital'?`
  <div class="pane">${title('CLEAR BONUS TRIAL','OPTIONAL · DIGITAL ROOMS ONLY')}
  <p class="tiny">Try the easier-to-recognize HIJACK THE JOB Bonus. Players still earn +1 Spotlight and at most +1 Bonus. In NPC-Judge rounds, an actual human referees; NPCs do not pretend to check the meaning of a quote. This is an unvalidated scoring experiment.</p>
  <label class="toggle"><input type="checkbox" id="trial-enabled" ${s.bonus_rules==='clear-v1'?'checked':''}> Enable Clear Bonus rules for this room</label>
  <div class="actions">${btn('SAVE BONUS RULE','set_bonus_trial','secondary')}</div>
- </div>
+ </div>`:''}
  <div class="pane">${title('HOST ALSO PLAYS','KEEP YOUR CARDS PRIVATE')}
  <p class="muted" style="margin:14px 0">Join from your own phone or a separate private tab while this host screen stays open. The shared screen never shows your secret hand or Fault.</p>
  ${privateTab? `<p class="hint">Your private player session is ready. Open it in another tab and keep the shared host display here.</p><div class="actions">${privateTab}</div>`:`
