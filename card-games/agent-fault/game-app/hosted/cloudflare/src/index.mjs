@@ -61,6 +61,14 @@ export default {
       if (u.pathname === '/cascade/demo' || u.pathname === '/cascade/demo/') {
         return env.ASSETS.fetch(new Request(new URL('/cascade/demo.html', u.origin), request));
       }
+      // Handle Cascade document routes explicitly as static assets. This avoids
+      // proxying page requests through the API adapter's virtual ASSETS binding,
+      // while retaining isolated API/WebSocket routing for the edition.
+      if (u.pathname === '/cascade/' ||
+          u.pathname === '/cascade/collection' ||
+          /^\/cascade\/(?:host|play)\/[A-HJ-NP-Z2-9]{6}\/?$/i.test(u.pathname)) {
+        return env.ASSETS.fetch(new Request(new URL('/cascade/index.html', u.origin), request));
+      }
       // Static Cascade resources are public assets, not room commands.
       if (u.pathname.startsWith('/cascade/static/')) return env.ASSETS.fetch(request);
       const target = new URL(u);
