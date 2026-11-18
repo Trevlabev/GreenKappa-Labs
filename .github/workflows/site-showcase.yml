@@ -62,8 +62,8 @@ permissions:
   contents: read
 
 # Fast, deterministic checks still run on applicable pushes and pull requests.
-# The full Playwright/Chromium suite is intentionally manual to avoid
-# costly, flaky browser runs on routine artwork and content changes.
+# The full Playwright/Chromium suite stays opt-in to avoid costly browser runs
+# on routine updates. A deliberately marked push may run one verification.
 jobs:
   quick-checks:
     runs-on: ubuntu-latest
@@ -77,7 +77,7 @@ jobs:
         run: node tests/site-integrity.mjs
 
   browser:
-    if: github.event_name == 'workflow_dispatch'
+    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && contains(github.event.head_commit.message, '[browser-verify]'))
     runs-on: ubuntu-24.04
     timeout-minutes: 18
     steps:
