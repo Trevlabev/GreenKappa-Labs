@@ -12,6 +12,7 @@ on:
       - 'card-games/agent-fault/how-to-play.js'
       - 'card-games/agent-fault/how-to-play.css'
       - 'card-games/agent-fault/site.test.mjs'
+      - 'card-games/agent-fault/demo-navigation.browser.mjs'
       - 'card-games/agent-fault/review-v09/**'
       - '.github/workflows/agent-fault-site-qa.yml'
   pull_request:
@@ -26,6 +27,7 @@ on:
       - 'card-games/agent-fault/how-to-play.js'
       - 'card-games/agent-fault/how-to-play.css'
       - 'card-games/agent-fault/site.test.mjs'
+      - 'card-games/agent-fault/demo-navigation.browser.mjs'
       - '.github/workflows/agent-fault-site-qa.yml'
   workflow_dispatch:
 concurrency:
@@ -49,3 +51,23 @@ jobs:
           node --check card-games/agent-fault/demo-tabs.js
           node --check card-games/agent-fault/how-to-play.js
           node --test card-games/agent-fault/site.test.mjs
+
+  browser-demos:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install browser testing dependency
+        run: npm install --no-save --no-audit --no-fund playwright@1.56.1
+      - name: Install Chromium
+        run: npx playwright install chromium --with-deps
+      - name: Exercise side-arrow navigation, swipe gestures and interactive cards
+        run: |
+          python3 -m http.server 8765 --bind 127.0.0.1 > /tmp/greenkappa-agent-fault.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          sleep 2
+          timeout --signal=TERM --kill-after=20s 7m node card-games/agent-fault/demo-navigation.browser.mjs
