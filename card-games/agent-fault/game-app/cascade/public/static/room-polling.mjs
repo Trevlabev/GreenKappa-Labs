@@ -115,11 +115,11 @@ export function createRoomPoller({
   doc.addEventListener('touchstart', interacted, { passive: true });
   doc.addEventListener('visibilitychange', () => {
     if (!running) return;
-    if (doc.visibilityState === 'visible') resume();
+    if (doc.visibilityState === 'visible') { resume(); refresh(); }
     else if (!paused) schedule();
   });
   win.addEventListener('focus', () => {
-    if (doc.visibilityState !== 'hidden') resume();
+    if (doc.visibilityState !== 'hidden') { resume(); refresh(); }
   });
   win.addEventListener('pagehide', stop);
   win.addEventListener('pageshow', () => {
