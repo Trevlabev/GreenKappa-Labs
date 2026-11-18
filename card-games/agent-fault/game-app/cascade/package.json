@@ -1,18 +1,26 @@
 {
-  "name":"agent-fault-cascade-hosted",
-  "private":true,
-  "version":"0.2.0-P",
-  "type":"module",
-  "description":"AGENT/FAULT CASCADE — independent continuous-conversation multiplayer mode",
-  "engines":{"node":">=20.12"},
-  "scripts":{
-    "test":"node --test tests/*.test.mjs",
-    "check":"node --check lib/game.mjs && node --check public/static/cascade.js && node --check public/static/cascade-demo.js && node --check public/static/cascade-embed.js",
-    "build":"node scripts/prepare-digital.mjs && npm run test && npm run check"
+  "name": "agent-fault-cascade-hosted",
+  "private": true,
+  "version": "0.2.0-P",
+  "type": "module",
+  "description": "AGENT/FAULT CASCADE — independent continuous-conversation multiplayer mode",
+  "engines": {
+    "node": ">=20.12"
   },
-  "dependencies":{
-    "@netlify/database":"latest",
-    "@netlify/functions":"latest",
-    "qrcode":"^1.5.4"
+  "scripts": {
+    "test": "node --test tests/*.test.mjs",
+    "check": "node --check lib/game.mjs && node --check public/static/cascade.js && node --check public/static/cascade-demo.js && node --check public/static/cascade-embed.js",
+    "build": "node scripts/prepare-digital.mjs && npm run test && npm run check",
+    "cloudflare:check": "node --check cloudflare/src/index.mjs && node --check ../cloudflare/shared/room-adapter.mjs && node --check public/static/room-realtime.mjs",
+    "cloudflare:dry-run": "wrangler deploy --dry-run --config cloudflare/wrangler.jsonc",
+    "cloudflare:deploy": "wrangler deploy --config cloudflare/wrangler.jsonc"
+  },
+  "dependencies": {
+    "@netlify/database": "latest",
+    "@netlify/functions": "latest",
+    "qrcode": "^1.5.4"
+  },
+  "devDependencies": {
+    "wrangler": "^4.0.0"
   }
 }
