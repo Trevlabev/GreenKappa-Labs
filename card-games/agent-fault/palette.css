@@ -1,0 +1,316 @@
+/* AGENT/FAULT / page-wide palette system — 2026-11-18
+   Keep approved cards, promo imagery, and 3D artwork exactly as released.
+   Scope all overrides to the AGENT/FAULT DETAIL page, not other games
+   or the standalone Classic/Cascade demonstrations. */
+body.game-detail-page[data-game="agent-fault"]{
+  --gd-accent:#E5F91B;
+  --gd-accent-rgb:229,249,27;
+  --gd-paper:#F1EFF7;
+  --gd-text:#26243B;
+  --gd-wash:#E4E2EF;
+  --af-navy:#141736;
+  --af-navy-raised:#20244B;
+  --af-lime:#E5F91B;
+  --af-violet:#C982EC;
+  --af-coral:#FF7568;
+  --af-cream:#FFF6E9;
+  --af-paper:#F1EFF7;
+  --af-paper-panel:#FAF9FD;
+  --af-paper-wash:#E4E2EF;
+  --af-ink:#26243B;
+  --af-muted:#55536B;
+  --af-violet-ink:#6B3E82;
+  --af-line:#C7C5D9;
+  background:var(--af-navy);
+  color:var(--af-cream);
+}
+
+/* One consistent dark family from hero through demos, physical model, and outro. */
+body[data-game="agent-fault"] .gd-hero{
+  background:radial-gradient(ellipse at 85% 25%,rgba(201,130,236,.10),transparent 47%);
+}
+body[data-game="agent-fault"] .gd-end{
+  background:var(--af-navy);
+  border-top:1px solid #41456B;
+}
+body[data-game="agent-fault"] .gd-end .gd-other-game{
+  background:var(--af-navy-raised);
+  border-color:#666B92;
+}
+body[data-game="agent-fault"] .gd-end .gd-other-game:hover,
+body[data-game="agent-fault"] .gd-end .gd-other-game:focus-visible{
+  border-color:var(--af-lime);
+}
+body[data-game="agent-fault"] .gd-art-section{
+  background:var(--af-navy);
+  border-color:#41456B;
+}
+body[data-game="agent-fault"] .gd-art-tile a{
+  background:var(--af-navy-raised);
+  border-color:#646991;
+}
+body[data-game="agent-fault"] .gd-art-heading h2,
+body[data-game="agent-fault"] .gd-end-heading h2{
+  color:var(--af-cream);
+}
+body[data-game="agent-fault"] .gd-art-heading p,
+body[data-game="agent-fault"] .gd-art-note,
+body[data-game="agent-fault"] .gd-art-tile figcaption{
+  color:#D0CDE2;
+}
+body[data-game="agent-fault"] .gd-art-tile figcaption strong{color:var(--af-cream)}
+body[data-game="agent-fault"] .gd-art-tile a:hover,
+body[data-game="agent-fault"] .gd-art-tile a:focus-visible{
+  border-color:var(--af-violet);
+}
+
+/* Editorial pages used to skew beige/brown. Cool them without darkening reading areas. */
+body[data-game="agent-fault"] .gd-paper,
+body[data-game="agent-fault"] .gd-development{
+  background:var(--af-paper);
+  color:var(--af-ink);
+}
+body[data-game="agent-fault"] .gd-paper h2,
+body[data-game="agent-fault"] .gd-development h2{
+  color:var(--af-ink);
+}
+body[data-game="agent-fault"] .gd-paper .gd-section-index,
+body[data-game="agent-fault"] .gd-development .gd-section-index{
+  color:var(--af-violet-ink);
+}
+body[data-game="agent-fault"] .gd-story-head p:last-child,
+body[data-game="agent-fault"] .af-simple-pitch p{
+  color:#4B4962;
+}
+body[data-game="agent-fault"] .af-simple-pitch .af-pitch-signoff{
+  color:var(--af-violet-ink);
+  border-left-color:var(--af-violet);
+}
+body[data-game="agent-fault"] .gd-feature{background:var(--af-paper)}
+body[data-game="agent-fault"] .gd-feature-number,
+body[data-game="agent-fault"] .gd-highlight span,
+body[data-game="agent-fault"] .gd-dev-list b{
+  color:var(--af-violet-ink);
+}
+body[data-game="agent-fault"] .gd-feature p,
+body[data-game="agent-fault"] .gd-development p,
+body[data-game="agent-fault"] .gd-dev-list span{
+  color:var(--af-muted);
+}
+body[data-game="agent-fault"] .gd-highlight{
+  background:var(--af-paper-wash);
+  border-left-color:var(--af-violet);
+}
+
+/* The demos remain the most vibrant area, but use the same two dark tones. */
+body[data-game="agent-fault"] .af-demo-section{
+  background:var(--af-navy-raised);
+  border-block:1px solid #525781;
+}
+body[data-game="agent-fault"] .afd{
+  --ink:var(--af-navy);
+  --cream:var(--af-cream);
+  --lime:var(--af-lime);
+  --violet:var(--af-violet);
+  --coral:var(--af-coral);
+  background:radial-gradient(ellipse at 72% 33%,#302E5D 0%,var(--af-navy-raised) 46%,var(--af-navy) 90%);
+}
+body[data-game="agent-fault"] .af-cascade-showcase .cd{
+  --cd-ink:var(--af-navy);
+  --cd-bg:var(--af-navy);
+  --cd-cream:var(--af-cream);
+  --cd-lime:var(--af-lime);
+  --cd-violet:var(--af-violet);
+  --cd-coral:var(--af-coral);
+}
+body[data-game="agent-fault"] .af-demo-tabs{
+  background:var(--af-navy);
+  border-color:#7579A5;
+}
+body[data-game="agent-fault"] .af-demo-tab[aria-selected="true"]{
+  background:var(--af-lime);
+  color:var(--af-navy);
+  border-color:#F5FFC6;
+}
+body[data-game="agent-fault"] .af-demo-head h2{color:var(--af-cream)}
+
+/* How-to gallery: pale lavender rather than warm parchment, vivid cards within. */
+body[data-game="agent-fault"] .af-how-head>p,
+body[data-game="agent-fault"] .af-ready p,
+body[data-game="agent-fault"] .af-rules-details>p{
+  color:var(--af-muted);
+}
+body[data-game="agent-fault"] .af-how-kicker,
+body[data-game="agent-fault"] .af-step-card strong{
+  color:var(--af-violet-ink);
+}
+body[data-game="agent-fault"] .af-steps-carousel{
+  background:var(--af-paper-wash);
+  border-color:var(--af-line);
+  box-shadow:0 17px 38px #14173613;
+}
+body[data-game="agent-fault"] .af-steps-toolbar{border-color:var(--af-line)}
+body[data-game="agent-fault"] .af-steps-toolbar>span,
+body[data-game="agent-fault"] .af-steps-counter{
+  color:var(--af-ink);
+}
+body[data-game="agent-fault"] .af-steps-arrow{
+  background:var(--af-navy);
+  border-color:#777BA9;
+  color:var(--af-cream);
+}
+body[data-game="agent-fault"] .af-steps-arrow:hover:not(:disabled){
+  background:#634A85;
+}
+body[data-game="agent-fault"] .af-steps-track{scrollbar-color:#A28CB9 transparent}
+body[data-game="agent-fault"] .af-step-card{
+  background:var(--af-paper-panel);
+  border-color:var(--af-line);
+  color:var(--af-ink);
+}
+body[data-game="agent-fault"] .af-step-card-top{background:var(--af-navy-raised)}
+body[data-game="agent-fault"] .af-step-card-top span:first-child{color:var(--af-lime)}
+body[data-game="agent-fault"] .af-step-art{
+  background:radial-gradient(circle at 50% 28%,#36305F,var(--af-navy) 74%);
+  border-bottom-color:var(--af-violet);
+}
+body[data-game="agent-fault"] .af-step-card h3,
+body[data-game="agent-fault"] .af-mode-explainer-head h3,
+body[data-game="agent-fault"] .af-ready h3,
+body[data-game="agent-fault"] .af-rules-details h3{
+  color:var(--af-ink);
+}
+body[data-game="agent-fault"] .af-step-card>p,
+body[data-game="agent-fault"] .af-rules-details details p{
+  color:var(--af-muted);
+}
+body[data-game="agent-fault"] .af-steps-pagination button[aria-pressed="true"]{
+  background:var(--af-navy);
+  border-color:var(--af-navy);
+}
+
+/* Classic gets lime; Cascade gets violet; failures and warnings get coral. */
+body[data-game="agent-fault"] .af-mode-explainer-grid .af-explain-classic{
+  background:var(--af-navy-raised);
+  border-color:#9EA447;
+}
+body[data-game="agent-fault"] .af-mode-explainer-grid .af-explain-cascade{
+  background:#292048;
+  border-color:#A87BC9;
+}
+body[data-game="agent-fault"] .af-explain-label{color:var(--af-lime)}
+body[data-game="agent-fault"] .af-explain-cascade .af-explain-label{color:var(--af-violet)}
+body[data-game="agent-fault"] .af-mode-explainer-grid a{
+  background:var(--af-lime);
+  color:var(--af-navy)!important;
+}
+body[data-game="agent-fault"] .af-mode-explainer-grid .af-explain-cascade a{
+  background:var(--af-violet);
+}
+body[data-game="agent-fault"] .af-mode-explainer-grid a:hover{background:#F5FFC6}
+body[data-game="agent-fault"] .af-mode-explainer-grid .af-explain-cascade a:hover{background:#E8C9FA}
+body[data-game="agent-fault"] .af-ready{
+  background:var(--af-paper-panel);
+  border-color:var(--af-line);
+}
+body[data-game="agent-fault"] .af-ready>p{
+  color:var(--af-violet-ink);
+  border-left-color:var(--af-violet);
+}
+body[data-game="agent-fault"] .af-rules-details{border-color:var(--af-line)}
+body[data-game="agent-fault"] .af-rules-details details,
+body[data-game="agent-fault"] .af-rules-details details:last-child{border-color:var(--af-line)}
+body[data-game="agent-fault"] .af-rules-details summary{color:var(--af-ink)}
+
+/* Three-format gallery keeps its existing swiping and print guidance. */
+body[data-game="agent-fault"] .af-mode-carousel{
+  background:var(--af-paper-panel);
+  border-color:var(--af-line);
+  border-top-color:var(--af-lime);
+}
+body[data-game="agent-fault"] .af-mode-carousel[data-active="1"]{border-top-color:var(--af-violet)}
+body[data-game="agent-fault"] .af-mode-carousel[data-active="2"]{border-top-color:var(--af-coral)}
+body[data-game="agent-fault"] .af-mode-toolbar{border-bottom-color:var(--af-line)}
+body[data-game="agent-fault"] .af-mode-gallery-label,
+body[data-game="agent-fault"] .af-mode-eyebrow,
+body[data-game="agent-fault"] .af-mode-detail{
+  color:var(--af-muted);
+}
+body[data-game="agent-fault"] .af-mode-slide h3{color:var(--af-ink)}
+body[data-game="agent-fault"] .af-mode-classic .af-mode-lead{color:var(--af-violet-ink)}
+body[data-game="agent-fault"] .af-mode-lead,
+body[data-game="agent-fault"] .af-mode-copy{
+  color:var(--af-ink);
+}
+body[data-game="agent-fault"] .af-mode-arrow{
+  background:var(--af-paper-panel);
+  border-color:#8C8BAA;
+  color:var(--af-navy);
+}
+body[data-game="agent-fault"] .af-mode-arrow:hover{background:var(--af-navy);color:var(--af-cream)}
+body[data-game="agent-fault"] .af-mode-cta,
+body[data-game="agent-fault"] .af-mode-classic .af-mode-cta{
+  background:var(--af-navy);
+  color:var(--af-cream)!important;
+}
+body[data-game="agent-fault"] .af-mode-cascade .af-mode-cta{background:#634A85}
+body[data-game="agent-fault"] .af-mode-physical .af-mode-cta{background:#633D50}
+body[data-game="agent-fault"] .af-mode-dot[aria-pressed="true"]{
+  background:var(--af-navy);
+  border-color:var(--af-navy);
+}
+body[data-game="agent-fault"] .af-physical-guide{
+  background:var(--af-paper-wash);
+  color:var(--af-ink);
+  border-color:var(--af-line);
+}
+body[data-game="agent-fault"] .af-physical-guide>p{
+  background:var(--af-paper-panel);
+  border-left-color:var(--af-coral);
+}
+
+/* Product render is a dark exhibit with the same lime, violet and coral cues. */
+body[data-game="agent-fault"] .af3d-section{
+  background:var(--af-navy-raised);
+  color:var(--af-cream);
+  border-top-color:var(--af-violet);
+  border-bottom-color:var(--af-lime);
+}
+body[data-game="agent-fault"] .af3d-kicker,
+body[data-game="agent-fault"] .af3d-intro h2 em,
+body[data-game="agent-fault"] .af3d-quick-links a,
+body[data-game="agent-fault"] .af3d-stage-footer a{
+  color:var(--af-lime);
+}
+body[data-game="agent-fault"] .af3d-quick-links a,
+body[data-game="agent-fault"] .af3d-stage-footer a{
+  text-decoration-color:#A4B135;
+}
+body[data-game="agent-fault"] .af3d-intro h2,
+body[data-game="agent-fault"] .af3d-intro-side strong,
+body[data-game="agent-fault"] .af3d-gallery-heading h3,
+body[data-game="agent-fault"] .af3d-shot figcaption b,
+body[data-game="agent-fault"] .af3d-note strong{
+  color:var(--af-cream);
+}
+body[data-game="agent-fault"] .af3d-stage{
+  background:var(--af-navy);
+  border-color:#777BA9;
+}
+body[data-game="agent-fault"] .af3d-stage-bar,
+body[data-game="agent-fault"] .af3d-stage-footer{background:var(--af-navy)}
+body[data-game="agent-fault"] .af3d-light{
+  background:var(--af-lime);
+  box-shadow:0 0 10px #E5F91B90;
+}
+body[data-game="agent-fault"] .af3d-shot{
+  background:var(--af-navy);
+  border-color:#7075A0;
+}
+body[data-game="agent-fault"] .af3d-shot:hover{border-color:var(--af-lime)}
+body[data-game="agent-fault"] .af3d-shot a{background:var(--af-navy)}
+body[data-game="agent-fault"] .af3d-shot a:focus-visible{outline-color:var(--af-lime)}
+body[data-game="agent-fault"] .af3d-note{
+  background:var(--af-navy);
+  border-left-color:var(--af-coral);
+}

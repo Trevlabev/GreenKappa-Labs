@@ -98,6 +98,48 @@ try {
   const integrated=await browser.newPage({viewport:{width:1200,height:880}});
   attach(integrated);
   await integrated.goto(base,{waitUntil:'domcontentloaded'});
+  // Computed colors, not just source tokens: test actual CSS cascade on the public subpage.
+  const colors=await integrated.evaluate(()=>{
+    const bg=selector=>getComputedStyle(document.querySelector(selector)).backgroundColor;
+    const bd=selector=>getComputedStyle(document.querySelector(selector)).borderTopColor;
+    const body=getComputedStyle(document.body);
+    return {
+      navy:body.backgroundColor,
+      lime:body.getPropertyValue('--gd-accent').trim(),
+      violet:body.getPropertyValue('--af-violet').trim(),
+      coral:body.getPropertyValue('--af-coral').trim(),
+      paper:bg('.gd-paper'),
+      demo:bg('#animated-demo'),
+      carousel:bg('.af-steps-carousel'),
+      stepCard:bg('.af-step-card'),
+      playGallery:bg('.af-mode-carousel'),
+      classicAccent:bd('.af-mode-carousel'),
+      model:bg('#box-cards'),
+      art:bg('.gd-art-section'),
+      activeTab:bg('#af-tab-classic')
+    };
+  });
+  assert.deepEqual(colors,{
+    navy:'rgb(20, 23, 54)',lime:'#E5F91B',violet:'#C982EC',coral:'#FF7568',
+    paper:'rgb(241, 239, 247)',demo:'rgb(32, 36, 75)',
+    carousel:'rgb(228, 226, 239)',stepCard:'rgb(250, 249, 253)',
+    playGallery:'rgb(250, 249, 253)',classicAccent:'rgb(229, 249, 27)',
+    model:'rgb(32, 36, 75)',art:'rgb(20, 23, 54)',
+    activeTab:'rgb(229, 249, 27)'
+  },'Unified site palette should apply in the rendered page');
+  await integrated.locator('.af-mode-arrow[data-dir="1"]').click();
+  assert.equal(await integrated.locator('.af-mode-carousel').getAttribute('data-active'),'1');
+  await integrated.waitForFunction(()=>{
+    const e=document.querySelector('.af-mode-carousel');
+    return e?.dataset.active==='1'&&getComputedStyle(e).borderTopColor==='rgb(201, 130, 236)';
+  },null,{timeout:5000}); // Wait for CSS border-color transition and smooth scroll to settle.
+  await integrated.locator('.af-mode-arrow[data-dir="1"]').click();
+  assert.equal(await integrated.locator('.af-mode-carousel').getAttribute('data-active'),'2');
+  await integrated.waitForFunction(()=>{
+    const e=document.querySelector('.af-mode-carousel');
+    return e?.dataset.active==='2'&&getComputedStyle(e).borderTopColor==='rgb(255, 117, 104)';
+  },null,{timeout:5000});
+  console.log('PASS: unified palette across hero, demos, how-to, play formats, product and artwork');
   await integrated.locator('#af-panel-classic .afd-edge-next').click();
   await verifyStage(integrated,'#af-panel-classic .afd-title','Choose how to ruin its day.');
   await integrated.locator('#af-tab-cascade').click();
