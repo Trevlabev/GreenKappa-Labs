@@ -85,7 +85,7 @@ async function poll(){
  if(state.phase==='finished')poller.stop();
  return changed;
 }
-function connect(role,code,token){poller.stop();S.role=role;S.code=code;S.token=token;S.version=-1;history.replaceState(null,'',`/${role==='host'?'host':'play'}/${code}`);poller.start();}
+function connect(role,code,token){poller.stop();S.role=role;S.code=code;S.token=token;S.state=null;S.version=-1;history.replaceState(null,'',`/${role==='host'?'host':'play'}/${code}`);poller.start();}
 async function create(){try{const r=await request('/api/rooms','POST',{},false);localStorage.setItem('cascade:host:'+r.code,r.token);connect('host',r.code,r.token)}catch(e){notify(e.message)}}
 async function generate(){if(S.loading)return;S.loading=true;notify('ASKING THE AGENT TO CONTINUE…');try{let r=await request(`/api/rooms/${S.code}/generate`,'POST');if(r.complete)notify('THE CONVERSATION CONTINUES · EST. $'+Number(r.billing?.estimated_usd||0).toFixed(6));else{S.autoAI=false;notify(r.detail||'Response needs manual correction');const box=document.getElementById('manual');if(box&&r.raw)box.value=r.raw;}}catch(e){S.autoAI=false;notify('AUTO AI STOPPED · '+e.message)}finally{S.loading=false;S.version=-1;poller.refresh()}}
 async function checkAI(){try{let r=await request(`/api/rooms/${S.code}/check-ai`,'POST');notify('AI CONNECTED: '+r.model+' · NO INFERENCE CHARGE')}catch(e){notify(e.message)}}
