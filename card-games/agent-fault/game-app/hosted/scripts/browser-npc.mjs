@@ -7,7 +7,7 @@ import assert from 'node:assert/strict';
 import { chromium } from 'playwright';
 
 const base=(process.argv[2]||'http://127.0.0.1:8787').replace(/\/$/,'');
-const browser=await chromium.launch({headless:true,args:['--no-sandbox']});
+const browser=await chromium.launch({channel:'chrome',headless:true,args:['--no-sandbox']});
 const errors=[];
 const expectNoErrors=(page,where)=>{
   page.on('pageerror',error=>errors.push(where+': '+error.message));
@@ -44,6 +44,7 @@ try {
   await clickAct(host,'host_play');
   const player=await popupPromise;
   expectNoErrors(player,'private player');
+  await player.setViewportSize({width:390,height:844});
   await player.waitForURL(new RegExp('/play/'+code+'$'),{timeout:12000});
   await waitFor(player,'.playerlist');
   await waitFor(host,'#npc-count');
@@ -68,7 +69,6 @@ try {
   await player.locator('#profile').fill('A municipal clerk with irrational confidence');
   await clickAct(player,'lock_profile');
   await host.locator('#responses').waitFor({state:'attached',timeout:15000});
-  await waitFor(host,'button[data-act="generate"]',15000).catch(()=>{});
   const hostVisible=await host.locator('#app').innerText();
   assert.doesNotMatch(hostVisible,/YOUR FOUR PRIVATE INTERFERENCES/i);
   const hostToken=await host.evaluate(c=>localStorage.getItem('aflive:host:'+c),code);
