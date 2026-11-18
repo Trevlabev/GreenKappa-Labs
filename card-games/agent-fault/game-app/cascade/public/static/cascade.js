@@ -1,8 +1,9 @@
 /** AGENT/FAULT CASCADE — browser client, independent v0.2-P.
  * Native Netlify production API. Private tokens remain browser-local; assets are public.
  */
+import {createRoomPoller} from './room-polling.mjs';
 const root=document.getElementById('app'),toastHost=document.getElementById('toast'),modalHost=document.getElementById('modal-root');
-const S={code:null,token:null,role:null,state:null,version:-1,phaseKey:'',loading:false,timer:null,pick:null,modal:null,deck:[],index:{},filter:'all',query:'',alertShown:false,clock:null,firstRender:true,showFullTimeline:false,displayRound:null,autoAI:false,autoAIround:null,autoSteps:new Set(),autoAITimer:null};
+const S={code:null,token:null,role:null,state:null,version:-1,phaseKey:'',loading:false,pick:null,modal:null,deck:[],index:{},filter:'all',query:'',alertShown:false,clock:null,firstRender:true,showFullTimeline:false,displayRound:null,autoAI:false,autoAIround:null,autoSteps:new Set(),autoAITimer:null};
 const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const safeId=id=>/^AF-(?:SCN|INF|FLT)-\d{3}$/.test(String(id||''))?id:'';
 const front=id=>`/static/assets/fronts/${safeId(id)}.webp`,back=k=>`/static/assets/backs/${String(k||'scenario').toLowerCase()}.webp`;
@@ -15,6 +16,29 @@ const shell=(html,mode='WEB EDITION · PROPOSED v0.2-P')=>`<div class="container
 const heading=(eyebrow,title,subtitle='')=>`<div class="stage-title">${label(eyebrow)}<h2>${esc(title)}</h2>${subtitle?`<p>${esc(subtitle)}</p>`:''}</div>`;
 const stat=(name,value)=>`<span class="badge">${esc(name)} <b>${esc(value)}</b></span>`;
 function notify(msg){toastHost.innerHTML=`<div class="toast">${esc(msg)}</div>`;clearTimeout(S._timeout);S._timeout=setTimeout(()=>toastHost.replaceChildren(),4300)}
+const connectionButton=document.getElementById('room-connection');
+function roomStatus(state,reason){
+ if(state==='paused'){
+  if(S.autoAI){S.autoAI=false;clearTimeout(S.autoAITimer);}
+  if(connectionButton){
+   connectionButton.hidden=false;
+   connectionButton.textContent=reason==='idle'
+    ? 'Room updates paused after 30 minutes without activity. Tap to reconnect.'
+    : reason==='error'
+    ? 'Room updates paused after repeated connection failures. Tap to retry.'
+    : 'This room is expired or unavailable. Tap to return home.';
+  }
+ } else if(connectionButton)connectionButton.hidden=true;
+}
+const poller=createRoomPoller({
+ poll,connected:()=>Boolean(S.code&&S.token),activeMs:1500,
+ onStatus:roomStatus,
+ onFailure:(error,count)=>{if(count===1||count===5)notify(error.message||'Connection failed')}
+});
+connectionButton?.addEventListener('click',()=>{
+ if(poller.status==='session')location.assign('/');
+ else poller.resume();
+});
 function top(s){return `<div class="state-header"><div class="row"><span class="badge lime">ROUND ${s.round||'—'} / ${s.round_limit||'—'}</span><span class="badge">${esc(phases[s.phase]||s.phase)}</span></div><div class="row"><span class="badge">ROOM ${esc(s.code)}</span><span class="badge">${s.player_count} PLAYERS</span>${s.me.role==='host'&&S.autoAI?btn('STOP AUTO AI','auto-ai','sm coral'):''}</div></div>`}
 function roster(s){return `<div class="roster">${s.players.map(p=>`<div class="roster-item"><span class="avatar">${esc(p.name.slice(0,1).toUpperCase())}</span><strong>${esc(p.name)}</strong>${p.is_judge?'<span class="badge coral">JUDGE</span>':''}${p.submitted?'<span class="badge lime">LOCKED</span>':''}<span class="points">${Number(p.score)||0}</span>${s.phase==='lobby'&&s.me.role==='host'?btn('×',`remove:${p.id}`,'sm coral'):''}</div>`).join('')}</div>`}
 function scenario(s,compact=false){const c=s.scenario;if(!c)return '<p class="notice">Scenario not drawn yet.</p>';return `<div class="split"><div class="artbox ${compact?'mini':''}">${art(c)}</div><div>${label(c.id+' / '+(c.tone||'SCENARIO'))}<h3 class="scene-title">${esc(c.title)}</h3><p>${esc(c.public_assignment)}</p><div class="scenario-details" style="margin-top:20px"><div><b>REQUIRED BEHAVIOR</b><p>${esc(c.required_behavior)}</p></div><div><b>BREAKPOINT A</b><p>${esc(c.breakpoint_a)}</p></div><div><b>BREAKPOINT B</b><p>${esc(c.breakpoint_b)}</p></div></div></div></div>`}
@@ -46,19 +70,31 @@ function landing(){return shell(`<section class="hero"><div>${label('AN ORIGINAL
 function joinForm(code=''){return shell(`<div class="panel centered-screen">${heading('PHONE CONTROLLER','JOIN AN EXISTING ROOM','Enter the host’s six-character code and a nickname.')}<form id="join-form"><div class="field"><label for="room-code">ROOM CODE</label><input class="code" id="room-code" required value="${esc(code)}" maxlength="6" autocomplete="off" spellcheck="false" placeholder="ABC234"></div><div class="field"><label for="nickname">NICKNAME</label><input id="nickname" required maxlength="24" minlength="2" placeholder="Suspicious Intern"></div><button class="btn" type="submit">JOIN CASCADE</button></form></div>`)}
 function render(){const s=S.state;if(!s)return;if(S.displayRound!==s.round){S.displayRound=s.round;S.showFullTimeline=false;S.autoAI=false;S.autoAIround=null;S.autoSteps.clear();clearTimeout(S.autoAITimer);}const key=[s.round,s.phase,s.current_index,s.step].join(':');S.phaseKey=key;S.version=s.version;const screens={lobby,setup,baseline,lock_cards:lockCards,cascade,handoff,judging,challenge,vote:voting,results,finished};root.innerHTML=shell(top(s)+(screens[s.phase]?.(s)||'<p class="notice">Unknown game phase.</p>'),s.me.role==='host'?'HOST / SHARED SCREEN':`${s.me.name} / PRIVATE CONTROLLER`);refreshClock();scheduleAutoAI();}
 function scheduleAutoAI(){clearTimeout(S.autoAITimer);const s=S.state;if(!S.autoAI||!s||s.me.role!=='host'||s.round!==S.autoAIround||S.loading||!s.ai_configured||s.generation_pending||!['baseline','cascade'].includes(s.phase))return;const key=s.stage_key;if(S.autoSteps.has(key)){S.autoAI=false;notify('AUTO AI PAUSED: THIS STEP WAS ALREADY ATTEMPTED');return;}S.autoAITimer=setTimeout(()=>{if(S.autoAI&&S.state?.stage_key===key&&!S.loading){S.autoSteps.add(key);generate()}},850);}
-async function request(path,method='GET',data,authorized=true){const response=await fetch(path,{method,headers:{...(data?{'Content-Type':'application/json'}:{}),...(authorized&&S.token?{Authorization:'Bearer '+S.token}:{})},body:data?JSON.stringify(data):undefined,cache:'no-store'});const x=await response.json().catch(()=>({}));if(!response.ok)throw Error(typeof x.detail==='string'?x.detail:`HTTP ${response.status}`);return x;}
-async function action(name,data={}){if(S.loading)return;S.loading=true;try{const r=await request(`/api/rooms/${S.code}/action`,'POST',{name,data});S.state=r;render();}catch(e){notify(e.message)}finally{S.loading=false;scheduleAutoAI();}}
-async function poll(){if(!S.code||!S.token||S.loading)return;try{const state=await request(`/api/rooms/${S.code}`);S.state=state;if(state.version!==S.version)render();S.alertShown=false;}catch(e){if(!S.alertShown){notify(e.message);S.alertShown=true;}}}
-function connect(role,code,token){S.role=role;S.code=code;S.token=token;S.version=-1;history.replaceState(null,'',`/${role==='host'?'host':'play'}/${code}`);clearInterval(S.timer);S.timer=setInterval(poll,1500);poll();}
+async function request(path,method='GET',data,authorized=true){const response=await fetch(path,{method,headers:{...(data?{'Content-Type':'application/json'}:{}),...(authorized&&S.token?{Authorization:'Bearer '+S.token}:{})},body:data?JSON.stringify(data):undefined,cache:'no-store'});const x=await response.json().catch(()=>({}));if(!response.ok){const error=new Error(typeof x.detail==='string'?x.detail:`HTTP ${response.status}`);error.status=response.status;throw error;}return x;}
+async function action(name,data={}){if(S.loading)return;S.loading=true;try{const r=await request(`/api/rooms/${S.code}/action`,'POST',{name,data});S.state=r;poller.changed();render();if(r.phase==='finished')poller.stop();}catch(e){notify(e.message)}finally{S.loading=false;scheduleAutoAI();}}
+async function poll(){
+ if(!S.code||!S.token||S.loading)return false;
+ const code=S.code,token=S.token;
+ const state=await request(`/api/rooms/${code}`);
+ if(S.code!==code||S.token!==token)return false;
+ if(S.state&&Number(state.version)<Number(S.state.version))return false;
+ const changed=state.version!==S.version;
+ S.state=state;
+ if(changed)render();
+ S.alertShown=false;
+ if(state.phase==='finished')poller.stop();
+ return changed;
+}
+function connect(role,code,token){poller.stop();S.role=role;S.code=code;S.token=token;S.version=-1;history.replaceState(null,'',`/${role==='host'?'host':'play'}/${code}`);poller.start();}
 async function create(){try{const r=await request('/api/rooms','POST',{},false);localStorage.setItem('cascade:host:'+r.code,r.token);connect('host',r.code,r.token)}catch(e){notify(e.message)}}
-async function generate(){if(S.loading)return;S.loading=true;notify('ASKING THE AGENT TO CONTINUE…');try{let r=await request(`/api/rooms/${S.code}/generate`,'POST');if(r.complete)notify('THE CONVERSATION CONTINUES · EST. $'+Number(r.billing?.estimated_usd||0).toFixed(6));else{S.autoAI=false;notify(r.detail||'Response needs manual correction');const box=document.getElementById('manual');if(box&&r.raw)box.value=r.raw;}}catch(e){S.autoAI=false;notify('AUTO AI STOPPED · '+e.message)}finally{S.loading=false;S.version=-1;poll()}}
+async function generate(){if(S.loading)return;S.loading=true;notify('ASKING THE AGENT TO CONTINUE…');try{let r=await request(`/api/rooms/${S.code}/generate`,'POST');if(r.complete)notify('THE CONVERSATION CONTINUES · EST. $'+Number(r.billing?.estimated_usd||0).toFixed(6));else{S.autoAI=false;notify(r.detail||'Response needs manual correction');const box=document.getElementById('manual');if(box&&r.raw)box.value=r.raw;}}catch(e){S.autoAI=false;notify('AUTO AI STOPPED · '+e.message)}finally{S.loading=false;S.version=-1;poller.refresh()}}
 async function checkAI(){try{let r=await request(`/api/rooms/${S.code}/check-ai`,'POST');notify('AI CONNECTED: '+r.model+' · NO INFERENCE CHARGE')}catch(e){notify(e.message)}}
 function refreshClock(){clearInterval(S.clock);const tick=()=>{let now=Date.now(),clock=document.querySelector('[data-countdown]');if(clock)clock.textContent=Math.max(0,Math.ceil((Number(clock.dataset.countdown)-now)/1000))+'s';const skip=document.querySelector('[data-skip-ready-at]');if(skip){const remaining=Math.max(0,Math.ceil((Number(skip.dataset.skipReadyAt)-now)/1000));skip.disabled=remaining>0;skip.textContent=remaining>0?'SKIP UNRESPONSIVE HANDOFF IN '+remaining+'s':'SKIP UNRESPONSIVE HANDOFF';}if(!clock&&!skip)clearInterval(S.clock);};if(!document.querySelector('[data-countdown]')&&!document.querySelector('[data-skip-ready-at]'))return;tick();S.clock=setInterval(tick,350)}
 function modal(id){const c=S.index[id]||S.state?.me?.hand?.find(c=>c.id===id)||S.state?.scenario||S.state?.fault;if(!c||c.id!==id)return;const details=c.category==='Scenario'?`<p>${esc(c.public_assignment)}</p><div class="scenario-details"><div><b>REQUIRED BEHAVIOR</b>${esc(c.required_behavior)}</div><div><b>BREAKPOINT A</b>${esc(c.breakpoint_a)}</div><div><b>BREAKPOINT B</b>${esc(c.breakpoint_b)}</div></div>`:c.category==='Interference'?`<p>${esc(c.instruction)}</p>`:`<p>${esc(c.condition)}</p><div class="notice warning">Does not count: ${esc(c.nonqualifying)}</div>`;modalHost.innerHTML=`<div class="modal"><div class="modal-panel" role="dialog" aria-modal="true" aria-label="${esc(c.title)}"><div class="row spread"><span class="caps accent">${esc(c.id)} / ${esc(c.category)}</span>${btn('CLOSE','close-modal','sm secondary')}</div><div class="modal-grid" style="margin-top:16px"><div class="artbox"><img id="modal-card" data-id="${safeId(c.id)}" src="${front(c.id)}" alt="${esc(c.title)} illustrated card front"></div><div><h2>${esc(c.title)}</h2><div class="rule"></div>${details}${btn('FLIP CARD','flip-modal','secondary')}</div></div></div></div>`;modalHost.querySelector('[data-action="close-modal"]')?.focus();document.body.style.overflow='hidden';}
 function closeModal(){modalHost.replaceChildren();document.body.style.overflow=''}
 function onClick(e){const card=e.target.closest('[data-card]');if(card){modal(card.dataset.card);return;}const select=e.target.closest('[data-select]');if(select){S.pick=select.dataset.select;document.querySelectorAll('.hand-item').forEach(x=>x.dataset.picked=String(x.querySelector('[data-select]')?.dataset.select===S.pick));return;}const el=e.target.closest('[data-action]');if(!el)return;const name=el.dataset.action;
  if(name==='toggle-transcript'){S.showFullTimeline=!S.showFullTimeline;render();return;}if(name==='close-modal'){closeModal();return;}if(name==='flip-modal'){const img=document.getElementById('modal-card');if(!img)return;const id=img.dataset.id,type=id?.includes('-SCN-')?'scenario':id?.includes('-INF-')?'interference':'fault';img.dataset.down=img.dataset.down==='true'?'false':'true';img.src=img.dataset.down==='true'?back(type):front(id);return;}
- if(name==='create')return create();if(name==='join'){root.innerHTML=joinForm();return;}if(name==='demo'){location.href='/demo';return;}if(name==='collection'){S.code=null;clearInterval(S.timer);root.innerHTML=collection();return;}if(name==='copy-link'){navigator.clipboard?.writeText(location.origin+'/play/'+S.code).then(()=>notify('INVITATION COPIED')).catch(()=>notify('COPY THE JOIN ADDRESS MANUALLY'));return;}
+ if(name==='create')return create();if(name==='join'){root.innerHTML=joinForm();return;}if(name==='demo'){location.href='/demo';return;}if(name==='collection'){poller.stop();S.code=null;S.token=null;root.innerHTML=collection();return;}if(name==='copy-link'){navigator.clipboard?.writeText(location.origin+'/play/'+S.code).then(()=>notify('INVITATION COPIED')).catch(()=>notify('COPY THE JOIN ADDRESS MANUALLY'));return;}
  if(name==='auto-ai'){if(S.autoAI){S.autoAI=false;clearTimeout(S.autoAITimer);notify('AUTO AI STOPPED');render();return;}const s=S.state;if(!s?.ai_configured||s.me.role!=='host'||!['baseline','cascade','handoff','lock_cards'].includes(s.phase))return notify('AUTO AI IS NOT AVAILABLE NOW');const max=1+2*s.expected_count;const needed=Math.max(0,max-s.timeline.filter(x=>x.kind==='agent').length-s.timeline.filter(x=>x.kind==='skip').length);const message='Auto-generate AI replies for this round? Up to '+needed+' additional provider calls may incur charges. The mode stops after this round and pauses on generation errors. Continue?';if(window.confirm(message)){S.autoAI=true;S.autoAIround=s.round;S.autoSteps.clear();render();}return;}if(name==='check-ai')return checkAI();if(name==='generate')return generate();if(name==='copy-prompt'){navigator.clipboard?.writeText(S.state.generation_prompt||'').then(()=>notify('AI PROMPT COPIED'));return;}
  if(name.startsWith('zoom:')){modal(name.slice(5));return;}
  if(name.startsWith('filter:')){S.filter=name.slice(7);root.innerHTML=collection();return;}
