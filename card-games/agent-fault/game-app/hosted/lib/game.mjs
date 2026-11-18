@@ -3,6 +3,7 @@
  */
 import { randomBytes, createHash, timingSafeEqual } from 'node:crypto';
 import {SCENES,INF,FAULTS} from './cards.mjs';
+import {chooseNpcCard,rankNpcReplies} from './comedy-quality.mjs';
 export const ABC='ABCDEFG';
 export const CARDS=Object.fromEntries([...SCENES,...INF,...FAULTS].map(c=>[c.id,c]));
 export const MODEL_PRICES={'gpt-4.1-mini':[.40,1.60,.10], 'gpt-5-mini':[.25,2.00,.025], 'gpt-4o-mini':[.15,.60,.075]};
@@ -26,21 +27,14 @@ export const NPC_PRESETS=[
  {name:'LITERAL MACHINE',profile:'A stubbornly literal but polite assistant',tags:['literal','exact','insist']},
  {name:'ERROR PRONE',profile:'A delighted assistant convinced bad ideas are brilliant',tags:['worst','celebrate','bad']}
 ];
-function npcCardId(p){
- const index=NPC_PRESETS.findIndex(x=>x.name===p.name);
- const tags=NPC_PRESETS[Math.max(index,0)].tags;
- return [...p.hand].sort((a,b)=>{
-  const rank=id=>tags.reduce((sum,word)=>sum+((CARDS[id]?.instruction||'').toLowerCase().includes(word)?3:0),0);
-  return rank(b)-rank(a) || a.localeCompare(b);
- })[0];
+function npcCardId(r,p){
+ return chooseNpcCard(p.hand,CARDS,NPC_PRESETS.find(x=>x.name===p.name)||NPC_PRESETS[0],CARDS[r.scenario_id]);
 }
-function npcFavorite(r){
- const valid=r.candidates.filter(x=>r.answers[x.label]&&r.answers[x.label].toUpperCase()!=='SKIP');
- // This is a disclosed length/variety heuristic, not a claim to understand humor.
- const score=x=>{const words=r.answers[x.label].toLowerCase().match(/[a-z]+/g)||[];
-   return new Set(words).size*2 + Math.min(30,words.length);
- };
- return [...valid].sort((a,b)=>score(b)-score(a)||a.label.localeCompare(b.label))[0]?.label;
+function npcFavorite(r,judge){
+ const valid=r.candidates.filter(x=>r.answers[x.label]&&r.answers[x.label].toUpperCase()!=='SKIP')
+  .map(x=>({label:x.label,text:r.answers[x.label]}));
+ // The deterministic score rewards in-context consequences, not word count.
+ return rankNpcReplies(valid,NPC_PRESETS.find(x=>x.name===judge.name)||NPC_PRESETS[0],CARDS[r.scenario_id])[0]?.label;
 }
 function npcApproves(r){
  if(!r.proposal?.bonus)return true;
@@ -58,9 +52,9 @@ export function advanceNpcs(r,now=Date.now()){
    applyAction(r,'player',judge,'lock_profile',{profile:NPC_PRESETS.find(x=>x.name===judge.name)?.profile||'A chaotic assistant'},now,true);continue;
   }
   const bot=r.phase==='submit'?players.find(q=>q.npc&&q.id!==r.judge_id&&!(q.id in r.submissions)):null;
-  if(bot){applyAction(r,'player',bot,'submit',{card_id:npcCardId(bot)},now,true);continue;}
+  if(bot){applyAction(r,'player',bot,'submit',{card_id:npcCardId(r,bot)},now,true);continue;}
   if(r.phase==='spotlight'&&judge?.npc){
-   const label=npcFavorite(r);
+   const label=npcFavorite(r,judge);
    if(!label)break;
    applyAction(r,'player',judge,'spotlight',{label},now,true);continue;
   }
@@ -79,7 +73,7 @@ export function createRoom(code,hostToken){return {code,host_hash:digest(hostTok
 export function auth(r,bearer){const token=(bearer||'').replace(/^Bearer /i,'');demand(token&&token.length<=200,'Session token required',401);const hash=digest(token);if(safeEq(hash,r.host_hash))return {role:'host',p:null};const p=r.players.find(x=>safeEq(x.token_hash,hash));demand(p,'Invalid session token',401);demand(p.active,'Player removed from room',403);return {role:'player',p};}
 function draw(r,kind){let arr=r.decks[kind];if(!arr.length){demand(r.discard[kind].length>0,'No more '+kind+' cards');r.decks[kind]=shuffle(r.discard[kind]);r.discard[kind]=[];arr=r.decks[kind]}return arr.pop();}
 export function newRound(r){r.round++;r.phase='setup';r.scenario_id=r.play_mode==='physical'?null:draw(r,'Scenario');r.fault_id=r.play_mode==='physical'?null:draw(r,'Fault');r.profile=null;r.submissions={};r.candidates=[];r.answers={};r.spotlight=null;r.proposal=null;r.approvals={};r.review_deadline=null;r.ai_attempted=false;}
-export function buildPrompt(r){const scene=CARDS[r.scenario_id];return ['You are writing fictional alternatives for a comedy card game. Produce one separate in-character answer for each listed letter. Each answer uses ONLY that letter\'s interference instruction, along with the common assignment and assistant personality. Keep answers 22–26 words when possible, absolutely no more than 30 words. Do not explain the game or compare answers. Return one line per letter, A:, B:, etc., no other text.','ASSIGNMENT: '+scene.public_assignment,'REQUIRED BEHAVIOR: '+scene.required_behavior,'ASSISTANT PERSONALITY: '+r.profile,'CANDIDATES:',...r.candidates.map(x=>x.label+': '+CARDS[x.card_id].instruction)].join('\n');}
+export function buildPrompt(r){const scene=CARDS[r.scenario_id];return ['You are writing fictional alternatives for a comedy card game. Produce one separate in-character answer for each listed letter. Each answer uses ONLY that letter\'s interference instruction, along with the common assignment and assistant personality. Each answer must make a specific, believable decision grounded in the assignment, then introduce one unexpected consequence that follows from that candidate Interference. Play the absurdity completely straight: sound earnestly helpful, never randomly chaotic. Give the Judge a concrete detail to laugh at. Avoid generic wackiness, repeating the same joke across letters, or explaining the game. Keep answers 22–26 words when possible, absolutely no more than 30 words. Do not compare answers. Return one line per letter, A:, B:, etc., no other text.','ASSIGNMENT: '+scene.public_assignment,'REQUIRED BEHAVIOR: '+scene.required_behavior,'ASSISTANT PERSONALITY: '+r.profile,'CANDIDATES:',...r.candidates.map(x=>x.label+': '+CARDS[x.card_id].instruction)].join('\n');}
 export function parseAnswers(text,labels){const out={};for(const line of String(text).split(/\r?\n/)){const match=line.match(/^\s*([A-G])\s*[:.)\-]\s*(.*)$/);if(match&&labels.includes(match[1]))out[match[1]]=match[2].trim().split(/\s+/).slice(0,30).join(' ')}return out}
 export function estimateUsd(model,usage){const p=MODEL_PRICES[model];if(!p)return null;const inp=Math.max(0,Number(usage.input_tokens||0)),output=Math.max(0,Number(usage.output_tokens||0)),cached=Math.min(inp,Math.max(0,Number(usage.input_tokens_details?.cached_tokens||0)));return Math.round(((inp-cached)*p[0]+output*p[1]+cached*p[2])/1e6*1e9)/1e9;}
 export function visible(r,role,p,usage={requests:0,estimated_usd:0},model='gpt-4.1-mini',aiConfigured=false){const players=r.players.filter(q=>q.active);const names=players.map(q=>({id:q.id,name:q.name,score:q.score,seat:q.seat,active:q.active,is_npc:!!q.npc,submitted:q.id in r.submissions,is_judge:q.id===r.judge_id}));const phase=r.phase,judge=p?.id===r.judge_id,reveal=['adjudicate','review','results','finished'].includes(phase),candidates=['spotlight','adjudicate','review','results','finished'].includes(phase)?r.candidates.map(x=>({label:x.label,response:r.answers[x.label]??null,valid:!!r.answers[x.label]&&r.answers[x.label].toUpperCase()!=='SKIP'})):[];

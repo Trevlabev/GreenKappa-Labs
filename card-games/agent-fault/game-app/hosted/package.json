@@ -14,7 +14,8 @@
     "cloudflare:check": "node --check cloudflare/src/index.mjs && node --check ../cloudflare/shared/room-adapter.mjs && node --check public/static/room-realtime.mjs",
     "cloudflare:dry-run": "wrangler deploy --dry-run",
     "cloudflare:deploy": "wrangler deploy",
-    "unified:check": "node --test tests/unified-app.test.mjs"
+    "unified:check": "node --test tests/unified-app.test.mjs",
+    "quality:check": "node scripts/comedy-audit.mjs"
   },
   "dependencies": {
     "@netlify/database": "latest",

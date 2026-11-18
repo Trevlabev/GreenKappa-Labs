@@ -18,6 +18,7 @@ run(process.execPath, ['scripts/prepare-digital.mjs'], hosted);
 run('npm', ['run', 'test'], hosted);
 run('npm', ['run', 'check'], hosted);
 run('npm', ['run', 'unified:check'], hosted);
+run('npm', ['run', 'quality:check'], hosted);
 // Cascade is independently packaged. Test and prepare its illustrated source as well.
 run('npm', ['install', '--no-audit', '--no-fund'], cascade);
 run('npm', ['run', 'build'], cascade);
