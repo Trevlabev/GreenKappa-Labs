@@ -168,13 +168,15 @@ export class GameRoomBase extends DurableObject {
       const path = new URL(request.url).pathname;
       const method = request.method;
       if (path === '/_create' && method === 'POST') {
-        const { code, secret } = await bodyJson(request, demand, problem);
+        const { code, secret, play_mode = 'digital' } = await bodyJson(request, demand, problem);
         demand(CODE.test(code), 'Invalid room code', 422);
+        demand(['digital','physical'].includes(play_mode), 'Unrecognized room mode', 422);
         return this.ctx.blockConcurrencyWhile(async () => {
           try {
           const existing = await this.ctx.storage.get('room');
           demand(!existing, 'Room code unavailable', 409);
           const room = this.engine.createRoom(code, secret);
+          room.play_mode=play_mode;
           await this.save(room);
           return json({ code, token: secret, role: 'host' });
           } catch (error) { return errorResponse(error); }
@@ -343,7 +345,8 @@ export function createWorker(engine, configuration) {
             cards: { Scenario: 24, Interference: 36, Fault: 6 }, ai_configured: Boolean(env.OPENAI_API_KEY) });
         }
         if (path === '/api/rooms' && method === 'POST') {
-          await bodyJson(request, demand, problem);
+          const {play_mode='digital'} = await bodyJson(request, demand, problem);
+          demand(['digital','physical'].includes(play_mode), 'Choose digital or physical card mode', 422);
           const ip = request.headers.get('CF-Connecting-IP') || 'anonymous';
           const key = engine.digest('create-room:' + ip);
           const allowed = await budget(env, 'rate', { bucket: key, limit: 10 });
@@ -351,7 +354,7 @@ export function createWorker(engine, configuration) {
           for (let i = 0; i < 8; i++) {
             const code = randomCode(), secret = engine.token();
             const result = await env.ROOM.getByName(code).fetch('https://room.internal/_create', {
-              method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ code, secret })
+              method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ code, secret, play_mode })
             });
             if (result.status === 409) continue;
             return result;
