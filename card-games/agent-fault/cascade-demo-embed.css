@@ -47,3 +47,21 @@
 
 @media(max-width:850px){.af-cascade-showcase .cd-shell{width:calc(100% - 26px)}}
 @media(max-width:590px){.af-cascade-showcase .cd-shell{width:calc(100% - 20px)}}
+
+
+/* Cascade uses the same direct-manipulation pattern as Classic. No autoplay. */
+.cd-viewer{position:relative;isolation:isolate}
+.cd-viewer .cd-main{padding-inline:clamp(2.65rem,4vw,3.75rem)}
+.cd-edge-arrow{position:absolute;z-index:35;top:50%;transform:translateY(-50%);display:grid;place-items:center;width:46px;height:61px;padding:0;border:1px solid #b0a9ce;border-radius:9px;background:#151a3eea;color:#fff8e9;box-shadow:0 5px 22px #05091cc9;font:400 3.1rem/.8 Georgia,serif;cursor:pointer;touch-action:manipulation;transition:background .18s ease,box-shadow .18s ease}
+.cd-edge-arrow:hover{background:#4b3672;box-shadow:0 5px 24px #080b21}
+.cd-edge-arrow:focus-visible,.cd-scene-dot:focus-visible,.cd-viewer:focus-visible{outline:3px solid var(--cd-lime);outline-offset:3px}
+.cd-edge-prev{left:2px}.cd-edge-next{right:2px}
+.cd-pagination{display:flex;justify-content:center;align-items:center;gap:10px;min-height:30px;padding:12px 0 3px}
+.cd-scene-dot{flex:none;width:12px;height:12px;border:1px solid #8d8db0;border-radius:50%;padding:0;background:#555b83;cursor:pointer;transition:background .2s ease,transform .2s ease}
+.cd-scene-dot[aria-current="step"]{background:var(--cd-lime);border-color:var(--cd-lime);transform:scale(1.15)}
+.cd-scene-dot:hover{background:var(--cd-violet);border-color:var(--cd-cream)}
+.cd-swipe-label{margin:0!important;padding:5px 0 18px;text-align:center;color:#c9cee3;font:800 .65rem/1.6 ui-monospace,Consolas,monospace!important;letter-spacing:.05em;text-transform:uppercase}
+.cd-viewer img{-webkit-user-drag:none}
+@media(max-width:850px){.cd-viewer .cd-main{padding-inline:clamp(2rem,4vw,2.8rem)}}
+@media(max-width:590px){.cd-viewer .cd-main{padding-inline:clamp(1.8rem,7vw,2.2rem)}.cd-edge-arrow{width:34px;height:49px;font-size:2.35rem;border-radius:7px}.cd-edge-prev{left:0}.cd-edge-next{right:0}.cd-pagination{gap:9px}.cd-swipe-label{font-size:.59rem!important}}
+@media(prefers-reduced-motion:reduce){.cd-edge-arrow,.cd-scene-dot{transition:none}}
