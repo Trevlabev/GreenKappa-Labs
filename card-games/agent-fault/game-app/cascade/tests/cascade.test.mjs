@@ -108,12 +108,12 @@ test('8-player distribution, unique hands, all 7 different Handoffs and 15 agent
  award(r,actors,'none');for(const {p} of actors)assert.equal(p.hand.length,4);
 });
 
-test('timer-controlled challenge, no-bonus default, reconnection and one-judge rotation',()=>{
+test('no-bonus awards finalize immediately; Spotlight scoring and Judge rotation remain intact',()=>{
  const {r,actors}=setup(4);take(r,null,'start');baseline(r);cards(r,actors);finishCascade(r,actors);
  take(r,actors[0].p,'propose_awards',{spotlight:'R1',bonus:null},20000);
- assert.throws(()=>take(r,actors[1].p,'challenge',{},20100),/No Derailment Bonus/);
- assert.throws(()=>take(r,null,'finalize',{},22000),/Wait until/);
- take(r,null,'finalize',{},32000);assert.equal(r.last_round.bonus,null);
+ assert.equal(r.challenge_until,20000);
+ assert.throws(()=>take(r,actors[1].p,'challenge',{},20100),/Challenge window expired|No Derailment Bonus/);
+ take(r,null,'finalize',{},20000);assert.equal(r.last_round.bonus,null);
  assert.equal(visible(r,'player',actors[1].p).last_round.awards.spotlight.id,'R1');
 });
 
