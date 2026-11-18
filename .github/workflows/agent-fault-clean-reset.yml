@@ -91,6 +91,21 @@ jobs:
             git push origin HEAD:main
           fi
 
+      - name: Check published-art manifest and card count before deployment
+        shell: bash
+        run: |
+          set -euo pipefail
+          node - <<'JS'
+          const fs=require('node:fs');
+          const base='card-games/agent-fault/assets';
+          const manifest=JSON.parse(fs.readFileSync(base+'/manifest.json','utf8'));
+          const fronts=fs.readdirSync(base+'/fronts').filter(x=>x.endsWith('.webp'));
+          const backs=fs.readdirSync(base+'/backs').filter(x=>x.endsWith('.webp'));
+          if(fronts.length!==66||backs.length!==3||Object.keys(manifest.cards||{}).length!==66) process.exit(1);
+          for(const id of Object.keys(manifest.cards))if(!fronts.includes(id+'.webp'))throw Error('Missing '+id);
+          console.log('Verified 66 original card fronts, 3 category backs and 66 manifest IDs.');
+          JS
+
       - name: Start one fresh Pages build only after artwork is published
         env:
           GH_TOKEN: ${{ github.token }}
