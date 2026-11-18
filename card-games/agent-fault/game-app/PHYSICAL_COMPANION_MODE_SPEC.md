@@ -42,3 +42,19 @@ The selected mode belongs to the room (play_mode = digital or physical), is immu
 - Ordinary digital rooms pass existing tests without behavioral changes.
 - Screen-reader labels, room reconnection, browser/tab inactivity and WebSocket notification behavior preserved.
 - No production deployment until GitHub tests and live multi-browser acceptance succeed.
+
+
+## Cloudflare staging build kickoff — 2026-11-18
+
+The first Cloudflare Git-connected Worker is named `agent-fault-classic-cf`.
+Its Workers Builds production branch is `feature/agent-fault-cloudflare-multiplayer-20261118`.
+This documentation commit intentionally triggers an initial connected-repository build, without merging to `main`.
+
+Expected configuration at first staging build:
+- Working repository root: `/`
+- Build command: `cd card-games/agent-fault/game-app/hosted && npm install --no-audit --no-fund && npm run build`
+- Deploy command: `cd card-games/agent-fault/game-app/hosted && npx wrangler versions upload`
+- Preview builds: off
+- No live traffic cutover, no custom-domain changes, and no plaintext API keys
+
+Acceptance: Cloudflare build reports success, uploads a version without making it live, and the main repository's automated tests pass. Any errors must be resolved before activating the Worker or connecting the second game.
