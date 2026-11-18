@@ -58,3 +58,7 @@ Expected configuration at first staging build:
 - No live traffic cutover, no custom-domain changes, and no plaintext API keys
 
 Acceptance: Cloudflare build reports success, uploads a version without making it live, and the main repository's automated tests pass. Any errors must be resolved before activating the Worker or connecting the second game.
+
+## Cloudflare initial Durable Object migration — 2026-11-18
+
+The first Git-connected Classic Worker build passed 25/25 app tests but `wrangler versions upload` was rejected because the Worker has an unapplied Durable Object migration. Cloudflare requires `wrangler deploy` to apply a new Durable Object migration. The owner confirmed the production-branch build configuration was changed to `cd card-games/agent-fault/game-app/hosted && npx wrangler deploy` (also checked against the connected Cloudflare Builds settings). This docs-only commit triggers the first full Worker deployment and migration to the dedicated workers.dev test endpoint. Custom domains and the GreenKappa Labs website are not cut over. A production game launch still requires Worker build verification, backend health checks, secrets configuration, and multiplayer browser QA.
