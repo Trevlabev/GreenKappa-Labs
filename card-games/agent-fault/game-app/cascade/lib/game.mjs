@@ -242,7 +242,7 @@ export function applyAction(r,role,p,name,data={},now=Date.now(),internal=false)
  case 'propose_awards':{demand(judge&&phase==='judging','Current Judge only');const replies=new Set(r.replies.map(x=>x.id)),spotlight=String(d.spotlight||'');demand(replies.has(spotlight),'Select one player-generated response for Spotlight',422);let bonus=null;
  if(d.bonus&&d.bonus.reply_id){const id=String(d.bonus.reply_id),tier=String(d.bonus.tier||''),evidence=String(d.bonus.evidence||'').trim().slice(0,220);
  demand(replies.has(id),'Bonus response unknown',422);demand(['Breakpoint A','Breakpoint B','Fault'].includes(tier),'Select a valid qualification tier',422);demand(evidence.length>=3,'Provide supporting evidence for objective Bonus',422);bonus={reply_id:id,tier,evidence};}
- r.proposal={spotlight,bonus};r.challengers=[];r.votes={};r.challenge_until=now+12000;r.vote_until=null;r.phase='challenge';break;}
+ r.proposal={spotlight,bonus};r.challengers=[];r.votes={};r.challenge_until=bonus?now+12000:now;r.vote_until=null;r.phase='challenge';break;}
  case 'challenge':{demand(role==='player'&&!judge&&phase==='challenge'&&now<r.challenge_until,'Challenge window expired or unavailable');demand(r.proposal.bonus,'No Derailment Bonus to challenge');demand(!r.challengers.includes(p.id),'Already challenged');r.challengers.push(p.id);r.vote_until=now+45000;r.phase='vote';break;}
  case 'vote':{demand(role==='player'&&phase==='vote'&&now<r.vote_until,'Voting closed');demand(!(p.id in r.votes),'You already voted');demand(typeof d.yes==='boolean','Vote must be yes or no',422);r.votes[p.id]=d.yes;break;}
  case 'finalize':{demand(host&&(phase==='challenge'||phase==='vote'),'Host can finalize only an award proposal');
