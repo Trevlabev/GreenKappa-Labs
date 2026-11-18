@@ -1,0 +1,35 @@
+name: AGENT/FAULT idle-polling regression QA
+
+on:
+  pull_request:
+    paths:
+      - 'card-games/agent-fault/game-app/hosted/**'
+      - 'card-games/agent-fault/game-app/cascade/**'
+      - '.github/workflows/agent-fault-polling-qa.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test-room-lifecycle:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        edition: [hosted, cascade]
+    defaults:
+      run:
+        working-directory: card-games/agent-fault/game-app/${{ matrix.edition }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Restore illustrated cards
+        run: node scripts/prepare-digital.mjs
+      - name: Run game and polling regression tests
+        run: npm test
+      - name: Validate client-side JavaScript syntax
+        run: npm run check

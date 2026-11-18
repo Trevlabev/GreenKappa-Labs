@@ -33,7 +33,7 @@ test('Classic review grace period handles disconnected votes without weakening s
  applyAction(r,'host',null,'start');
  applyAction(r,'player',people[0].p,'lock_profile',{profile:'A municipal assistant'});
  for(const {p} of people.slice(1))applyAction(r,'player',p,'submit',{card_id:p.hand[0]});
- applyAction(r,'host',null,'manual_answers',{text:'A: First complete candidate.\\nB: Second complete candidate.\\nC: Third complete candidate.'});
+ applyAction(r,'host',null,'manual_answers',{text:'A: First complete candidate.\nB: Second complete candidate.\nC: Third complete candidate.'});
  applyAction(r,'player',people[0].p,'spotlight',{label:'A'});
  const start=1_000_000;
  applyAction(r,'player',people[0].p,'propose_bonus',{claims:{},bonus:null},start);
@@ -51,7 +51,7 @@ test('Classic does not award a contested proposal when disconnected votes leave 
  applyAction(r,'host',null,'start');
  applyAction(r,'player',people[0].p,'lock_profile',{profile:'A careful administrator'});
  for(const {p} of people.slice(1))applyAction(r,'player',p,'submit',{card_id:p.hand[0]});
- applyAction(r,'host',null,'manual_answers',{text:'A: First complete candidate.\\nB: Second complete candidate.\\nC: Third complete candidate.'});
+ applyAction(r,'host',null,'manual_answers',{text:'A: First complete candidate.\nB: Second complete candidate.\nC: Third complete candidate.'});
  applyAction(r,'player',people[0].p,'spotlight',{label:'A'});
  applyAction(r,'player',people[0].p,'propose_bonus',{claims:{},bonus:null},2000);
  applyAction(r,'player',people[0].p,'approve',{yes:true});
