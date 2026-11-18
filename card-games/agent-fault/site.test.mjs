@@ -8,7 +8,7 @@ const read=p=>readFileSync(new URL(p,root),'utf8');
 const html=read('index.html'),css=read('demo-embed.css'),classic=read('demo-embed.js'),cascade=read('cascade-demo-embed.js'),tabs=read('demo-tabs.js'),showcase=read('cascade-demo-embed.css');
 test('physical and digital options accurately distinguish access and release status',()=>{
  assert(html.includes('id="physical-play"'));
- for(const s of ['printed prototype','shared AI chat','print certification remain pending','Play Classic online','Play Cascade online','different player'])assert(html.toLowerCase().includes(s.toLowerCase()),s);
+ for(const s of ['printed 66-card prototype','shared AI chat','print certification remain pending','Play Classic online','Play Cascade online','different player'])assert(html.toLowerCase().includes(s.toLowerCase()),s);
  assert(html.includes('https://agent-fault-classic-cf.grenkappa459.workers.dev/'));
  assert(html.includes('https://agent-fault-classic-cf.grenkappa459.workers.dev/cascade/'));
 });
