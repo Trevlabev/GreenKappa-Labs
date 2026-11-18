@@ -111,7 +111,15 @@ try{
     attached(mobile);
     await mobile.goto(origin+"/",{waitUntil:"networkidle"});
     const mobilePause=mobile.locator("[data-showcase-pause]");
-    await mobilePause.evaluate(el=>el.scrollIntoView({block:"center",inline:"nearest"}));
+    await mobilePause.evaluate(el=>el.scrollIntoView({behavior:"instant",block:"center",inline:"nearest"}));
+    // A real mobile tap must land on the Pause button, not the slide-wide
+    // overlay or Ask Arcana's floating suggestion.
+    const pauseHit=await mobilePause.evaluate(el=>{
+      const rect=el.getBoundingClientRect();
+      const atPoint=document.elementFromPoint(rect.left+rect.width/2,rect.top+rect.height/2);
+      return atPoint===el || el.contains(atPoint);
+    });
+    assert.ok(pauseHit,"Mobile pause hit target must not be covered at "+width+"px");
     await mobilePause.click({timeout:8000});
     assert.equal(await mobilePause.getAttribute("aria-pressed"),"true","Mobile pause control must accept a real pointer click");
     assert.equal(await mobile.locator("[data-showcase-tab]").count(),slideCount);

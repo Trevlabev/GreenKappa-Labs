@@ -1626,3 +1626,16 @@ html{scroll-padding-top:90px}
 @media(max-width:570px) {
   .gkl-game-card-no-such-room .gkl-nsr-listing-media {aspect-ratio:4/3}
 }
+
+/* Mobile homepage gallery tap targets — 2026-11-18.
+   Keep the carousel buttons above slide-cover anchors and out of transient
+   smooth-scroll / floating-assistant interception. Ask Arcana's launcher stays
+   available; only its unsolicited mobile nudge is suppressed. */
+.gkl-showcase-controls{position:relative;z-index:20;isolation:isolate}
+@media (max-width:620px){
+  html{scroll-behavior:auto}
+  .arcana-assistant{pointer-events:none}
+  .arcana-assistant-launcher{pointer-events:auto}
+  .arcana-assistant[data-state="open"] .arcana-assistant-panel{pointer-events:auto}
+  .arcana-assistant-nudge{display:none!important}
+}
