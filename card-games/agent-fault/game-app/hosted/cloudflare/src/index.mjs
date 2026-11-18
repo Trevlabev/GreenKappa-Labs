@@ -57,6 +57,10 @@ export default {
       return Response.redirect(new URL('/cascade/', u.origin), 308);
     }
     if (u.pathname.startsWith('/cascade/')) {
+      // Serve the dedicated animated walkthrough rather than the room launcher.
+      if (u.pathname === '/cascade/demo' || u.pathname === '/cascade/demo/') {
+        return env.ASSETS.fetch(new Request(new URL('/cascade/demo.html', u.origin), request));
+      }
       // Static Cascade resources are public assets, not room commands.
       if (u.pathname.startsWith('/cascade/static/')) return env.ASSETS.fetch(request);
       const target = new URL(u);
