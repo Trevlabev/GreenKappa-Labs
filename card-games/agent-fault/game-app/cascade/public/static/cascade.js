@@ -2,6 +2,7 @@
  * Native Netlify production API. Private tokens remain browser-local; assets are public.
  */
 import {createRoomPoller} from './room-polling.mjs';
+import {createRoomSocket} from './room-realtime.mjs';
 const root=document.getElementById('app'),toastHost=document.getElementById('toast'),modalHost=document.getElementById('modal-root');
 const S={code:null,token:null,role:null,state:null,version:-1,phaseKey:'',loading:false,pick:null,modal:null,deck:[],index:{},filter:'all',query:'',alertShown:false,clock:null,firstRender:true,showFullTimeline:false,displayRound:null,autoAI:false,autoAIround:null,autoSteps:new Set(),autoAITimer:null};
 const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -35,7 +36,15 @@ const poller=createRoomPoller({
  onStatus:roomStatus,
  onFailure:(error,count)=>{if(count===1||count===5)notify(error.message||'Connection failed')}
 });
+const socket=createRoomSocket({
+ details:()=>({code:S.code,token:S.token}),
+ onReady:()=>{poller.stop();roomStatus('active','connected')},
+ onChange:()=>{if(!S.loading)void poll().catch(error=>notify(error.message))},
+ onFallback:()=>{if(poller.status==='stopped'&&S.code&&S.state?.phase!=='finished')poller.start()},
+ onPaused:reason=>roomStatus('paused',reason)
+});
 connectionButton?.addEventListener('click',()=>{
+ socket.resume();
  if(poller.status==='session')location.assign('/');
  else poller.resume();
 });
@@ -71,7 +80,7 @@ function joinForm(code=''){return shell(`<div class="panel centered-screen">${he
 function render(){const s=S.state;if(!s)return;if(S.displayRound!==s.round){S.displayRound=s.round;S.showFullTimeline=false;S.autoAI=false;S.autoAIround=null;S.autoSteps.clear();clearTimeout(S.autoAITimer);}const key=[s.round,s.phase,s.current_index,s.step].join(':');S.phaseKey=key;S.version=s.version;const screens={lobby,setup,baseline,lock_cards:lockCards,cascade,handoff,judging,challenge,vote:voting,results,finished};root.innerHTML=shell(top(s)+(screens[s.phase]?.(s)||'<p class="notice">Unknown game phase.</p>'),s.me.role==='host'?'HOST / SHARED SCREEN':`${s.me.name} / PRIVATE CONTROLLER`);refreshClock();scheduleAutoAI();}
 function scheduleAutoAI(){clearTimeout(S.autoAITimer);const s=S.state;if(!S.autoAI||!s||s.me.role!=='host'||s.round!==S.autoAIround||S.loading||!s.ai_configured||s.generation_pending||!['baseline','cascade'].includes(s.phase))return;const key=s.stage_key;if(S.autoSteps.has(key)){S.autoAI=false;notify('AUTO AI PAUSED: THIS STEP WAS ALREADY ATTEMPTED');return;}S.autoAITimer=setTimeout(()=>{if(S.autoAI&&S.state?.stage_key===key&&!S.loading){S.autoSteps.add(key);generate()}},850);}
 async function request(path,method='GET',data,authorized=true){const response=await fetch(path,{method,headers:{...(data?{'Content-Type':'application/json'}:{}),...(authorized&&S.token?{Authorization:'Bearer '+S.token}:{})},body:data?JSON.stringify(data):undefined,cache:'no-store'});const x=await response.json().catch(()=>({}));if(!response.ok){const error=new Error(typeof x.detail==='string'?x.detail:`HTTP ${response.status}`);error.status=response.status;throw error;}return x;}
-async function action(name,data={}){if(S.loading)return;S.loading=true;try{const r=await request(`/api/rooms/${S.code}/action`,'POST',{name,data});S.state=r;poller.changed();render();if(r.phase==='finished')poller.stop();}catch(e){notify(e.message)}finally{S.loading=false;scheduleAutoAI();}}
+async function action(name,data={}){if(S.loading)return;S.loading=true;try{const r=await request(`/api/rooms/${S.code}/action`,'POST',{name,data});S.state=r;poller.changed();render();if(r.phase==='finished'){poller.stop();socket.stop();}}catch(e){notify(e.message)}finally{S.loading=false;scheduleAutoAI();}}
 async function poll(){
  if(!S.code||!S.token||S.loading)return false;
  const code=S.code,token=S.token;
@@ -82,19 +91,19 @@ async function poll(){
  S.state=state;
  if(changed)render();
  S.alertShown=false;
- if(state.phase==='finished')poller.stop();
+ if(state.phase==='finished'){poller.stop();socket.stop();}
  return changed;
 }
-function connect(role,code,token){poller.stop();S.role=role;S.code=code;S.token=token;S.state=null;S.version=-1;history.replaceState(null,'',`/${role==='host'?'host':'play'}/${code}`);poller.start();}
+function connect(role,code,token){socket.stop();poller.stop();S.role=role;S.code=code;S.token=token;S.state=null;S.version=-1;history.replaceState(null,'',`/${role==='host'?'host':'play'}/${code}`);poller.start();socket.start();}
 async function create(){try{const r=await request('/api/rooms','POST',{},false);localStorage.setItem('cascade:host:'+r.code,r.token);connect('host',r.code,r.token)}catch(e){notify(e.message)}}
-async function generate(){if(S.loading)return;S.loading=true;notify('ASKING THE AGENT TO CONTINUE…');try{let r=await request(`/api/rooms/${S.code}/generate`,'POST');if(r.complete)notify('THE CONVERSATION CONTINUES · EST. $'+Number(r.billing?.estimated_usd||0).toFixed(6));else{S.autoAI=false;notify(r.detail||'Response needs manual correction');const box=document.getElementById('manual');if(box&&r.raw)box.value=r.raw;}}catch(e){S.autoAI=false;notify('AUTO AI STOPPED · '+e.message)}finally{S.loading=false;S.version=-1;poller.refresh()}}
+async function generate(){if(S.loading)return;S.loading=true;notify('ASKING THE AGENT TO CONTINUE…');try{let r=await request(`/api/rooms/${S.code}/generate`,'POST');if(r.complete)notify('THE CONVERSATION CONTINUES · EST. $'+Number(r.billing?.estimated_usd||0).toFixed(6));else{S.autoAI=false;notify(r.detail||'Response needs manual correction');const box=document.getElementById('manual');if(box&&r.raw)box.value=r.raw;}}catch(e){S.autoAI=false;notify('AUTO AI STOPPED · '+e.message)}finally{S.loading=false;S.version=-1;if(socket.connected)void poll().catch(error=>notify(error.message));else poller.refresh()}}
 async function checkAI(){try{let r=await request(`/api/rooms/${S.code}/check-ai`,'POST');notify('AI CONNECTED: '+r.model+' · NO INFERENCE CHARGE')}catch(e){notify(e.message)}}
 function refreshClock(){clearInterval(S.clock);const tick=()=>{let now=Date.now(),clock=document.querySelector('[data-countdown]');if(clock)clock.textContent=Math.max(0,Math.ceil((Number(clock.dataset.countdown)-now)/1000))+'s';const skip=document.querySelector('[data-skip-ready-at]');if(skip){const remaining=Math.max(0,Math.ceil((Number(skip.dataset.skipReadyAt)-now)/1000));skip.disabled=remaining>0;skip.textContent=remaining>0?'SKIP UNRESPONSIVE HANDOFF IN '+remaining+'s':'SKIP UNRESPONSIVE HANDOFF';}if(!clock&&!skip)clearInterval(S.clock);};if(!document.querySelector('[data-countdown]')&&!document.querySelector('[data-skip-ready-at]'))return;tick();S.clock=setInterval(tick,350)}
 function modal(id){const c=S.index[id]||S.state?.me?.hand?.find(c=>c.id===id)||S.state?.scenario||S.state?.fault;if(!c||c.id!==id)return;const details=c.category==='Scenario'?`<p>${esc(c.public_assignment)}</p><div class="scenario-details"><div><b>REQUIRED BEHAVIOR</b>${esc(c.required_behavior)}</div><div><b>BREAKPOINT A</b>${esc(c.breakpoint_a)}</div><div><b>BREAKPOINT B</b>${esc(c.breakpoint_b)}</div></div>`:c.category==='Interference'?`<p>${esc(c.instruction)}</p>`:`<p>${esc(c.condition)}</p><div class="notice warning">Does not count: ${esc(c.nonqualifying)}</div>`;modalHost.innerHTML=`<div class="modal"><div class="modal-panel" role="dialog" aria-modal="true" aria-label="${esc(c.title)}"><div class="row spread"><span class="caps accent">${esc(c.id)} / ${esc(c.category)}</span>${btn('CLOSE','close-modal','sm secondary')}</div><div class="modal-grid" style="margin-top:16px"><div class="artbox"><img id="modal-card" data-id="${safeId(c.id)}" src="${front(c.id)}" alt="${esc(c.title)} illustrated card front"></div><div><h2>${esc(c.title)}</h2><div class="rule"></div>${details}${btn('FLIP CARD','flip-modal','secondary')}</div></div></div></div>`;modalHost.querySelector('[data-action="close-modal"]')?.focus();document.body.style.overflow='hidden';}
 function closeModal(){modalHost.replaceChildren();document.body.style.overflow=''}
 function onClick(e){const card=e.target.closest('[data-card]');if(card){modal(card.dataset.card);return;}const select=e.target.closest('[data-select]');if(select){S.pick=select.dataset.select;document.querySelectorAll('.hand-item').forEach(x=>x.dataset.picked=String(x.querySelector('[data-select]')?.dataset.select===S.pick));return;}const el=e.target.closest('[data-action]');if(!el)return;const name=el.dataset.action;
  if(name==='toggle-transcript'){S.showFullTimeline=!S.showFullTimeline;render();return;}if(name==='close-modal'){closeModal();return;}if(name==='flip-modal'){const img=document.getElementById('modal-card');if(!img)return;const id=img.dataset.id,type=id?.includes('-SCN-')?'scenario':id?.includes('-INF-')?'interference':'fault';img.dataset.down=img.dataset.down==='true'?'false':'true';img.src=img.dataset.down==='true'?back(type):front(id);return;}
- if(name==='create')return create();if(name==='join'){root.innerHTML=joinForm();return;}if(name==='demo'){location.href='/demo';return;}if(name==='collection'){poller.stop();S.code=null;S.token=null;root.innerHTML=collection();return;}if(name==='copy-link'){navigator.clipboard?.writeText(location.origin+'/play/'+S.code).then(()=>notify('INVITATION COPIED')).catch(()=>notify('COPY THE JOIN ADDRESS MANUALLY'));return;}
+ if(name==='create')return create();if(name==='join'){root.innerHTML=joinForm();return;}if(name==='demo'){location.href='/demo';return;}if(name==='collection'){socket.stop();poller.stop();S.code=null;S.token=null;root.innerHTML=collection();return;}if(name==='copy-link'){navigator.clipboard?.writeText(location.origin+'/play/'+S.code).then(()=>notify('INVITATION COPIED')).catch(()=>notify('COPY THE JOIN ADDRESS MANUALLY'));return;}
  if(name==='auto-ai'){if(S.autoAI){S.autoAI=false;clearTimeout(S.autoAITimer);notify('AUTO AI STOPPED');render();return;}const s=S.state;if(!s?.ai_configured||s.me.role!=='host'||!['baseline','cascade','handoff','lock_cards'].includes(s.phase))return notify('AUTO AI IS NOT AVAILABLE NOW');const max=1+2*s.expected_count;const needed=Math.max(0,max-s.timeline.filter(x=>x.kind==='agent').length-s.timeline.filter(x=>x.kind==='skip').length);const message='Auto-generate AI replies for this round? Up to '+needed+' additional provider calls may incur charges. The mode stops after this round and pauses on generation errors. Continue?';if(window.confirm(message)){S.autoAI=true;S.autoAIround=s.round;S.autoSteps.clear();render();}return;}if(name==='check-ai')return checkAI();if(name==='generate')return generate();if(name==='copy-prompt'){navigator.clipboard?.writeText(S.state.generation_prompt||'').then(()=>notify('AI PROMPT COPIED'));return;}
  if(name.startsWith('zoom:')){modal(name.slice(5));return;}
  if(name.startsWith('filter:')){S.filter=name.slice(7);root.innerHTML=collection();return;}
