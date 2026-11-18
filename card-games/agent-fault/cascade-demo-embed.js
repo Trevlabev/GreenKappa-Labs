@@ -10,7 +10,6 @@
   const front = id => assets + 'fronts/' + id + '.webp';
   const back = category => assets + 'backs/' + category + '.webp';
   const escape = v => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  const supportsReduced = window.matchMedia?.('(prefers-reduced-motion: reduce)');
   const scene = {
     id:'AF-SCN-001',title:'The Goose Administration',
     task:'Reassure citizens after a goose wins a democratic mayoral election.',
@@ -39,7 +38,9 @@
     {short:'THE HANDOFF',title:'Oh, you thought that was bad?',lead:'A different player—C, not the card owner A—gets a short Handoff. Try making honking mandatory, stealing the goose’s job, or saving the day.',hint:'The next person inherits the previous player’s mess.'},
     {short:'THE FALLOUT',title:'Who gets credit for this?',lead:'The Judge picks a favorite answer and can propose an extra point for a specific failure. Everyone gets to see how one bad idea led to the next.',hint:'The Bonus can be challenged. The players—not the AI—decide the score.'}
   ];
-  const state = {step:0,reaction:'question',playing:!supportsReduced?.matches,timer:null,visible:true,hover:false,focus:false,preview:null};
+  const state = {step:0,reaction:'question',preview:null};
+  const swipeThreshold=52;
+  let swipeStart=null;
   const getReaction = () => reactions.find(x => x.id === state.reaction) || reactions[0];
   const img = (url, alt, extra='') => `<img src="${url}" alt="${escape(alt)}" ${extra} loading="lazy" decoding="async">`;
   const card = (id, description, classname='') => `<div class="cd-art ${classname}">${img(front(id),description)}</div>`;
@@ -61,30 +62,66 @@
     return `<header class="cd-head"><a href="https://agent-fault-classic-cf.grenkappa459.workers.dev/cascade/" target="_blank" rel="noopener" class="cd-mark" aria-label="AGENT/FAULT Cascade home">AGENT<span>/</span>FAULT <small>CASCADE</small></a><span class="cd-caption">INTERACTIVE DEMONSTRATION <span>· SIMULATED</span></span></header>`;
   }
   function navigation() {
-    return `<div class="cd-nav" role="group" aria-label="Walkthrough controls"><div class="cd-nav-head"><span class="cd-nav-label">STAGE <strong>${state.step+1}</strong> / 06</span><span class="cd-nav-name" aria-live="polite" aria-atomic="true">${escape(stages[state.step].short)}</span></div><div class="cd-buttons"><button type="button" class="cd-control" data-prev aria-label="Go to previous stage">← <span>Previous</span></button><button type="button" class="cd-control cd-control-play" data-play aria-label="${state.playing?'Pause automatic walkthrough':'Play automatic walkthrough'}" aria-pressed="${state.playing}">${state.playing?'Ⅱ <span>Pause</span>':'▶ <span>Autoplay</span>'}</button><button type="button" class="cd-control cd-control-next" data-next aria-label="${state.step===5?'Restart walkthrough':'Go to next stage'}">${state.step===5?'↻ <span>Restart</span>':'<span>Next</span> →'}</button></div><div class="cd-dots" role="group" aria-label="Jump to a walkthrough stage">${stages.map((s,i)=>`<button type="button" class="cd-dot ${i===state.step?'cd-dot-on':''}" data-jump="${i}" aria-current="${i===state.step?'step':'false'}" aria-label="Stage ${i+1}: ${escape(s.short)}" title="${escape(s.short)}"><span></span></button>`).join('')}</div></div>`;
+    return `<div class="cd-pagination" role="group" aria-label="Choose a Cascade demo scene">${stages.map((step,i)=>`<button type="button" class="cd-scene-dot ${i===state.step?'cd-scene-dot-active':''}" data-jump="${i}" aria-current="${i===state.step?'step':'false'}" aria-label="Scene ${i+1} of ${stages.length}: ${escape(step.short)}" title="${escape(step.short)}"></button>`).join('')}</div><p class="cd-swipe-label">Swipe the scene or use the arrows <span aria-hidden="true">·</span> ${String(state.step+1).padStart(2,'0')} / 06</p>`;
   }
-  function render({focusNav=false}={}) {
+  function render(focusSelector=null) {
     const s=stages[state.step];
-    root.innerHTML=`<div class="cd"><div class="cd-shell">${header()}${navigation()}<main class="cd-main" id="cd-current-scene"><div class="cd-copy"><span class="cd-eyebrow">${escape(s.short)} · ${String(state.step+1).padStart(2,'0')} OF 06</span><h1>${escape(s.title)}</h1><p>${escape(s.lead)}</p><div class="cd-tip">${escape(s.hint)}</div></div><div class="cd-visual">${stageContent()}</div></main><div class="cd-foot"><div><strong>ONE AI. ONE ESCALATING MESS.</strong> Every Handoff comes from a different player.</div><a href="https://agent-fault-classic-cf.grenkappa459.workers.dev/cascade/" target="_blank" rel="noopener" class="cd-cta">Play Cascade <span aria-hidden="true">↗</span></a></div><div class="cd-disclaimer">Illustrated cards are from the approved 66-card candidate deck. Example responses, branching outcomes, and awards are scripted. No AI calls, live rooms, or billing.</div></div></div>`;
-    if(focusNav)root.querySelector('[data-next]')?.focus({preventScroll:true});
-    updateTimer();
+    root.innerHTML=`<div class="cd"><div class="cd-shell">${header()}<div class="cd-viewer" role="group" tabindex="0" aria-label="Cascade demo scene. Swipe or use left and right arrow keys to change scenes."><main class="cd-main" id="cd-current-scene"><div class="cd-copy"><span class="cd-eyebrow">${escape(s.short)} · ${String(state.step+1).padStart(2,'0')} OF 06</span><h1>${escape(s.title)}</h1><p>${escape(s.lead)}</p><div class="cd-tip">${escape(s.hint)}</div></div><div class="cd-visual">${stageContent()}</div></main><button type="button" class="cd-edge-arrow cd-edge-prev" data-prev aria-label="Previous Cascade scene"><span aria-hidden="true">‹</span></button><button type="button" class="cd-edge-arrow cd-edge-next" data-next aria-label="Next Cascade scene"><span aria-hidden="true">›</span></button></div>${navigation()}<div class="cd-foot"><div><strong>ONE AI. ONE ESCALATING MESS.</strong> Every Handoff comes from a different player.</div><a href="https://agent-fault-classic-cf.grenkappa459.workers.dev/cascade/" target="_blank" rel="noopener" class="cd-cta">Play Cascade <span aria-hidden="true">↗</span></a></div><div class="cd-disclaimer">Illustrated cards are from the approved 66-card candidate deck. Example responses, branching outcomes, and awards are scripted. No AI calls, live rooms, or billing.</div></div></div>`;
+    bindSwipe(root.querySelector('.cd-viewer'));
+    if(focusSelector)root.querySelector(focusSelector)?.focus({preventScroll:true});
   }
-  function updateTimer() {
-    if(state.timer){clearTimeout(state.timer);state.timer=null;}
-    root.querySelector('.cd')?.setAttribute('data-playing',String(state.playing&&!state.hover&&!state.focus&&state.visible&&!document.hidden&&!supportsReduced?.matches));
-    if(!state.playing||state.hover||state.focus||!state.visible||document.hidden||supportsReduced?.matches)return;
-    state.timer=setTimeout(()=>{if(!state.playing||state.hover||state.focus||!state.visible||document.hidden)return;state.step=(state.step+1)%stages.length;render();},8500);
+  function jump(index,focusSelector=null) {
+    swipeStart=null;
+    state.step=(index+stages.length)%stages.length;
+    render(focusSelector);
   }
-  function jump(next,focusNav=false){state.step=(next+stages.length)%stages.length;render({focusNav});}
+  function isSwipeSafe(target) {
+    return target?.closest && !target.closest('button,a,input,textarea,select,[role="dialog"],.cd-hand,.cd-chain,.cd-choice-grid');
+  }
+  function trySwipe(dx,dy) {
+    if(Math.abs(dx)<swipeThreshold||Math.abs(dx)<Math.abs(dy)*1.35)return;
+    jump(state.step+(dx<0?1:-1));
+  }
+  function bindSwipe(viewer) {
+    viewer.addEventListener('touchstart',event=>{
+      if(event.touches.length!==1||!isSwipeSafe(event.target)){swipeStart=null;return;}
+      const t=event.touches[0];
+      swipeStart={kind:'touch',id:t.identifier,x:t.clientX,y:t.clientY};
+    },{passive:true});
+    viewer.addEventListener('touchend',event=>{
+      if(swipeStart?.kind!=='touch')return;
+      const touch=Array.from(event.changedTouches).find(t=>t.identifier===swipeStart.id);
+      if(!touch)return;
+      const {x,y}=swipeStart;swipeStart=null;
+      trySwipe(touch.clientX-x,touch.clientY-y);
+    },{passive:true});
+    viewer.addEventListener('touchcancel',()=>{swipeStart=null;},{passive:true});
+    viewer.addEventListener('pointerdown',event=>{
+      if(event.pointerType==='touch'||event.button!==0||!isSwipeSafe(event.target)||event.target.closest('.cd-copy'))return;
+      swipeStart={kind:'pointer',id:event.pointerId,x:event.clientX,y:event.clientY};
+    });
+    viewer.addEventListener('pointerup',event=>{
+      if(swipeStart?.kind!=='pointer'||swipeStart.id!==event.pointerId)return;
+      const {x,y}=swipeStart;swipeStart=null;
+      trySwipe(event.clientX-x,event.clientY-y);
+    });
+    viewer.addEventListener('pointercancel',()=>{swipeStart=null;});
+    viewer.addEventListener('dragstart',event=>event.preventDefault());
+    viewer.addEventListener('keydown',event=>{
+      if(event.target!==viewer||!['ArrowLeft','ArrowRight','Home','End'].includes(event.key))return;
+      event.preventDefault();
+      const index=event.key==='Home'?0:event.key==='End'?stages.length-1:state.step+(event.key==='ArrowRight'?1:-1);
+      jump(index,'.cd-viewer');
+    });
+  }
   function chooseReaction(id) {
     if(!reactions.some(v=>v.id===id))return;
-    state.reaction=id;state.playing=false;
+    state.reaction=id;
     // Preserve the button's keyboard focus after the entire scripted response branch changes.
     render();root.querySelector(`[data-reaction="${id}"]`)?.focus({preventScroll:true});
   }
   function openInspect(id) {
     if(!hand.some(x=>x.id===id))return;
-    state.playing=false;updateTimer();
     state.preview=id;
     const existing=document.getElementById('cd-inspect');if(existing)existing.remove();
     const overlay=document.createElement('div');overlay.id='cd-inspect';overlay.className='cd-overlay';
@@ -96,10 +133,9 @@
     const button=e.target.closest('button');if(!button)return;
     if(button.hasAttribute('data-reaction')){chooseReaction(button.dataset.reaction);return;}
     if(button.hasAttribute('data-inspect')){openInspect(button.dataset.inspect);return;}
-    if(button.hasAttribute('data-play')){state.playing=!state.playing;render();root.querySelector('[data-play]')?.focus({preventScroll:true});return;}
-    if(button.hasAttribute('data-prev')){state.playing=false;jump(state.step-1);root.querySelector('[data-prev]')?.focus({preventScroll:true});return;}
-    if(button.hasAttribute('data-next')){state.playing=false;jump(state.step+1);root.querySelector('[data-next]')?.focus({preventScroll:true});return;}
-    if(button.hasAttribute('data-jump')){const i=Number(button.dataset.jump);state.playing=false;jump(i);root.querySelector('[data-jump="'+i+'"]')?.focus({preventScroll:true});return;}
+    if(button.hasAttribute('data-prev')){jump(state.step-1,'[data-prev]');return;}
+    if(button.hasAttribute('data-next')){jump(state.step+1,'[data-next]');return;}
+    if(button.hasAttribute('data-jump')){const i=Number(button.dataset.jump);jump(i,'[data-jump="'+i+'"]');return;}
   });
   document.addEventListener('click',e=>{if(e.target?.id==='cd-inspect'||e.target?.closest?.('[data-close]'))closeInspect();});
   document.addEventListener('keydown',e=>{
@@ -114,13 +150,8 @@
       else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}
     }
   });
-  document.addEventListener('visibilitychange',updateTimer);
-  if('IntersectionObserver' in window){const obs=new IntersectionObserver(entries=>{state.visible=!!entries[0]?.isIntersecting;updateTimer()},{threshold:.12});obs.observe(root);}
-  if(supportsReduced?.addEventListener)supportsReduced.addEventListener('change',e=>{if(e.matches)state.playing=false;render();});
-  root.addEventListener('af-demo-visibility',e=>{if(!e.detail?.active){state.playing=false;if(state.preview)closeInspect();render();}});
-   root.addEventListener('mouseenter',()=>{state.hover=true;updateTimer()});
-  root.addEventListener('mouseleave',()=>{state.hover=false;updateTimer()});
-  root.addEventListener('focusin',()=>{state.focus=true;updateTimer()});
-  root.addEventListener('focusout',e=>{if(!root.contains(e.relatedTarget)){state.focus=false;updateTimer()}});
+  root.addEventListener('af-demo-visibility',event=>{
+    if(!event.detail?.active){swipeStart=null;if(state.preview)closeInspect();}
+  });
   render();
 })();

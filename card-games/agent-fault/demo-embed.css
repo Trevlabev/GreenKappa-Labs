@@ -135,3 +135,21 @@ body[data-game="agent-fault"] .af-demo-intro{font-size:.95rem;line-height:1.6;co
 body[data-game="agent-fault"] .af-demo-disclosure{font:.78rem/1.65 ui-monospace,monospace;color:#bec8da;margin-top:22px;max-width:980px}
 @media(max-width:980px){.af-play-heading{align-items:start}}
 @media(max-width:700px){.af-physical-guide ol{grid-template-columns:1fr}.af-play-heading{display:block}.af-play-library{display:inline-block;margin-top:17px}.af-mode-carousel{padding:14px}.af-mode-toolbar{gap:8px}.af-mode-gallery-label{font-size:.59rem;letter-spacing:.025em}.af-mode-nav{gap:5px}.af-mode-arrow{width:31px;height:31px}.af-mode-counter{min-width:47px;font-size:.66rem}.af-mode-slide{padding:17px 1px 5px}.af-mode-slide h3{font-size:2.1rem}.af-mode-lead{font-size:.94rem}.af-mode-footer{align-items:stretch;flex-direction:column}.af-mode-cta{width:100%}.af-mode-status{text-align:center}.af-physical-title{display:block}.af-physical-title h3{margin-top:10px}body[data-game="agent-fault"] .af-demo-tab{padding:10px;min-height:65px}body[data-game="agent-fault"] .af-demo-tab span{font-size:.7rem}}
+
+
+/* Side-arrow scene navigation: replaces Classic's timed progress bars and bottom transport. */
+.afd-viewer{position:relative;isolation:isolate}
+.afd-viewer .afd-content{padding-inline:clamp(3.5rem,5vw,5rem)}
+.afd-edge-arrow{position:absolute;top:50%;transform:translateY(-50%);z-index:12;display:grid;place-items:center;width:46px;height:61px;padding:0;border:1px solid #b0a9ce;border-radius:9px;background:#151a3eea;color:#fff8e9;box-shadow:0 5px 22px #05091cc9;font:400 3.1rem/.8 Georgia,serif;cursor:pointer;touch-action:manipulation;transition:background .18s ease,box-shadow .18s ease}
+.afd-edge-arrow:hover{background:#4b3672;box-shadow:0 5px 24px #080b21}
+.afd-edge-arrow:focus-visible,.afd-dot:focus-visible,.afd-viewer:focus-visible{outline:3px solid var(--lime);outline-offset:3px}
+.afd-edge-prev{left:8px}.afd-edge-next{right:8px}
+.afd-pagination{display:flex;justify-content:center;align-items:center;gap:10px;min-height:32px;padding:12px 14px 0;border-top:1px solid #626b99}
+.afd-dot{flex:none;width:12px;height:12px;border:1px solid #8d8db0;border-radius:50%;padding:0;background:#555b83;cursor:pointer;transition:background .2s ease,transform .2s ease}
+.afd-dot[aria-current="step"]{background:var(--lime);border-color:var(--lime);transform:scale(1.15)}
+.afd-dot:hover{border-color:#fff6e9;background:#bc93d7}
+.afd-swipe-label{text-align:center;color:#c9cee3;font:800 .65rem/1.6 ui-monospace,Consolas,monospace;letter-spacing:.05em;padding:5px 14px 14px;text-transform:uppercase}
+.afd-viewer img{-webkit-user-drag:none}
+@media(max-width:850px){.afd-viewer .afd-content{padding-inline:clamp(2.55rem,5vw,3.2rem)}}
+@media(max-width:550px){.afd-viewer .afd-content{padding:20px clamp(2.4rem,10vw,3rem)}.afd-edge-arrow{width:36px;height:52px;font-size:2.45rem;border-radius:7px}.afd-edge-prev{left:4px}.afd-edge-next{right:4px}.afd-pagination{gap:9px}.afd-swipe-label{font-size:.59rem}}
+@media(prefers-reduced-motion:reduce){.afd-edge-arrow,.afd-dot{transition:none}}
