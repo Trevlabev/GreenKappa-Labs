@@ -80,6 +80,7 @@ try{
  await a(classic,'solo_next');
  cs=await api(classic,'classic',classicCode,cp);
  assert.equal(cs.round,2);
+ await classic.locator('details.persistent-prompt[data-prompt-id="'+cs.scenario.id+'"]').waitFor({state:'visible',timeout:12000});
  assert.equal(await classicPrompt.getAttribute('data-prompt-id'),cs.scenario.id,'Pin must update when the Scenario changes');
  assert.equal(cs.phase,'submit','NPC Judge should prepare automatically');
  assert.equal(cs.fault,null,'Non-Judge cannot see private Fault');
@@ -119,6 +120,11 @@ try{
   if(ds.phase==='judging')break;
   assert(['baseline','cascade'].includes(ds.phase),'No human Handoff required with 3 NPCs in round 1');
   const active=ds.current_card||[...ds.timeline].reverse().find(item=>item.kind==='card')?.card;
+  await cascade.waitForFunction(({scenarioId,activeId})=>{
+   const cards=[...document.querySelectorAll('.persistent-prompt-bar .persistent-prompt-card')];
+   return cards.length===(activeId?2:1)&&cards[0]?.dataset.promptId===scenarioId
+     &&(!activeId||cards[1]?.dataset.promptId===activeId);
+  },{scenarioId:ds.scenario.id,activeId:active?.id||null},{timeout:12000});
   assert.equal(await cascadeRail.locator('[data-prompt-id]').first().getAttribute('data-prompt-id'),ds.scenario.id,'Scenario must stay pinned through every generation step');
   assert.equal(await cascadeRail.locator('.persistent-prompt-card').count(),active?2:1,'Only publicly played Interferences may appear');
   if(active)assert.equal(await cascadeRail.locator('.persistent-prompt-card').last().getAttribute('data-prompt-id'),active.id,'Pin must track current or most recent Interference');
@@ -129,6 +135,7 @@ try{
  }
  ds=await api(cascade,'cascade',cascadeCode,dp);
  assert.equal(ds.phase,'judging');
+ await cascade.waitForFunction(()=>document.querySelectorAll('.persistent-prompt-bar .persistent-prompt-card').length===2,null,{timeout:12000});
  assert.equal(await cascadeRail.locator('.persistent-prompt-card').count(),2,'Last played card stays pinned during judging');
  assert.equal(ds.replies.length,6);
  assert.equal(ds.timeline.filter(x=>x.kind==='handoff').length,3);
@@ -144,6 +151,7 @@ try{
  await b(cascade,'solo-next');
  ds=await api(cascade,'cascade',cascadeCode,dp);
  assert.equal(ds.round,2);
+ await cascade.locator('.persistent-prompt-card[data-prompt-id="'+ds.scenario.id+'"]').first().waitFor({state:'visible',timeout:12000});
  assert.equal(await cascadeRail.locator('[data-prompt-id]').first().getAttribute('data-prompt-id'),ds.scenario.id,'Scenario pin must reset each new round');
  assert.equal(await cascadeRail.locator('.persistent-prompt-card').count(),1,'Previous round Interference must not leak into the next round');
  assert.equal(ds.phase,'baseline','NPC Judge profile should lock itself');
