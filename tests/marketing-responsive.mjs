@@ -40,6 +40,29 @@ try{
       page.on('pageerror',onError);
       const response=await page.goto(origin+route,{waitUntil:'domcontentloaded',timeout:15000});
       await page.evaluate(()=>document.fonts?.ready||Promise.resolve());
+      if(route==='/card-games/'){
+        const availability=await page.locator('.cg-status').innerText();
+        if(!availability.includes('Play online:')||!availability.includes('In development:')){
+          errors.push(route+' @ '+width+'px: mixed product availability status missing');
+        }
+      }
+      if(route==='/card-games/not-to-scale/'){
+        const art=page.locator('.nsr-art-study-figure img');
+        if(await art.count()!==1){
+          errors.push(route+' @ '+width+'px: approved promo artwork absent');
+        }else{
+          await art.scrollIntoViewIfNeeded({timeout:6000});
+          await art.evaluate(img=>img.decode().catch(()=>{}));
+          const asset=await art.evaluate(img=>({complete:img.complete,naturalWidth:img.naturalWidth}));
+          if(!asset.complete||asset.naturalWidth<=0){
+            errors.push(route+' @ '+width+'px: approved promo artwork failed to load');
+          }
+          await page.evaluate(()=>window.scrollTo(0,0));
+        }
+        if(!await page.locator('a[href="/playground/not-to-scale/"]').count()){
+          errors.push(route+' @ '+width+'px: simplified browser demo link missing');
+        }
+      }
       // Wait for above-the-fold images so captured hero art is representative,
       // not a blank placeholder produced by premature screenshot timing.
       if(width===390||width===1280){
