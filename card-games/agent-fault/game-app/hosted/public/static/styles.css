@@ -28,3 +28,20 @@
 /* NPC seat configuration: match existing player inputs and keep visible controls accessible. */
 .npc-select{appearance:auto;min-height:52px;background:#0d1030;color:var(--cream);border:2px solid #7478a7;border-radius:3px;padding:12px 14px;width:100%;font:inherit}
 .npc-select:focus-visible{outline:3px solid var(--lime);outline-offset:3px}
+
+
+/* Persistent, public-only Scenario: remains visible during every digital phase. */
+.persistent-prompt{position:sticky;top:0;z-index:60;margin:0 0 20px;background:#151a3cf7;border:2px solid var(--violet);border-radius:8px;box-shadow:0 8px 22px #07091d9e;backdrop-filter:blur(12px)}
+.persistent-prompt-summary{list-style:none;display:flex;align-items:center;gap:13px;min-height:90px;padding:9px 13px;cursor:pointer}
+.persistent-prompt-summary::-webkit-details-marker{display:none}
+.persistent-prompt-art{display:block;width:50px;height:70px;flex:none;object-fit:cover;border-radius:5px;border:1px solid var(--cream)}
+.persistent-prompt-copy{display:grid;gap:2px;min-width:0;flex:1}
+.persistent-prompt-label{font:800 .7rem/1.4 ui-monospace,monospace;letter-spacing:.1em;color:var(--lime)}
+.persistent-prompt-copy strong{font:900 clamp(1.17rem,2vw,1.65rem)/1.1 var(--display);text-transform:uppercase}
+.persistent-prompt-excerpt{font-size:.82rem;color:#f0e9e0;line-height:1.35;overflow:hidden;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2}
+.persistent-prompt-expand{font:800 .72rem/1.4 ui-monospace,monospace;color:var(--lime);white-space:nowrap}
+.persistent-prompt-expand::before{content:'+';margin-right:6px}
+.persistent-prompt[open] .persistent-prompt-expand::before{content:'−'}
+.persistent-prompt-full{border-top:1px solid #777bb0;padding:14px;max-height:min(66dvh,620px);overflow:auto;overscroll-behavior:contain}
+.persistent-prompt-full .scenario{box-shadow:none;max-width:1100px;margin:0 auto}
+@media(max-width:620px){.persistent-prompt-summary{min-height:74px;padding:7px;gap:8px}.persistent-prompt-art{width:42px;height:59px}.persistent-prompt-expand{font-size:.62rem}.persistent-prompt-excerpt{-webkit-line-clamp:1;font-size:.76rem}.persistent-prompt-copy strong{font-size:1.17rem}.persistent-prompt-label{font-size:.61rem}.persistent-prompt-full{padding:6px;max-height:63dvh}}
