@@ -20,7 +20,7 @@ function scenarioCard(c){if(!c)return '<div class="empty">SCENARIO NOT DEALT YET
 // Private Faults and unrevealed Interference hands are deliberately excluded.
 function persistentPromptCard(s){
  const c=s.scenario;
- if(s.play_mode==='physical'||!c||!/^AF-SCN-\\d{3}$/.test(String(c.id)))return '';
+ if(s.play_mode==='physical'||!c||!/^AF-SCN-[0-9]{3}$/.test(String(c.id)))return '';
  const asset='/static/assets/fronts/'+c.id+'.webp';
  return `<details class="persistent-prompt" data-prompt-id="${esc(c.id)}">
   <summary class="persistent-prompt-summary">
