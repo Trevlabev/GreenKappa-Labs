@@ -44,3 +44,26 @@
 }
 .room-connection[hidden] { display: none; }
 .room-connection:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
+
+
+/* The public prompt rail follows the game, not the page section or host controls. */
+.persistent-prompt-bar{position:sticky;top:0;z-index:60;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,370px),1fr));gap:9px;margin:0 0 18px;padding:8px;background:#151a3cf8;border:2px solid var(--violet);border-radius:8px;box-shadow:0 10px 23px #07091db0;backdrop-filter:blur(12px)}
+.persistent-prompt-card{min-width:0;background:#292c53;border:1px solid #8a7daa;border-radius:5px}
+.persistent-prompt-card:last-child:not(:first-child){border-color:var(--coral)}
+.persistent-prompt-summary{list-style:none;display:flex;align-items:center;gap:10px;cursor:pointer;min-height:83px;padding:7px 10px}
+.persistent-prompt-summary::-webkit-details-marker{display:none}
+.persistent-prompt-art{display:block;width:48px;height:68px;flex:none;border:1px solid var(--cream);border-radius:4px;object-fit:cover}
+.persistent-prompt-copy{display:grid;gap:2px;flex:1;min-width:0}
+.persistent-prompt-label{color:var(--lime);font:800 .7rem/1.3 ui-monospace,monospace;letter-spacing:.07em;text-transform:uppercase}
+.persistent-prompt-card:last-child:not(:first-child) .persistent-prompt-label{color:var(--coral)}
+.persistent-prompt-copy strong{font:900 clamp(1.2rem,1.8vw,1.6rem)/1.05 var(--display);text-transform:uppercase;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.persistent-prompt-excerpt{font-size:.77rem;line-height:1.35;color:#f1ede6;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}
+.persistent-prompt-expand{font:800 .65rem ui-monospace,monospace;color:var(--lime);white-space:nowrap}
+.persistent-prompt-expand::before{content:'+';margin-right:5px}
+.persistent-prompt-card[open] .persistent-prompt-expand::before{content:'−'}
+.persistent-prompt-full{display:grid;grid-template-columns:minmax(80px,155px) minmax(0,1fr);align-items:start;gap:14px;border-top:1px solid #7d7aa0;padding:13px;max-height:min(67dvh,610px);overflow:auto;overscroll-behavior:contain}
+.persistent-prompt-full-art{width:100%;max-width:155px}
+.persistent-prompt-full h3{font-size:1.7rem;margin:7px 0}
+.persistent-prompt-full p{margin:12px 0;line-height:1.5;overflow-wrap:anywhere}
+.persistent-prompt-full b{color:var(--lime)}
+@media(max-width:700px){.persistent-prompt-bar{grid-template-columns:1fr;gap:5px;padding:5px}.persistent-prompt-summary{min-height:64px;padding:4px 7px}.persistent-prompt-art{width:39px;height:55px}.persistent-prompt-copy strong{font-size:1.1rem}.persistent-prompt-excerpt{-webkit-line-clamp:1}.persistent-prompt-label{font-size:.61rem}.persistent-prompt-expand{font-size:.61rem}.persistent-prompt-full{grid-template-columns:76px minmax(0,1fr);gap:9px;padding:9px;max-height:52dvh}.persistent-prompt-full h3{font-size:1.3rem}}

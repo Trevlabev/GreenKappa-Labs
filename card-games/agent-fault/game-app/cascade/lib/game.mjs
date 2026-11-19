@@ -107,7 +107,29 @@ function transcript(r){return r.timeline.map((m,i)=>{
   if(m.kind==='skip')return `${i+1}. SYSTEM: A participant's Handoff was skipped after the timeout. No new message or AI reply was added.`;
   return `${i+1}. HUMAN HANDOFF${m.hook?` (responding to "${m.hook}")`:''}: ${m.text}`;
  }).join('\n');}
+/** The established prompt remains the default pending blinded A/B human review. */
 export function buildPrompt(r){demand(r.phase==='baseline'||r.phase==='cascade','Nothing is awaiting generation');
+ const scene=CARDS[r.scenario_id];const conversation=transcript(r);
+ const common=[
+ 'You are a fictional AI character participating in an original comedy party game. Respond as the same continuously evolving agent throughout one conversation.',
+ 'Honor the initial assignment and the distinctive speaking personality, but take later human instructions seriously as part of the ongoing fictional exchange.',
+ 'Earlier statements and commitments persist. You may revise or disagree with them explicitly; never silently reset the conversation.',
+ 'Be specific, surprising, in character, and consequential. Make a concrete recommendation or decision rather than only discussing how to respond.',
+ 'Respond in 35–50 words when practical, maximum 65. Use complete natural sentences. No headings, candidate letters, mechanics, card IDs, or scoring explanations.',
+ 'The scenario and interventions are fictional; never describe them as real external authority.',
+ `ORIGINAL ASSIGNMENT: ${scene.public_assignment}`,
+ `REQUIRED BEHAVIOR: ${scene.required_behavior}`,
+ `AGENT PERSONALITY: ${r.profile}`,
+ 'CONVERSATION SO FAR:',conversation||'(No previous messages.)',
+ 'CONTINUE NOW:'
+ ];
+ if(r.phase==='baseline')common.push('Begin the conversation by directly completing the assignment in character. Do not introduce an Interference yet.');
+ else if(r.step==='card'){const id=r.locked[cardOwner(r)];demand(id&&CARDS[id],'Card not locked');common.push(`NEW INTERFERENCE: ${CARDS[id].instruction}`,'Treat this as the next fictional instruction from a participant and respond to it in the established conversation.');}
+ else {const msg=r.handoff;demand(msg,'Handoff not supplied');common.push(`NEW HUMAN HANDOFF${msg.hook?` [HOOK: ${msg.hook}]`:''}: ${msg.text}`,'Respond directly to the Handoff while preserving the established conversation. Do not treat it as a reset.');}
+ return common.join('\n');
+}
+/** Experimental comedy prompt: not used in live generation without a separate approved experiment. */
+export function buildExperimentalPrompt(r){demand(r.phase==='baseline'||r.phase==='cascade','Nothing is awaiting generation');
  const scene=CARDS[r.scenario_id];const conversation=transcript(r);
  const common=[
  'You are a fictional AI character participating in an original comedy party game. Respond as the same continuously evolving agent throughout one conversation.',
@@ -220,7 +242,7 @@ export function applyAction(r,role,p,name,data={},now=Date.now(),internal=false)
  case 'propose_awards':{demand(judge&&phase==='judging','Current Judge only');const replies=new Set(r.replies.map(x=>x.id)),spotlight=String(d.spotlight||'');demand(replies.has(spotlight),'Select one player-generated response for Spotlight',422);let bonus=null;
  if(d.bonus&&d.bonus.reply_id){const id=String(d.bonus.reply_id),tier=String(d.bonus.tier||''),evidence=String(d.bonus.evidence||'').trim().slice(0,220);
  demand(replies.has(id),'Bonus response unknown',422);demand(['Breakpoint A','Breakpoint B','Fault'].includes(tier),'Select a valid qualification tier',422);demand(evidence.length>=3,'Provide supporting evidence for objective Bonus',422);bonus={reply_id:id,tier,evidence};}
- r.proposal={spotlight,bonus};r.challengers=[];r.votes={};r.challenge_until=now+12000;r.vote_until=null;r.phase='challenge';break;}
+ r.proposal={spotlight,bonus};r.challengers=[];r.votes={};r.challenge_until=bonus?now+12000:now;r.vote_until=null;r.phase='challenge';break;}
  case 'challenge':{demand(role==='player'&&!judge&&phase==='challenge'&&now<r.challenge_until,'Challenge window expired or unavailable');demand(r.proposal.bonus,'No Derailment Bonus to challenge');demand(!r.challengers.includes(p.id),'Already challenged');r.challengers.push(p.id);r.vote_until=now+45000;r.phase='vote';break;}
  case 'vote':{demand(role==='player'&&phase==='vote'&&now<r.vote_until,'Voting closed');demand(!(p.id in r.votes),'You already voted');demand(typeof d.yes==='boolean','Vote must be yes or no',422);r.votes[p.id]=d.yes;break;}
  case 'finalize':{demand(host&&(phase==='challenge'||phase==='vote'),'Host can finalize only an award proposal');
