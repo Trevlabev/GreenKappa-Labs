@@ -26,6 +26,9 @@ body.card-games-page{
 .cg-hero-note{max-width:570px;color:#abb7be;font-size:1.03rem}
 .cg-status{display:flex;align-items:center;gap:.7rem;margin-top:2rem;color:#b4c8c6;font-size:.75rem;line-height:1.4;font-weight:740;letter-spacing:.015em}
 .cg-status-dot{flex:none;width:9px;height:9px;background:#d9b57b;border-radius:50%;box-shadow:0 0 0 5px rgba(217,181,123,.14)}
+.cg-status{flex-wrap:wrap;gap:.35rem .7rem}
+.cg-status strong{color:#f2dbc0;font-weight:850}
+.cg-status-separator{color:#8eaaa8}
 .cg-hero-art{position:relative;min-height:520px;isolation:isolate;perspective:1100px}
 .cg-hero-art:before{content:"";position:absolute;inset:15% 13%;border-radius:50%;background:#bb7a65;filter:blur(95px);opacity:.27;z-index:-1}
 .cg-cover{

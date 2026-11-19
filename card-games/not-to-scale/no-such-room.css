@@ -1,4 +1,4 @@
-/* NO SUCH ROOM | v20261118. Editorial, artwork-free product page.
+/* NO SUCH ROOM | v20261118. Editorial product page with a separate approved-art study.
    Scope every page rule; shared GreenKappa header/footer remain unchanged. */
 
 .nsr-page {
@@ -45,10 +45,22 @@
 .nsr-page .nsr-step-index {display:block;font:750 .72rem/1.5 system-ui,sans-serif;color:var(--nsr-teal);margin-bottom:clamp(23px,4vw,40px)}
 .nsr-page .nsr-steps h3 {font-size:clamp(1.65rem,2.5vw,2.2rem);letter-spacing:-.035em;line-height:1.14;color:#f2e8d8;margin-bottom:10px!important}
 .nsr-page .nsr-steps p {font:400 .95rem/1.77 system-ui,sans-serif;color:#bacbca}
+.nsr-page .nsr-art-study{padding:clamp(48px,7vw,85px) 0;background:linear-gradient(140deg,#0f2733,#091824);border-top:1px solid var(--nsr-rule)}
+.nsr-page .nsr-art-study-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(210px,.58fr);align-items:center;gap:clamp(28px,6vw,86px)}
+.nsr-page .nsr-art-study h2{font-size:clamp(2.55rem,4.8vw,4.5rem);line-height:1.05;letter-spacing:-.065em;color:var(--nsr-ivory);margin:1rem 0 1.3rem!important}
+.nsr-page .nsr-art-study h2 em{font-weight:400;color:var(--nsr-teal)}
+.nsr-page .nsr-art-study-copy>p:not(.nsr-overline){max-width:56ch;font:400 1rem/1.76 system-ui,sans-serif;color:#c5d6d2}
+.nsr-page .nsr-art-study-link{display:inline-flex;gap:.6rem;align-items:center;margin-top:1.55rem;font:750 .85rem/1.5 system-ui,sans-serif;text-decoration:underline;text-underline-offset:5px;color:var(--nsr-teal)!important}
+.nsr-page .nsr-art-study-figure{min-width:0;width:min(100%,360px);margin:0 auto}
+.nsr-page .nsr-art-study-figure a{display:block;border:1px solid rgba(154,210,203,.42);background:#0a1b28;padding:7px;border-radius:8px}
+.nsr-page .nsr-art-study-figure img{display:block;width:100%;height:auto;max-height:570px;object-fit:contain;border-radius:4px}
+.nsr-page .nsr-art-study-figure figcaption{padding:.8rem .2rem 0;font:650 .7rem/1.55 system-ui,sans-serif;letter-spacing:.035em;color:#a7c1bd}
 .nsr-page .nsr-outro {padding:clamp(43px,5vw,65px) 0 clamp(52px,6vw,85px);border-top:1px solid var(--nsr-rule);background:var(--nsr-deep)}
 .nsr-page .nsr-outro-layout {display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:clamp(34px,7vw,120px)}
 .nsr-page .nsr-outro h2 {font-size:clamp(2.15rem,3.4vw,3.2rem);line-height:1.14;letter-spacing:-.055em;color:#f3e9da;margin-top:12px!important}
 .nsr-page .nsr-outro-copy p {font:400 .95rem/1.78 system-ui,sans-serif;color:#bacbca;max-width:61ch}
+.nsr-page .nsr-outro-copy .nsr-microdemo-note{margin-top:1rem;color:#d5ded5}
+.nsr-page .nsr-outro-actions{display:flex;align-items:center;flex-wrap:wrap;gap:.25rem 1.5rem}
 .nsr-page .nsr-outro-copy a {display:inline-block;margin-top:20px;font:700 .83rem/1.5 system-ui,sans-serif;text-decoration:underline;text-underline-offset:5px;color:var(--nsr-teal)!important}
 .nsr-page .site-footer {color:#aebfc0;border-top:1px solid var(--nsr-rule)}
 .nsr-page .site-footer a {color:#d5e5e0}
@@ -60,6 +72,8 @@
   .nsr-page .nsr-hero-description {max-width:660px}
   .nsr-page .nsr-topline {margin-bottom:55px}
   .nsr-page .nsr-outro-layout {grid-template-columns:1fr;gap:20px}
+  .nsr-page .nsr-art-study-layout{grid-template-columns:1fr;gap:1.8rem}
+  .nsr-page .nsr-art-study-figure{width:min(100%,330px);margin-inline:0}
 }
 @media(max-width:640px) {
   .nsr-page .nsr-container {width:calc(100% - 36px)}
