@@ -60,6 +60,7 @@
 .nsr-page .nsr-outro h2 {font-size:clamp(2.15rem,3.4vw,3.2rem);line-height:1.14;letter-spacing:-.055em;color:#f3e9da;margin-top:12px!important}
 .nsr-page .nsr-outro-copy p {font:400 .95rem/1.78 system-ui,sans-serif;color:#bacbca;max-width:61ch}
 .nsr-page .nsr-outro-copy .nsr-microdemo-note{margin-top:1rem;color:#d5ded5}
+.nsr-page .nsr-outro-actions{display:flex;align-items:center;flex-wrap:wrap;gap:.25rem 1.5rem}
 .nsr-page .nsr-outro-copy a {display:inline-block;margin-top:20px;font:700 .83rem/1.5 system-ui,sans-serif;text-decoration:underline;text-underline-offset:5px;color:var(--nsr-teal)!important}
 .nsr-page .site-footer {color:#aebfc0;border-top:1px solid var(--nsr-rule)}
 .nsr-page .site-footer a {color:#d5e5e0}
