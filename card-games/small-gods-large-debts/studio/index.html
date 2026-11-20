@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="dark"><meta name="robots" content="noindex,nofollow"><meta name="description" content="Small Gods, Large Debts experimental local-first card design studio. Source artwork approvals and experimental mechanics remain distinct."><title>Small Gods, Large Debts — Card Studio</title>
+<link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="styles.css">
+<script src="builtin.js" defer></script><script src="seed.js" defer></script><script src="app.js" defer></script>
+</head>
+<body>
+<div class="app-shell">
+  <header class="topbar">
+    <div class="brand"><div class="brand-sigil" aria-hidden="true"><i></i><i></i><i></i></div>
+      <div><div class="brand-overline">GREENKAPPA LABS / AUTHORING TOOLS</div><strong>SMALL GODS, <em>LARGE DEBTS</em></strong><div class="brand-sub">CARD STUDIO <span>v1.1.0-P · ONLINE DEVELOPMENT EDITION</span></div></div>
+    </div>
+    <div class="top-actions"><span id="saveIndicator" class="save-indicator"><span class="live-dot"></span> Starting local studio…</span><button id="btnBackup" class="btn subtle" title="Export the entire project, including imported art">Backup project</button><button id="btnHelp" class="btn outline">Guide <span aria-hidden="true">?</span></button></div>
+  </header>
+  <div class="body-shell">
+    <aside class="side-nav" aria-label="Studio sections">
+      <div class="nav-section-label">WORKSPACE</div>
+      <button class="nav-link active" data-view="workshop"><span class="nav-symbol">◈</span><span>Card workshop</span><span class="nav-kbd">01</span></button>
+      <button class="nav-link" data-view="library"><span class="nav-symbol">▦</span><span>Deck library</span><span class="nav-kbd">02</span></button>
+      <button class="nav-link" data-view="assets"><span class="nav-symbol">◉</span><span>Artwork vault</span><span class="nav-kbd">03</span></button>
+      <button class="nav-link" data-view="proof"><span class="nav-symbol">▤</span><span>Print & export</span><span class="nav-kbd">04</span></button>
+      <button class="nav-link" data-view="governance"><span class="nav-symbol">◇</span><span>Governance</span><span class="nav-kbd">05</span></button>
+      <div class="nav-divider"></div>
+      <div class="nav-section-label">LIVE INVENTORY</div>
+      <div id="sidebarCount" class="sidebar-count"></div>
+      <div class="nav-bottom"><div class="nav-bottom-quote">EVERY FAVOR<br>HAS A PRICE.</div><div class="nav-bottom-note">Local-first. No automatic Drive writes. Approved originals stay untouched.</div></div>
+    </aside>
+    <main id="content" class="app-main">
+      <section id="view-workshop" class="page-section active">
+        <div class="page-head compact"><div><div class="eyebrow">01 / CREATE & REFINE</div><h1>Card workshop</h1><p>Choose a slot, edit a working candidate, and inspect the actual printed result.</p></div><div class="header-actions"><button id="btnSnapshot" class="btn outline" title="Save a named revision of this card">Snapshot</button><button id="btnFork" class="btn outline">Create variant</button><button id="btnExportPNG" class="btn primary">Export card PNG</button></div></div>
+        <div class="studio-layout">
+          <section class="card-browser panel">
+            <div class="panel-title"><span>CARD INDEX</span><span id="shownCount" class="mono">54</span></div>
+            <div class="search-wrap"><span>⌕</span><input id="cardSearch" autocomplete="off" placeholder="Search names, IDs, text…" aria-label="Search cards"></div>
+            <div class="stack-small"><select id="cardModule" aria-label="Card collection"><option value="all">All collections</option><option value="core">Core deck · 54 slots</option><option value="expansion">Titan + Boon module</option><option value="alternate">Alternate deity candidates</option><option value="variants">My design variants</option></select><select id="cardCategory" aria-label="Card type"><option value="all">Every card type</option><option>Deity</option><option>Miracle</option><option>Covenant</option><option>Omen</option><option>Titan</option><option>Good Boon</option><option>Bad Boon</option></select></div>
+            <div id="cardList" class="card-index" role="listbox" aria-label="Cards"></div>
+            <div class="browser-footer"><button id="btnAddCard" class="btn outline full">+ New experimental card</button><small>Core IDs are protected. New cards live outside the 54-slot baseline.</small></div>
+          </section>
+          <section class="editor-panel panel">
+            <div class="editor-tabs" role="tablist" aria-label="Editor panels"><button class="editor-tab active" data-editor="content">Content</button><button class="editor-tab" data-editor="art">Artwork</button><button class="editor-tab" data-editor="design">Layout</button><button class="editor-tab" data-editor="history">Sources & history</button></div>
+            <div id="editor-content" class="editor-body active"><div id="cardIdentity"></div>
+              <div class="form-grid"><label>Card title<input id="fieldTitle" maxlength="120" data-field="title"></label><label>Subtitle / domain<input id="fieldSubtitle" maxlength="120" data-field="subtitle"></label></div>
+              <div class="form-grid"><label>Ability or effect name<input id="fieldAbility" maxlength="130" data-field="abilityTitle"></label><label>Cost · Devotion<input id="fieldCost" type="number" min="0" max="99" data-field="cost"></label></div>
+              <label>Exact card rules <span class="field-explainer">Keep mechanical text separate from art.</span><textarea id="fieldEffect" rows="7" data-field="effect" spellcheck="true"></textarea></label>
+              <div class="form-grid"><label>Usage / frequency<input id="fieldFrequency" maxlength="100" data-field="frequency" placeholder="e.g. TWICE PER GAME"></label><label>Visual accent<input id="fieldAccent" type="color" data-field="accent"></label></div>
+              <label>Flavor text<textarea id="fieldFlavor" rows="2" data-field="flavor"></textarea></label>
+              <div id="d8Editor" hidden><div class="section-sep"><span>TITAN D8 ORACLE · EXPERIMENTAL</span></div><p class="mini-help">Each face is independently editable. Repeated effects may be intentional. No D8 rows are approved canon yet.</p><div id="d8Fields" class="dice-grid"></div></div>
+              <div class="editor-tip"><strong>Source governance:</strong> Your edits are working candidates. They do not replace the source approval or modify Google Drive.</div>
+            </div>
+            <div id="editor-art" class="editor-body">
+              <div class="section-sep"><span>ILLUSTRATION SOURCE</span></div><div id="assignedArt" class="assigned-art"></div>
+              <div class="form-row"><label class="upload-btn btn primary">Upload illustration<input id="artFile" type="file" accept="image/png,image/jpeg,image/webp" hidden></label><button id="btnChooseAsset" class="btn outline">Choose from vault</button><button id="btnClearArt" class="btn subtle">Unassign</button></div>
+              <p class="mini-help">Uploads are stored locally in this browser until included in a project backup. The original approved files stay unchanged.</p>
+              <div class="section-sep"><span>CROP & POSITION</span></div><div class="range-row"><label for="artZoom">Zoom</label><input type="range" id="artZoom" min="65" max="260" step="1" data-field="artZoom"><output id="artZoomValue"></output></div><div class="range-row"><label for="artX">Horizontal focus</label><input type="range" id="artX" min="0" max="100" step="1" data-field="artX"><output id="artXValue"></output></div><div class="range-row"><label for="artY">Vertical focus</label><input type="range" id="artY" min="0" max="100" step="1" data-field="artY"><output id="artYValue"></output></div>
+              <button id="btnResetCrop" class="btn outline">Reset to centered crop</button><div id="artQuality" class="quality-info"></div>
+            </div>
+            <div id="editor-design" class="editor-body">
+              <div class="section-sep"><span>CARD GEOMETRY</span></div><div id="geometryCard" class="geometry-card"></div>
+              <label class="check-row"><input type="checkbox" id="showGuides"> Show trim, safe-area and artwork guides</label>
+              <label class="check-row"><input type="checkbox" id="previewBack"> Show reverse side instead of front</label>
+              <div class="section-sep"><span>PRINT SAFETY</span></div><div id="designNotes" class="info-cards"></div>
+              <div class="section-sep"><span>EXPORT VARIANTS</span></div><div class="form-row"><button id="btnExportSVG" class="btn outline">Editable SVG</button><button id="btnExportBleed" class="btn outline">Bleed proof PNG</button><button id="btnExportBack" class="btn outline">Back PNG</button></div>
+            </div>
+            <div id="editor-history" class="editor-body">
+              <div class="section-sep"><span>SOURCE & APPROVAL SCOPE</span></div><div id="sourceInfo"></div>
+              <label>Working notes<textarea id="fieldNotes" rows="4" data-field="notes"></textarea></label>
+              <label>Source URL<input id="fieldSourceUrl" data-field="sourceUrl" placeholder="https://…"></label>
+              <div class="section-sep"><span>VERSION SNAPSHOTS</span></div><div id="historyList" class="history-list"></div>
+              <div class="form-row"><button id="btnRestoreSeed" class="btn subtle">Revert this card to imported baseline</button><button id="btnDeleteVariant" class="btn danger" hidden>Delete variant</button></div>
+            </div>
+          </section>
+          <section class="preview-panel panel"><div class="preview-head"><div><span>LIVE CARD PROOF</span><small id="previewMeta">TAROT · 2.75 × 4.75 IN</small></div><div class="segmented"><button id="previewFront" class="active" aria-label="Show front">Front</button><button id="previewReverse" aria-label="Show back">Back</button></div></div>
+            <div class="preview-stage"><canvas id="cardCanvas" width="825" height="1425" aria-label="Card design preview"></canvas></div>
+            <div class="preview-foot"><span id="previewTitle">D05 — Nulve</span><span class="preview-version" id="previewStatus">CANDIDATE</span></div>
+            <div id="qaPanel" class="qa-panel"></div>
+            <div class="preview-actions"><button id="btnDownloadCurrent" class="btn outline">PNG</button><button id="btnDownloadSVG" class="btn outline">SVG</button><button id="btnQuickPrint" class="btn outline">Print</button></div>
+          </section>
+        </div>
+      </section>
+      <section id="view-library" class="page-section">
+        <div class="page-head"><div><div class="eyebrow">02 / REFERENCE & COMPLETENESS</div><h1>Deck library</h1><p>Inventory, provenance and production readiness at a glance.</p></div><div class="header-actions"><button id="btnExportCSV" class="btn outline">Export inventory CSV</button><button id="btnImportJson" class="btn outline">Import project JSON</button></div></div>
+        <div id="statCards" class="stat-grid"></div><div class="library-tools"><input id="librarySearch" placeholder="Filter the inventory…" aria-label="Search inventory"><select id="libraryScope"><option value="all">All collections</option><option value="core">Core deck only</option><option value="expansion">Titan + Boon module</option><option value="alternate">Alternates</option><option value="variants">Variants</option></select></div>
+        <div class="table-scroller"><table class="inventory-table"><thead><tr><th>ID</th><th>Card</th><th>Collection</th><th>Rules</th><th>Artwork</th><th>Front layout</th><th>Proof</th></tr></thead><tbody id="inventoryRows"></tbody></table></div>
+      </section>
+      <section id="view-assets" class="page-section">
+        <div class="page-head"><div><div class="eyebrow">03 / PROVENANCE & ORIGINALS</div><h1>Artwork vault</h1><p>Browse sourced art, assign images, or add your own without altering approved originals.</p></div><div class="header-actions"><label class="btn primary">Import images<input id="vaultFile" multiple type="file" accept="image/png,image/jpeg,image/webp" hidden></label></div></div>
+        <div class="notice"><strong>Asset integrity:</strong> Bundled images retain their original bytes and SHA-256 references. Assigning an artwork key does not change its approval scope.</div>
+        <div id="assetGrid" class="asset-grid"></div>
+      </section>
+      <section id="view-proof" class="page-section">
+        <div class="page-head"><div><div class="eyebrow">04 / OUTPUT ENGINE</div><h1>Print & export</h1><p>Build proof sheets, individual exports and full project backups.</p></div></div>
+        <div class="export-grid">
+          <div class="export-card"><div class="export-icon">▤</div><h2>Print-ready layout proof</h2><p>US Letter sheets, automatically separated by tarot and poker dimensions. Open in your browser and print at 100%.</p><label>Included cards<select id="printScope"><option value="core">Core deck · 54 cards</option><option value="expansion">Titan + Boon module</option><option value="all">Everything, including alternates</option><option value="selected">Current card only</option></select></label><label class="check-row"><input type="checkbox" id="printBacks"> Include matching back sheets</label><label class="check-row"><input type="checkbox" id="printGuides" checked> Print crop marks and cut guides</label><button id="btnPrintSheets" class="btn primary full">Open print proof</button><small>Home proof only. No vendor certification; browser print scaling must be 100%.</small></div>
+          <div class="export-card"><div class="export-icon">◇</div><h2>Batch asset package</h2><p>Download a ZIP containing rendered PNG fronts, a manifest, and any selected reverse-side previews.</p><label>Asset set<select id="batchScope"><option value="core">Core 54</option><option value="expansion">Titan + Boons</option><option value="all">All card records</option></select></label><button id="btnBatchZIP" class="btn outline full">Build PNG ZIP</button><button id="btnOracle" class="btn subtle full">Print full Titan D8 oracle sheets</button><small>Exports respect current candidate edits. Unapproved assets stay labelled.</small></div>
+          <div class="export-card"><div class="export-icon">↧</div><h2>Portable project backup</h2><p>Download all card records, approval metadata, working notes, versions, and uploaded custom images as JSON.</p><button id="btnProjectBackup" class="btn outline full">Download project backup</button><label class="btn subtle full" style="text-align:center">Restore from JSON<input id="restoreInput" type="file" accept="application/json,.json" hidden></label><small>Use this before switching browsers or computers. Drive is not automatically synchronized.</small></div>
+        </div><div id="progressPanel" class="progress-panel" hidden><div class="progress-head"><strong id="progressLabel">Working…</strong><span id="progressPercent">0%</span></div><div class="progress-track"><div id="progressFill"></div></div><p id="progressDetail"></p></div>
+      </section>
+      <section id="view-governance" class="page-section">
+        <div class="page-head"><div><div class="eyebrow">05 / SOURCE OF TRUTH</div><h1>Governance & decisions</h1><p>Separate approved source material from untested mechanics, layout proofs and proposed expansions.</p></div></div>
+        <div class="governance-grid"><article class="governance-card"><h2>Approval ledger</h2><div id="approvalLedger"></div></article><article class="governance-card"><h2>Production gates</h2><div id="productionGates"></div></article></div>
+        <article class="governance-card"><h2>Authoritative references</h2><div class="link-list"><a href="https://docs.google.com/document/d/14BImRCsrWYBl6-A8B7cZgbQ-x7wE0A5O-xn6Hg8v8eY/edit" target="_blank" rel="noreferrer">Project authority &amp; approval index ↗</a><a href="https://drive.google.com/drive/folders/1GGxv7zlciytN74tHO79hbdcZb2JRH2j1" target="_blank" rel="noreferrer">Approved Assets — source originals ↗</a><a href="https://docs.google.com/document/d/107CtXFD2owIVdKb5rUTjOtomcwlLmL7ytfonZmdVOzQ/edit" target="_blank" rel="noreferrer">Seven approved Deity abilities ↗</a><a href="https://docs.google.com/document/d/1Ql6lCErVsvZg1JxHSy8l9H2DR4YOaEyFhtot069eYQE/edit" target="_blank" rel="noreferrer">16 approved Titan Boon texts ↗</a><a href="https://drive.google.com/drive/folders/1Ehylfu3VYk2W_rCRb5wO2-KOYSZ8bF5g" target="_blank" rel="noreferrer">Historical v0.9-P print-and-play baseline ↗</a></div></article>
+      </section>
+    </main>
+  </div>
+</div>
+<input id="hiddenImport" type="file" accept="application/json,.json" hidden>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<dialog id="modal" class="modal"><div class="modal-inner"><div class="modal-head"><h2 id="modalTitle">Dialog</h2><button id="modalClose" class="icon-button" aria-label="Close dialog">×</button></div><div id="modalBody"></div><div id="modalActions" class="modal-actions"></div></div></dialog>
+</body>
+</html>

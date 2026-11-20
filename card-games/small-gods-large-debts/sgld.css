@@ -123,3 +123,30 @@ body[data-game="small-gods-large-debts"] .gd-hero h1 em{color:#ffc96a}
  .sgld-media-grid .sgld-media a{aspect-ratio:4/3}
 }
 @media(prefers-reduced-motion:reduce){.sgld-media-grid{scroll-behavior:auto}}
+
+/* SG,LD Card Studio integration v1.1.0-P — public development tool, not retail game */
+.sgld-studio-launch{background:radial-gradient(ellipse at 82% 12%,rgba(52,130,187,.18),transparent 44%),radial-gradient(ellipse at 5% 100%,rgba(227,61,140,.12),transparent 43%),#070d1c;color:#f1ebed;border-top:1px solid rgba(255,214,133,.19);border-bottom:1px solid rgba(255,214,133,.19)}
+.sgld-studio-launch-inner{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(300px,.95fr);align-items:center;gap:clamp(2rem,5vw,5.5rem);padding-block:clamp(3rem,6vw,5.5rem)}
+.sgld-studio-launch h2{font-family:inherit;color:#fff;font-size:clamp(2rem,4.5vw,4.2rem);line-height:1.04;letter-spacing:-.045em;margin:.7rem 0 1.35rem}
+.sgld-studio-launch h2 em{font-style:normal;color:#ee6eb7}
+.sgld-studio-launch-copy>p:not(.gd-overline){max-width:66ch;line-height:1.75;color:#ced4e4}
+.sgld-studio-launch .gd-actions{display:flex;flex-wrap:wrap;gap:.8rem;margin-top:1.5rem}
+.sgld-studio-launch .sgld-studio-privacy{font-size:.82rem;line-height:1.6;color:#aab8d0;margin-top:1.4rem;max-width:70ch}
+.sgld-studio-console{border:1px solid rgba(255,202,108,.28);background:linear-gradient(160deg,#122033,#070e1d);box-shadow:0 18px 55px #0006;border-radius:19px;overflow:hidden}
+.sgld-studio-console-head,.sgld-studio-console-foot{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:1rem 1.2rem;background:#050d1b;font:700 .69rem/1.4 system-ui,sans-serif;letter-spacing:.13em;color:#d5c8a8}
+.sgld-studio-console-head i{display:inline-block;width:.48rem;height:.48rem;border-radius:50%;background:#57d8d7;box-shadow:0 0 12px #57d8d7;vertical-align:middle;margin-right:.45rem}
+.sgld-studio-console-head strong{color:#78e8e0;white-space:nowrap}
+.sgld-studio-console-body{padding:1.5rem 1.3rem}
+.sgld-studio-console-eyebrow{font:700 .68rem/1 system-ui,sans-serif;letter-spacing:.15em;color:#aab9cd;margin:0 0 .95rem}
+.sgld-studio-console-stats{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
+.sgld-studio-console-stats>div{padding:1rem;border:1px solid rgba(97,194,216,.23);border-radius:11px;background:#ffffff08}
+.sgld-studio-console-stats strong{display:block;color:#ffce78;font-size:2.5rem;font-weight:750;line-height:1}
+.sgld-studio-console-stats span{display:block;color:#aebdd1;font:600 .74rem/1.4 system-ui,sans-serif;margin-top:.5rem}
+.sgld-studio-console-rule{height:1px;background:#ffffff20;margin:1.3rem 0}
+.sgld-studio-console-body ul{list-style:none;margin:0;padding:0;display:grid;gap:.7rem}
+.sgld-studio-console-body li{display:flex;align-items:baseline;gap:.65rem;font:500 .86rem/1.5 system-ui,sans-serif;color:#d6deec}
+.sgld-studio-console-body li>span{color:#59d9e1;flex:0 0 1rem}
+.sgld-studio-console-foot{font-size:.61rem;color:#b8a8bf}
+.sgld-studio-console-foot span{color:#e9c56d;text-align:right}
+@media(max-width:900px){.sgld-studio-launch-inner{grid-template-columns:1fr}.sgld-studio-console{max-width:620px}}
+@media(max-width:480px){.sgld-studio-console-head,.sgld-studio-console-foot{font-size:.58rem;letter-spacing:.05em}.sgld-studio-console-stats strong{font-size:2rem}.sgld-studio-launch h2{font-size:clamp(2rem,10vw,2.9rem)}}
