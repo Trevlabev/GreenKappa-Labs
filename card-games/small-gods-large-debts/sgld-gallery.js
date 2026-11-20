@@ -1,56 +1,68 @@
-/* Small Gods, Large Debts — approved promotional art gallery, November 2026. */
+/* SG,LD — accessible tarot inspector, motion gate and swipe controls; v2.0-P */
 (() => {
-  const gallery = document.getElementById('sgld-gallery');
-  const controls = document.getElementById('sgld-gallery-controls');
-  if (!gallery || !controls) return;
-  const cards = [...gallery.querySelectorAll('.sgld-media')];
-  const prev = document.getElementById('sgld-gallery-prev');
-  const next = document.getElementById('sgld-gallery-next');
-  const count = document.getElementById('sgld-gallery-count');
-  if (!cards.length || !prev || !next || !count) return;
-  controls.hidden = false;
-  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-  function currentIndex() {
-    if (gallery.scrollLeft <= 4) return 0;
-    if (gallery.scrollLeft >= gallery.scrollWidth - gallery.clientWidth - 4) return cards.length - 1;
-    const left = gallery.getBoundingClientRect().left;
-    let index = 0;
-    let distance = Number.POSITIVE_INFINITY;
-    cards.forEach((card, i) => {
-      const delta = Math.abs(card.getBoundingClientRect().left - left);
-      if (delta < distance) { index = i; distance = delta; }
+  'use strict';
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const video = document.getElementById('sgld-deck-video');
+  const toggle = document.getElementById('sgld-motion-toggle');
+  const slowNetwork = Boolean(navigator.connection && navigator.connection.saveData);
+  let manualPause = false;
+  function setVideoState(playing) {
+    if (!video || !toggle) return;
+    toggle.setAttribute('aria-pressed', playing ? 'true' : 'false');
+    toggle.innerHTML = playing ? 'Pause deck animation <span aria-hidden="true">Ⅱ</span>' : 'Play deck animation <span aria-hidden="true">▶</span>';
+  }
+  if (video && toggle) {
+    video.addEventListener('play', () => setVideoState(true));
+    video.addEventListener('pause', () => setVideoState(false));
+    toggle.addEventListener('click', async () => {
+      if (!video.paused) { manualPause = true; video.pause(); return; }
+      manualPause = false;
+      try { await video.play(); } catch (_) { video.setAttribute('controls', ''); }
     });
-    return index;
-  }
-  function update() {
-    const index = currentIndex();
-    count.textContent = (index + 1) + ' / ' + cards.length;
-    prev.disabled = index === 0;
-    next.disabled = index === cards.length - 1;
-  }
-  function navigate(step) {
-    const targetIndex = Math.min(cards.length - 1, Math.max(0, currentIndex() + step));
-    const target = cards[targetIndex];
-    const delta = target.getBoundingClientRect().left - gallery.getBoundingClientRect().left;
-    gallery.scrollBy({left: delta, behavior: prefersReducedMotion.matches ? 'auto' : 'smooth'});
-    count.textContent = (targetIndex + 1) + ' / ' + cards.length;
-    prev.disabled = targetIndex === 0;
-    next.disabled = targetIndex === cards.length - 1;
-  }
-  prev.addEventListener('click', () => navigate(-1));
-  next.addEventListener('click', () => navigate(1));
-  gallery.addEventListener('keydown', (event) => {
-    if (event.key === 'ArrowRight' || event.key === 'ArrowLeft') {
-      event.preventDefault();
-      navigate(event.key === 'ArrowRight' ? 1 : -1);
+    if ('IntersectionObserver' in window) {
+      const observer = new IntersectionObserver(entries => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) { video.pause(); continue; }
+          if (!manualPause && !reduced.matches && !slowNetwork) video.play().catch(() => {});
+        }
+      }, {threshold: .48});
+      observer.observe(video);
     }
+    reduced.addEventListener?.('change', () => { if (reduced.matches) video.pause(); });
+  }
+
+  document.querySelectorAll('[data-scroll]').forEach(button => {
+    button.addEventListener('click', () => {
+      const container = document.getElementById(button.dataset.target);
+      if (!container) return;
+      const first = container.querySelector('.sgld-deity');
+      const distance = first ? first.getBoundingClientRect().width + 16 : container.clientWidth * .78;
+      container.scrollBy({left: (button.dataset.scroll === 'next' ? 1 : -1) * distance, behavior: reduced.matches ? 'instant' : 'smooth'});
+    });
   });
-  let queued = false;
-  gallery.addEventListener('scroll', () => {
-    if (queued) return;
-    queued = true;
-    requestAnimationFrame(() => { queued = false; update(); });
-  }, {passive: true});
-  window.addEventListener('resize', update, {passive: true});
-  update();
+
+  const dialog = document.getElementById('sgld-card-dialog');
+  const closing = dialog?.querySelector('[data-close]');
+  const image = dialog?.querySelector('[data-dialog-image]');
+  const name = dialog?.querySelector('[data-dialog-name]');
+  const domain = dialog?.querySelector('[data-dialog-domain]');
+  const ability = dialog?.querySelector('[data-dialog-ability]');
+  if (dialog && image && name && domain && ability) {
+    let lastFocus = null;
+    document.querySelectorAll('[data-inspect]').forEach(button => {
+      button.addEventListener('click', () => {
+        lastFocus = button;
+        name.textContent = button.dataset.name || '';
+        domain.textContent = button.dataset.domain || '';
+        ability.textContent = button.dataset.ability || '';
+        image.src = button.dataset.image || '';
+        image.alt = 'Approved tarot artwork for ' + (button.dataset.name || 'deity');
+        if (typeof dialog.showModal === 'function') dialog.showModal();
+        else window.open(button.dataset.image, '_blank', 'noopener');
+      });
+    });
+    closing?.addEventListener('click', () => dialog.close());
+    dialog.addEventListener('click', event => { if (event.target === dialog) dialog.close(); });
+    dialog.addEventListener('close', () => { lastFocus?.focus(); });
+  }
 })();
