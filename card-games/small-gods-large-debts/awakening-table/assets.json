@@ -1,0 +1,234 @@
+{
+  "status": "UNAPPROVED",
+  "date": "2026-11-20",
+  "assets": {
+    "titans": [
+      {
+        "id": "OG01",
+        "file": "assets/titans/SGLD_OG01_The_Gap_That_Hungers_3D_Card_v0.1-P_UNAPPROVED.glb",
+        "bytes": 3338900,
+        "sha256": "b046898ea4e352f4ec48cea467a8cb131ed361fa26c41137fbfde417d55547d8"
+      },
+      {
+        "id": "OG02",
+        "file": "assets/titans/SGLD_OG02_The_First_Unpaid_Cause_3D_Card_v0.1-P_UNAPPROVED.glb",
+        "bytes": 3502268,
+        "sha256": "c5c82ad354637f015fe4fba699556e809e585faa22eceebcda4ca68c47496fc3"
+      },
+      {
+        "id": "OG03",
+        "file": "assets/titans/SGLD_OG03_The_Future_That_Refused_3D_Card_v0.1-P_UNAPPROVED.glb",
+        "bytes": 3452400,
+        "sha256": "1e6843b378215d43b25ef2fec6241842cbb31bd76ba9e00217be78d4a8235596"
+      },
+      {
+        "id": "OG04",
+        "file": "assets/titans/SGLD_OG04_The_Wound_Before_Light_3D_Card_v0.1-P_UNAPPROVED.glb",
+        "bytes": 3714068,
+        "sha256": "c5e7e94d7ad771c73e79009dc6ae6d09c821efb4ecc4c9fb46c160f2471e9aa8"
+      },
+      {
+        "id": "OG05",
+        "file": "assets/titans/SGLD_OG05_The_Last_Witness_3D_Card_v0.1-P_UNAPPROVED.glb",
+        "bytes": 3525364,
+        "sha256": "e0fa92010d3f83a01c4b216fd03b520ebc8c2078c87d4bd77e824dc2a7c04bba"
+      },
+      {
+        "id": "OG06",
+        "file": "assets/titans/SGLD_OG06_The_Geometry_That_Cannot_Close_3D_Card_v0.1-P_UNAPPROVED.glb",
+        "bytes": 3634476,
+        "sha256": "89f43c91c422667cc91828c5ab4296aa1a1764e98099f8aa31fc987168c5d9a1"
+      },
+      {
+        "id": "OG07",
+        "file": "assets/titans/SGLD_OG07_The_Choir_Without_Voices_3D_Card_v0.1-P_UNAPPROVED.glb",
+        "bytes": 3563840,
+        "sha256": "a2c47818bd3258d41d602172a169ceb49a405e5ac8082f9cddb59417ed3472fd"
+      },
+      {
+        "id": "OG08",
+        "file": "assets/titans/SGLD_OG08_The_Unfinished_Constant_3D_Card_v0.1-P_UNAPPROVED.glb",
+        "bytes": 3354756,
+        "sha256": "adcd20cf44741228ff8870893a61fb95afacd93e427942bcbac8862dfd5fb50e"
+      }
+    ],
+    "deities": [
+      {
+        "id": "EIGHT",
+        "file": "assets/deities/SGLD_EIGHT_DEITIES_ANIMATED_TRUE_3D_DECK_v1.2-P.glb",
+        "bytes": 20061312,
+        "sha256": "ba5fd0f8b403234982ca0166163ad9eccf01d7cb183a8cf78955380bfb2dc9f8"
+      },
+      {
+        "id": "GILT",
+        "file": "assets/deities/SGLD_GILT_TACTILE_TAROT_CARD_3D_v1.2-P.glb",
+        "bytes": 4096448,
+        "sha256": "6e81b5e13386444c9d0acc22b146e098770e49eca27c3b9783b988fda38322ee"
+      },
+      {
+        "id": "KETH",
+        "file": "assets/deities/SGLD_KETH_TACTILE_TAROT_CARD_3D_v1.2-P.glb",
+        "bytes": 4009964,
+        "sha256": "855468563dca168958af964beb7f3a5f1c6433bde6b9bdc384db2880fdb5bae0"
+      },
+      {
+        "id": "NOID",
+        "file": "assets/deities/SGLD_NOID_TACTILE_TAROT_CARD_3D_v1.2-P.glb",
+        "bytes": 3266792,
+        "sha256": "77426e167232d399a4db0995a1be1b8b7ae8ff97e618ac9e3afc3cef6b72f409"
+      },
+      {
+        "id": "NULVE",
+        "file": "assets/deities/SGLD_NULVE_TACTILE_TAROT_CARD_3D_v1.2-P.glb",
+        "bytes": 3813416,
+        "sha256": "3e1c3761abccd60f1a12b3481dd1db6809cdbac3ece6fe0222ac857f4562fa3a"
+      },
+      {
+        "id": "RAVEL",
+        "file": "assets/deities/SGLD_RAVEL_TACTILE_TAROT_CARD_3D_v1.2-P.glb",
+        "bytes": 4035620,
+        "sha256": "83ba7252f876c298541cc7bb129f9dea681b06eb74a4bf8580d7b9051dd9dd8a"
+      },
+      {
+        "id": "RIFF",
+        "file": "assets/deities/SGLD_RIFF_TACTILE_TAROT_CARD_3D_v1.2-P.glb",
+        "bytes": 4092060,
+        "sha256": "db9526cd540677e5a998db9ee2a6a66798a501b6a9d4087809cbfc4ea7ef795b"
+      },
+      {
+        "id": "TALLY",
+        "file": "assets/deities/SGLD_TALLY_TACTILE_TAROT_CARD_3D_v1.2-P.glb",
+        "bytes": 3967984,
+        "sha256": "4495f0db70769f2b855538874043616b139ad281486566b3b6eae8d3518ed25c"
+      },
+      {
+        "id": "VESHKA",
+        "file": "assets/deities/SGLD_VESHKA_TACTILE_TAROT_CARD_3D_v1.2-P.glb",
+        "bytes": 4032296,
+        "sha256": "466715d7672538722a3264fa5214e93fd021f469f23826549a9afdcf851c8857"
+      }
+    ],
+    "miracles": [
+      {
+        "id": "M01",
+        "file": "assets/miracles/SGLD_M01_MIRACLE_POKER_CARD_3D_v0.2-P.glb",
+        "bytes": 1253692,
+        "sha256": "52528b513fa2eb36758855ef6094029b74131f1f99bd38756a22c427fda65ae5"
+      },
+      {
+        "id": "M02",
+        "file": "assets/miracles/SGLD_M02_MIRACLE_POKER_CARD_3D_v0.2-P.glb",
+        "bytes": 1216708,
+        "sha256": "726b5df88abcca2e5ea81047947b6b83c1d55c5c33369839bbc1a37da501708b"
+      },
+      {
+        "id": "M03",
+        "file": "assets/miracles/SGLD_M03_MIRACLE_POKER_CARD_3D_v0.2-P.glb",
+        "bytes": 1187376,
+        "sha256": "66f2c7a025cf429edc647bf12a5e7271070a83d242725e502a911611b2792818"
+      },
+      {
+        "id": "M04",
+        "file": "assets/miracles/SGLD_M04_MIRACLE_POKER_CARD_3D_v0.2-P.glb",
+        "bytes": 1244688,
+        "sha256": "2c14d4ff0cc63ad86023d17274995422e4f511ac4ef1af6ff2fbbce29c7a7fa6"
+      },
+      {
+        "id": "M05",
+        "file": "assets/miracles/SGLD_M05_MIRACLE_POKER_CARD_3D_v0.2-P.glb",
+        "bytes": 1193108,
+        "sha256": "9d255ab779c09ac718f682ab95296c5cae8bce3cdd39e48bcfdd9bd9ed036906"
+      },
+      {
+        "id": "M07",
+        "file": "assets/miracles/SGLD_M07_MIRACLE_POKER_CARD_3D_v0.2-P.glb",
+        "bytes": 1389040,
+        "sha256": "1cd05b38db357c70864767b4d8dafaa6050f8f6f476af1aa6ab2fce888ebfa6c"
+      },
+      {
+        "id": "M08",
+        "file": "assets/miracles/SGLD_M08_MIRACLE_POKER_CARD_3D_v0.2-P.glb",
+        "bytes": 1294572,
+        "sha256": "6a5bec5485d5827efeaa17633aa1d88f9de4c5c6414f00110e7482ed4142715b"
+      },
+      {
+        "id": "M09",
+        "file": "assets/miracles/SGLD_M09_MIRACLE_POKER_CARD_3D_v0.2-P.glb",
+        "bytes": 1191216,
+        "sha256": "010eaea827ee4426824569411869e175263b9b0b67632b7f294418f7c2ede0d5"
+      },
+      {
+        "id": "M10",
+        "file": "assets/miracles/SGLD_M10_MIRACLE_POKER_CARD_3D_v0.2-P.glb",
+        "bytes": 1345556,
+        "sha256": "eab9b67e3e5fe09c46310afb812795add2ebbedff3d9386e51293c87d03cf69e"
+      }
+    ],
+    "seals": [
+      {
+        "id": "GILT",
+        "file": "assets/seals/SGLD_GILT_PREMIUM_DIE_STRUCK_3D_v0.3-P.glb",
+        "bytes": 2650660,
+        "sha256": "ce53c956eb1098becce8f73a11743510670239c4892cb54271369fb3154b875b"
+      },
+      {
+        "id": "KETH",
+        "file": "assets/seals/SGLD_KETH_PREMIUM_DIE_STRUCK_3D_v0.3-P.glb",
+        "bytes": 2467896,
+        "sha256": "c0017d2068e2fb7398a7831a5e12edafe80d99b26a3915b38ed9244550addbf0"
+      },
+      {
+        "id": "NOID",
+        "file": "assets/seals/SGLD_NOID_PREMIUM_DIE_STRUCK_3D_v0.3-P.glb",
+        "bytes": 1513352,
+        "sha256": "f0f1b495e9d79a224ad964b82eaa79a153559cdde2c9a69464f012e4a2600f14"
+      },
+      {
+        "id": "NULVE",
+        "file": "assets/seals/SGLD_NULVE_PREMIUM_DIE_STRUCK_3D_v0.3-P.glb",
+        "bytes": 2242012,
+        "sha256": "14da38080143a3431844e035da20871bbae0ace7e47c8c2a66162695b34295ef"
+      },
+      {
+        "id": "RAVEL",
+        "file": "assets/seals/SGLD_RAVEL_PREMIUM_DIE_STRUCK_3D_v0.3-P.glb",
+        "bytes": 2552652,
+        "sha256": "57587dcdec6dacbe0fef06d3356af13841a1f12652e78515648117c5184532b5"
+      },
+      {
+        "id": "RIFF",
+        "file": "assets/seals/SGLD_RIFF_PREMIUM_DIE_STRUCK_3D_v0.3-P.glb",
+        "bytes": 2584332,
+        "sha256": "7c00f6bde14ac13189d2ac90bb32d1b77304d4f88fb839f87bd85ed6e511da3a"
+      },
+      {
+        "id": "TALLY",
+        "file": "assets/seals/SGLD_TALLY_PREMIUM_DIE_STRUCK_3D_v0.3-P.glb",
+        "bytes": 2162208,
+        "sha256": "04a912d5f1602029a38236b3884b62fcf57fd32ab22634420068ef00203c8f7e"
+      },
+      {
+        "id": "VESHKA",
+        "file": "assets/seals/SGLD_VESHKA_PREMIUM_DIE_STRUCK_3D_v0.3-P.glb",
+        "bytes": 2637396,
+        "sha256": "1781fcaf583c913ff75b5ef4c2bc0a58d66a7b5d4964adfa5b9d78c7a7e4bda9"
+      }
+    ],
+    "ledger": [
+      {
+        "id": "ledger",
+        "file": "assets/ledger/SGLD_DIVINE_LEDGER_PREMIUM_PHYSICAL_BOARD_v0.3-P.glb",
+        "bytes": 4786436,
+        "sha256": "fcb998b8fbbd70048b4a771e82045dcae0a297def7ab69bbe83ebca76fb4ef20"
+      }
+    ],
+    "die": [
+      {
+        "id": "die",
+        "file": "assets/die/SGLD_D8_DIE_OF_UNMAKING_v0.2-P_UNAPPROVED.glb",
+        "bytes": 581588,
+        "sha256": "bfba0185f3b2cab08d75e6894a674fa53a0d0e581cee177ec77702637d58ed06"
+      }
+    ]
+  }
+}
