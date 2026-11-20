@@ -1,24 +1,28 @@
-# The Awakening Table — SG,LD website sub-subpage (v0.1-P, UNAPPROVED)
+# The Awakening Table — SG,LD public device-testing beta (v0.1-P)
 
-**Branch:** `sgld-awakening-table-v0.1-p-unapproved`
+**Route:** /card-games/small-gods-large-debts/awakening-table/
 
-**Target route:** `/card-games/small-gods-large-debts/awakening-table/`
+**Parent page:** /card-games/small-gods-large-debts/
 
-**Parent page:** `/card-games/small-gods-large-debts/`
+**Status:** Owner-approved for public **device testing** on 2026-11-20. This is not game canon or approval of experimental art/mechanics.
 
-## Current status
-The page shell and Three.js GLB viewer are committed to the unapproved branch. The existing parent page and production branch are unchanged.
+## Deployment record
+- All 36 GLB models and an integrity manifest were pushed to the main branch in commit `9276e0fb3976fc294e4506fe4c6ef61d2e442a46`.
+- Local deployment script verified 36/36 GLB SHA-256 checksums and file sizes before the push.
+- Its post-deploy checks returned HTTP 200 for the HTML page and sampled GLB URLs. This does **not** constitute a full live render/performance test.
+- Website viewer references 35 standalone artifacts; the 36th GLB is the combined eight-deity animated deck, retained as a source asset and not selected by the viewer.
+- Parent-page CTA is live in the repository.
 
-**Deployment blocker:** 36 binary GLB files (~112 MB uncompressed) are not yet in the GitHub repository. Copy the `assets/` folder from the `SGLD_Awakening_Table_v0.1-P_UNAPPROVED.zip` package into this directory before browser testing or merging. The page currently expects exact relative paths matching that package.
+## Known limitations — not yet QA-approved
+- Actual interactive WebGL rendering on desktop and mobile browsers has not been independently verified.
+- The D8 yields an illustrative 1–8 result, but the visible die face is not synchronized to the result.
+- The Sealed Three chapter currently inspects one Titan at a time; the cinematic three-card composition is not implemented.
+- Card flip/spin are presentation only, not gameplay.
+- The Three.js ES-module CDN requires network availability.
+- Owner-approved **public deployment** does not imply production-quality or retail-canon approval. Maintain the 54-card historical physical inventory baseline.
 
-## QA limitations
-- Browser rendering not yet tested.
-- Die result is uniformly selected 1–8, but the visible D8 face is not synchronized.
-- Three.js ES module CDN requires internet; for production bundle dependencies locally.
-- The Sealed Three chapter currently selects and inspects one Titan at a time; the cinematic three-card table composition is not yet implemented.
-- Card flip and spin are presentation-only; no mechanics are asserted.
-- Add a parent-page CTA only after owner review.
-- Preserve source approved art and the historical 54-card baseline.
+## Device test suggestions
+Check Safari iOS, Chrome Android, desktop Chrome/Edge/Firefox/Safari, touch orbit, scroll interaction, loading time, WebGL errors, memory pressure, orientation changes, and reduced-motion preference.
 
-## Approval
-This is **not approved for production deployment**. Await owner's visual and functional review, finish assets and QA, then request approval before merge.
+## Governance
+Approved for public testing by the project owner; keep experimental project artifacts under Unapproved Assets in SG,LD Drive until explicitly approved as assets.
