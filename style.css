@@ -1779,15 +1779,3 @@ html{scroll-padding-top:90px}
     padding:.55rem .75rem;
   }
 }
-
-
-/* SG,LD homepage Games card: real, user-pausable deck preview. Only this card is affected. */
-.gkl-game-card-small-gods{position:relative}
-.gkl-game-card-small-gods .gkl-game-card-media{position:relative}
-.gkl-game-card-small-gods .gkl-game-card-media video{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:contain;object-position:center}
-.gkl-game-card-small-gods .gkl-sgld-card-link{position:absolute;inset:0;z-index:1}
-.gkl-game-card-small-gods .gkl-sgld-card-link:focus-visible{outline:3px solid #246c57;outline-offset:-5px;border-radius:19px}
-.gkl-game-card-small-gods .gkl-sgld-video-toggle{position:absolute;right:12px;bottom:12px;z-index:2;padding:.55rem .8rem;min-height:40px;border:1px solid rgba(255,221,179,.65);border-radius:999px;background:rgba(11,13,28,.86);color:#fff3e7;box-shadow:0 2px 15px rgba(0,0,0,.3);font:700 .72rem/1.3 system-ui,sans-serif;cursor:pointer}
-.gkl-game-card-small-gods .gkl-sgld-video-toggle:hover{background:#42304e}
-.gkl-game-card-small-gods .gkl-sgld-video-toggle:focus-visible{outline:3px solid #f4c47b;outline-offset:3px}
-@media(prefers-reduced-motion:reduce){.gkl-game-card-small-gods{transition:none}}
