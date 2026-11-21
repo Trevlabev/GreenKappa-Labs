@@ -66,7 +66,7 @@ style.textContent = [
   '.af-narrator button[aria-pressed=true]{background:#e5f91b;color:#141736}',
   '.af-narrator button:disabled{opacity:.45;cursor:not-allowed}',
   '.af-narrator button:focus-visible,.af-narrator select:focus-visible,.af-narrator summary:focus-visible,.af-narrator input:focus-visible{outline:3px solid #fff;outline-offset:2px}',
-  '.af-narrator .af-narrator-status{margin:5px 0 0;color:#d2d4eb;font-size:11px}',
+  '.af-narrator .af-narrator-status{margin:5px 0 0;color:#d2d4eb;font-size:11px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}',
   '.af-narrator details{margin-top:5px;border-top:1px solid #4e547a;padding-top:5px}',
   '.af-narrator summary{cursor:pointer;list-style:auto;color:#e5f91b;font-size:11px}',
   '.af-narrator .af-narrator-options{display:grid;grid-template-columns:minmax(0,1fr) 90px;gap:9px;margin-top:6px}',
@@ -222,7 +222,7 @@ window.addEventListener(EVENTS.phase, (event) => {
   if (key === lastKey) return;
   lastKey = key;
   if (enabled) speak();
-  else if (supported) status.textContent = 'Off · ' + lineFor(latest);
+  else if (supported) status.textContent = 'Off · ' + latest.phase.replaceAll('_', ' ').toUpperCase();
 });
 document.addEventListener('visibilitychange', () => {
   if (document.hidden) stop();
