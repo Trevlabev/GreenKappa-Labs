@@ -23,7 +23,10 @@ try {
  const src=join(original,'static'); const dest=join(ROOT,'public','static');
  mkdirSync(dest,{recursive:true});
  for(const n of ['digital.js','digital.css'])cpSync(join(src,n),join(dest,n));
- cpSync(join(src,'index.html'),join(ROOT,'public','index.html'));
+ // Preserve the multiplayer entry page; the archive's index is only for the standalone prototype.
+ const gameIndex=join(ROOT,'public','index.html');
+ const hasMultiplayerEntry=existsSync(gameIndex)&&readFileSync(gameIndex,'utf8').includes('src="/static/app.js"');
+ if(!hasMultiplayerEntry)cpSync(join(src,'index.html'),gameIndex);
  cpSync(join(src,'assets'),join(dest,'assets'),{recursive:true,force:true});
  const art=join(dest,'assets','fronts');const backs=join(dest,'assets','backs');
  if(readdirSync(art).filter(x=>x.endsWith('.webp')).length!==66)throw Error('Incorrect front artwork count');
