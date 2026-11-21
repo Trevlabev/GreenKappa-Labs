@@ -20,6 +20,17 @@ audio.volume = (() => {
   } catch { /* Private browsing can disable storage. */ }
   return 0.32; // Approximately -10 dB relative to source, leaving headroom for speech.
 })();
+let preferredVolume = audio.volume;
+let narrationActive = false;
+const effectiveVolume = () => { audio.volume = preferredVolume * (narrationActive ? 0.25 : 1); };
+window.addEventListener('agent-fault:narration-start', () => {
+  narrationActive = true;
+  effectiveVolume();
+});
+window.addEventListener('agent-fault:narration-end', () => {
+  narrationActive = false;
+  effectiveVolume();
+});
 
 const style = document.createElement('style');
 style.textContent = [
@@ -77,8 +88,9 @@ toggle.addEventListener('click', async () => {
   }
 });
 volume.addEventListener('input', () => {
-  audio.volume = Number(volume.value) / 100;
-  try { localStorage.setItem(VOLUME_KEY, String(audio.volume)); } catch { /* Optional. */ }
+  preferredVolume = Number(volume.value) / 100;
+  effectiveVolume();
+  try { localStorage.setItem(VOLUME_KEY, String(preferredVolume)); } catch { /* Optional. */ }
 });
 audio.addEventListener('play', update);
 audio.addEventListener('pause', update);
