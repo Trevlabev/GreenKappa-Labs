@@ -1,0 +1,26 @@
+{
+  "classic": {
+    "lobby": "Welcome to Agent Fault. Several hidden agendas, one remarkably optimistic artificial intelligence. This should go well.",
+    "setup": "Judge preparation. Assemble your assignment. Our artificial intelligence has already begun overestimating its abilities.",
+    "submit": "Agents, select your interference. Keep it secret. Plausible deniability is a feature.",
+    "generate": "Interference received. The A I is now attempting to recover from decisions it did not make.",
+    "spotlight": "The answers are in. Judge, select your favorite disaster.",
+    "adjudicate": "The secrets are out. Time to determine whether the A I truly went off the rails.",
+    "review": "The table has the final say. Democracy was a bold design choice.",
+    "results": "Round complete. Points have been awarded. Accountability remains optional.",
+    "finished": "Session complete. The system reports that everything went according to plan. This report is disputed."
+  },
+  "cascade": {
+    "lobby": "Welcome to Agent Fault: Cascade. One conversation. Several agents. Absolutely no collective accountability.",
+    "setup": "Judge programming. Prepare the scenario. The A I remains blissfully uninformed.",
+    "baseline": "Awaiting the first answer. It is important to establish what normal looks like, while we still can.",
+    "lock_cards": "Agents, lock your Interference cards. Consequences will be distributed shortly.",
+    "cascade": "Interference deployed. The conversation continues, despite all available evidence.",
+    "handoff": "A new agent inherits the problem. Please do not mistake this for a promotion.",
+    "judging": "The human verdict. Judge, identify the most impressive malfunction.",
+    "challenge": "A challenge has been filed. Apparently someone still believes in due process.",
+    "vote": "The table votes. The algorithm is not eligible.",
+    "results": "Round complete. The consequences have been tallied, and irresponsibility rewarded.",
+    "finished": "Cascade concluded. The A I has requested reassignment."
+  }
+}

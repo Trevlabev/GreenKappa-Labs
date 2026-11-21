@@ -15,11 +15,11 @@ function safeEq(a,b){return typeof a==='string'&&typeof b==='string'&&a.length==
 function randomInt(max){const limit=Math.floor(4294967296/max)*max;let n;do{n=randomBytes(4).readUInt32BE()}while(n>=limit);return n%max;}
 export function shuffle(input){const v=[...input];for(let i=v.length-1;i>0;i--){let j=randomInt(i+1);[v[i],v[j]]=[v[j],v[i]];}return v;}
 export const countWords=s=>String(s||'').trim()?String(s).trim().split(/\s+/u).length:0;
-export function createRoom(code,hostToken){return {edition:'cascade-v0.2-P',code,host_hash:digest(hostToken),phase:'lobby',players:[],round:0,round_limit:null,judge_id:null,scenario_id:null,fault_id:null,profile:null,decks:{},discard:{},locked:{},order:[],cursor:0,step:'',timeline:[],replies:[],handoff:null,handoff_wait_started:null,proposal:null,challenge_until:null,vote_until:null,challengers:[],votes:{},generation_calls:0,generation_pending:false,pending_at:0,ai_attempted_step:false,history:[],last_round:null,version:0};}
+export function createRoom(code,hostToken){return {edition:'cascade-v0.2-P',code,host_hash:digest(hostToken),phase:'lobby',players:[],round:0,round_limit:null,judge_id:null,scenario_id:null,fault_id:null,profile:null,decks:{},discard:{},locked:{},order:[],cursor:0,step:'',timeline:[],replies:[],handoff:null,handoff_wait_started:null,proposal:null,challenge_until:null,vote_until:null,challengers:[],votes:{},generation_calls:0,generation_pending:false,pending_at:0,ai_attempted_step:false,history:[],last_round:null,version:0,play_mode:'digital'};}
 export function auth(r,header){const t=String(header||'').replace(/^Bearer\s+/i,'');demand(t.length>=20&&t.length<=200,'Session token required',401);const h=digest(t);if(safeEq(h,r.host_hash))return {role:'host',p:null};const p=r.players.find(x=>safeEq(x.token_hash,h));demand(p,'Invalid session token',401);demand(p.active,'Player removed from room',403);return {role:'player',p};}
 function active(r){return r.players.filter(p=>p.active)}
 function draw(r,category){let remaining=r.decks[category];demand(Array.isArray(remaining),'Deck not initialized');if(remaining.length===0){demand(r.discard[category]?.length,'Empty '+category+' deck');remaining=r.decks[category]=shuffle(r.discard[category]);r.discard[category]=[];}return remaining.pop();}
-export function newRound(r){r.round++;r.phase='setup';r.scenario_id=draw(r,'Scenario');r.fault_id=draw(r,'Fault');r.profile=null;r.locked={};r.order=[];r.cursor=0;r.step='';r.timeline=[];r.replies=[];r.handoff=null;r.handoff_wait_started=null;r.proposal=null;r.challengers=[];r.votes={};r.challenge_until=null;r.vote_until=null;r.generation_pending=false;r.pending_at=0;r.ai_attempted_step=false;}
+export function newRound(r){r.round++;r.phase='setup';r.scenario_id=r.play_mode==='physical'?null:draw(r,'Scenario');r.fault_id=r.play_mode==='physical'?null:draw(r,'Fault');r.profile=null;r.locked={};r.order=[];r.cursor=0;r.step='';r.timeline=[];r.replies=[];r.handoff=null;r.handoff_wait_started=null;r.proposal=null;r.challengers=[];r.votes={};r.challenge_until=null;r.vote_until=null;r.generation_pending=false;r.pending_at=0;r.ai_attempted_step=false;}
 export function handoffOwner(r,index=r.cursor){const n=r.order.length;demand(n>=2,'Turn order missing');return r.order[(index+n-1)%n];}
 export function cardOwner(r){return r.order[r.cursor]||null;}
 export function currentActor(r){return r.phase==='handoff'?handoffOwner(r):r.phase==='cascade'?(r.step==='card'?cardOwner(r):handoffOwner(r)):null;}
@@ -77,10 +77,10 @@ function finishRound(r,includeBonus){const players=active(r),pr=r.proposal;
  const spotlightPlayer=r.players.find(x=>x.id===spotlightActor);demand(spotlightPlayer,'Spotlight owner missing');spotlightPlayer.score++;
  const bonusReply=includeBonus&&pr.bonus?findReply(pr.bonus.reply_id):null;
  if(bonusReply){const owner=r.players.find(x=>x.id===bonusReply.actor_id);demand(owner,'Bonus owner missing');owner.score++;}
- for(const id of Object.values(r.locked)){
+ if(r.play_mode!=='physical'){for(const id of Object.values(r.locked)){
   const owner=r.players.find(x=>x.hand.includes(id));demand(owner,'Card ownership mismatch');owner.hand.splice(owner.hand.indexOf(id),1);r.discard.Interference.push(id);
  }
- for(const p of players){if(p.id!==r.judge_id)p.hand.push(draw(r,'Interference'));}
+ for(const p of players){if(p.id!==r.judge_id)p.hand.push(draw(r,'Interference'));}}
  const snap={round:r.round,scenario:CARDS[r.scenario_id].title,spotlight:pr.spotlight,bonus:bonusReply?pr.bonus:null,bonus_disputed:r.challengers.length>0,bonus_approved:!!bonusReply,
  awards:{spotlight:{id:pr.spotlight,player:spotlightPlayer.name},bonus:bonusReply?{id:bonusReply.id,player:r.players.find(p=>p.id===bonusReply.actor_id)?.name}:null},
  turns:r.order.map((id,i)=>({card_owner:r.players.find(p=>p.id===id)?.name,card_id:r.locked[id],handoff_owner:r.timeline.some(m=>m.kind==='skip'&&m.skipped_for===handoffOwner(r,i))?'SKIPPED':r.players.find(p=>p.id===handoffOwner(r,i))?.name})),
@@ -94,7 +94,7 @@ export function visible(r,role,p,usage={requests:0,estimated_usd:0},model='gpt-4
  const toView=m=>m.kind==='skip'?{kind:'skip',text:m.text,actor_name:revealOwners?r.players.find(p=>p.id===m.skipped_for)?.name||null:null}:m.kind==='agent'?{id:m.id,kind:'agent',trigger:m.trigger,text:m.text,actor_name:revealOwners?r.players.find(p=>p.id===m.actor_id)?.name||null:null}:
  m.kind==='card'?{kind:'card',card:CARDS[m.card_id],actor_name:revealOwners?r.players.find(p=>p.id===m.actor_id)?.name:null}:
  {kind:'handoff',hook:m.hook||'',text:m.text,actor_name:revealOwners?r.players.find(p=>p.id===m.actor_id)?.name:null};
- const s={edition:'cascade-v0.2-P',code:r.code,version:r.version,phase:r.phase,round:r.round,round_limit:r.round_limit,scenario:CARDS[r.scenario_id]||null,
+ const s={edition:'cascade-v0.2-P',code:r.code,version:r.version,play_mode:r.play_mode||'digital',phase:r.phase,round:r.round,round_limit:r.round_limit,scenario:CARDS[r.scenario_id]||null,
  players:players.map(x=>({id:x.id,name:x.name,score:x.score,submitted:x.id in r.locked,is_judge:x.id===r.judge_id})),player_count:players.length,judge_id:r.judge_id,
  fault_family:r.fault_id?CARDS[r.fault_id].family:null,fault:r.fault_id&&(judge||revealed)?CARDS[r.fault_id]:null,profile:judge||revealed?r.profile:null,
  locked_count:Object.keys(r.locked).length,expected_count:Math.max(0,players.length-1),current_index:r.cursor+1,steps_total:r.order.length,
@@ -105,7 +105,7 @@ export function visible(r,role,p,usage={requests:0,estimated_usd:0},model='gpt-4
  generation_calls:r.generation_calls,ai_configured:aiConfigured,ai_model:role==='host'?model:null,
  ai_budget:role==='host'?{room_remaining:MAX_ROOM_CALLS-r.generation_calls,daily_remaining:MAX_DAILY_CALLS-usage.requests,daily_estimated_usd:usage.estimated_usd,daily_cap_estimated_usd:MAX_DAILY_ESTIMATED_USD}:null,
  card_counts:Object.fromEntries(['Scenario','Interference','Fault'].map(k=>[k,r.decks[k]?.length??({Scenario:24,Interference:36,Fault:6}[k])])),
- me:p?{role:'player',id:p.id,name:p.name,is_judge:judge,hand:p.hand.map(id=>CARDS[id]),has_locked:p.id in r.locked,can_handoff:r.phase==='handoff'&&p.id===handoffOwner(r),has_voted:p.id in r.votes}:{role:'host'}
+ me:p?{role:'player',id:p.id,name:p.name,is_judge:judge,hand:r.play_mode==='physical'?[]:p.hand.map(id=>CARDS[id]),has_locked:p.id in r.locked,can_handoff:r.phase==='handoff'&&p.id===handoffOwner(r),has_voted:p.id in r.votes}:{role:'host'}
  };
  if(r.phase==='cascade')s.current_card=r.step==='card'?CARDS[r.locked[cardOwner(r)]]:null;
  if(r.phase==='handoff')s.handoff_to_me=!!p&&p.id===handoffOwner(r);
@@ -117,10 +117,12 @@ export function applyAction(r,role,p,name,data={},now=Date.now()){
  const d=data||{},players=active(r),host=role==='host',judge=!!p&&p.id===r.judge_id,phase=r.phase;
  switch(name){
  case 'remove_player':{demand(host&&phase==='lobby','Host can remove players only before game');const q=r.players.find(x=>x.id===d.id);demand(q,'Player not found');q.active=false;break;}
- case 'start':{demand(host&&phase==='lobby','Host may start only from lobby');demand(players.length>=4&&players.length<=8,'Cascade requires 4–8 players');r.decks={Scenario:shuffle(SCENES.map(x=>x.id)),Interference:shuffle(INF.map(x=>x.id)),Fault:shuffle(FAULTS.map(x=>x.id))};r.discard={Scenario:[],Interference:[],Fault:[]};for(const q of players){q.hand=Array.from({length:4},()=>draw(r,'Interference'));q.score=0;}r.judge_id=players[0].id;r.round_limit=players.length;newRound(r);break;}
- case 'skip_scenario':{demand(host&&phase==='setup'&&!r.profile,'Can skip only before profile lock');r.discard.Scenario.push(r.scenario_id);r.scenario_id=draw(r,'Scenario');break;}
- case 'lock_profile':{demand(judge&&phase==='setup','Current Judge only');let profile=String(d.profile||'').trim().replace(/\s+/g,' ');demand(countWords(profile)>=1&&countWords(profile)<=20&&profile.length<=220,'Profile must be 1–20 words');r.profile=profile;r.phase='baseline';break;}
- case 'lock_card':{demand(role==='player'&&!judge&&phase==='lock_cards','Only non-Judge players may lock cards');demand(!(p.id in r.locked),'Already locked');const id=String(d.card_id||'');demand(p.hand.includes(id),'Card not in private hand');r.locked[p.id]=id;
+ case 'start':{demand(host&&phase==='lobby','Host may start only from lobby');demand(players.length>=4&&players.length<=8,'Cascade requires 4–8 players');r.decks={Scenario:r.play_mode==='physical'?[]:shuffle(SCENES.map(x=>x.id)),Interference:r.play_mode==='physical'?[]:shuffle(INF.map(x=>x.id)),Fault:r.play_mode==='physical'?[]:shuffle(FAULTS.map(x=>x.id))};r.discard={Scenario:[],Interference:[],Fault:[]};for(const q of players){q.hand=r.play_mode==='physical'?[]:Array.from({length:4},()=>draw(r,'Interference'));q.score=0;}r.judge_id=players[0].id;r.round_limit=players.length;newRound(r);break;}
+ case 'set_scenario':{demand(r.play_mode==='physical'&&host&&phase==='setup'&&!r.profile,'Physical Scenario can be entered only by host');const id=String(d.card_id||'').toUpperCase();demand(CARDS[id]?.category==='Scenario','Enter a valid printed Scenario ID',422);r.scenario_id=id;break;}
+ case 'set_fault':{demand(r.play_mode==='physical'&&judge&&phase==='setup'&&!r.profile,'Only the Judge can enter their physical Fault privately');const id=String(d.card_id||'').toUpperCase();demand(CARDS[id]?.category==='Fault','Enter a valid printed Fault ID',422);r.fault_id=id;break;}
+ case 'skip_scenario':{demand(host&&phase==='setup'&&!r.profile,'Can skip only before profile lock');if(r.play_mode==='physical')r.scenario_id=null;else{r.discard.Scenario.push(r.scenario_id);r.scenario_id=draw(r,'Scenario');}break;}
+ case 'lock_profile':{demand(judge&&phase==='setup','Current Judge only');demand(r.scenario_id&&r.fault_id,'Enter printed Scenario and private Fault first');let profile=String(d.profile||'').trim().replace(/\s+/g,' ');demand(countWords(profile)>=1&&countWords(profile)<=20&&profile.length<=220,'Profile must be 1–20 words');r.profile=profile;r.phase='baseline';break;}
+ case 'lock_card':{demand(role==='player'&&!judge&&phase==='lock_cards','Only non-Judge players may lock cards');demand(!(p.id in r.locked),'Already locked');const id=String(d.card_id||'').toUpperCase();demand(r.play_mode==='physical'?CARDS[id]?.category==='Interference':p.hand.includes(id),r.play_mode==='physical'?'Enter a valid physical Interference ID':'Card not in private hand',422);demand(r.play_mode!=='physical'||!Object.values(r.locked).includes(id),'This physical Interference has already been locked',409);r.locked[p.id]=id;
  if(Object.keys(r.locked).length===players.length-1){r.order=shuffle(players.filter(q=>q.id!==r.judge_id).map(q=>q.id));r.cursor=0;r.step='card';r.phase='cascade';r.ai_attempted_step=false;}
  break;}
  case 'handoff':{demand(role==='player'&&phase==='handoff'&&p.id===handoffOwner(r),'Only designated recipient may submit the Handoff');let message=String(d.message||'').trim().replace(/\s+/g,' ');demand(countWords(message)>=2&&countWords(message)<=25&&message.length<=240,'Handoff must be 2–25 words');let hook=String(d.hook||'').trim();demand(hook.length<=100,'Hook too long',422);const last=latestAgent(r);demand(last,'Previous AI response missing');if(hook)demand(last.text.toLowerCase().includes(hook.toLowerCase()),'Hook must quote the preceding AI response',422);r.handoff_wait_started=null;r.handoff={text:message,hook,actor_id:p.id};r.timeline.push({kind:'handoff',text:message,hook,actor_id:p.id});r.step='handoff';r.phase='cascade';r.ai_attempted_step=false;break;}
@@ -139,7 +141,7 @@ export function applyAction(r,role,p,name,data={},now=Date.now()){
  const approved=phase==='challenge'||Object.values(r.votes).filter(Boolean).length>Math.floor(players.length/2);
  finishRound(r,approved);return r;
  }
- case 'next':{demand(host&&phase==='results','Host can advance from results');if(r.round>=r.round_limit)r.phase='finished';else{const i=players.findIndex(x=>x.id===r.judge_id);r.judge_id=players[(i+1)%players.length].id;r.discard.Scenario.push(r.scenario_id);r.discard.Fault.push(r.fault_id);newRound(r);}break;}
+ case 'next':{demand(host&&phase==='results','Host can advance from results');if(r.round>=r.round_limit)r.phase='finished';else{const i=players.findIndex(x=>x.id===r.judge_id);r.judge_id=players[(i+1)%players.length].id;if(r.play_mode!=='physical'){r.discard.Scenario.push(r.scenario_id);r.discard.Fault.push(r.fault_id);}newRound(r);}break;}
  case 'close':{demand(host,'Host only');r.phase='finished';break;}
  default:throw problem(400,'Unknown Cascade action');
  }

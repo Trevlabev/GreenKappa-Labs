@@ -1,0 +1,73 @@
+name: AGENT/FAULT unified four-mode Worker validation
+
+on:
+  pull_request:
+    paths:
+      - 'card-games/agent-fault/game-app/cloudflare/**'
+      - 'card-games/agent-fault/game-app/hosted/**'
+      - 'card-games/agent-fault/game-app/cascade/**'
+      - '.github/workflows/agent-fault-cloudflare-workers-qa.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: agent-fault-cloudflare-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  validate-unified-worker:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    defaults:
+      run:
+        working-directory: card-games/agent-fault/game-app/hosted
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Worker dependencies
+        run: npm install --no-audit --no-fund
+      - name: Assemble illustrated Classic and Cascade editions and run game tests
+        run: npm run build
+      - name: Validate unified Worker syntax
+        run: npm run cloudflare:check
+      - name: Validate Worker bundle and Durable Object migrations without deploying
+        run: npm run cloudflare:dry-run
+      - name: Exercise both game engines, QR, authentication and WebSockets locally
+        run: |
+          npx wrangler dev --ip 127.0.0.1 --port 8787 > /tmp/agent-fault-unified-worker.log 2>&1 &
+          worker_pid=$!
+          trap 'kill "$worker_pid" 2>/dev/null || true' EXIT
+          ready=0
+          for attempt in $(seq 1 40); do
+            if curl -fsS http://127.0.0.1:8787/api/health >/dev/null 2>&1 && curl -fsS http://127.0.0.1:8787/cascade/api/health >/dev/null 2>&1; then ready=1; break; fi
+            sleep 2
+          done
+          if [ "$ready" -ne 1 ]; then
+            cat /tmp/agent-fault-unified-worker.log
+            exit 1
+          fi
+          node ../cloudflare/smoke.mjs http://127.0.0.1:8787 hosted
+          node ../cloudflare/smoke.mjs http://127.0.0.1:8787 cascade /cascade
+      - name: Prepare preinstalled Chrome for NPC browser acceptance
+        run: |
+          npm install --no-save --no-audit --no-fund playwright@1.56.1
+          google-chrome --version
+      - name: Exercise Classic NPC lobby, private Host Also Plays, and solo round in Chromium
+        run: |
+          npx wrangler dev --ip 127.0.0.1 --port 8787 > /tmp/agent-fault-npc-browser-worker.log 2>&1 &
+          worker_pid=$!
+          trap 'kill "$worker_pid" 2>/dev/null || true' EXIT
+          ready=0
+          for attempt in $(seq 1 40); do
+            if curl -fsS http://127.0.0.1:8787/api/health >/dev/null 2>&1; then ready=1; break; fi
+            sleep 2
+          done
+          if [ "$ready" -ne 1 ]; then
+            cat /tmp/agent-fault-npc-browser-worker.log
+            exit 1
+          fi
+          timeout --signal=TERM --kill-after=15s 4m node scripts/browser-npc.mjs http://127.0.0.1:8787

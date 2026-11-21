@@ -1,12 +1,9 @@
 name: AGENT-FAULT Cascade — isolated playtest deployment
 
+# Legacy Netlify workflow retained for explicit rollback only.
+# Never automatically publish this suspended site on source changes.
 on:
   workflow_dispatch:
-  push:
-    branches: [main]
-    paths:
-      - 'card-games/agent-fault/game-app/cascade/**'
-      - '.github/workflows/agent-fault-cascade-deploy.yml'
 
 permissions:
   contents: read

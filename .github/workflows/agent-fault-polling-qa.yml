@@ -8,6 +8,10 @@ on:
       - '.github/workflows/agent-fault-polling-qa.yml'
   workflow_dispatch:
 
+concurrency:
+  group: agent-fault-polling-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
 
