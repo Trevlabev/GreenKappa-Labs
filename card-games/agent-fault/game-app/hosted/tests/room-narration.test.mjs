@@ -61,6 +61,17 @@ test('soundtrack ducks and restores volume around narration', () => {
   }
 });
 
+test('recorded voice registry is loaded by both multiplayer entrypoints', () => {
+  for (const dir of [hosted, cascade]) {
+    const html = read(dir, 'public/index.html');
+    assert.match(html, /src="\/shared-media\/narration\/voice-pack\.js"/);
+    assert.ok(html.indexOf('voice-pack.js') < html.indexOf('room-narration.mjs'));
+    const narrator = read(dir, 'public/static/room-narration.mjs');
+    assert.match(narrator, /function playRecording\(/);
+    assert.match(narrator, /speakFallback\(fallbackLine\)/);
+  }
+});
+
 test('unified Worker rewrites the Cascade narrator entry without changing shared media paths', () => {
   const html = rewriteCascadeText(read(cascade, 'public/index.html'), 'index.html');
   assert.match(html, /src="\/cascade\/static\/room-narration\.mjs"/);

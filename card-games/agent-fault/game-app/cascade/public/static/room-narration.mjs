@@ -36,7 +36,10 @@ const EVENTS = {
 };
 const SETTINGS = 'agent-fault:narrator:';
 const synth = typeof window.speechSynthesis === 'undefined' ? null : window.speechSynthesis;
-const supported = !!synth && typeof window.SpeechSynthesisUtterance === 'function';
+const browserSpeech = !!synth && typeof window.SpeechSynthesisUtterance === 'function';
+const pack = window.AGENT_FAULT_VOICE_PACK || {};
+const hasRecordings = typeof window.Audio === 'function' && Object.keys(pack).length > 0;
+const supported = browserSpeech || hasRecordings;
 let enabled = false;
 let latest = null;
 let lastKey = null;
@@ -113,8 +116,11 @@ document.body.append(widget);
 
 const announceMusic = (playing) => window.dispatchEvent(new CustomEvent(playing ? EVENTS.start : EVENTS.end));
 function stop() {
+  const previous = active;
+  active = null;
+  if (previous && typeof previous.pause === 'function') previous.pause();
   if (synth) synth.cancel();
-  if (active) { active = null; announceMusic(false); }
+  if (previous) announceMusic(false);
 }
 function voices() {
   if (!synth) return [];
@@ -126,7 +132,7 @@ function populateVoices() {
   voiceSelect.replaceChildren();
   const defaultOption = document.createElement('option');
   defaultOption.value = '';
-  defaultOption.textContent = 'Automatic English';
+  defaultOption.textContent = hasRecordings ? 'Recorded announcer (preferred)' : 'Automatic English';
   voiceSelect.append(defaultOption);
   for (const v of list) {
     const option = document.createElement('option');
@@ -136,7 +142,7 @@ function populateVoices() {
   }
   voiceSelect.value = list.some(v => v.voiceURI === before) ? before : '';
 }
-if (supported) {
+if (browserSpeech) {
   populateVoices();
   if (typeof synth.addEventListener === 'function') synth.addEventListener('voiceschanged', populateVoices);
   else synth.onvoiceschanged = populateVoices;
@@ -155,6 +161,46 @@ function speak() {
   const line = lineFor(latest);
   if (!line) return;
   stop();
+  const cueKey = latest.edition + '-' + latest.phase;
+  const path = pack[cueKey];
+  if (!preferredVoice && hasRecordings && typeof path === 'string' && path === '/shared-media/narration/' + cueKey + '.mp3') {
+    playRecording(path, PHASE_LINES[latest.edition][latest.phase], line);
+    return;
+  }
+  speakFallback(line);
+}
+function playRecording(path, caption, fallbackLine) {
+  const recording = new window.Audio(path);
+  recording.preload = 'none';
+  recording.volume = voiceVolume;
+  active = recording;
+  status.textContent = 'Loading recorded voice';
+  const finish = () => {
+    if (active !== recording) return;
+    active = null;
+    announceMusic(false);
+    status.textContent = 'Ready · ' + caption;
+  };
+  const fallback = () => {
+    if (active !== recording) return;
+    stop();
+    if (enabled && !document.hidden) speakFallback(fallbackLine);
+  };
+  recording.addEventListener('playing', () => {
+    if (active !== recording) return;
+    announceMusic(true);
+    status.textContent = 'Speaking · ' + caption;
+  });
+  recording.addEventListener('ended', finish);
+  recording.addEventListener('error', fallback);
+  try { Promise.resolve(recording.play()).catch(fallback); }
+  catch { fallback(); }
+}
+function speakFallback(line) {
+  if (!browserSpeech) {
+    status.textContent = 'Recording unavailable · browser voice not supported';
+    return;
+  }
   const utterance = new window.SpeechSynthesisUtterance(line);
   const found = voices();
   utterance.voice = found.find(v => v.voiceURI === preferredVoice) || found.find(v => /^en-US$/i.test(v.lang)) || found[0] || null;

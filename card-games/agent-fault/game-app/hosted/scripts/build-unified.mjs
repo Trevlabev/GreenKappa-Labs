@@ -7,6 +7,7 @@ import { dirname, extname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { execFileSync } from 'node:child_process';
 import { rewriteCascadeText } from './unified-rewrite.mjs';
+import { prepareNarration } from './prepare-narration.mjs';
 
 const hosted = resolve(fileURLToPath(new URL('..', import.meta.url)));
 const cascade = resolve(hosted, '../cascade');
@@ -34,10 +35,11 @@ cpSync(join(cascade, 'public'), cascadeOut, { recursive: true, force: true });
 
 // Bundle the actual soundtrack with the same Worker that serves both live games.
 const themeSource = resolve(hosted, '../../audio/agent-fault-main-theme.mp3');
-const themeTarget = join(output, 'shared-media/agent-fault-main-theme.mp3');
+const themeTarget = join(output, 'shared-media/agent-fault-main-theme.mp3', 'shared-media/narration/voice-pack.js');
 if (!existsSync(themeSource)) throw Error('Missing approved AGENT/FAULT main theme MP3');
 mkdirSync(dirname(themeTarget), { recursive: true });
 cpSync(themeSource, themeTarget);
+prepareNarration(resolve(hosted, '../../audio/narration'), output);
 
 
 function rewriteTree(dir) {
