@@ -17,7 +17,7 @@ function load(url){if(!modelCache.has(url)){const p=loader.loadAsync(url).catch(
 const descriptors={
  deity:name=>({url:DEITY(name),face:'front',alt:name+' deity card'}),
  titan:(id,awake)=>({url:TITAN(awake?id:0),face:awake?'front':'back',alt:awake?N[id]:'Sealed Titan card',neverReveal:!awake}),
- miracle:(card,hidden=false)=>({url:MIRACLE(hidden||!HAVE.has(card.id)?'M01':card.id),face:hidden?'back':HAVE.has(card.id)?'front':'proxy',alt:hidden?'Concealed Miracle':card.name,neverReveal:hidden,proxy:!hidden&&!HAVE.has(card.id),label:card.id}),
+ miracle:(card,hidden=false)=>({url:MIRACLE(hidden||!HAVE.has(card.id)?'M01':card.id),face:hidden?'back':HAVE.has(card.id)?'front':'proxy',alt:hidden?'Concealed Miracle':card.name,neverReveal:hidden,proxy:!hidden&&!HAVE.has(card.id),label:hidden?'':card.id}),
  generic:(category,title)=>({url:MIRACLE('M01'),face:'proxy',alt:category+' — '+title,proxy:true,label:category})
 };
 function makeObject(gltf,d){
@@ -27,7 +27,7 @@ function makeObject(gltf,d){
  if((d.neverReveal||d.face==='proxy')&&front.length){
   for(const mesh of front){
    if(d.neverReveal)mesh.visible=false;
-   else{mesh.material=new THREE.MeshStandardMaterial({color:0x21182e,roughness:.67,metalness:.13,emissive:0x130c25,emissiveIntensity:.55});ownedMaterials.push(mesh.material)}
+   else{const tint=d.label==='COVENANT'?0x4f3423:d.label==='GOOD BOON'?0x46391c:d.label==='BAD BOON'?0x241535:0x21182e;mesh.material=new THREE.MeshStandardMaterial({color:tint,roughness:.67,metalness:.13,emissive:0x130c25,emissiveIntensity:.55});ownedMaterials.push(mesh.material)}
   }
  }
  // Fail closed: never render an unrecognized hidden/proxy object.
@@ -55,7 +55,7 @@ function ensure(key,host,d,opts={}){
   load(d.url).then(gltf=>{
    if(entries.get(key)!==ticket)return;
    const built=makeObject(gltf,d);ticket.object=built.pivot;ticket.aspect=built.aspect;ticket.ownedMaterials=built.ownedMaterials;
-   ticket.start=performance.now();ticket.dirty=true;
+   ticket.start=0;ticket.dirty=true;
   }).catch(err=>{if(entries.get(key)!==ticket)return;ticket.slot.classList.add('failed');placeholder.textContent=d.alt+' · 3D unavailable';console.warn('SGLD card:',d.url,err);status('A card model could not load. Text controls are still playable.')});
  }else{
   if(e.selected!==!!opts.selected){e.selected=!!opts.selected;e.dirty=true}
@@ -69,7 +69,7 @@ const ease=t=>1-Math.pow(1-t,3);
 function drawCard(e,now){
  if(!gl||!e.object||!e.slot.isConnected)return;
  const w=e.slot.clientWidth,h=e.slot.clientHeight;if(w<5||h<5)return;
- const b=e.slot.getBoundingClientRect();if(b.bottom<0||b.top>innerHeight)return;
+ const b=e.slot.getBoundingClientRect();if(!e.key.startsWith('event-')&&(b.bottom<0||b.top>innerHeight))return;if(!e.start)e.start=now;
  const pixel=Math.min(devicePixelRatio||1,1.6,320/Math.max(w,h)),pw=Math.max(20,Math.round(w*pixel)),ph=Math.max(20,Math.round(h*pixel));
  const t=REDUCED?1:Math.min(1,(now-e.start)/e.duration);
  if(!e.dirty&&t>=1&&!e.hover&&e.canvas.width===pw&&e.canvas.height===ph)return;
@@ -105,7 +105,7 @@ function advanceEvent(now){
  for(const [key,e] of [...entries])if(key.startsWith('event-')&&key!=='event-'+eventSerial){disposeEntry(e);entries.delete(key)}
 }
 function queue(card){
- events.push(card);if(events.length>12)events.shift();
+ events.push(card);// Preserve all resolution events; do not silently discard older actions.
  if(initialized&&(!activeEvent||(activeEvent.until&&performance.now()>=activeEvent.until)))advanceEvent(performance.now());
 }
 export function played(actor,card,hidden,cost,glory){
@@ -117,7 +117,10 @@ export function boon(actor,name,good){
 export function covenant(borrower,lender){
  queue({title:'Covenant created',detail:lender+' sponsors '+borrower+': 2 Devotion now, 3 due next personal turn.',desc:descriptors.generic('COVENANT','Debt receipt')});
 }
-export function reset(){session++;for(const [key,e] of [...entries])if(key!=='setup'){disposeEntry(e);entries.delete(key)}events.length=0;activeEvent=null;last=null;if($('sgEventTitle')){$('sgEventTitle').textContent='Played cards';$('sgEventDetail').textContent='Miracles and drawn cards appear here as they resolve.'}}
+export function settlement(borrower,lender,paid,defaulted){queue({title:'Covenant settlement',detail:borrower+' pays '+lender+' '+paid+'/3 Devotion'+(defaulted?' · '+defaulted+' Glory lost ':'')+'.',desc:descriptors.generic('COVENANT','Settlement receipt')})}
+export function roll(actor,name,face){const i=N.indexOf(name);if(i>=0)queue({title:actor+' invokes '+name,detail:'Natural D8: '+face+' · resolving Titan effect.',desc:descriptors.titan(i,true)})}
+export function pending(){return events.length>0||!!(activeEvent&&(!activeEvent.until||performance.now()<activeEvent.until))}
+export function reset(){session++;for(const [key,e] of [...entries])if(key!=='setup'){disposeEntry(e);entries.delete(key)}events.length=0;activeEvent=null;last=null;if($('sgEventTitle')){$('sgEventTitle').textContent='Played cards';$('sgEventDetail').textContent='Miracles, Titans, Boons and Covenants appear here in order.'}}
 export function setup(){
  if(initialized)return;
  gl=new THREE.WebGLRenderer({antialias:true,alpha:true,preserveDrawingBuffer:true,powerPreference:'low-power'});gl.setPixelRatio(1);gl.setClearColor(0x000000,0);gl.outputColorSpace=THREE.SRGBColorSpace;gl.toneMapping=THREE.NoToneMapping;
@@ -129,7 +132,7 @@ export function setup(){
  const setupStyles=document.createElement('style');setupStyles.textContent='.sg-setup-model{width:100%;height:100%}';document.head.append(setupStyles);
  select.addEventListener('change',choose);choose();
  const event=document.createElement('section');event.id='sgCardEvents';event.innerHTML='<div id="sgEventVisual"></div><div><div class="eyebrow">CARD RESOLUTION</div><strong id="sgEventTitle">Played cards</strong><p id="sgEventDetail">Miracles and drawn cards appear here as they resolve.</p></div>';
- $('hand').parentElement.insertBefore(event,$('controls'));
+ $('hand').parentElement.insertBefore(event,$('hand'));
  const stat=document.createElement('p');stat.id='sgCardStatus';stat.textContent='Live 3D card models · originals where available · labeled unillustrated proxies otherwise.';$('hand').parentElement.insertBefore(stat,event);
  initialized=true;frame=requestAnimationFrame(loop);
 }
