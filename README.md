@@ -9,8 +9,9 @@ Source for the static GitHub Pages website at **https://greenkappalabs.art/**.
 | `/` | Ten-slide gallery, four studio divisions, and product discovery | Public-facing site |
 | `/tablearc/` | Original TableArc local-first RPG engine | Active development |
 | `/tablearc-red/` | Standalone Cyberpunk RED AI-GM and operations-console project | v0.5.0 source prototype; Windows acceptance pending |
-| `/card-games/` | Three original card-driven games | In development |
-| `/card-games/playtest/` | Playtest inquiries for the three current card games | Intake page |
+| `/card-games/` | Four original card-driven games | In development |
+| `/card-games/bi-panic/` | Adult party game product page and Panic Die mechanic preview | Prototype; no public full-game URL verified |
+| `/card-games/playtest/` | Playtest inquiries for the original three card games | Intake page |
 | `/playground/` | Public experiments and free interactive prototypes | First experiment implemented |
 | `/playground/not-to-scale/` | No Such Room shifting-house microgame (legacy URL) | Browser concept demo |
 | `/worlds/` | Portal linking to independent universe sourcebook and adventure catalogs | Public portfolio hub |

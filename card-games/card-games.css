@@ -395,3 +395,14 @@ body.card-games-page{
 .cg-game-art.cg-sgld-feature-art img{aspect-ratio:1/1;object-fit:contain}
 .cg-sgld-feature-art a{display:block;border-radius:7px;overflow:hidden}
 .cg-sgld-feature-art a:focus-visible{outline:3px solid #ffcc6e;outline-offset:3px}
+
+/* BI PANIC! editorial discovery tile — independent of existing game art. */
+.cg-bp-tile{grid-column:1/-1;background:linear-gradient(120deg,#392344,#24162f 65%,#30274d);border-color:#bc89c4}
+.cg-bp-tile>span,.cg-bp-feature>a{display:flex;flex-direction:column;justify-content:space-between;gap:1rem;padding:clamp(1.25rem,3vw,2.4rem);color:#f9ede6;text-decoration:none;min-height:170px}
+.cg-bp-tile small,.cg-bp-tile em,.cg-bp-feature small,.cg-bp-feature em{font:750 .68rem/1.4 system-ui,sans-serif;letter-spacing:.13em;color:#e9b4e0;font-style:normal}
+.cg-bp-tile strong,.cg-bp-feature strong{font:950 clamp(2.7rem,6vw,5.8rem)/.8 system-ui,sans-serif;letter-spacing:-.09em;color:#f9ede6}
+.cg-bp-tile i,.cg-bp-feature i{font-style:normal;color:#f3a6d2}
+.cg-bp-feature{background:radial-gradient(ellipse at 85% 10%,#52376d,transparent 65%),#2d1d3a!important;border-color:#aa80b4!important}
+.cg-bp-feature>a{min-height:clamp(290px,34vw,410px);padding:clamp(1.5rem,4vw,3.5rem)}
+.cg-bp-feature a:focus-visible{outline:3px solid #a8c0ff;outline-offset:-5px}
+@media(max-width:760px){.cg-bp-tile>span{min-height:215px;aspect-ratio:3/2}.cg-bp-tile strong{font-size:clamp(2.8rem,9vw,4rem)}}
