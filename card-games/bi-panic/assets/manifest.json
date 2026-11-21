@@ -1,0 +1,41 @@
+{
+  "status": "Proposed prototype assets, not retail print masters",
+  "source": "BI PANIC! project Drive",
+  "assets": [
+    {
+      "file": "hero.png",
+      "driveId": "1BC7lAohUBpLLkv67FeTs47wtCdzH3Qn-",
+      "gitBlob": "b81f6f1d7a23d96e57678a5c27488301920a327f"
+    },
+    {
+      "file": "product.png",
+      "driveId": "1UW7e-eoK3apBJnZm0mokdSiqm0_PuE5z",
+      "gitBlob": "b70f072cb7248959d85585fae11fde3d7052d211"
+    },
+    {
+      "file": "die.png",
+      "driveId": "1glysipeE70AGbaBxalaDZJOflqNqyoU0",
+      "gitBlob": "7c257a45b3b463f2d586c2b4978b079b07859aa7"
+    },
+    {
+      "file": "ivory-preview.png",
+      "driveId": "19BdsqYn4FTCIBR79Sij1iBuLoZXDqMEg",
+      "gitBlob": "54d3c958d7b1701301ce9a8cba435830ea6f9156"
+    },
+    {
+      "file": "noir-preview.png",
+      "driveId": "1jxZuuJSPUzfMGxyZwRheEVrFIVji1wM-",
+      "gitBlob": "46da3fd42b071a06dd9d65c52c222c6957439232"
+    },
+    {
+      "file": "die.glb",
+      "driveId": "1rbXMkGU3NEvSr1XyWQ3W91ph9Tg7cJDD",
+      "gitBlob": "16887005abb9e6e309d9919cd939ee2da49f37fe"
+    },
+    {
+      "file": "box.glb",
+      "driveId": "1FpXSXEYX6OHCpCSnoMIyZGls27kmEsUV",
+      "gitBlob": "47a7630ac116d2501ec5f5b0538b2cb9b9c81e98"
+    }
+  ]
+}

@@ -406,3 +406,11 @@ body.card-games-page{
 .cg-bp-feature>a{min-height:clamp(290px,34vw,410px);padding:clamp(1.5rem,4vw,3.5rem)}
 .cg-bp-feature a:focus-visible{outline:3px solid #a8c0ff;outline-offset:-5px}
 @media(max-width:760px){.cg-bp-tile>span{min-height:215px;aspect-ratio:3/2}.cg-bp-tile strong{font-size:clamp(2.8rem,9vw,4rem)}}
+
+/* Actual BI PANIC! campaign art — preserve landscape composition. */
+.cg-bp-tile{grid-column:1/-1;background:#100b17;border:0;box-shadow:none}
+.cg-hero-five .cg-gallery-card.cg-bp-tile img,.cg-bp-tile img,.cg-game-art.cg-bp-feature img{display:block;width:100%;height:auto;aspect-ratio:1672/941;object-fit:contain;border-radius:0}
+.cg-bp-feature{padding:0!important;background:#100b17!important;border:0!important;box-shadow:none}
+.cg-bp-feature>a{display:block;min-height:0;padding:0}
+.cg-bp-feature figcaption{padding:.8rem 0}
+@media(max-width:760px){.cg-hero-five .cg-bp-tile{flex:0 0 min(94vw,600px)}.cg-hero-five .cg-gallery-card.cg-bp-tile img{aspect-ratio:1672/941}}

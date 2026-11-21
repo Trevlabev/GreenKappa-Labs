@@ -11,9 +11,11 @@
 <meta property="og:title" content="BI PANIC! — A Bisexual Party Game">
 <meta property="og:description" content="Roll the Panic Die. Pick a card. Question your type.">
 <meta property="og:url" content="https://greenkappalabs.art/card-games/bi-panic/">
+<meta property="og:image" content="https://greenkappalabs.art/card-games/bi-panic/assets/hero.png">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="../../assets/greenkappa-logo.png">
 <link rel="stylesheet" href="../../style.css">
-<link rel="stylesheet" href="bi-panic.css">
+<link rel="stylesheet" href="bi-panic.css?v=20261121-campaign">
 </head>
 <body class="bp-page" data-game="bi-panic">
 <a class="skip-link" href="#main">Skip to content</a>
@@ -28,20 +30,12 @@
 <main id="main">
   <div class="bp-wrap">
     <nav class="bp-breadcrumb" aria-label="Breadcrumb"><a href="/">Studio</a> / <a href="/card-games/">Games</a> / <span aria-current="page">BI PANIC!</span></nav>
-    <section class="bp-hero" aria-labelledby="bp-title">
-      <div class="bp-hero-copy">
-        <p class="bp-kicker"><span>04 / ORIGINAL PARTY GAME</span><span>18+</span></p>
-        <h1 id="bp-title">BI<br><i>PANIC!</i></h1>
-        <p class="bp-tag">Well, this just got complicated.</p>
-        <p class="bp-intro">A gloriously bisexual party game about crushes, confessions, flirting, and finding out your type might be a little less specific than you thought.</p>
-        <div class="bp-actions"><a class="bp-button" href="#try">Roll the Panic Die</a><a class="bp-button bp-outline" href="#how">How it works</a></div>
-        <p class="bp-status">IN DEVELOPMENT &nbsp; / &nbsp; PLAYABLE BROWSER PROTOTYPE</p>
-      </div>
-      <div class="bp-poster" aria-label="Decorative typographic game artwork in pink, purple, blue and ivory">
-        <div class="bp-orbit bp-orbit-one"></div><div class="bp-orbit bp-orbit-two"></div>
-        <span class="bp-poster-top">GREENKAPPA LABS &nbsp; / &nbsp; AFTER DARK</span>
-        <div class="bp-fan" aria-hidden="true"><div class="bp-fan-card bp-fan-a"><small>01 / THE CONFESSION</small><b>SPILL.</b><span>◇</span></div><div class="bp-fan-card bp-fan-b"><small>02 / THE CHALLENGE</small><b>DARE.</b><span>↔</span></div><div class="bp-fan-card bp-fan-c"><small>03 / THE TWIST</small><b>BI<br>PANIC!</b><span>✳</span></div></div>
-        <span class="bp-poster-bottom">60 CARDS &nbsp; / &nbsp; ONE PANIC DIE &nbsp; / &nbsp; QUESTIONABLE COMPOSURE</span>
+    <section class="bp-hero bp-campaign" aria-labelledby="bp-title">
+      <h1 id="bp-title" class="bp-visually-hidden">BI PANIC! — The bisexual party card game</h1>
+      <figure class="bp-campaign-art"><img src="assets/hero.png" alt="BI PANIC! Divine Bad Decisions: neon-lit marble busts, prototype box, cards and glitter Panic Die. Go both ways. Make bad decisions." width="1672" height="941" fetchpriority="high" decoding="async"><figcaption>DIVINE BAD DECISIONS / CHAOS &amp; DESIRE · CONCEPT CAMPAIGN ART</figcaption></figure>
+      <div class="bp-campaign-copy">
+        <div><p class="bp-kicker"><span>GREENKAPPA LABS / ORIGINAL PARTY GAME</span><span>18+</span></p><p class="bp-campaign-line">Go both ways.<br><i>Make bad decisions.</i></p></div>
+        <div><p class="bp-intro">A gloriously bisexual party game about crushes, confessions, flirting, and finding out your type might be a little less specific than you thought.</p><div class="bp-actions"><a class="bp-button" href="#try">Roll the Panic Die</a><a class="bp-button bp-outline" href="#cards">Explore the cards</a></div><p class="bp-status">IN DEVELOPMENT / PLAYABLE BROWSER PROTOTYPE</p></div>
       </div>
     </section>
     <div class="bp-facts" aria-label="Game at a glance">
@@ -55,35 +49,46 @@
       <div class="bp-steps"><article><span>01</span><h3>Deal three.</h3><p>Every player starts with three private cards.</p></article><article><span>02</span><h3>Roll the die.</h3><p>Its four faces determine how cards and players interact.</p></article><article><span>03</span><h3>Spill or dare.</h3><p>Choose a prompt, a twist, or pass. Refill and move clockwise.</p></article></div>
     </div>
   </section>
+  <section class="bp-wrap bp-section bp-product-section" id="product" aria-labelledby="product-title">
+    <p class="bp-eyebrow">02 / THE OBJECT</p>
+    <div class="bp-product-grid">
+      <figure class="bp-product-art"><img src="assets/product.png" alt="Source-rendered BI PANIC! prototype packaging, deck and cards" width="3200" height="2400" loading="lazy" decoding="async"><figcaption>ORIGINAL 3D PRODUCT CONCEPT / NOT A MANUFACTURED EDITION</figcaption></figure>
+      <div><h2 id="product-title">Bad decisions.<br><i>Good packaging.</i></h2><p>Neon gradients, sharp typography, ivory and noir card art, and a glittering four-sided die. The components have their own visual personality.</p>
+      <div class="bp-model-actions"><button type="button" class="bp-button bp-outline" data-model="box" aria-controls="bp-model-stage">Inspect the box in 3D</button><button type="button" class="bp-button bp-outline" data-model="die" aria-controls="bp-model-stage">Inspect the die in 3D</button></div>
+      <p class="bp-small">Optional interactive viewer uses the original GLB models. Requires WebGL and an internet connection to load the viewing library.</p></div>
+    </div>
+    <div id="bp-model-stage" class="bp-model-stage" hidden><div class="bp-model-toolbar"><span id="bp-model-label">3D COMPONENT VIEWER</span><button class="bp-button bp-outline" id="bp-model-close" type="button">Close viewer</button></div><div id="bp-model-content"></div><p id="bp-model-status" class="bp-small" role="status"></p></div>
+  </section>
   <section class="bp-wrap bp-section" id="try" aria-labelledby="try-title">
-    <p class="bp-eyebrow">02 / INTERACTIVE MECHANIC PREVIEW</p>
-    <div class="bp-two bp-try"><div><h2 id="try-title">Meet the<br><i>Panic Die.</i></h2><p>Four sides. Four ways to make the next turn somebody's problem. Try the turn selector below before the full game is available online.</p><button id="bp-roll" class="bp-button" type="button">Roll the D4</button><p class="bp-small">Mechanic preview only — not the full card game or a multiplayer room.</p></div>
-      <div class="bp-result" id="bp-result" role="status" aria-live="polite" aria-atomic="true"><span class="bp-result-number" id="bp-face">D4</span><p class="bp-eyebrow" id="bp-result-label">READY TO ROLL</p><h3 id="bp-mode">Your turn.</h3><p id="bp-description">Roll to reveal one of the four ways to play a turn.</p></div>
+    <p class="bp-eyebrow">03 / INTERACTIVE MECHANIC PREVIEW</p>
+    <div class="bp-two bp-try"><div><h2 id="try-title">Meet the<br><i>Panic Die.</i></h2><p>Four sides. Four ways to make the next turn somebody's problem. Try the turn selector below to explore the four turn modes.</p><button id="bp-roll" class="bp-button" type="button">Roll the D4</button><p class="bp-small">Mechanic preview only — not the full card game or a multiplayer room.</p></div>
+      <div class="bp-result" id="bp-result"><div class="bp-die-stage"><img src="assets/die.png" alt="Actual rendered purple glitter Panic Die with gold symbols" width="1600" height="1600" loading="lazy" decoding="async"></div><div class="bp-roll-copy" role="status" aria-live="polite" aria-atomic="true"><span class="bp-result-number" id="bp-face">D4</span><p class="bp-eyebrow" id="bp-result-label">READY TO ROLL</p><h3 id="bp-mode">Your turn.</h3><p id="bp-description">Roll to reveal one of the four ways to play a turn.</p></div></div>
     </div>
     <div class="bp-modes">
       <article><span>01 / ROCKET</span><h3>ME TIME</h3><p>Choose a card from your own hand and play it yourself.</p></article>
       <article><span>02 / ORCHID</span><h3>YOUR PROBLEM</h3><p>Choose a card and invite another player to take it.</p></article>
-      <article><span>03 / ARROWS</span><h3>THE LINEUP</h3><p>Other players submit cards. Choose one and invite a recipient. In larger groups, only the three players to your left submit.</p></article>
+      <article><span>03 / ARROWS</span><h3>THE LINEUP</h3><p>Other players submit cards. Choose one and invite a recipient. With 7–12 players, only the three players to your left submit.</p></article>
       <article><span>04 / LIPS</span><h3>ALL IN</h3><p>Choose a card. Everyone gets an optional SPILL turn — no physical dares.</p></article>
     </div>
   </section>
-  <section class="bp-paper" aria-labelledby="cards-title">
+  <section class="bp-paper" id="cards" aria-labelledby="cards-title">
     <div class="bp-wrap bp-section">
-      <p class="bp-eyebrow">03 / THE CARDS</p>
-      <div class="bp-two"><h2 id="cards-title">The same card.<br><i>Different decisions.</i></h2><div><p>The current 60-card prototype offers four authored variations per card: standard SPILL and DARE, plus a BI PANIC version of each. The three color intensities let the game move from playful to bold.</p><p>Two visual treatments — ivory and noir — carry the same game content in a minimalist pink, purple and blue identity.</p><p class="bp-small">Illustrations here are editorial interface compositions, not final card faces or photographs of retail components.</p></div></div>
-      <div class="bp-card-pair">
-        <article class="bp-sample bp-ivory"><div class="bp-sample-top"><span>IVORY / DEMO COPY</span><span>01</span></div><h3>SPILL</h3><p>What's a celebrity crush that would surprise your friends?</p><div class="bp-rule"></div><h3>BI PANIC</h3><p>Pick two celebrity crushes of different genders.</p><small>ILLUSTRATIVE PROMPT / NOT A DECK PROOF</small></article>
-        <article class="bp-sample bp-noir"><div class="bp-sample-top"><span>NOIR / DEMO COPY</span><span>02</span></div><h3>DARE</h3><p>Deliver your best ridiculous pickup line.</p><div class="bp-rule"></div><h3>BI PANIC</h3><p>Invent two dramatically different pickup lines.</p><small>ILLUSTRATIVE PROMPT / NOT A DECK PROOF</small></article>
+      <p class="bp-eyebrow">04 / THE CARDS</p>
+      <div class="bp-two"><h2 id="cards-title">The same card.<br><i>Different decisions.</i></h2><div><p>The current 60-card prototype offers four authored variations per card: standard SPILL and DARE, plus a BI PANIC version of each. The three color intensities let the game move from playful to bold.</p><p>Two visual treatments — ivory and noir — carry the same game content in a minimalist pink, purple and blue identity.</p><p class="bp-small">The gallery uses actual v1.0-P card proofs. The text and graphic layouts are proposed, not final retail-approved components.</p></div></div>
+      <div class="bp-gallery" aria-label="Prototype card proof gallery">
+        <div class="bp-gallery-toolbar"><div class="bp-theme-switch" role="group" aria-label="Card visual treatment"><button type="button" data-theme-choice="ivory" aria-pressed="true">Ivory</button><button type="button" data-theme-choice="noir" aria-pressed="false">Noir</button></div><span class="bp-gallery-note">6 CARDS / ACTUAL PROTOTYPE ART</span></div>
+        <figure class="bp-deck-proof" id="bp-ivory-proof"><a href="assets/ivory-preview.png" target="_blank" rel="noopener" aria-label="Open full size Ivory card artwork"><img src="assets/ivory-preview.png" alt="Six actual BI PANIC! Ivory prototype card faces, featuring three color intensities and SPILL and DARE prompts" width="2322" height="2152" loading="lazy" decoding="async"></a><figcaption>IVORY / v1.0-P — Select the image for the full-resolution proof.</figcaption></figure>
+        <figure class="bp-deck-proof" id="bp-noir-proof" hidden><a href="assets/noir-preview.png" target="_blank" rel="noopener" aria-label="Open full size Noir card artwork"><img src="assets/noir-preview.png" alt="Six actual BI PANIC! Noir prototype card faces, featuring three color intensities and SPILL and DARE prompts" width="2322" height="2152" loading="lazy" decoding="async"></a><figcaption>NOIR / v1.0-P — Select the image for the full-resolution proof.</figcaption></figure>
       </div>
     </div>
   </section>
   <section class="bp-wrap bp-section bp-outro" aria-labelledby="status-title">
-    <p class="bp-eyebrow">04 / DEVELOPMENT STATUS</p>
+    <p class="bp-eyebrow">05 / DEVELOPMENT STATUS</p>
     <div class="bp-two"><h2 id="status-title">Good decisions<br>are optional.<br><i>Consent isn't.</i></h2><div><p>BI PANIC! is for adults. Nobody has to disclose their identity, answer a question, or perform a dare. Anyone can decline without explanation or penalty; intimate contact requires freely given agreement from everyone involved.</p><p>The v1.0-P pass-and-play prototype and 60-card design exist. Rules and card content remain proposed, human playtesting is pending, and no retail edition or public multiplayer launch is announced.</p><div class="bp-actions"><a class="bp-button" href="/card-games/">Explore more games</a><a class="bp-button bp-outline" href="mailto:GreenkappaLabs@gmail.com?subject=BI%20PANIC%20Inquiry">Contact the studio</a></div></div></div>
   </section>
 </main>
 <footer class="site-footer dark-footer"><div><strong>GreenKappa Labs</strong><span>Original games, systems, and creative technology</span></div><div><a href="/">Home</a><a href="/card-games/">Games</a><a href="/privacy.html">Privacy</a><span>© <span id="year"></span> Trevor Leininger</span></div></footer>
 <script src="../../script.js"></script>
-<script src="bi-panic.js"></script>
+<script src="bi-panic.js?v=20261121-campaign"></script>
 </body>
 </html>
