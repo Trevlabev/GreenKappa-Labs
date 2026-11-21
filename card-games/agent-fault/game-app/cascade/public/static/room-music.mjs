@@ -2,7 +2,7 @@
  * AGENT/FAULT game-room soundtrack — a local, opt-in player.
  * Shared by Classic and Cascade; does not touch multiplayer game state.
  */
-const TRACK_URL = 'https://raw.githubusercontent.com/Trevlabev/GreenKappa-Labs/main/card-games/agent-fault/audio/agent-fault-main-theme.mp3';
+const TRACK_URL = '/shared-media/agent-fault-main-theme.mp3';
 const VOLUME_KEY = 'agent-fault:room-music-volume:v1';
 
 const audio = document.createElement('audio');
