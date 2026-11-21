@@ -32,6 +32,14 @@ writeFileSync(join(output, 'index.html'), originalHostedIndex);
 const cascadeOut = join(output, 'cascade');
 cpSync(join(cascade, 'public'), cascadeOut, { recursive: true, force: true });
 
+// Bundle the actual soundtrack with the same Worker that serves both live games.
+const themeSource = resolve(hosted, '../../audio/agent-fault-main-theme.mp3');
+const themeTarget = join(output, 'shared-media/agent-fault-main-theme.mp3');
+if (!existsSync(themeSource)) throw Error('Missing approved AGENT/FAULT main theme MP3');
+mkdirSync(dirname(themeTarget), { recursive: true });
+cpSync(themeSource, themeTarget);
+
+
 function rewriteTree(dir) {
   for (const entry of readdirSync(dir, { withFileTypes: true })) {
     const p = join(dir, entry.name);
@@ -46,7 +54,8 @@ function rewriteTree(dir) {
 rewriteTree(cascadeOut);
 for (const required of [
   'index.html', 'static/app.js', 'cascade/index.html',
-  'cascade/static/cascade.js', 'cascade/static/assets/deck_data.json'
+  'cascade/static/cascade.js', 'cascade/static/assets/deck_data.json',
+  'shared-media/agent-fault-main-theme.mp3'
 ]) {
   if (!existsSync(join(output, required))) throw Error('Missing unified output asset: ' + required);
 }
