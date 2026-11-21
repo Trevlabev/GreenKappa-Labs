@@ -18,7 +18,7 @@ const back=new THREE.Quaternion().setFromEuler(new THREE.Euler(Math.PI/2,0,Math.
 const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
 const cache=new Map(), entities=new Map(), tasks=new Map(), labels=new Map();
 const loader=new GLTFLoader(), clock=new THREE.Clock();
-let root,stage,info,renderer,scene,camera,orbit,resizeObserver,last,runId=0,raf=0,init=false,rollSeq=0,latest=null;
+let root,stage,info,renderer,scene,camera,orbit,resizeObserver,last,runId=0,raf=0,init=false,rollSeq=0,latest=null,pendingRoll=null;
 const ease=t=>1-Math.pow(1-t,3);
 const colors={Veshka:0xe954a7,Ravel:0xe76c55,Gilt:0xe4ba64,Riff:0xc964e6,Nulve:0x56c9f5,Tally:0xbade65,Keth:0x838aff,Noid:0xb3b3c9};
 function fetchModel(url){if(!cache.has(url)){let p=loader.loadAsync(url).catch(e=>{cache.delete(url);throw e});cache.set(url,p)}return cache.get(url)}
@@ -30,7 +30,7 @@ function removeLabel(id){let a=labels.get(id);if(a){scene.remove(a.sprite);a.spr
 function clean(key,animated=false){let e=entities.get(key);if(!e)return;entities.delete(key);if(animated){const dest=V(0,.6,-.4);move(e.group,dest,front,380,.7);tween('remove-'+e.group.uuid,390,()=>{},()=>scene.remove(e.group))}else{tasks.delete(e.group.uuid);scene.remove(e.group)}removeLabel(key)}
 async function ensure(key,url,width,pos,q,options={}){
  let e=entities.get(key);
- if(e&&e.url===url){e.target={pos:pos.clone(),q:q.clone(),options};if(e.loaded&&(!e.positioned||e.group.position.distanceTo(pos)>.02||e.group.quaternion.angleTo(q)>.03)){move(e.group,pos,q,options.ms??440,options.lift??0);e.positioned=true}return e}
+ if(e&&e.url===url){e.group.userData.click=options.click;e.target={pos:pos.clone(),q:q.clone(),options};if(e.loaded&&(!e.positioned||e.group.position.distanceTo(pos)>.02||e.group.quaternion.angleTo(q)>.03)){move(e.group,pos,q,options.ms??440,options.lift??0);e.positioned=true}return e}
  if(e)clean(key);
  const group=new THREE.Group();group.position.copy(options.from||pos);group.quaternion.copy(options.initialQ||q);group.userData.click=options.click;scene.add(group);
  e={group,url,loaded:false,target:{pos:pos.clone(),q:q.clone(),options},positioned:false};entities.set(key,e);
@@ -46,11 +46,11 @@ function layout(){
 }
 function resetCamera(){camera.position.set(0,12.8,11.8);orbit.target.set(0,0,0);camera.zoom=1;camera.updateProjectionMatrix();orbit.update()}
 function tokenFlight(p,q,d,kind){if(!d||reduced)return;let x=seat(p),z=seat(q),material=new THREE.MeshStandardMaterial({color:kind==='glory'?0xffc66a:0x6ad9ff,emissive:kind==='glory'?0x8d5717:0x194b8d,metalness:.75,roughness:.2});let mesh=new THREE.Mesh(new THREE.CylinderGeometry(.16,.16,.055,24),material);scene.add(mesh);let from=V(x.x,.42,x.z),to=V(z.x,.42,z.z);tween('flight-'+mesh.uuid,650,t=>{mesh.position.lerpVectors(from,to,ease(t));mesh.position.y+=Math.sin(Math.PI*t)*1.8;mesh.rotation.z=t*6;mesh.rotation.x=t*8},()=>{scene.remove(mesh);mesh.geometry.dispose();material.dispose()})}
-function seat(id){return id===0?{x:-6.1,z:3.45}:id===1?{x:-5.4,z:-3.55}:{x:5.4,z:-3.55}}
+function seat(id){return id===0?{x:-6.1,z:3.45}:id===1?{x:-5.4,z:-3.55}:id===2?{x:5.4,z:-3.55}:{x:-6.25,z:-.15}}
 function showRoll(result){
  const seq=++rollSeq;const dieEntity=entities.get('die');
- if(!result||!dieEntity?.loaded){if(result)dieEntity?.pendingRoll;return}
- const die=dieEntity.group,face=dieEntity.model.getObjectByName('FACE_'+String(result).padStart(2,'0')+'_TEXTURED');
+ if(!result||!dieEntity?.loaded){if(result)pendingRoll=result;return}pendingRoll=null;
+ const die=dieEntity.group;tasks.delete(die.uuid);const face=dieEntity.model.getObjectByName('FACE_'+String(result).padStart(2,'0')+'_TEXTURED');
  if(!face){setStatus('D8 '+result+' (face geometry unavailable)');return;}
  const box=new THREE.Box3().setFromObject(face);const centre=box.getCenter(V(0,0,0));die.worldToLocal(centre);const normal=centre.normalize();
  const target=new THREE.Quaternion().setFromUnitVectors(normal,V(0,1,0));
@@ -59,7 +59,7 @@ function showRoll(result){
  if(reduced){die.quaternion.copy(target);textLabel('roll-result','NATURAL '+result,V(6.1,.65,-.35),'#f7cb88',.39)}
 }
 function snapshot(s){return {round:s.round,turn:s.turn,roll:s.roll,events:[...s.events],players:s.players.map(p=>({name:p.name,dev:p.dev,glory:p.glory,hand:p.hand.map(c=>({id:c.id,name:c.name}))})),titans:s.titans.map(t=>({id:t.id,awake:t.awake,name:t.name})),loans:s.loans.map(l=>({...l})),selected:s.selected}}
-function newSession(s){runId++;for(const key of [...entities.keys()])clean(key);for(const key of [...labels.keys()])removeLabel(key);tasks.clear();last=null;latest=null;setStatus('Loading original 3D game pieces…')}
+function newSession(s){runId++;for(const key of [...entities.keys()])clean(key);for(const key of [...labels.keys()])removeLabel(key);tasks.clear();pendingRoll=null;rollSeq++;last=null;latest=null;setStatus('Loading original 3D game pieces…')}
 function syncState(s){
  if(!init||!s)return;
  const next=snapshot(s);
@@ -67,7 +67,7 @@ function syncState(s){
  latest=next;const prev=last;last=next;
  const currentKeys=new Set(['ledger','die']);
  ensure('ledger',LEDGER,3.15,V(-6.25,.035,-.15),front,{ms:650});
- ensure('die',DIE,1.05,V(6.1,.52,.4),new THREE.Quaternion(),{ms:400}).then(e=>{if(e&&latest?.roll&&!labels.has('roll-result')&&!tasks.has('die-spin'))showRoll(latest.roll)});
+ if(!entities.has('die'))ensure('die',DIE,1.05,V(6.1,.52,.4),new THREE.Quaternion(),{ms:400,lift:0}).then(e=>{if(e&&pendingRoll)showRoll(pendingRoll);else if(e&&latest?.roll)showRoll(latest.roll)});
  next.players.forEach((p,i)=>{
    const a=seat(i),key='deity-'+i,seal='seal-'+i;currentKeys.add(key);currentKeys.add(seal);
    ensure(key,D(p.name),1.43,V(a.x,.11,a.z),front,{from:V(0,.4,-.1),lift:.6});
@@ -100,7 +100,7 @@ function syncState(s){
  const event=next.events.find(x=>x.includes('natural D8'));
  const old=prev?.events.find(x=>x.includes('natural D8'));
  if(event&&event!==old){const m=event.match(/natural D8 (\d)/);if(m)showRoll(+m[1])}
- if(prev&&next.loans.length!==prev.loans.length){const l=next.loans.find(x=>!prev.loans.some(y=>y.borrower===x.borrower&&y.lender===x.lender));if(l){tokenFlight(l.lender,l.borrower,2,'devotion');setStatus('Covenant created: 2 Devotion now, 3 due next personal turn.')}else{const settled=prev.loans.find(x=>!next.loans.some(y=>y.borrower===x.borrower&&y.lender===x.lender));if(settled){tokenFlight(settled.borrower,settled.lender,3,'devotion');setStatus('Covenant settled or canceled; see the ledger for details.')}}}
+ if(prev&&next.loans.length!==prev.loans.length){const l=next.loans.find(x=>!prev.loans.some(y=>y.borrower===x.borrower&&y.lender===x.lender));if(l){tokenFlight(l.lender,l.borrower,2,'devotion');setStatus('Covenant created: 2 Devotion now, 3 due next personal turn.')}else{const settled=prev.loans.find(x=>!next.loans.some(y=>y.borrower===x.borrower&&y.lender===x.lender));if(settled){setStatus('Covenant settled or canceled; see the ledger for actual payment and default.')}}}
 }
 function initTable(){
  if(init)return;init=true;
