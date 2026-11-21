@@ -21,22 +21,22 @@ const descriptors={
  generic:(category,title)=>({url:MIRACLE('M01'),face:'proxy',alt:category+' — '+title,proxy:true,label:category})
 };
 function makeObject(gltf,d){
- const obj=gltf.scene.clone(true),front=[],back=[];
+ const obj=gltf.scene.clone(true),front=[],back=[],ownedMaterials=[];
  obj.traverse(o=>{if(!o.isMesh)return;const n=(o.name+' '+(o.geometry?.name||'')).toUpperCase();if(n.includes('_FRONT'))front.push(o);else if(n.includes('_BACK'))back.push(o)});
  // The verified source meshes use +Z for front and -Z for back.
  if((d.neverReveal||d.face==='proxy')&&front.length){
   for(const mesh of front){
    if(d.neverReveal)mesh.visible=false;
-   else mesh.material=new THREE.MeshStandardMaterial({color:0x21182e,roughness:.67,metalness:.13,emissive:0x130c25,emissiveIntensity:.55});
+   else{mesh.material=new THREE.MeshStandardMaterial({color:0x21182e,roughness:.67,metalness:.13,emissive:0x130c25,emissiveIntensity:.55});ownedMaterials.push(mesh.material)}
   }
  }
  // Fail closed: never render an unrecognized hidden/proxy object.
  if((d.neverReveal||d.face==='proxy')&&!front.length)throw Error('Expected named front mesh is missing');
  const b=new THREE.Box3().setFromObject(obj),size=b.getSize(new THREE.Vector3()),center=b.getCenter(new THREE.Vector3()),pivot=new THREE.Group(),base=new THREE.Group();
  base.add(obj);obj.position.sub(center);base.scale.setScalar(2.6/Math.max(size.y,.00001));pivot.add(base);
- return {pivot,aspect:size.x/Math.max(size.y,.00001)};
+ return {pivot,aspect:size.x/Math.max(size.y,.00001),ownedMaterials};
 }
-function disposeEntry(e){if(e?.proxyMaterial)e.proxyMaterial.dispose();e?.slot?.remove()}
+function disposeEntry(e){for(const m of e?.ownedMaterials||[])m.dispose();e?.slot?.remove()}
 function descKey(d){return d.url+'|'+d.face+'|'+(d.label||'')}
 function ensure(key,host,d,opts={}){
  if(!host)return null;const dk=descKey(d);let e=entries.get(key),old=e;
@@ -54,7 +54,7 @@ function ensure(key,host,d,opts={}){
   const ticket=e;
   load(d.url).then(gltf=>{
    if(entries.get(key)!==ticket)return;
-   const built=makeObject(gltf,d);ticket.object=built.pivot;ticket.aspect=built.aspect;
+   const built=makeObject(gltf,d);ticket.object=built.pivot;ticket.aspect=built.aspect;ticket.ownedMaterials=built.ownedMaterials;
    ticket.start=performance.now();ticket.dirty=true;
   }).catch(err=>{if(entries.get(key)!==ticket)return;ticket.slot.classList.add('failed');placeholder.textContent=d.alt+' · 3D unavailable';console.warn('SGLD card:',d.url,err);status('A card model could not load. Text controls are still playable.')});
  }else{
@@ -78,7 +78,7 @@ function drawCard(e,now){
  if(t<1){
   if(e.mode==='flip'){ry=target+(1-ease(t))*Math.PI;y=Math.sin(t*Math.PI)*.16}
   else if(e.mode==='play'){ry=target+(e.d.neverReveal?0:Math.PI*.48)*(1-ease(t));rz=(1-ease(t))*.13;scale=.65+.35*ease(t);y=(1-ease(t))*(-.45)}
-  else{ry=target+(e.d.neverReveal?0:Math.PI*.62)*(1-ease(t));rz=(1-ease(t))*.1;y=(1-ease(t))*(-.25);scale=.82+.18*ease(t)}
+  else{ry=target+(e.d.neverReveal?0:Math.PI)*(1-ease(t));rz=(1-ease(t))*.1;y=(1-ease(t))*(-.25);scale=.82+.18*ease(t)}
  }
  // Hover tilt stays on the same side. No opponent face is disclosed.
  if(e.hover){ry+=e.hoverX*.22;rx=e.hoverY*.14}
@@ -96,18 +96,17 @@ function loop(now){
  if(!gl||document.hidden||now-lastFrame<33)return;
  lastFrame=now;
  for(const e of entries.values())try{drawCard(e,now)}catch(err){console.error('Card render failure',err);e.dirty=false}
- if(activeEvent&&now>=activeEvent.until&&events.length)advanceEvent(now);
- else if(!activeEvent&&events.length)advanceEvent(now);
+ if(activeEvent){const entry=entries.get(activeEvent.key);if(!activeEvent.until&&(entry?.object||entry?.slot.classList.contains('failed')||now>=activeEvent.maxWait))activeEvent.until=now+(REDUCED?550:1250);if(activeEvent.until&&now>=activeEvent.until&&events.length)advanceEvent(now)}else if(events.length)advanceEvent(now);
 }
 function advanceEvent(now){
- const card=events.shift();if(!card)return;activeEvent={until:now+(REDUCED?450:1150)};
+ const card=events.shift();if(!card)return;activeEvent={until:null,maxWait:now+6000,key:'event-'+(eventSerial+1)};
  const host=$('sgEventVisual');$('sgEventTitle').textContent=card.title;$('sgEventDetail').textContent=card.detail;
  ensure('event-'+(++eventSerial),host,card.desc,{className:'sg-event-slot',mode:'play',duration:650});
  for(const [key,e] of [...entries])if(key.startsWith('event-')&&key!=='event-'+eventSerial){disposeEntry(e);entries.delete(key)}
 }
 function queue(card){
  events.push(card);if(events.length>12)events.shift();
- if(!activeEvent&&initialized)advanceEvent(performance.now());
+ if(initialized&&(!activeEvent||(activeEvent.until&&performance.now()>=activeEvent.until)))advanceEvent(performance.now());
 }
 export function played(actor,card,hidden,cost,glory){
  queue({title:hidden?actor+' performs a hidden Miracle':actor+' performs '+card.name,detail:cost+' Devotion · +'+glory+' Glory'+(hidden?' · Identity concealed':''),desc:descriptors.miracle(card,hidden)});
