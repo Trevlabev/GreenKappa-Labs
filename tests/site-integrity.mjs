@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 const root=process.cwd(),domain='https://greenkappalabs.art',issues=[];
-const routes=['index.html','tablearc/index.html','tablearc-red/index.html','card-games/index.html','card-games/not-to-scale/index.html','card-games/small-gods-large-debts/index.html','card-games/agent-fault/index.html','card-games/bi-panic/index.html','card-games/playtest/index.html','playground/index.html','playground/not-to-scale/index.html','worlds/index.html','worlds/sourcebooks/index.html','worlds/adventures/index.html','tools/index.html','flowglass/index.html','filingproof/index.html','courtflow/index.html','tools/handoff-atlas/index.html','journal/index.html','work/index.html','privacy.html'];
+const routes=['index.html','tablearc/index.html','tablearc-red/index.html','card-games/index.html','card-games/not-to-scale/index.html','card-games/small-gods-large-debts/index.html','card-games/agent-fault/index.html','card-games/bi-panic/index.html','card-games/bi-panic/play/index.html','card-games/playtest/index.html','playground/index.html','playground/not-to-scale/index.html','worlds/index.html','worlds/sourcebooks/index.html','worlds/adventures/index.html','tools/index.html','flowglass/index.html','filingproof/index.html','courtflow/index.html','tools/handoff-atlas/index.html','journal/index.html','work/index.html','privacy.html'];
 function walk(dir){return fs.readdirSync(dir,{withFileTypes:true}).flatMap(e=>{if(['.git','node_modules'].includes(e.name))return [];let full=path.join(dir,e.name);return e.isDirectory()?walk(full):[path.relative(root,full).split(path.sep).join('/')];})}
 // Independently served app roots, not documents hosted at the main GitHub Pages origin.
 const appMounts=[
