@@ -16,7 +16,7 @@
 <link rel="icon" href="../../assets/greenkappa-logo.png">
 <link rel="stylesheet" href="../../style.css">
 <link rel="stylesheet" href="bi-panic.css?v=20261123-play">
-</head>
+<link rel="stylesheet" href="music-player.css?v=20261123"></head>
 <body class="bp-page" data-game="bi-panic">
 <a class="skip-link" href="#main">Skip to content</a>
 <header class="site-header dark-header">
@@ -42,7 +42,25 @@
       <div><strong>4–12</strong><span>Adults / digital prototype</span></div><div><strong>60</strong><span>Proposed cards</span></div><div><strong>D4</strong><span>Four turn modes</span></div><div><strong>18+</strong><span>Adult party game</span></div>
     </div>
   </div>
-  <section class="bp-play-feature" id="play" aria-labelledby="bp-play-title">
+  
+<section class="bp-score bp-wrap" id="soundtrack" aria-labelledby="bp-score-title">
+  <div class="bp-score-copy">
+    <p class="bp-eyebrow">THE SOUND / ORIGINAL PROTOTYPE SCORE</p>
+    <h2 id="bp-score-title">AFTERIMAGE <i>Soundtrack preview.</i></h2>
+    <p>A restrained, jazz-inflected minimal techno loop made for actual conversation. 104 BPM · 37 seconds · Instrumental. Press play to listen; it never starts automatically.</p>
+  </div>
+  <div class="bp-score-player" data-bp-audio-player>
+    <audio src="assets/afterimage.mp3" preload="metadata" loop></audio>
+    <div class="bp-score-wave" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+    <div class="bp-score-controls">
+      <button type="button" data-bp-audio-toggle aria-pressed="false">Play soundtrack</button>
+      <div class="bp-score-time"><span data-bp-audio-elapsed>0:00</span><input type="range" data-bp-audio-seek min="0" max="37" value="0" step=".1" aria-label="Seek in soundtrack"><span data-bp-audio-duration>0:37</span></div>
+      <label class="bp-score-volume">Volume <input type="range" data-bp-audio-volume min="0" max="100" value="35" aria-label="Music volume"></label>
+    </div>
+    <div class="bp-score-foot"><span data-bp-audio-status role="status" aria-live="polite">Optional audio · Prototype composition</span><a href="assets/afterimage.mp3" download>Save MP3</a></div>
+  </div>
+</section>
+<section class="bp-play-feature" id="play" aria-labelledby="bp-play-title">
     <div class="bp-wrap bp-play-grid">
       <div class="bp-play-copy">
         <p class="bp-eyebrow">PLAY NOW / 60-CARD BROWSER PROTOTYPE</p>
@@ -107,5 +125,5 @@
 <footer class="site-footer dark-footer"><div><strong>GreenKappa Labs</strong><span>Original games, systems, and creative technology</span></div><div><a href="/">Home</a><a href="/card-games/">Games</a><a href="play/">Play BI PANIC!</a><a href="/privacy.html">Privacy</a><span>© <span id="year"></span> Trevor Leininger</span></div></footer>
 <script src="../../script.js"></script>
 <script src="bi-panic.js?v=20261123-play"></script>
-</body>
+<script src="music-player.js?v=20261123"></script></body>
 </html>
