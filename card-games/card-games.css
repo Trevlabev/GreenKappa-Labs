@@ -414,3 +414,8 @@ body.card-games-page{
 .cg-bp-feature>a{display:block;min-height:0;padding:0}
 .cg-bp-feature figcaption{padding:.8rem 0}
 @media(max-width:760px){.cg-hero-five .cg-bp-tile{flex:0 0 min(94vw,600px)}.cg-hero-five .cg-gallery-card.cg-bp-tile img{aspect-ratio:1672/941}}
+
+/* BI PANIC! browser prototype: distinct play control within the games directory. */
+.cg-bp-online-links a{background:linear-gradient(115deg,#ffa4cf,#c5b0ff);color:#201528!important;border:1px solid #f7d1e8}
+.cg-bp-online-links a:hover{background:linear-gradient(115deg,#ffd0e8,#dcd0ff)}
+.cg-bp-online-links a:focus-visible{outline:3px solid #fff;outline-offset:4px}

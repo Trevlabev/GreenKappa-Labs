@@ -1,7 +1,8 @@
 import fs from 'node:fs';
+import vm from 'node:vm';
 import path from 'node:path';
 const root=process.cwd(),domain='https://greenkappalabs.art',issues=[];
-const routes=['index.html','tablearc/index.html','tablearc-red/index.html','card-games/index.html','card-games/not-to-scale/index.html','card-games/small-gods-large-debts/index.html','card-games/agent-fault/index.html','card-games/bi-panic/index.html','card-games/playtest/index.html','playground/index.html','playground/not-to-scale/index.html','worlds/index.html','worlds/sourcebooks/index.html','worlds/adventures/index.html','tools/index.html','flowglass/index.html','filingproof/index.html','courtflow/index.html','tools/handoff-atlas/index.html','journal/index.html','work/index.html','privacy.html'];
+const routes=['index.html','tablearc/index.html','tablearc-red/index.html','card-games/index.html','card-games/not-to-scale/index.html','card-games/small-gods-large-debts/index.html','card-games/agent-fault/index.html','card-games/bi-panic/index.html','card-games/bi-panic/play/index.html','card-games/playtest/index.html','playground/index.html','playground/not-to-scale/index.html','worlds/index.html','worlds/sourcebooks/index.html','worlds/adventures/index.html','tools/index.html','flowglass/index.html','filingproof/index.html','courtflow/index.html','tools/handoff-atlas/index.html','journal/index.html','work/index.html','privacy.html'];
 function walk(dir){return fs.readdirSync(dir,{withFileTypes:true}).flatMap(e=>{if(['.git','node_modules'].includes(e.name))return [];let full=path.join(dir,e.name);return e.isDirectory()?walk(full):[path.relative(root,full).split(path.sep).join('/')];})}
 // Independently served app roots, not documents hosted at the main GitHub Pages origin.
 const appMounts=[
@@ -65,4 +66,39 @@ for(const url of urls){if(!url.startsWith(domain+'/'))fail('sitemap.xml','other 
   }
  }
 }
+
+// BI PANIC! release gate — preserve every actual source card image and prompt variant.
+{
+ const game='card-games/bi-panic/play/index.html',base='card-games/bi-panic/play/assets/';
+ if(!fileSet.has(game))fail(game,'hosted 60-card game missing');
+ else{
+  const source=fs.readFileSync(game,'utf8');
+  const match=source.match(/window\.BI_PANIC_CARDS=(\[[\s\S]*?\]);<\/script>/);
+  if(!match)fail(game,'60-card game data missing');
+  else{
+   try {
+    const cards=JSON.parse(match[1]),ids=new Set(cards.map(x=>x.id));
+    if(cards.length!==60||ids.size!==60)fail(game,'expected 60 unique authored cards');
+    for(const level of ['PINK','PURPLE','BLUE'])if(cards.filter(x=>x.level===level).length!==20)fail(game,'expected 20 '+level+' cards');
+    for(const card of cards)for(const key of ['spill','bi_panic_spill','dare','bi_panic_dare'])if(typeof card[key]!=='string'||!card[key].trim())fail(game,card.id+' missing '+key);
+   }catch(e){fail(game,'invalid card data: '+e.message)}
+  }
+  const context=vm.createContext({window:{BP_IMAGES:{ivory:{},noir:{},back:'',die:''}}});
+  for(const file of ['back.js','die.js',...['ivory','noir'].flatMap(theme=>Array.from({length:6},(_,i)=>theme+'-0'+(i+1)+'.js'))]){
+   const asset=base+file;
+   if(!fileSet.has(asset)){fail(asset,'game art bundle missing');continue}
+   if(!source.includes('src="assets/'+file+'"'))fail(game,'missing asset reference '+file);
+   try{vm.runInContext(fs.readFileSync(asset,'utf8'),context,{timeout:3000})}
+   catch(e){fail(asset,'asset script invalid: '+e.message)}
+  }
+  const art=context.window.BP_IMAGES;
+  for(const theme of ['ivory','noir']){
+   const entries=Object.entries(art[theme]);
+   if(entries.length!==60)fail(base,'expected 60 '+theme+' card images; found '+entries.length);
+   for(const [id,uri] of entries)if(!/^data:image\/(?:png|webp);base64,[A-Za-z0-9+/]+=*$/.test(uri))fail(base,theme+'/'+id+' invalid image data');
+  }
+  for(const kind of ['back','die'])if(!String(art[kind]).startsWith('data:image/'))fail(base,'original '+kind+' image missing');
+ }
+}
+
 if(issues.length){console.error('SITE INTEGRITY FAILURES: '+issues.length);for(const x of issues)console.error(' - '+x);process.exitCode=1}else console.log('PASS: '+html.size+' HTML documents, '+checked+' local resources, '+all.filter(x=>x.endsWith('.css')).length+' CSS files, '+routes.length+' canonical routes and sitemap coverage.');
