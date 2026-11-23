@@ -1779,3 +1779,10 @@ html{scroll-padding-top:90px}
     padding:.55rem .75rem;
   }
 }
+
+/* Four-game studio grid: the three secondary products share one balanced row. */
+@media(min-width:801px){.gkl-game-grid-product-first{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.gkl-game-card-bi-panic .gkl-game-card-media{background:linear-gradient(145deg,#201229,#4b245b)}
+.gkl-game-card-bi-panic .gkl-game-card-index{color:#a02a71}
+.gkl-game-card-bi-panic .gkl-game-card-action{color:#9d2c78}
+.gkl-game-card-bi-panic:hover{border-color:#e8a7d1}
