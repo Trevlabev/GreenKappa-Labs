@@ -16,10 +16,25 @@ Cascade uses new `CascadeRoom` (migration `v2-unified`) and a separate binding,
 so rooms and secrets never cross between the engines. Both share a daily AI budget
 via `BudgetGate`. One `OPENAI_API_KEY` runtime secret serves both editions.
 
-The original Classic game was already live on this Worker. Keep its GitHub production
-branch pointing to `feature/agent-fault-cloudflare-multiplayer-20261118` until this
-unified branch passes review; then publish a single coordinated commit/update on the
-watched branch. Do not deploy intermediate source files.
+## Direct-commit release policy (2026-11-23)
+
+The Cloudflare-connected branch is `feature/agent-fault-cloudflare-multiplayer-20261118`.
+Despite its historical name, this is the **live Worker source branch**. Approved,
+routine game changes are committed **directly to that branch** with no PR. The
+public GitHub Pages website is separately updated on `main`.
+
+**Routine workflow:** edit the appropriate files -> review diff -> run local game,
+Worker and browser regression checks when feasible -> make one cohesive direct
+commit -> Cloudflare builds/tests/deploys from its watched branch -> check Actions,
+Cloudflare deployment, and health/gameplay endpoints. Never claim a deployment
+succeeded solely because the GitHub commit succeeded. The unified GitHub Actions
+workflow now also runs on direct pushes to the watched branch.
+
+Do not force-push or delete room data. Port only explicitly approved tested
+features from the older research branches. Do not wholesale merge an older
+website layout, unapproved scoring or human-untested gameplay candidates.
+The release register is at `card-games/agent-fault/DEVELOPMENT_WORKFLOW.md`.
+
 
 Cloudflare Builds command (no dashboard change):
 `cd card-games/agent-fault/game-app/hosted && npm install --no-audit --no-fund && npm run build`

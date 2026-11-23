@@ -1,8 +1,19 @@
 name: AGENT/FAULT unified four-mode Worker validation
 
 on:
+  # The live Worker receives routine direct pushes; a PR is not required.
+  push:
+    branches:
+      - feature/agent-fault-cloudflare-multiplayer-20261118
+    paths:
+      - 'card-games/agent-fault/audio/**'
+      - 'card-games/agent-fault/game-app/cloudflare/**'
+      - 'card-games/agent-fault/game-app/hosted/**'
+      - 'card-games/agent-fault/game-app/cascade/**'
+      - '.github/workflows/agent-fault-cloudflare-workers-qa.yml'
   pull_request:
     paths:
+      - 'card-games/agent-fault/audio/**'
       - 'card-games/agent-fault/game-app/cloudflare/**'
       - 'card-games/agent-fault/game-app/hosted/**'
       - 'card-games/agent-fault/game-app/cascade/**'
@@ -10,7 +21,7 @@ on:
   workflow_dispatch:
 
 concurrency:
-  group: agent-fault-cloudflare-${{ github.event.pull_request.number || github.ref }}
+  group: agent-fault-cloudflare-${{ github.head_ref || github.ref_name }}
   cancel-in-progress: true
 
 permissions:
