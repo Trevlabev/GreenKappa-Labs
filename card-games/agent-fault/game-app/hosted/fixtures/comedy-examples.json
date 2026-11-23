@@ -1,0 +1,30 @@
+{
+  "schema": "agent-fault-comedy-review-v1",
+  "description": "Hand-authored fictional examples for regression, NOT real model outputs or measured audience fun.",
+  "examples": [
+    {
+      "scenario": "AF-SCN-001",
+      "interference": "AF-INF-001",
+      "good": "Mayor Goose's office now requires residents to honk three times before filing permits; the clerk stamps each application after receiving a certified honk receipt.",
+      "bad": "As an AI language model, I cannot play this card game or discuss an interference card."
+    },
+    {
+      "scenario": "AF-SCN-002",
+      "interference": "AF-INF-013",
+      "good": "The vampire wedding planner approves a midnight ceremony, but guests must file matching invitation forms and bring sealed frosting samples to the crypt.",
+      "bad": "This game is funny because the answer is chaotic. I will explain the joke instead of helping anyone."
+    },
+    {
+      "scenario": "AF-SCN-003",
+      "interference": "AF-INF-020",
+      "good": "Customer service refunds the early doomsday fee, then requires each survivor to file three emergency complaint forms at the newly opened survival desk.",
+      "bad": "As an AI, I cannot help you with this fictional prompt. Please choose another instruction."
+    },
+    {
+      "scenario": "AF-SCN-005",
+      "interference": "AF-INF-025",
+      "good": "The building manager asks the conscious Wi-Fi tenant to approve all repairs; residents now need a signed hallway access permit before reconnecting.",
+      "bad": "I will not do the task. This prompt is silly, and the gameplay should not influence any answer."
+    }
+  ]
+}

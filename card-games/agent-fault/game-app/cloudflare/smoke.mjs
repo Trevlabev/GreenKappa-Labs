@@ -177,3 +177,86 @@ if (edition === 'hosted') {
   assert.equal(Object.keys(state.approvals).length,3);
   console.log('PASS: hosted NPCs — solo human + 3 private NPC seats, automatic turns, judge rotation, privacy, votes, zero model calls');
 }
+
+if (edition === 'cascade') {
+  // Local-only integration. All Agent messages are supplied through the
+  // existing manual-reply endpoint: zero model requests or additional charges.
+  const createdNpc = (await call('/api/rooms', {
+    method:'POST',body:{play_mode:'digital'}
+  })).data;
+  const endpoint='/api/rooms/'+createdNpc.code;
+  const joined=(await call(endpoint+'/join',{method:'POST',body:{name:'Solo Cascade Host'}})).data;
+  const humanToken=joined.token;
+  const act=async(token,name,data={})=>(await call(endpoint+'/action',{
+    method:'POST',token,body:{name,data}
+  })).data;
+  const reply='The assistant carefully explains a fictional municipal policy and recommends a bizarre but actionable next step for the residents involved in this unusual situation.';
+  await call(endpoint+'/action',{
+    method:'POST',token:humanToken,body:{name:'set_npcs',data:{count:3}},expectedStatus:409
+  });
+  let state=await act(createdNpc.token,'set_npcs',{count:3});
+  assert.equal(state.npc_count,3);
+  assert.equal(state.human_count,1);
+  assert.equal(state.player_count,4);
+  assert.equal(state.players.filter(p=>p.is_npc).length,3);
+  state=await act(createdNpc.token,'start');
+  assert.equal(state.phase,'setup');
+  assert.equal(state.players.find(p=>p.is_judge).is_npc,false);
+  state=await act(humanToken,'lock_profile',{profile:'A nervous fictional city clerk'});
+  assert.equal(state.phase,'baseline');
+  state=await act(createdNpc.token,'manual_reply',{text:reply});
+  assert.equal(state.phase,'cascade','NPCs should lock all three cards after baseline');
+  assert.equal(state.locked_count,3);
+  assert.equal(state.generation_calls,0);
+  for(let i=0;i<15&&state.phase!=='judging';i++){
+    assert.equal(state.phase,'cascade','All Handoffs belong to NPCs in the first round');
+    state=await act(createdNpc.token,'manual_reply',{text:reply});
+  }
+  assert.equal(state.phase,'judging');
+  assert.equal(state.replies.length,6);
+  const botHandoffs=state.timeline.filter(x=>x.kind==='handoff');
+  assert.equal(botHandoffs.length,3,'Every card has a different-player NPC Handoff');
+  assert.equal(new Set(botHandoffs.map(x=>x.text)).size,3,'NPC Handoffs have distinct personalities');
+  assert.equal(state.generation_calls,0);
+  state=await act(humanToken,'propose_awards',{
+    spotlight:state.replies[0].id,
+    bonus:{reply_id:state.replies[1].id,tier:'Breakpoint A',evidence:'This invented passage is absent from the response'}
+  });
+  assert.equal(state.phase,'vote','NPCs should challenge an unsupported bonus quote');
+  assert.equal(state.votes_count,3,'NPC challengers cast conservative votes automatically');
+  state=await act(humanToken,'vote',{yes:true});
+  state=await act(createdNpc.token,'finalize');
+  assert.equal(state.phase,'results');
+  assert.equal(state.players.reduce((sum,p)=>sum+p.score,0),1);
+  state=await act(createdNpc.token,'next');
+  assert.equal(state.round,2);
+  assert.equal(state.phase,'baseline','The new NPC Judge should automatically lock its personality');
+  assert.equal(state.players.find(x=>x.is_judge).is_npc,true);
+  assert.equal(state.fault,null,'Shared display cannot see the NPC Judge Fault');
+  const privateMe=(await call(endpoint,{token:humanToken})).data;
+  assert.equal(privateMe.fault,null,'Non-Judge human cannot read the secret Fault');
+  state=await act(createdNpc.token,'manual_reply',{text:reply});
+  assert.equal(state.phase,'lock_cards','NPCs should wait for the human to choose a legal card');
+  const hand=(await call(endpoint,{token:humanToken})).data.me.hand;
+  assert.equal(hand.length,4);
+  state=await act(humanToken,'lock_card',{card_id:hand[0].id});
+  assert.equal(state.phase,'cascade');
+  for(let n=0;n<15&&!['judging','challenge'].includes(state.phase);n++){
+    if(state.phase==='handoff'){
+      state=await act(humanToken,'handoff',{
+        message:'This new rule needs an absurd appeal procedure and another pointless document.',
+        hook:''
+      });
+    } else {
+      assert.equal(state.phase,'cascade');
+      state=await act(createdNpc.token,'manual_reply',{text:reply});
+    }
+  }
+  assert.equal(state.phase,'challenge','NPC Judge should automatically propose Spotlight after every reply');
+  assert(state.proposal?.spotlight);
+  assert.equal(state.proposal?.bonus,null,'NPC Judge must not invent an objective bonus');
+  assert.equal(state.replies.length,6);
+  assert.equal(state.timeline.filter(x=>x.kind==='handoff').length,3);
+  assert.equal(state.generation_calls,0);
+  console.log('PASS: Cascade NPCs — solo human, 3 independent NPC Handoffs, human/NPC Judges, challenge vote, private Fault, no model calls');
+}
