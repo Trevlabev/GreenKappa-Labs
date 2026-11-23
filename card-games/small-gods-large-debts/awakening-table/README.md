@@ -4,13 +4,21 @@
 
 | Purpose | Current URL | Main implementation |
 | --- | --- | --- |
-| Play a 3-player development match | [Playable Alpha](play.html) | `play.html` + `cards3d.js`, with `visuals.js` fallback |
+| Play a 3–6-god solo-versus-bots development match | [Playable Alpha](play.html) | `play.html` + `cards3d.js`, with `visuals.js` fallback |
 | Learn Devotion, Glory, and Covenants | [The Divine Economy](divine-economy.html) | `divine-economy.html` |
 | Watch the 14-chapter scripted game | [Awakening Table v0.5-P](tabletop-v05.html) | `tabletop-v05.html`; illustrative, not a full simulation |
 | Watch the cinematic showcase | [The Awakening](cinematic.html) | `cinematic.html` |
 | Inspect 3D game artifacts | [Gallery](index.html) | `index.html` (standalone Three.js viewer) |
 
 **Preservation:** `tabletop-v04.html`, `cinematic-v02.html`, and `walkthrough-v03.html` are older or alternative independent demos. They are deliberately retained for provenance and existing direct links; they are not primary links from the SG,LD subpage. `table3d.js` remains separate from the active playable-alpha renderer because it includes standalone die/scene behavior that has not been validated as a drop-in replacement for `cards3d.js`. The gallery and cinematic scripts are not interchangeable with the game engine. Do not deduplicate these by deleting code or changing asset bytes without dependency and device checks.
+
+## Configurable 3–6-god playable alpha — v0.7-P
+
+The playable alpha now offers 3, 4, 5, or 6 gods in setup, consisting of **one human player and 2–5 automated rivals**. This is local solo-versus-bots play, not online or local multi-human multiplayer. Five rounds apply to 3–4 gods, four rounds to 5–6 gods, with a randomly selected first seat, fixed clockwise order, three random facedown Titans and unique Deity identities.
+
+BB07 **Envy of Heaven** now selects exactly two distinct other gods rather than affecting every opponent at larger tables. OG07 **False Harmony** selects two distinct other gods independently for its +2 and −2 Devotion outcomes. OG07's sealed-card clockwise pass and OG06's simultaneous Devotion circulation retain all-player behavior. Approved Boon wording, candidate D8 descriptions, original art and historical physical slots were not modified.
+
+[Table-size QA report](qa/PLAYER_COUNT_QA_2026-11-23.md) and [75-case test suite](qa/player-count.test.cjs). The 64 full-match fixtures are automated and use a mocked browser DOM; they do **not** certify real multiplayer, human negotiation or rendered-device behavior. Formal human playtesting remains on hold.
 
 ## Candidate mechanical conformance
 
