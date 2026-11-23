@@ -213,7 +213,10 @@ test('hero uses the player-first Drive the AI Insane pitch everywhere',()=>{
   assert(html.includes('<p class="gd-lead">Drive the AI Insane.</p>'));
   assert(html.includes('One player gives an AI a job. Everyone else plays a card to make it lose its mind.'));
   assert(html.includes("There's an extra point up for grabs if someone actually manages to break the AI's assignment."));
-  assert(html.includes('<p class="af-hero-meta">4–8 players · Play online · No AI experience required</p>'));
+  assert(html.includes('<p class="af-hero-meta">Play solo with 3 NPCs · Or bring 4–8 players · No AI experience required</p>'));
+  assert(html.includes('Play Classic — solo or group ↗'));
+  assert(html.includes('<strong>PLAY SOLO</strong>'));
+  assert(html.includes('No second host tab is needed.'));
   assert(!html.includes('One agent. Everyone else is a problem.'));
   assert(!html.includes('Then the table gets to read the damage.'));
   assert(html.includes('name="description" content="Drive the AI insane.'));
