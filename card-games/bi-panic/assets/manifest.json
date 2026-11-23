@@ -1,6 +1,6 @@
 {
   "status": "Proposed prototype assets, not retail print masters",
-  "source": "BI PANIC! project Drive",
+  "source": "BI PANIC! project Drive; v1.1-P editorial rewrite",
   "assets": [
     {
       "file": "hero.png",
@@ -19,13 +19,13 @@
     },
     {
       "file": "ivory-preview.png",
-      "driveId": "19BdsqYn4FTCIBR79Sij1iBuLoZXDqMEg",
-      "gitBlob": "54d3c958d7b1701301ce9a8cba435830ea6f9156"
+      "driveId": "1nRV_NLIm3TCkhid0fO8yZLswVe8X3XlR",
+      "gitBlob": "d6bd2883dfbaa6b4e7a50fe76981b8eca52901b2"
     },
     {
       "file": "noir-preview.png",
-      "driveId": "1jxZuuJSPUzfMGxyZwRheEVrFIVji1wM-",
-      "gitBlob": "46da3fd42b071a06dd9d65c52c222c6957439232"
+      "driveId": "1Ow-zrr0cp18H-sXf486vo7aU3WyXuqPi",
+      "gitBlob": "2a8f968939c008a9d393e3ebbe1bc59ae3f36b09"
     },
     {
       "file": "die.glb",
@@ -37,5 +37,17 @@
       "driveId": "1FpXSXEYX6OHCpCSnoMIyZGls27kmEsUV",
       "gitBlob": "47a7630ac116d2501ec5f5b0538b2cb9b9c81e98"
     }
-  ]
+  ],
+  "editorialMaster": {
+    "edition": "v1.1-P",
+    "status": "PROPOSED / NOT HUMAN-PLAYTESTED",
+    "driveFolder": "1b__17Vx5HMTJb9q90FwIkAZEMGZcoM8T",
+    "textProofDriveId": "1x9XtwjjRuqhghpxa1OnKcUFT12nvPrIR",
+    "csvDriveId": "1xFUUaYrYI76o8gZCRpenzCNZVqijmR8c",
+    "standaloneDriveId": "1fgjx8ba-bVtQqPpUl0-ZGJEkYCO74QMB",
+    "assetPackDriveId": "1ZRC_LOtJRG_wm71_t-6jNJuHev3O0czy",
+    "cardCount": 60,
+    "promptCount": 240,
+    "frontArtCount": 120
+  }
 }

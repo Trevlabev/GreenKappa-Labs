@@ -11,7 +11,7 @@ Source for the static GitHub Pages website at **https://greenkappalabs.art/**.
 | `/tablearc-red/` | Standalone Cyberpunk RED AI-GM and operations-console project | v0.5.0 source prototype; Windows acceptance pending |
 | `/card-games/` | Four original card-driven games | In development |
 | `/card-games/bi-panic/` | BI PANIC! product page, original card art and 3D component viewer | Public prototype page; not a retail edition |
-| `/card-games/bi-panic/play/` | Complete 60-card local pass-and-play prototype (Ivory/Noir) | Public browser prototype; 18+, not multiplayer or human-playtested |
+| `/card-games/bi-panic/play/` | Complete v1.1-P revised 60-card local pass-and-play prototype (Ivory/Noir) | Public browser prototype; 18+, not multiplayer or human-playtested |
 | `/card-games/playtest/` | Playtest inquiries for the original three card games | Intake page |
 | `/playground/` | Public experiments and free interactive prototypes | First experiment implemented |
 | `/playground/not-to-scale/` | No Such Room shifting-house microgame (legacy URL) | Browser concept demo |
