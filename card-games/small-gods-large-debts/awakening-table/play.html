@@ -16,7 +16,7 @@ const powers={Veshka:'The Invitation · Once on your turn: exchange one hidden M
 const raw=[
 ['M01','Spark of Worship',3,1,0,'Gain 1 Glory.'],
 ['M02','Public Miracle',4,1,0,'Gain 1 Glory; another god loses 1 Devotion.'],
-['M03','Borrowed Spotlight',4,1,0,'Gain 1 Glory; choose 2 Devotion or free Titan awakening. If sponsored, sponsor gains 1 Devotion.'],
+['M03','Borrowed Spotlight',4,1,0,'Gain 1 Glory. If sponsored, your sponsor gains 1 Devotion; then choose: gain 2 Devotion or awaken a dormant Titan for no additional awakening cost. Otherwise, gain 1 Glory only.'],
 ['M04','Open Invitation',4,1,2,'Gain 1 Glory and 2 Devotion; another god gains 1 Devotion.'],
 ['M05','Small, Beautiful Lie',4,1,1,'Gain 1 Glory and 1 Devotion.'],
 ['M06','A Beautiful Mistake',4,1,0,'Gain 1 Glory; recycle a second Miracle or awaken a Titan for free.'],
@@ -118,7 +118,7 @@ function sponsorOffer(c,done){const p=current(),eligible=rivals(p).filter(q=>val
 function alternate(p,c,done){const normal=()=>{if(c.id==='M03'){change(p,2);done()}else cycleCard(p,done)};if(!canAwaken()){normal();return}choose(p,c.name,'Choose your alternate effect.',[{label:c.id==='M03'?'Gain 2 Devotion':'Return another Miracle and draw a replacement',value:0},{label:'Awaken one sealed Titan for no extra cost',value:1}],x=>x?chooseAwakening(true,done):normal(),xs=>['Gambler','Opportunist'].includes(p.profile)?xs[1]:xs[0])}
 function playCard(index,sponsor=null){const p=current(),c=p.hand[index];if(!live()||s.usedMove||!c)return false;const cost=costOf(c);if((sponsor&&!validSponsor(p,sponsor,c))||p.dev+(sponsor?2:0)<cost){log('Miracle cannot be paid legally.');s.busy=false;render();return false}s.busy=true;s.performed=true;s.phase='move';s.selected=-1;if(sponsor){change(sponsor,-2);s.loans.push({borrower:p.id,lender:sponsor.id,due:s.round+1});notify('covenant',p.name,sponsor.name)}change(p,-(cost-(sponsor?2:0)),c.glory);change(p,c.dev);discardCard(p,c);notify('played',p.name,c,p.id!==0,cost,c.glory);log(p.name+' performs a concealed Miracle'+(p.id===0?' ('+c.id+')':'')+' for '+cost+' Devotion, +'+c.glory+' Glory.');if(sponsor&&s.discount>0)change(sponsor,1);const end=()=>afterMove(),o=rivals(p),choose=(fn,actor=p,opts=o)=>selectGod(actor,actor===p?c.name:'Sponsored Miracle · choose the other god',opts,q=>{if(q)fn(q);end()},xs=>[...xs].sort((a,b)=>b.value.glory-a.value.glory)[0]);switch(c.id){
 case'M02':choose(q=>change(q,-1));return true;
-case'M03':if(sponsor)change(sponsor,1);alternate(p,c,end);return true;
+case'M03':if(sponsor){change(sponsor,1);alternate(p,c,end)}else end();return true;
 case'M04':choose(q=>change(q,1));return true;
 case'M06':case'M15':alternate(p,c,end);return true;
 case'M07':case'M11':choose(q=>{let n=Math.min(q.dev,c.id==='M11'?2:1,10-p.dev);change(q,-n);change(p,n)});return true;

@@ -1,3 +1,33 @@
+# Current SG,LD website experiences — source map (2026-11-23)
+
+**Status:** Public development experiences, not final tabletop canon or authorization for formal human playtesting. The latest approved rules authority is the [00 START HERE Drive index](https://docs.google.com/document/d/14BImRCsrWYBl6-A8B7cZgbQ-x7wE0A5O-xn6Hg8v8eY/edit).
+
+| Purpose | Current URL | Main implementation |
+| --- | --- | --- |
+| Play a 3-player development match | [Playable Alpha](play.html) | `play.html` + `cards3d.js`, with `visuals.js` fallback |
+| Learn Devotion, Glory, and Covenants | [The Divine Economy](divine-economy.html) | `divine-economy.html` |
+| Watch the 14-chapter scripted game | [Awakening Table v0.5-P](tabletop-v05.html) | `tabletop-v05.html`; illustrative, not a full simulation |
+| Watch the cinematic showcase | [The Awakening](cinematic.html) | `cinematic.html` |
+| Inspect 3D game artifacts | [Gallery](index.html) | `index.html` (standalone Three.js viewer) |
+
+**Preservation:** `tabletop-v04.html`, `cinematic-v02.html`, and `walkthrough-v03.html` are older or alternative independent demos. They are deliberately retained for provenance and existing direct links; they are not primary links from the SG,LD subpage. `table3d.js` remains separate from the active playable-alpha renderer because it includes standalone die/scene behavior that has not been validated as a drop-in replacement for `cards3d.js`. The gallery and cinematic scripts are not interchangeable with the game engine. Do not deduplicate these by deleting code or changing asset bytes without dependency and device checks.
+
+## Candidate mechanical conformance
+
+For this branch, all 18 Miracle IDs, costs, and base Glory values use the [v1.1-P M13-2G control](https://docs.google.com/document/d/1_5JAhiyiCEf42-0_ZBQuvyx9afbQYkZpnXrk7jWhhR8/edit). The M13-3G treatment is restricted to internal experiments; no printed text or physical inventory changed.
+
+**TW-01 M03 correction:** In the active alpha, unsponsored M03 now grants only its base 1 Glory after paying the normal cost. Only a sponsored M03 can choose +2 Devotion or free awakening of one dormant Titan; the sponsor still gains +1 Devotion. The common M06/M15 alternate-action handler remains available without sponsorship. [Approved-for-testing TW-01 specification](https://docs.google.com/document/d/1NfOaaoSUC9wkdwE49zOMyFdByzqubbCOjDTKvDLXmPw/edit). TW-01 is NOT permanent retail gameplay canon.
+
+Run focused, no-network, no-new-workflow regressions with Node.js 22+:
+
+```bash
+node --test card-games/small-gods-large-debts/awakening-table/qa/tw01-m03.test.cjs
+```
+
+The nine focused tests exercise the actual inline alpha engine in a mocked DOM and check the 18 Miracle IDs/costs/Glory. Historical 142-fixture evidence remains archived in Drive, but its unsponsored M03 test expectation predates the TW-01 correction and must not be counted as conformance. The isolated new tests are not an exhaustive game-balance or rendered browser QA certificate. No recurring GitHub Actions workflow was introduced.
+
+## Historical v0.1 device-testing record (preserved)
+
 # The Awakening Table — SG,LD public device-testing beta (v0.1-P)
 
 **Route:** /card-games/small-gods-large-debts/awakening-table/

@@ -1,3 +1,11 @@
+# Current release and provenance note — 2026-11-23
+
+This file's original v2.0-P notes below are retained as **historical proposal evidence**, not the current release status. The SG,LD website redesign was subsequently owner-approved and merged (see [approval record](https://docs.google.com/document/d/1Zm5UAhkkVYP2F0uKlTpK3-VwhxY2v64MSuWa9MlQNP8/edit)). The current public source is on `main`, with its SG,LD-specific latest walkthrough change at [d9b254f](https://github.com/Trevlabev/GreenKappa-Labs/commit/d9b254f0bee6f2947731506655f07c28b19984ef).
+
+Approval of the website presentation does **not** make the experimental card mechanics, physical component counts, Titan D8 tables, or print exports retail canon. The original Drive-approved character and card artwork remain untouched. A current route/source mapping lives in [Awakening Table README](awakening-table/README.md); do not delete archival demo versions or `table3d.js` without separate dependency and rendered-device checks.
+
+---
+
 # Small Gods, Large Debts — Website Redesign Asset Register
 Status: UNAPPROVED WEBSITE PRESENTATION v2.0-P, 2026-11-20
 Implementation branch: feature/sgld-total-redesign-20261120
