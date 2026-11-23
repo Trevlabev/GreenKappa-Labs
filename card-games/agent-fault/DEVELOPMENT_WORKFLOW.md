@@ -63,15 +63,31 @@ These are **reference and research sources, not approvals to publish**:
 | #6 | Unified Cloudflare Worker | Its **head branch is the direct-update Worker release line**; a PR is no longer needed for routine pushes |
 | #7 | Four-mode integration acceptance | Additional test coverage candidate; selectively port test assertions without replacing newer NPC tests |
 | #13 | Classic NPC + private Host Also Plays | Merged into the Cloudflare release branch; part of the established code baseline |
-| #19 | Cascade NPCs / Handoffs | Candidate; not approved as deployed |
-| #21 | NPC relevance and solo UX | Candidate; final one-screen solo flow incomplete |
-| #25 | Balance audit / scoring and UI refinements | Research candidate; not fully promoted |
+| #19 | Cascade NPCs / Handoffs | **Integrated into Worker source** and passed browser acceptance on 2026-11-23; live deployment not independently checked |
+| #21 | NPC relevance and solo UX | **Integrated into Worker source**; one-screen Classic and Cascade solo passed mobile Chromium tests |
+| #25 | Balance audit / scoring and UI refinements | **Relevant engine/UI tests and deterministic quality checks integrated**; no alternative Clear Bonus scoring imported |
 | #27 | Optional Clear Bonus / human referee | Unapproved experimental scoring; remains OFF in canonical release |
-| #31 | Persistent public Scenario/Interference cards | Merged into PR #25's experimental branch, **not** proof it reached the Worker release branch |
+| #31 | Persistent public Scenario/Interference cards | **Integrated into Worker source**; mobile Chromium verified round persistence, visibility and private-information isolation |
 
 Closing an unfinished PR does **not** delete its head branch or merge its code.
 Any later approved change may be ported from a historical branch directly to the
 Worker release line, with appropriate verification.
+
+## Solo / NPC integration — 2026-11-23
+
+- The existing Cloudflare-connected branch received direct commit
+  [`f8c3e0f`](https://github.com/Trevlabev/GreenKappa-Labs/commit/f8c3e0f49a32f0523333748c7f42243e234514ed)
+  (21 files) integrating one-screen Classic/Cascade solo, Cascade NPCs,
+  contextual heuristic decisions, and persistent public Scenario/Interference cards.
+- The unified direct-push validation run
+  [45220117790](https://github.com/Trevlabev/GreenKappa-Labs/actions/runs/45220117790)
+  **passed**, including mocked full solo rounds in mobile Chromium for both modes,
+  NPC/room privacy, engine tests, Worker dry-run and local Wrangler WebSockets.
+- Existing soundtrack, phase announcements and browser narration were explicitly
+  preserved. Experimental Clear Bonus scoring was not imported.
+- **Not established by CI:** the watched Cloudflare build/deploy result,
+  authenticated model responses, real remote-device gameplay, human comedy
+  ratings, and physical print manufacturing acceptance.
 
 ## Acceptance still outstanding
 
