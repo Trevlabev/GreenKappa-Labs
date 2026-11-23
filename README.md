@@ -51,6 +51,13 @@ Static HTML, CSS, and vanilla JavaScript. No JavaScript framework or site-build 
 
 ## Publishing
 
+**AGENT/FAULT direct updates:** Routine website edits go directly to `main`;
+routine Classic/Cascade Worker changes go directly to
+`feature/agent-fault-cloudflare-multiplayer-20261118` (the branch watched
+by Cloudflare). Neither requires a pull request. See
+[AGENT/FAULT development workflow](card-games/agent-fault/DEVELOPMENT_WORKFLOW.md)
+for tests, deployment boundaries and archived experimental work.
+
 The custom domain is declared in `CNAME`. Intended GitHub Pages publishing configuration: **deploy from branch `main`, directory `/root`**. If edits to the repository are not reflected at the public URL, check **Settings → Pages** and deployment status.
 
 ## Important distinctions
