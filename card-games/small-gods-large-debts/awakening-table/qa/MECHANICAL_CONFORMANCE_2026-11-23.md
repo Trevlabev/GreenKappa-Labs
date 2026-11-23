@@ -33,12 +33,12 @@ Under Group A A07, if no other god is tied for the game's minimum Glory, the cho
 
 ## Regression coverage
 
-The two files exercise the actual inline \`play.html\` engine under a mocked DOM. This avoids changing game art, models, or the active website's module structure.
+The two files exercise the actual inline `play.html` engine under a mocked DOM. This avoids changing game art, models, or the active website's module structure.
 
 | Suite | Scenarios | Coverage |
 | --- | ---: | --- |
-| \`tw01-m03.test.cjs\` | 9 | M03 sponsored/unsponsored eligibility, fallback, control data, M06/M15 protection |
-| \`candidate-conformance.test.cjs\` — targeted | 15 | GB02 (4), OG05 (4), cap, identity, snapshot, partial/capped debt, frozen reckoning, M13 control |
+| `tw01-m03.test.cjs` | 9 | M03 sponsored/unsponsored eligibility, fallback, control data, M06/M15 protection |
+| `candidate-conformance.test.cjs` — targeted | 15 | GB02 (4), OG05 (4), cap, identity, snapshot, partial/capped debt, frozen reckoning, M13 control |
 | Candidate conformance — all Miracles | 18 | Each M01–M18 self-funded base resolution, Glory, Move count, no unintended Covenant and cap invariants |
 | Candidate conformance — all Boons | 16 | Each of 8 Good + 8 Bad Boons resolves with callback and resource invariants |
 | Candidate conformance — all Titan middle outcomes | 48 | Each OG01–OG08 D8 2–7 resolves, with callback and resource invariants |
@@ -46,11 +46,11 @@ The two files exercise the actual inline \`play.html\` engine under a mocked DOM
 | Candidate conformance — OG08 exception | 2 | Exact-ten natural 1 loses all Devotion and 2 Glory without a Bad Boon; exact-ten natural 8 immediately wins without a Good Boon or Final Reckoning |
 | **Total** | **124** | **Both suites, non-browser** |
 
-An independent V8 execution of **the exact fetched engine and test sources** recorded **124/124 passing scenarios** with **732 assertions** (115/115, 668 assertions in the candidate suite; 9/9, 64 assertions in M03). The test functions were executed in a JavaScript runtime with mocks for Node's \`fs\`, \`path\`, \`assert\`, and \`node:test\` interfaces. This is **not** an assertion that GitHub Actions executed them or that a browser accepted them. The test files are ordinary CommonJS and can also run under Node.js 22+:
+An independent V8 execution of **the exact fetched engine and test sources** recorded **124/124 passing scenarios** with **732 assertions** (115/115, 668 assertions in the candidate suite; 9/9, 64 assertions in M03). The test functions were executed in a JavaScript runtime with mocks for Node's `fs`, `path`, `assert`, and `node:test` interfaces. This is **not** an assertion that GitHub Actions executed them or that a browser accepted them. The test files are ordinary CommonJS and can also run under Node.js 22+:
 
-\`\`\`bash
+```bash
 node --test card-games/small-gods-large-debts/awakening-table/qa/*.test.cjs
-\`\`\`
+```
 
 ## Coverage limitations and remaining risk
 
