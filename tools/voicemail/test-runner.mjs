@@ -1,0 +1,1 @@
+import {runTests} from './tests.mjs';const results=runTests(),host=document.getElementById('results');host.replaceChildren();const h=document.createElement('h2');h.textContent=results.filter(r=>r.pass).length+' / '+results.length+' passed';host.append(h);for(const r of results){const p=document.createElement('p');p.textContent=(r.pass?'PASS':'FAIL')+' — '+r.name;host.append(p);}

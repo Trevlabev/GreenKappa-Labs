@@ -1,155 +1,94 @@
-import { pipeline } from 'https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.8.1/+esm';
-
-const $ = s => document.querySelector(s);
-const els = {
-  system: $('#systemBtn'), mic: $('#micBtn'), stop: $('#stopBtn'), file: $('#fileInput'), transcribe: $('#transcribeBtn'),
-  model: $('#modelSelect'), status: $('#status'), progress: $('#progressBar'), audio: $('#audioPreview'), transcript: $('#transcript'),
-  summary: $('#summary'), analyze: $('#analyzeBtn'), detected: $('#detected'), fieldCount: $('#fieldCount'), copyTranscript: $('#copyTranscript'), copySummary: $('#copySummary')
-};
-
-let recorder = null, sourceStream = null, chunks = [], audioBlob = null, audioUrl = null;
-const transcribers = new Map();
-
-function setStatus(html, tone='') { els.status.innerHTML = html; els.status.dataset.tone = tone; }
-function setProgress(n){ els.progress.style.width = `${Math.max(0, Math.min(100, n || 0))}%`; }
-function escapeHtml(v=''){ return String(v).replace(/[&<>'\"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','\"':'&quot;'}[c])); }
-function cleanPhone(v=''){ let d=String(v).replace(/\D/g,''); if(d.length===11 && d[0]==='1') d=d.slice(1); return d; }
-function formatPhone(v=''){ const d=cleanPhone(v); return d.length===10 ? `(${d.slice(0,3)}) ${d.slice(3,6)}-${d.slice(6)}` : v; }
-
-function mimeType(){ return ['audio/webm;codecs=opus','audio/webm','audio/ogg;codecs=opus'].find(t => MediaRecorder.isTypeSupported(t)) || ''; }
-
-async function startRecording(kind){
-  try{
-    if(!navigator.mediaDevices || !window.MediaRecorder) throw new Error('Recording APIs are not available in this browser.');
-    if(kind === 'system'){
-      setStatus('<strong>Choose a source with audio.</strong> In Chrome/Edge, enable “Share tab audio” or system audio when offered.', 'warn');
-      sourceStream = await navigator.mediaDevices.getDisplayMedia({video:true,audio:{systemAudio:'include',suppressLocalAudioPlayback:false}});
-      if(!sourceStream.getAudioTracks().length){ sourceStream.getTracks().forEach(t=>t.stop()); throw new Error('No audio track was shared. Try again and enable Share tab audio/system audio.'); }
-    } else {
-      sourceStream = await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:false,noiseSuppression:true,autoGainControl:true},video:false});
-    }
-    const audioOnly = new MediaStream(sourceStream.getAudioTracks());
-    chunks = [];
-    recorder = new MediaRecorder(audioOnly, mimeType() ? {mimeType:mimeType()} : undefined);
-    recorder.ondataavailable = e => { if(e.data && e.data.size) chunks.push(e.data); };
-    recorder.onstop = () => {
-      const type = recorder.mimeType || chunks[0]?.type || 'audio/webm';
-      setAudioBlob(new Blob(chunks,{type}));
-      sourceStream?.getTracks().forEach(t=>t.stop()); sourceStream=null;
-      setStatus('<strong>Recording captured.</strong> Click Transcribe.', 'good');
-    };
-    recorder.start(250);
-    els.stop.disabled=false; els.system.disabled=true; els.mic.disabled=true; els.transcribe.disabled=true;
-    setStatus('<span class="recordingDot"></span><strong>Recording…</strong> Play the voicemail, then press Stop.', 'bad');
-  } catch(err){ sourceStream?.getTracks().forEach(t=>t.stop()); sourceStream=null; setStatus(`<strong>Capture failed.</strong> ${escapeHtml(err.message)}`, 'bad'); resetCaptureButtons(); }
+import { analyze, outputs, labels, types } from './engine.mjs?v=2';
+const $=id=>document.getElementById(id);
+const e=Object.fromEntries(['model','backend','prepare','system','mic','file','stop','cancel','clock','level','signal','progress','status','preview','transcribe','higher','reset','transcript','title','summary','segments','analyze','warnings','fields','missing','regen','copyAll'].map(k=>[k,$(k)]));
+let state='idle',generation=0,recording=null,blob=null,previewURL=null,worker=null,workerURL=null,workerReady=null,jobId=0,job=null,modelUsed=null,fields={},resultWarnings=[],segments=[],analysisTimer=null;
+const busy=()=>!['idle','ready'].includes(state);
+function status(text,tone=''){e.status.textContent=text;e.status.dataset.tone=tone;}
+function setState(s){
+ state=s;const b=busy();
+ for(const k of ['system','mic','file','model','backend','prepare','reset'])e[k].disabled=b;
+ e.file.closest('label').classList.toggle('disabled',b);
+ e.stop.disabled=s!=='recording';e.cancel.disabled=!b;
+ e.transcribe.disabled=b||!blob;e.higher.disabled=b||!blob||modelUsed==='small';
+ e.analyze.disabled=b;e.regen.disabled=b;e.copyAll.disabled=b;
+ e.transcript.readOnly=b;e.summary.readOnly=b;e.title.readOnly=b;
+ for(const x of document.querySelectorAll('#fields input,#fields select,#missing input,#missing select'))x.disabled=b;
 }
-
-function resetCaptureButtons(){ els.system.disabled=false; els.mic.disabled=false; els.stop.disabled=true; els.transcribe.disabled=!audioBlob; }
-function stopRecording(){ if(recorder && recorder.state!=='inactive') recorder.stop(); resetCaptureButtons(); }
-function setAudioBlob(blob){ audioBlob=blob; if(audioUrl) URL.revokeObjectURL(audioUrl); audioUrl=URL.createObjectURL(blob); els.audio.src=audioUrl; els.audio.style.display='block'; els.transcribe.disabled=false; resetCaptureButtons(); }
-
-async function blobToMono16k(blob){
-  const Ctx = window.AudioContext || window.webkitAudioContext;
-  if(!Ctx) throw new Error('Web Audio is unavailable in this browser.');
-  const ctx = new Ctx();
-  try{
-    const buf = await blob.arrayBuffer();
-    const decoded = await ctx.decodeAudioData(buf.slice(0));
-    const frames = Math.max(1, Math.ceil(decoded.duration * 16000));
-    const Offline = window.OfflineAudioContext || window.webkitOfflineAudioContext;
-    const offline = new Offline(1, frames, 16000);
-    const src = offline.createBufferSource(); src.buffer = decoded; src.connect(offline.destination); src.start(0);
-    const rendered = await offline.startRendering();
-    return new Float32Array(rendered.getChannelData(0));
-  } finally { await ctx.close().catch(()=>{}); }
+function sec(n){n=Math.max(0,Math.floor(n||0));return String(Math.floor(n/60)).padStart(2,'0')+':'+String(n%60).padStart(2,'0');}
+function clearAudio(){e.preview.pause();e.preview.removeAttribute('src');e.preview.load();e.preview.hidden=true;if(previewURL)URL.revokeObjectURL(previewURL);previewURL=null;blob=null;modelUsed=null;}
+function clearReview(){clearTimeout(analysisTimer);fields={};resultWarnings=[];segments=[];e.transcript.value='';e.title.value='';e.summary.value='';e.segments.replaceChildren();renderFields();renderWarnings();}
+function clearSession(){if(busy())return;generation++;clearAudio();clearReview();e.file.value='';e.clock.textContent='00:00';e.progress.value=0;e.level.value=0;e.signal.textContent='Idle';setState('idle');status('New voicemail. Ready for audio or a pasted transcript.');}
+function setAudio(b){clearAudio();blob=b;previewURL=URL.createObjectURL(b);e.preview.src=previewURL;e.preview.hidden=false;}
+function terminateWorker(){if(worker)worker.terminate();worker=null;workerReady=null;if(workerURL)URL.revokeObjectURL(workerURL);workerURL=null;const j=job;job=null;if(j)j.reject(Error('Canceled'));}
+async function ensureWorker(){
+ if(worker)return worker;if(workerReady)return workerReady;
+ const g=generation;
+ workerReady=(async()=>{const res=await fetch('./worker.js?v=2',{cache:'no-cache'});if(!res.ok)throw Error('Unable to load the transcription worker.');const source=await res.text();if(g!==generation)throw Error('Canceled');workerURL=URL.createObjectURL(new Blob([source],{type:'text/javascript'}));const w=new Worker(workerURL,{type:'module'});worker=w;
+ w.onmessage=({data:m})=>{if(!job||m.id!==job.id||w!==worker)return;
+ if(m.kind==='stage'){status(m.text);e.progress.removeAttribute('value');}
+ else if(m.kind==='progress'){e.progress.value=Number.isFinite(m.progress)?Math.round(m.progress):0;status('Downloading model component: '+m.file+' · '+Math.round(m.progress||0)+'%');}
+ else if(m.kind==='done'||m.kind==='error'){const j=job;job=null;m.kind==='done'?j.resolve(m):j.reject(Error(m.text));}};
+ w.onerror=ev=>{if(w!==worker)return;const j=job;job=null;terminateWorker();j?.reject(Error(ev.message||'Transcription worker failed to initialize.'));};return w;})();
+ try{return await workerReady;}finally{if(g===generation)workerReady=null;}
 }
-
-async function getTranscriber(model){
-  if(transcribers.has(model)) return transcribers.get(model);
-  setStatus('<strong>Loading Whisper model…</strong> First use can take a while; the browser should cache model files afterward.');
-  setProgress(3);
-  const progress_callback = p => {
-    if(p?.progress != null) setProgress(Math.round(p.progress));
-    if(p?.status === 'progress' && p.file) setStatus(`<strong>Loading model…</strong> ${escapeHtml(p.file)} · ${Math.round(p.progress||0)}%`);
-  };
-  let pipe;
-  if(navigator.gpu){
-    try{ pipe = await pipeline('automatic-speech-recognition', model, {device:'webgpu',dtype:'q8',progress_callback}); }
-    catch(e){ pipe = await pipeline('automatic-speech-recognition', model, {progress_callback}); }
-  } else pipe = await pipeline('automatic-speech-recognition', model, {progress_callback});
-  transcribers.set(model, pipe); setProgress(100); return pipe;
+async function askWorker(action,model,audio){const w=await ensureWorker();return new Promise((resolve,reject)=>{const id=++jobId;job={id,resolve,reject};try{w.postMessage({id,action,model,backend:e.backend.value,audio});}catch(err){job=null;reject(err);}});}
+function cleanupCapture(r){if(!r)return;clearInterval(r.timer);cancelAnimationFrame(r.frame);try{r.ctx?.close().catch(()=>{});}catch{}r.stream?.getTracks().forEach(t=>t.stop());e.level.value=0;e.signal.textContent='Idle';}
+function beginMeter(r){
+ try{const C=window.AudioContext||window.webkitAudioContext;r.ctx=new C();r.ctx.resume().catch(()=>{});const analyser=r.ctx.createAnalyser();analyser.fftSize=1024;r.ctx.createMediaStreamSource(r.audio).connect(analyser);const a=new Float32Array(analyser.fftSize);
+ const tick=()=>{if(recording!==r||state!=='recording')return;analyser.getFloatTimeDomainData(a);let s=0;for(const x of a)s+=x*x;const rms=Math.sqrt(s/a.length);r.peak=Math.max(r.peak,rms);e.level.value=Math.min(1,rms*6);e.signal.textContent=rms>.012?'Signal detected':rms>.002?'Low signal':'Quiet';r.frame=requestAnimationFrame(tick);};tick();
+ }catch{e.signal.textContent='Meter unavailable';}
 }
-
-async function transcribe(){
-  if(!audioBlob) return;
-  els.transcribe.disabled=true; els.system.disabled=true; els.mic.disabled=true; setProgress(1);
-  try{
-    setStatus('<strong>Preparing audio…</strong> Converting to 16 kHz mono locally.');
-    const audio = await blobToMono16k(audioBlob);
-    const pipe = await getTranscriber(els.model.value);
-    setStatus('<strong>Transcribing locally…</strong> Short voicemails may still take several seconds.'); setProgress(55);
-    const out = await pipe(audio,{chunk_length_s:30,stride_length_s:5,return_timestamps:false});
-    const text = String(out?.text || '').trim();
-    els.transcript.value=text; analyzeTranscript(); setProgress(100);
-    setStatus(`<strong>Done.</strong> ${text ? 'Transcript and summary are ready.' : 'No speech was detected.'}`, text?'good':'warn');
-  }catch(err){ console.error(err); setStatus(`<strong>Transcription failed.</strong> ${escapeHtml(err.message || err)}`, 'bad'); }
-  finally{ resetCaptureButtons(); }
+async function start(kind){
+ if(busy())return;const g=++generation;setState('requesting');status(kind==='system'?'Choose the voicemail source in the share picker. Enable tab or system audio.':'Allow microphone access.');
+ let stream;
+ try{
+ if(!navigator.mediaDevices||!window.MediaRecorder)throw Error('Capture is unavailable in this browser. Use a local audio file instead.');
+ stream=kind==='system'?await navigator.mediaDevices.getDisplayMedia({video:true,audio:true,systemAudio:'include'}):await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:false,noiseSuppression:false,autoGainControl:false},video:false});
+ if(g!==generation){stream.getTracks().forEach(t=>t.stop());return;}
+ if(!stream.getAudioTracks().length)throw Error('No audio track was shared. Enable audio sharing or choose a local audio file.');
+ const audio=new MediaStream(stream.getAudioTracks());
+ const mime=['audio/webm;codecs=opus','audio/webm','audio/mp4','audio/ogg;codecs=opus'].find(x=>MediaRecorder.isTypeSupported(x));
+ const recorder=mime?new MediaRecorder(audio,{mimeType:mime}):new MediaRecorder(audio);
+ clearAudio();clearReview();e.file.value='';e.progress.value=0;
+ const r={stream,audio,recorder,chunks:[],g,start:performance.now(),peak:0,discard:false};recording=r;
+ recorder.ondataavailable=x=>{if(!r.discard&&x.data?.size)r.chunks.push(x.data);};
+ recorder.onerror=x=>{if(recording!==r)return;r.discard=true;cleanupCapture(r);recording=null;setState('idle');status('Recording failed: '+(x.error?.message||'Unknown recording error'),'error');};
+ recorder.onstop=()=>{cleanupCapture(r);if(recording!==r||g!==generation||r.discard)return;recording=null;const b=new Blob(r.chunks,{type:recorder.mimeType||r.chunks[0]?.type||'audio/webm'});r.chunks=[];if(!b.size){setState('idle');status('No audio was captured.','error');return;}setAudio(b);setState('ready');transcribe();};
+ for(const track of stream.getTracks())track.addEventListener('ended',()=>{if(recording===r&&state==='recording')stop();},{once:true});
+ recorder.start(250);setState('recording');status('Recording. Play the voicemail, then select Stop & transcribe.');
+ e.clock.textContent='00:00';r.timer=setInterval(()=>{e.clock.textContent=sec((performance.now()-r.start)/1000);},250);beginMeter(r);
+ }catch(err){stream?.getTracks().forEach(t=>t.stop());if(g!==generation)return;cleanupCapture(recording);recording=null;setState(blob?'ready':'idle');status('Capture failed: '+(err.message||err),'error');}
 }
-
-const counties=['Alachua','Baker','Bay','Bradford','Brevard','Broward','Calhoun','Charlotte','Citrus','Clay','Collier','Columbia','DeSoto','Dixie','Duval','Escambia','Flagler','Franklin','Gadsden','Gilchrist','Glades','Gulf','Hamilton','Hardee','Hendry','Hernando','Highlands','Hillsborough','Holmes','Indian River','Jackson','Jefferson','Lafayette','Lake','Lee','Leon','Levy','Liberty','Madison','Manatee','Marion','Martin','Miami-Dade','Monroe','Nassau','Okaloosa','Okeechobee','Orange','Osceola','Palm Beach','Pasco','Pinellas','Polk','Putnam','Santa Rosa','Sarasota','Seminole','St. Johns','St. Lucie','Sumter','Suwannee','Taylor','Union','Volusia','Wakulla','Walton','Washington'];
-function titleCase(s){ return s.toLowerCase().replace(/\b[a-z]/g,c=>c.toUpperCase()).replace(/\b(Mc)([a-z])/g,(_,a,b)=>a+b.toUpperCase()); }
-function extractFields(text){
-  const t=text.replace(/\s+/g,' ').trim(), low=t.toLowerCase(), f={};
-  const email=t.match(/\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/i); if(email) f.email=email[0];
-  const phone=t.match(/(?:\+?1[\s.-]?)?(?:\(?\d{3}\)?[\s.-]?)\d{3}[\s.-]?\d{4}/); if(phone) f.phone=formatPhone(phone[0]);
-  const name=t.match(/\b(?:my name is|this is|name is)\s+([A-Z][A-Za-z'’-]+(?:\s+[A-Z][A-Za-z'’-]+){1,3})/i); if(name) f.personName=titleCase(name[1].replace(/\b(?:and|calling|phone|number|from)\b.*$/i,'').trim());
-  if(/\b(?:pro\s*se|pro\s*say|self[- ]represented|representing myself|without an attorney)\b/i.test(t)) f.filerRole='Self Represented Litigant';
-  else if(/\battorney|lawyer|counsel\b/i.test(t)) f.filerRole='Attorney';
-  const c=counties.find(c=>new RegExp(`\\b${c.replace('-','[- ]')}\\s+county\\b`,'i').test(t)); if(c) f.county=c;
-  else if(/\bdade county\b/i.test(t)) f.county='Miami-Dade';
-  const bothSupport=/\bchild support\b/i.test(t), bothCust=/\bchild (?:custody|time[- ]sharing)\b/i.test(t);
-  if(bothSupport&&bothCust) f.caseType='Child Support / Child Custody'; else if(bothSupport) f.caseType='Child Support'; else if(bothCust) f.caseType='Child Custody'; else if(/\bfamily\b/i.test(t)) f.caseType='Family'; else if(/\bcriminal\b/i.test(t)) f.caseType='Criminal'; else if(/\btraffic\b|citation\b/i.test(t)) f.caseType='Traffic';
-  const caseMatch=t.match(/\b(?:case(?: number| no\.?| #)?|ucn)\s*(?:is|:|#)?\s*([A-Z0-9-]{6,})\b/i); if(caseMatch && /\d/.test(caseMatch[1])) f.ucn=caseMatch[1];
-  const bar=t.match(/\b(?:florida\s+bar|bar)(?:\s+(?:number|no\.?|#))?\s*(?:is|:|#)?\s*(\d{5,8})\b/i); if(bar) f.barNumber=bar[1];
-  const filing=t.match(/\b(?:filing|submission)(?:\s+(?:id|number|no\.?|#))?\s*(?:is|:|#)?\s*([A-Z0-9-]{5,})\b/i); if(filing && /\d/.test(filing[1])) f.filingId=filing[1];
-  const rac=t.match(/\b(?:registration|rac)(?:\s+(?:id|number|no\.?|#))?\s*(?:is|:|#)?\s*([A-Z0-9-]{4,})\b/i); if(rac && /\d/.test(rac[1])) f.racId=rac[1];
-  if(/\b(?:existing case|my case|open case|pending case)\b/i.test(t) || (/\b(?:response|answer|motion|evidence|objection|counterclaim)\b/i.test(t) && /\b(?:petition|complaint|case|file|filing)\b/i.test(t)) || /\b(?:file|submit|upload)\b[^.!?]{0,60}\b(?:existing|case|answer|response|document)\b/i.test(t)) f.ticketType='Help with Filing to Existing Case';
-  else if(/\b(?:new case|initiate a case|start a case|new complaint|new petition)\b/i.test(t)) f.ticketType='File New Case';
-  else if(/\b(?:password|locked out|reset my password|forgot password)\b/i.test(t)) f.ticketType='Password / Login Help';
-  else if(/\b(?:register|registration|create an account|new account)\b/i.test(t)) f.ticketType='Registration Help';
-  return f;
+function stop(){const r=recording;if(state!=='recording'||!r)return;setState('finalizing');status('Finalizing audio…');clearInterval(r.timer);cancelAnimationFrame(r.frame);try{if(r.recorder.state!=='inactive')r.recorder.stop();else r.recorder.onstop();}catch(err){r.discard=true;cleanupCapture(r);recording=null;setState('idle');status('Could not finalize audio: '+err.message,'error');}}
+function cancel(){
+ if(!busy())return;generation++;const r=recording;recording=null;if(r){r.discard=true;r.chunks=[];try{if(r.recorder.state!=='inactive')r.recorder.stop();}catch{}cleanupCapture(r);}terminateWorker();e.progress.value=0;setState(blob?'ready':'idle');status(blob?'Canceled. The selected audio is available to retry.':'Canceled. No recording retained.');}
+async function decode(b){
+ const C=window.AudioContext||window.webkitAudioContext,O=window.OfflineAudioContext||window.webkitOfflineAudioContext;if(!C||!O)throw Error('Audio decoding is unavailable.');
+ const ctx=new C();try{const buf=await ctx.decodeAudioData(await b.arrayBuffer());if(buf.duration>900)throw Error('Audio exceeds the 15-minute limit. Select a shorter voicemail.');const off=new O(1,Math.max(1,Math.ceil(buf.duration*16000)),16000);const src=off.createBufferSource();src.buffer=buf;src.connect(off.destination);src.start();const out=await off.startRendering();const data=new Float32Array(out.getChannelData(0));let peak=0,sum=0;for(const v of data){peak=Math.max(peak,Math.abs(v));sum+=v*v;}const rms=Math.sqrt(sum/data.length);if(peak<0.002||rms<0.0005)throw Error('Audio appears silent. Check the shared audio source or microphone.');const gain=Math.min(4,0.95/peak);if(gain>1.05)for(let i=0;i<data.length;i++)data[i]*=gain;return {data,seconds:buf.duration,rms,peak};}finally{await ctx.close().catch(()=>{});}
 }
-function casePhrase(v=''){ return v==='Child Support / Child Custody'?'Child Support and Custody Case':v?`${v} Case`:'case'; }
-function buildSummary(f,text){
-  const role=f.filerRole==='Self Represented Litigant'?'Pro Se Litigant':f.filerRole||'Caller';
-  let s='';
-  if(f.ticketType==='Help with Filing to Existing Case') s=`${role} called inquiring for help filing to an existing ${casePhrase(f.caseType)}`;
-  else if(f.ticketType==='File New Case') s=`${role} called inquiring about filing a new ${casePhrase(f.caseType)}`;
-  else if(f.ticketType==='Password / Login Help') s=`${role} called requesting password or login assistance`;
-  else if(f.ticketType==='Registration Help') s=`${role} called requesting registration assistance`;
-  else s=`${role} called requesting Portal Support assistance`;
-  if(f.county) s += ` in ${f.county} County`;
-  if(f.ucn) s += `, case number ${f.ucn}`;
-  s += '.';
-  if(f.phone) s += ` Customer requested call back at phone number: ${f.phone}.`;
-  else if(f.email) s += ` Customer provided email: ${f.email}.`;
-  return s;
+async function prepare(){if(busy())return;const g=++generation;setState('processing');try{const res=await askWorker('prepare',e.model.value);if(g!==generation)return;e.progress.value=100;status('Model ready on '+res.device.toUpperCase()+'.','good');}catch(err){if(g===generation){terminateWorker();e.progress.value=0;status('Model preparation failed: '+err.message+' — you can still paste a transcript.','error');}}finally{if(g===generation)setState(blob?'ready':'idle');}}
+async function transcribe(model=e.model.value){
+ if(busy()||!blob)return;const g=++generation;setState('processing');e.progress.removeAttribute('value');status('Decoding audio locally…');
+ try{const d=await decode(blob);if(g!==generation)return;e.clock.textContent=sec(d.seconds);const res=await askWorker('transcribe',model,d.data);if(g!==generation)return;const text=String(res.output?.text||'').trim();modelUsed=model;e.model.value=model;segments=res.output?.chunks||[];e.transcript.value=text;renderSegments();analyzeNow();e.progress.value=100;status(text?'Draft ready · '+res.device.toUpperCase()+' · verify names, identifiers, and issue against audio.':'No speech was detected. Try a different recording or model.',text?'good':'error');
+ }catch(err){if(g===generation){terminateWorker();e.progress.value=0;status('Transcription failed: '+err.message+' — retry or paste a transcript.','error');}}
+ finally{if(g===generation)setState(blob?'ready':'idle');}
 }
-function renderFields(f){
-  const labels={personName:'Caller Name',phone:'Phone',email:'Email',filerRole:'Filer Role',county:'County / Court',caseType:'Case Type',ucn:'Case # / UCN',barNumber:'FL Bar #',filingId:'Filing / Submission #',racId:'Registration / RAC #',ticketType:'Ticket Type'};
-  const entries=Object.entries(labels).filter(([k])=>f[k]); els.fieldCount.textContent=`${entries.length} detected`;
-  els.detected.innerHTML=entries.length?entries.map(([k,l])=>`<div class="kv"><b>${escapeHtml(l)}</b><span>${escapeHtml(f[k])}</span></div>`).join(''):'<div class="kv"><b>Status</b><span>No fields detected yet.</span></div>';
-}
-function analyzeTranscript(){ const text=els.transcript.value.trim(); const f=extractFields(text); renderFields(f); els.summary.value=text?buildSummary(f,text):''; }
-async function copyText(v,btn){ try{ await navigator.clipboard.writeText(v); const old=btn.textContent; btn.textContent='Copied'; setTimeout(()=>btn.textContent=old,900); }catch{ setStatus('<strong>Copy blocked.</strong> Select the text and copy manually.','warn'); } }
-
-els.system.addEventListener('click',()=>startRecording('system'));
-els.mic.addEventListener('click',()=>startRecording('mic'));
-els.stop.addEventListener('click',stopRecording);
-els.file.addEventListener('change',()=>{ const f=els.file.files?.[0]; if(f){ setAudioBlob(f); setStatus(`<strong>Loaded:</strong> ${escapeHtml(f.name)} · ${(f.size/1048576).toFixed(1)} MB`,'good'); }});
-els.transcribe.addEventListener('click',transcribe);
-els.analyze.addEventListener('click',analyzeTranscript);
-els.transcript.addEventListener('input',()=>{ window.clearTimeout(window.__vmAnalyze); window.__vmAnalyze=setTimeout(analyzeTranscript,450); });
-els.copyTranscript.addEventListener('click',()=>copyText(els.transcript.value,els.copyTranscript));
-els.copySummary.addEventListener('click',()=>copyText(els.summary.value,els.copySummary));
-window.addEventListener('beforeunload',()=>{ sourceStream?.getTracks().forEach(t=>t.stop()); if(audioUrl) URL.revokeObjectURL(audioUrl); });
+function renderSegments(){e.segments.replaceChildren();for(const s of segments){const start=s.timestamp?.[0];const row=document.createElement('div');row.className='segment';const b=document.createElement('button');b.className='small';b.textContent=Number.isFinite(start)?sec(start):'—';b.disabled=!Number.isFinite(start)||!blob;b.onclick=()=>{e.preview.currentTime=start;e.preview.play().catch(()=>{});};const p=document.createElement('span');p.textContent=s.text||'';row.append(b,p);e.segments.append(row);}}
+function renderWarnings(){e.warnings.replaceChildren();e.warnings.hidden=!resultWarnings.length;if(!resultWarnings.length)return;const h=document.createElement('strong');h.textContent='Review before copying';e.warnings.append(h);for(const x of resultWarnings){const p=document.createElement('p');p.textContent=x;e.warnings.append(p);}}
+function renderFields(){e.fields.replaceChildren();e.missing.replaceChildren();for(const [key,label] of Object.entries(labels)){
+ const cell=document.createElement('div');cell.className='control'+(key==='issue'?' wide':'');const l=document.createElement('label');l.textContent=label;l.htmlFor='field-'+key;
+ let input;if(key==='ticketType'||key==='callback'||key==='filerRole'){input=document.createElement('select');const opts=key==='ticketType'?types:key==='callback'?['Callback requested','Do not call','Email requested']:['Self Represented Litigant','Attorney','PHV Attorney','Other'];for(const x of ['',...opts]){const o=document.createElement('option');o.value=x;o.textContent=x||'Not specified';input.append(o);}}else{input=document.createElement('input');input.autocomplete='off';input.spellcheck=false;}
+ input.id='field-'+key;input.value=fields[key]||'';input.disabled=busy();input.addEventListener('input',()=>{if(input.value.trim())fields[key]=input.value.trim();else delete fields[key];status('Field updated. Regenerate outputs when ready.');});
+ const line=document.createElement('div');line.className='line';line.append(l);const b=document.createElement('button');b.className='small';b.textContent='Copy';b.onclick=()=>copy(input.value,b);line.append(b);cell.append(line,input);(fields[key]||key==='ticketType'?e.fields:e.missing).append(cell);
+ }}
+function regenerate(){if(!e.transcript.value.trim()&&!Object.keys(fields).length){e.title.value='';e.summary.value='';return;}const out=outputs(fields);e.title.value=out.title;e.summary.value=out.summary;}
+function analyzeNow(){clearTimeout(analysisTimer);const a=analyze(e.transcript.value);fields=a.fields;resultWarnings=a.warnings;renderFields();renderWarnings();regenerate();}
+async function copy(text,b){if(!text)return;try{await navigator.clipboard.writeText(text);const old=b.textContent;b.textContent='Copied';setTimeout(()=>{b.textContent=old;},850);}catch{status('Clipboard access blocked. Select and copy the text manually.','error');}}
+e.system.onclick=()=>start('system');e.mic.onclick=()=>start('mic');e.stop.onclick=stop;e.cancel.onclick=cancel;e.reset.onclick=clearSession;e.prepare.onclick=prepare;e.transcribe.onclick=()=>transcribe();e.higher.onclick=()=>transcribe(modelUsed==='tiny'?'base':'small');e.analyze.onclick=()=>{analyzeNow();status('Transcript analyzed. Review the extracted fields and draft.');};e.regen.onclick=()=>{regenerate();status('Draft regenerated from your edited fields.');};
+e.file.onchange=()=>{if(busy())return;const f=e.file.files?.[0];if(!f)return;if(f.size>150*1024*1024){status('File exceeds the 150 MB limit.','error');e.file.value='';return;}generation++;clearReview();setAudio(f);e.clock.textContent='00:00';setState('ready');transcribe();};
+for(const b of document.querySelectorAll('[data-copy]'))b.onclick=()=>copy($(b.dataset.copy).value,b);
+e.copyAll.onclick=()=>copy(['Title: '+e.title.value,'Summary: '+e.summary.value,...Object.entries(labels).filter(([k])=>fields[k]).map(([k,l])=>l+': '+fields[k])].join('\n'),e.copyAll);
+e.transcript.addEventListener('input',()=>{clearTimeout(analysisTimer);status('Transcript edited. Select Analyze transcript to refresh the draft.');});
+window.addEventListener('keydown',ev=>{if(ev.key!=='F9'||ev.repeat)return;ev.preventDefault();if(state==='recording')stop();else if(!busy())start('system');});
+window.addEventListener('pagehide',()=>{generation++;if(recording){recording.discard=true;cleanupCapture(recording);}terminateWorker();clearAudio();});
+renderFields();setState('idle');
