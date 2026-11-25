@@ -11,6 +11,7 @@ const cases=[
  ['response','I cannot find the option to file a response to a petition for child support and child custody.',f=>f.ticketType==='Help with Filing to Existing Case'&&f.caseType==='Child Support and Custody'],
  ['two phones','My phone is 850-555-0123 or 850-555-0199.',f=>!f.phone],
  ['callback not inferred','My phone is 850-555-0123.',f=>!f.callback&&!outputs(f).summary.includes('requested call back')],
+ ['contracted attorney',"I'm an attorney.",f=>f.filerRole==='Attorney'],
  ['explicit attorney','I am an attorney. My Florida Bar number is 123456.',f=>f.filerRole==='Attorney'&&f.barNumber==='123456'],
  ['case question','What is the case number?',f=>!f.ucn],
  ['payment','My credit card was charged twice.',f=>f.ticketType==='Payment Help'],

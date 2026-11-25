@@ -29,7 +29,7 @@ export function analyze(raw){
  const names=candidates(t,/\b(?:my name is|this is|name is)\s+([A-Za-z][A-Za-z'’-]+(?:[ \t]+[A-Za-z][A-Za-z'’-]+){1,3})/gi).map(n=>n.split(/\s+(?:and|calling|phone|number|from|I|I'm|I’m|with|here|about|trying|need|speaking)\b/i)[0].trim()).filter(n=>n.includes(' ')&&!/^(?:pro\s+(?:se|say)|self represented|an attorney|the attorney|my attorney|a lawyer)\b/i.test(n));
  pick('personName',names.map(cap));
  if(/\b(?:pro\s*(?:se|say)|self[- ]represented|representing myself|without an attorney)\b/i.test(t))f.filerRole='Self Represented Litigant';
- else if(/\b(?:I (?:am|'m|’m) (?:an? |the )?(?:attorney|lawyer|counsel)|I am counsel|my (?:Florida )?bar number|attorney here|speaking as (?:an? )?attorney)\b/i.test(t))f.filerRole='Attorney';
+ else if(/\b(?:I(?: am|'m|’m) (?:an? |the )?(?:attorney|lawyer|counsel)|I am counsel|my (?:Florida )?bar number|attorney here|speaking as (?:an? )?attorney)\b/i.test(t))f.filerRole='Attorney';
  const c=candidates(t,new RegExp('\\b('+counties+')\\s+county\\b','gi')).map(x=>/dade/i.test(x)?'Miami-Dade':cap(x.toLowerCase()));pick('county',c);
  const support=/\bchild support\b/i.test(t),custody=/\b(?:child custody|time[- ]sharing)\b/i.test(t);
  if(support&&custody)f.caseType='Child Support and Custody';else if(support)f.caseType='Child Support';else if(custody)f.caseType='Child Custody';else for(const [re,label] of [[/\bfamily\b/i,'Family'],[/\bcriminal\b/i,'Criminal'],[/\btraffic\b|\bcitation\b/i,'Traffic'],[/\bprobate\b/i,'Probate'],[/\beviction\b/i,'Eviction'],[/\bsmall claims\b/i,'Small Claims'],[/\bcivil\b/i,'Civil']])if(re.test(t)){f.caseType=label;break;}
@@ -77,4 +77,22 @@ export function outputs(f){
  if(f.callback==='Email requested')s+=' Customer requested email contact.';
  const title=type+(f.caseType?' – '+f.caseType:'')+(f.county?' – '+f.county:'');
  return {title,summary:s};
+}
+export function responseDraft(f){
+ const intro='Hello, and thank you for contacting Portal Support.';
+ const bodies={
+ 'Help with Filing to Existing Case':'We received your request for assistance submitting documents to an existing case. We can assist with navigating the filing website. Please contact the appropriate Clerk of Court if you need guidance on filing requirements or which document to select.',
+ 'File New Case':'We received your request for assistance starting a new filing. We can assist with navigating the filing website. Please contact the appropriate Clerk of Court regarding filing requirements.',
+ 'Password / Login Help':'We received your request for login assistance. Please describe the error you receive when attempting to sign in or reset your password. Do not send your password or verification codes.',
+ 'Account Lockout':'We received your request for assistance accessing your account. Please describe the message displayed when you attempt to sign in. Do not send your password or verification codes.',
+ 'Registration Help':'We received your request for registration assistance. Please let us know which step of the registration process you are having difficulty completing.',
+ 'Filing Rejected':'We received your request regarding a rejected filing. Please provide the submission number and the rejection message, if available, so the issue can be reviewed.',
+ 'Correction Queue':'We received your request regarding a filing returned for correction. Please provide the submission number and the correction message, if available.',
+ 'Payment Help':'We received your request for assistance with a payment. Please provide the submission number and a description of the issue. Do not send full payment card information.',
+ 'Document Upload Help':'We received your request for help uploading a document. Please provide the error message and the file format and size, if available.',
+ 'Service List Help':'We received your request for assistance with the service list. Please describe the step you are trying to complete and any error displayed.',
+ 'Technical Error':'We received your request for technical assistance. Please describe the steps leading to the error and the message displayed.',
+ 'Filing Status':'We received your request regarding the status of a filing. Please provide the submission number, if available.',
+ };
+ return intro+'\n\n'+(bodies[f.ticketType]||'We received your request for assistance. Please provide additional details about the issue you are experiencing.')+'\n\nThank you.';
 }

@@ -1,6 +1,6 @@
-import { analyze, outputs, labels, types } from './engine.mjs?v=2';
+import { analyze, outputs, labels, types, responseDraft } from './engine.mjs?v=2';
 const $=id=>document.getElementById(id);
-const e=Object.fromEntries(['model','backend','prepare','system','mic','file','stop','cancel','clock','level','signal','progress','status','preview','transcribe','higher','reset','transcript','title','summary','segments','analyze','warnings','fields','missing','regen','copyAll'].map(k=>[k,$(k)]));
+const e=Object.fromEntries(['model','backend','prepare','system','mic','file','stop','cancel','clock','level','signal','progress','status','preview','transcribe','higher','reset','transcript','title','summary','segments','analyze','warnings','fields','missing','regen','copyAll','response'].map(k=>[k,$(k)]));
 let state='idle',generation=0,recording=null,blob=null,previewURL=null,worker=null,workerURL=null,workerReady=null,jobId=0,job=null,modelUsed=null,fields={},resultWarnings=[],segments=[],analysisTimer=null;
 const busy=()=>!['idle','ready'].includes(state);
 function status(text,tone=''){e.status.textContent=text;e.status.dataset.tone=tone;}
@@ -11,13 +11,13 @@ function setState(s){
  e.stop.disabled=s!=='recording';e.cancel.disabled=!b;
  e.transcribe.disabled=b||!blob;e.higher.disabled=b||!blob||modelUsed==='small';
  e.analyze.disabled=b;e.regen.disabled=b;e.copyAll.disabled=b;
- e.transcript.readOnly=b;e.summary.readOnly=b;e.title.readOnly=b;
+ e.transcript.readOnly=b;e.summary.readOnly=b;e.title.readOnly=b;e.response.readOnly=b;
  for(const x of document.querySelectorAll('#fields input,#fields select,#missing input,#missing select'))x.disabled=b;
 }
 function sec(n){n=Math.max(0,Math.floor(n||0));return String(Math.floor(n/60)).padStart(2,'0')+':'+String(n%60).padStart(2,'0');}
 function clearAudio(){e.preview.pause();e.preview.removeAttribute('src');e.preview.load();e.preview.hidden=true;if(previewURL)URL.revokeObjectURL(previewURL);previewURL=null;blob=null;modelUsed=null;}
-function clearReview(){clearTimeout(analysisTimer);fields={};resultWarnings=[];segments=[];e.transcript.value='';e.title.value='';e.summary.value='';e.segments.replaceChildren();renderFields();renderWarnings();}
-function clearSession(){if(busy())return;generation++;clearAudio();clearReview();e.file.value='';e.clock.textContent='00:00';e.progress.value=0;e.level.value=0;e.signal.textContent='Idle';setState('idle');status('New voicemail. Ready for audio or a pasted transcript.');}
+function clearReview(){clearTimeout(analysisTimer);fields={};resultWarnings=[];segments=[];e.transcript.value='';e.title.value='';e.summary.value='';e.response.value='';e.segments.replaceChildren();renderFields();renderWarnings();}
+function clearSession(){if(busy())return;generation++;terminateWorker();clearAudio();clearReview();e.file.value='';e.clock.textContent='00:00';e.progress.value=0;e.level.value=0;e.signal.textContent='Idle';setState('idle');status('New voicemail. Ready for audio or a pasted transcript.');}
 function setAudio(b){clearAudio();blob=b;previewURL=URL.createObjectURL(b);e.preview.src=previewURL;e.preview.hidden=false;}
 function terminateWorker(){if(worker)worker.terminate();worker=null;workerReady=null;if(workerURL)URL.revokeObjectURL(workerURL);workerURL=null;const j=job;job=null;if(j)j.reject(Error('Canceled'));}
 async function ensureWorker(){
@@ -79,9 +79,9 @@ function renderFields(){e.fields.replaceChildren();e.missing.replaceChildren();f
  const cell=document.createElement('div');cell.className='control'+(key==='issue'?' wide':'');const l=document.createElement('label');l.textContent=label;l.htmlFor='field-'+key;
  let input;if(key==='ticketType'||key==='callback'||key==='filerRole'){input=document.createElement('select');const opts=key==='ticketType'?types:key==='callback'?['Callback requested','Do not call','Email requested']:['Self Represented Litigant','Attorney','PHV Attorney','Other'];for(const x of ['',...opts]){const o=document.createElement('option');o.value=x;o.textContent=x||'Not specified';input.append(o);}}else{input=document.createElement('input');input.autocomplete='off';input.spellcheck=false;}
  input.id='field-'+key;input.value=fields[key]||'';input.disabled=busy();input.addEventListener('input',()=>{if(input.value.trim())fields[key]=input.value.trim();else delete fields[key];status('Field updated. Regenerate outputs when ready.');});
- const line=document.createElement('div');line.className='line';line.append(l);const b=document.createElement('button');b.className='small';b.textContent='Copy';b.onclick=()=>copy(input.value,b);line.append(b);cell.append(line,input);(fields[key]||key==='ticketType'?e.fields:e.missing).append(cell);
+ const line=document.createElement('div');line.className='line';line.append(l);const b=document.createElement('button');b.className='small';b.textContent='Copy';b.onclick=()=>copy(input.value,b);line.append(b);const original=fields[key]||'';if(original&&segments.length&&key!=='ticketType'&&key!=='callback'&&key!=='filerRole'){const needle=original.toLowerCase().replace(/[^a-z0-9]/g,'');const match=needle.length>=4?segments.find(s=>Number.isFinite(s.timestamp?.[0])&&String(s.text||'').toLowerCase().replace(/[^a-z0-9]/g,'').includes(needle)):null;if(match){const seek=document.createElement('button');seek.className='small';seek.textContent=sec(match.timestamp[0]);seek.title='Play matching transcript segment';seek.onclick=()=>{e.preview.currentTime=match.timestamp[0];e.preview.play().catch(()=>{});};line.append(seek);}}cell.append(line,input);(fields[key]||key==='ticketType'?e.fields:e.missing).append(cell);
  }}
-function regenerate(){if(!e.transcript.value.trim()&&!Object.keys(fields).length){e.title.value='';e.summary.value='';return;}const out=outputs(fields);e.title.value=out.title;e.summary.value=out.summary;}
+function regenerate(){if(!e.transcript.value.trim()&&!Object.keys(fields).length){e.title.value='';e.summary.value='';e.response.value='';return;}const out=outputs(fields);e.title.value=out.title;e.summary.value=out.summary;e.response.value=responseDraft(fields);}
 function analyzeNow(){clearTimeout(analysisTimer);const a=analyze(e.transcript.value);fields=a.fields;resultWarnings=a.warnings;renderFields();renderWarnings();regenerate();}
 async function copy(text,b){if(!text)return;try{await navigator.clipboard.writeText(text);const old=b.textContent;b.textContent='Copied';setTimeout(()=>{b.textContent=old;},850);}catch{status('Clipboard access blocked. Select and copy the text manually.','error');}}
 e.system.onclick=()=>start('system');e.mic.onclick=()=>start('mic');e.stop.onclick=stop;e.cancel.onclick=cancel;e.reset.onclick=clearSession;e.prepare.onclick=prepare;e.transcribe.onclick=()=>transcribe();e.higher.onclick=()=>transcribe(modelUsed==='tiny'?'base':'small');e.analyze.onclick=()=>{analyzeNow();status('Transcript analyzed. Review the extracted fields and draft.');};e.regen.onclick=()=>{regenerate();status('Draft regenerated from your edited fields.');};
@@ -90,5 +90,5 @@ for(const b of document.querySelectorAll('[data-copy]'))b.onclick=()=>copy($(b.d
 e.copyAll.onclick=()=>copy(['Title: '+e.title.value,'Summary: '+e.summary.value,...Object.entries(labels).filter(([k])=>fields[k]).map(([k,l])=>l+': '+fields[k])].join('\n'),e.copyAll);
 e.transcript.addEventListener('input',()=>{clearTimeout(analysisTimer);status('Transcript edited. Select Analyze transcript to refresh the draft.');});
 window.addEventListener('keydown',ev=>{if(ev.key!=='F9'||ev.repeat)return;ev.preventDefault();if(state==='recording')stop();else if(!busy())start('system');});
-window.addEventListener('pagehide',()=>{generation++;if(recording){recording.discard=true;cleanupCapture(recording);}terminateWorker();clearAudio();});
+window.addEventListener('pagehide',()=>{generation++;if(recording){recording.discard=true;cleanupCapture(recording);}terminateWorker();clearAudio();clearReview();e.file.value='';recording=null;setState('idle');});
 renderFields();setState('idle');
