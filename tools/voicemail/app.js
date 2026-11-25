@@ -12,7 +12,7 @@ const transcribers = new Map();
 
 function setStatus(html, tone='') { els.status.innerHTML = html; els.status.dataset.tone = tone; }
 function setProgress(n){ els.progress.style.width = `${Math.max(0, Math.min(100, n || 0))}%`; }
-function escapeHtml(v=''){ return String(v).replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c])); }
+function escapeHtml(v=''){ return String(v).replace(/[&<>'\"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','\"':'&quot;'}[c])); }
 function cleanPhone(v=''){ let d=String(v).replace(/\D/g,''); if(d.length===11 && d[0]==='1') d=d.slice(1); return d; }
 function formatPhone(v=''){ const d=cleanPhone(v); return d.length===10 ? `(${d.slice(0,3)}) ${d.slice(3,6)}-${d.slice(6)}` : v; }
 
@@ -99,7 +99,7 @@ async function transcribe(){
 const counties=['Alachua','Baker','Bay','Bradford','Brevard','Broward','Calhoun','Charlotte','Citrus','Clay','Collier','Columbia','DeSoto','Dixie','Duval','Escambia','Flagler','Franklin','Gadsden','Gilchrist','Glades','Gulf','Hamilton','Hardee','Hendry','Hernando','Highlands','Hillsborough','Holmes','Indian River','Jackson','Jefferson','Lafayette','Lake','Lee','Leon','Levy','Liberty','Madison','Manatee','Marion','Martin','Miami-Dade','Monroe','Nassau','Okaloosa','Okeechobee','Orange','Osceola','Palm Beach','Pasco','Pinellas','Polk','Putnam','Santa Rosa','Sarasota','Seminole','St. Johns','St. Lucie','Sumter','Suwannee','Taylor','Union','Volusia','Wakulla','Walton','Washington'];
 function titleCase(s){ return s.toLowerCase().replace(/\b[a-z]/g,c=>c.toUpperCase()).replace(/\b(Mc)([a-z])/g,(_,a,b)=>a+b.toUpperCase()); }
 function extractFields(text){
-  const t=text.replace(/\s+/g,' ').trim(), f={};
+  const t=text.replace(/\s+/g,' ').trim(), low=t.toLowerCase(), f={};
   const email=t.match(/\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/i); if(email) f.email=email[0];
   const phone=t.match(/(?:\+?1[\s.-]?)?(?:\(?\d{3}\)?[\s.-]?)\d{3}[\s.-]?\d{4}/); if(phone) f.phone=formatPhone(phone[0]);
   const name=t.match(/\b(?:my name is|this is|name is)\s+([A-Z][A-Za-z'’-]+(?:\s+[A-Z][A-Za-z'’-]+){1,3})/i); if(name) f.personName=titleCase(name[1].replace(/\b(?:and|calling|phone|number|from)\b.*$/i,'').trim());
@@ -120,7 +120,7 @@ function extractFields(text){
   return f;
 }
 function casePhrase(v=''){ return v==='Child Support / Child Custody'?'Child Support and Custody Case':v?`${v} Case`:'case'; }
-function buildSummary(f){
+function buildSummary(f,text){
   const role=f.filerRole==='Self Represented Litigant'?'Pro Se Litigant':f.filerRole||'Caller';
   let s='';
   if(f.ticketType==='Help with Filing to Existing Case') s=`${role} called inquiring for help filing to an existing ${casePhrase(f.caseType)}`;
@@ -140,7 +140,7 @@ function renderFields(f){
   const entries=Object.entries(labels).filter(([k])=>f[k]); els.fieldCount.textContent=`${entries.length} detected`;
   els.detected.innerHTML=entries.length?entries.map(([k,l])=>`<div class="kv"><b>${escapeHtml(l)}</b><span>${escapeHtml(f[k])}</span></div>`).join(''):'<div class="kv"><b>Status</b><span>No fields detected yet.</span></div>';
 }
-function analyzeTranscript(){ const text=els.transcript.value.trim(); const f=extractFields(text); renderFields(f); els.summary.value=text?buildSummary(f):''; }
+function analyzeTranscript(){ const text=els.transcript.value.trim(); const f=extractFields(text); renderFields(f); els.summary.value=text?buildSummary(f,text):''; }
 async function copyText(v,btn){ try{ await navigator.clipboard.writeText(v); const old=btn.textContent; btn.textContent='Copied'; setTimeout(()=>btn.textContent=old,900); }catch{ setStatus('<strong>Copy blocked.</strong> Select the text and copy manually.','warn'); } }
 
 els.system.addEventListener('click',()=>startRecording('system'));
