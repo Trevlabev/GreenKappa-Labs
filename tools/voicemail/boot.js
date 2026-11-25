@@ -1,0 +1,1 @@
+(()=>{const status=document.getElementById('status');const fail=e=>{status.textContent='Application startup failed: '+(e?.message||String(e));status.dataset.tone='error';};window.addEventListener('error',e=>{if(e.error)fail(e.error);});window.addEventListener('unhandledrejection',e=>fail(e.reason));import('./app.js?v=2.1').catch(fail);})();

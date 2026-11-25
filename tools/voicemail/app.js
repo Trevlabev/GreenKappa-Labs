@@ -1,4 +1,4 @@
-import { analyze, outputs, labels, types, responseDraft } from './engine.mjs?v=2';
+import { analyze, outputs, labels, types, responseDraft } from './engine.mjs?v=2.1';
 const $=id=>document.getElementById(id);
 const e=Object.fromEntries(['model','backend','prepare','system','mic','file','stop','cancel','clock','level','signal','progress','status','preview','transcribe','higher','reset','transcript','title','summary','segments','analyze','warnings','fields','missing','regen','copyAll','response'].map(k=>[k,$(k)]));
 let state='idle',generation=0,recording=null,blob=null,previewURL=null,worker=null,workerURL=null,workerReady=null,jobId=0,job=null,modelUsed=null,fields={},resultWarnings=[],segments=[],analysisTimer=null;
@@ -23,12 +23,12 @@ function terminateWorker(){if(worker)worker.terminate();worker=null;workerReady=
 async function ensureWorker(){
  if(worker)return worker;if(workerReady)return workerReady;
  const g=generation;
- workerReady=(async()=>{const res=await fetch('./worker.js?v=2',{cache:'no-cache'});if(!res.ok)throw Error('Unable to load the transcription worker.');const source=await res.text();if(g!==generation)throw Error('Canceled');workerURL=URL.createObjectURL(new Blob([source],{type:'text/javascript'}));const w=new Worker(workerURL,{type:'module'});worker=w;
+ workerReady=(async()=>{if(g!==generation)throw Error('Canceled');if(typeof Worker==='undefined')throw Error('Web Workers are unavailable.');status('Starting transcription worker…');const w=new Worker(new URL('./worker.js?v=2.1',document.baseURI),{type:'module'});worker=w;
  w.onmessage=({data:m})=>{if(!job||m.id!==job.id||w!==worker)return;
  if(m.kind==='stage'){status(m.text);e.progress.removeAttribute('value');}
  else if(m.kind==='progress'){e.progress.value=Number.isFinite(m.progress)?Math.round(m.progress):0;status('Downloading model component: '+m.file+' · '+Math.round(m.progress||0)+'%');}
  else if(m.kind==='done'||m.kind==='error'){const j=job;job=null;m.kind==='done'?j.resolve(m):j.reject(Error(m.text));}};
- w.onerror=ev=>{if(w!==worker)return;const j=job;job=null;terminateWorker();j?.reject(Error(ev.message||'Transcription worker failed to initialize.'));};return w;})();
+ w.onerror=ev=>{if(w!==worker)return;const j=job;job=null;terminateWorker();j?.reject(Error('Worker startup: '+(ev.message||'Browser could not load the worker script.')));};w.onmessageerror=()=>{if(w!==worker)return;const j=job;job=null;terminateWorker();j?.reject(Error('Worker message could not be decoded.'));};return w;})();
  try{return await workerReady;}finally{if(g===generation)workerReady=null;}
 }
 async function askWorker(action,model,audio){const w=await ensureWorker();return new Promise((resolve,reject)=>{const id=++jobId;job={id,resolve,reject};try{w.postMessage({id,action,model,backend:e.backend.value,audio});}catch(err){job=null;reject(err);}});}
@@ -57,7 +57,7 @@ async function start(kind){
  for(const track of stream.getTracks())track.addEventListener('ended',()=>{if(recording===r&&state==='recording')stop();},{once:true});
  recorder.start(250);setState('recording');status('Recording. Play the voicemail, then select Stop & transcribe.');
  e.clock.textContent='00:00';r.timer=setInterval(()=>{e.clock.textContent=sec((performance.now()-r.start)/1000);},250);beginMeter(r);
- }catch(err){stream?.getTracks().forEach(t=>t.stop());if(g!==generation)return;cleanupCapture(recording);recording=null;setState(blob?'ready':'idle');status('Capture failed: '+(err.message||err),'error');}
+ }catch(err){stream?.getTracks().forEach(t=>t.stop());if(g!==generation)return;cleanupCapture(recording);recording=null;setState(blob?'ready':'idle');status('Capture failed: '+(err.name?err.name+' — ':'')+(err.message||err)+(err.name==='NotAllowedError'?' Audio sharing was denied or unavailable. Use a permitted local audio file or paste text.':''),'error');}
 }
 function stop(){const r=recording;if(state!=='recording'||!r)return;setState('finalizing');status('Finalizing audio…');clearInterval(r.timer);cancelAnimationFrame(r.frame);try{if(r.recorder.state!=='inactive')r.recorder.stop();else r.recorder.onstop();}catch(err){r.discard=true;cleanupCapture(r);recording=null;setState('idle');status('Could not finalize audio: '+err.message,'error');}}
 function cancel(){
@@ -91,4 +91,4 @@ e.copyAll.onclick=()=>copy(['Title: '+e.title.value,'Summary: '+e.summary.value,
 e.transcript.addEventListener('input',()=>{clearTimeout(analysisTimer);status('Transcript edited. Select Analyze transcript to refresh the draft.');});
 window.addEventListener('keydown',ev=>{if(ev.key!=='F9'||ev.repeat)return;ev.preventDefault();if(state==='recording')stop();else if(!busy())start('system');});
 window.addEventListener('pagehide',()=>{generation++;if(recording){recording.discard=true;cleanupCapture(recording);}terminateWorker();clearAudio();clearReview();e.file.value='';recording=null;setState('idle');});
-renderFields();setState('idle');
+renderFields();setState('idle');status('Ready. Select Prepare model to check transcription availability, or paste a transcript.');
